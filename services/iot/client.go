@@ -4,14 +4,14 @@ import (
 	"context"
 	"time"
 
-	"github.com/SKF/go-enlight-sdk/iot/iotgrpcapi"
 	"google.golang.org/grpc"
+
+	"github.com/SKF/go-enlight-sdk/services/iot/iotgrpcapi"
 )
 
 type IoTClient interface {
 	Dial(host, port string, opts ...grpc.DialOption) error
 	Close()
-
 	DeepPing() error
 
 	CreateTask(task iotgrpcapi.InitialTaskDescription) (string, error)
@@ -26,7 +26,7 @@ type client struct {
 	api  iotgrpcapi.IoTClient
 }
 
-func CreateIoTClient() IoTClient {
+func CreateClient() IoTClient {
 	return &client{}
 }
 

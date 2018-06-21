@@ -3,12 +3,13 @@ package main
 import (
 	"time"
 
-	"github.com/SKF/go-enlight-sdk/grpc"
-	"github.com/SKF/go-enlight-sdk/iot"
-	"github.com/SKF/go-enlight-sdk/iot/iotgrpcapi"
 	"github.com/SKF/go-utility/env"
 	"github.com/SKF/go-utility/log"
 	"github.com/SKF/go-utility/uuid"
+
+	"github.com/SKF/go-enlight-sdk/grpc"
+	"github.com/SKF/go-enlight-sdk/services/iot"
+	"github.com/SKF/go-enlight-sdk/services/iot/iotgrpcapi"
 )
 
 func main() {
@@ -24,7 +25,7 @@ func main() {
 	var err error
 
 	log.Info("Setup Client")
-	client := iot.CreateIoTClient()
+	client := iot.CreateClient()
 	transportOption, err := grpc.WithTransportCredentials(
 		CERT_NAME, CLIENT_CRT, CLIENT_KEY, CA_CERT,
 	)
