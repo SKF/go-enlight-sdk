@@ -1,0 +1,55 @@
+syntax = "proto3";
+
+package iotgrpcapi;
+
+service IoT {
+  rpc DeepPing (PrimitiveVoid) returns (PrimitiveString) {}
+
+  rpc CreateTask (InitialTaskDescription) returns (PrimitiveString) {}
+  rpc GetAllTasks (PrimitiveString) returns (TaskDescriptions) {}
+  rpc GetUncompletedTasks (PrimitiveString) returns (TaskDescriptions) {}
+  rpc SetTaskCompleted (TaskUser) returns (PrimitiveVoid) {}
+  rpc DeleteTask (TaskUser) returns (PrimitiveVoid) {}
+}
+
+message TaskDescription {
+  string user_id = 1;
+  string task_id = 2;
+  string task_name = 3;
+  string hierarchy_id = 4;
+  int64 due_date_timestamp = 5;
+  bool is_completed = 6;
+  FunctionalLocationIds functional_location_ids = 7;
+}
+
+message InitialTaskDescription {
+  string user_id = 1;
+  string task_name = 2;
+  string hierarchy_id = 3;
+  int64 due_date_timestamp = 4;
+  FunctionalLocationIds functional_location_ids = 5;
+  string external_task_id = 6;
+}
+
+message TaskUser {
+  string user_id = 1;
+  string task_id = 2;
+}
+
+message TaskDescriptions {
+  repeated TaskDescription task_description_arr = 1;
+}
+
+message FunctionalLocationIds {
+  repeated string id_arr = 1;
+}
+
+message PrimitiveString {
+  string value = 1;
+}
+
+message PrimitiveBool {
+  bool value = 1;
+}
+
+message PrimitiveVoid {}
