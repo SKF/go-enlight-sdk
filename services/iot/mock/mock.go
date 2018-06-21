@@ -9,14 +9,13 @@ import (
 )
 
 type client struct {
-	*mock.Mock
+	mock.Mock
+	iot.IoTClient
 }
 
 // Create returns an empty mock
-func Create() iot.IoTClient {
-	return &client{
-		Mock: &mock.Mock{},
-	}
+func Create() *client {
+	return new(client)
 }
 
 func (mock *client) Dial(host, port string, opts ...grpc.DialOption) error {
