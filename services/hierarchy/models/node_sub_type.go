@@ -1,9 +1,5 @@
 package models
 
-import (
-	"fmt"
-)
-
 type NodeSubType string
 
 const (
@@ -18,12 +14,6 @@ const (
 	NodeSubTypeInspectionPoint    NodeSubType = "inspection_point"
 )
 
-var allNodeSubTypees = []NodeSubType{
-	NodeSubTypeCompany, NodeSubTypeSite, NodeSubTypePlant,
-	NodeSubTypeShip, NodeSubTypeSystem, NodeSubTypeFunctionalLocation,
-	NodeSubTypeAsset, NodeSubTypeMeasurementPoint, NodeSubTypeInspectionPoint,
-}
-
 var nodeTypeClasses = map[NodeType][]NodeSubType{
 	NodeTypeCompany:            {NodeSubTypeCompany},
 	NodeTypeSite:               {NodeSubTypeSite},
@@ -33,31 +23,4 @@ var nodeTypeClasses = map[NodeType][]NodeSubType{
 	NodeTypeAsset:              {NodeSubTypeAsset},
 	NodeTypeMeasurementPoint:   {NodeSubTypeMeasurementPoint},
 	NodeTypeInspectionPoint:    {NodeSubTypeInspectionPoint},
-}
-
-func (nc NodeSubType) String() string {
-	return string(nc)
-}
-
-func (nc NodeSubType) IsTypeOf(nt NodeType) bool {
-	for nodeType, nodeClasses := range nodeTypeClasses {
-		if nodeType == nt {
-			for _, nodeClass := range nodeClasses {
-				if nodeClass == nc {
-					return true
-				}
-			}
-		}
-	}
-
-	return false
-}
-
-func (nc NodeSubType) Validate() error {
-	for _, nodeClass := range allNodeSubTypees {
-		if nc == nodeClass {
-			return nil
-		}
-	}
-	return fmt.Errorf("'%s' is not a valid node class", nc)
 }
