@@ -16,7 +16,7 @@ type HierarchyClient interface {
 	DeepPing() error
 
 	SaveNode(request grpcapi.SaveNodeInput) (string, error)
-	GetNode(uuid string) (grpcapi.Node, error)
+	GetNode(nodeID string) (grpcapi.Node, error)
 	GetNodes(parentID string) ([]grpcapi.Node, error)
 	DeleteNode(request grpcapi.DeleteNodeInput) error
 	GetEvents(since int, limit *int32) ([]eventsource.Record, error)
