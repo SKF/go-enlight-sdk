@@ -6,6 +6,7 @@ import (
 	"google.golang.org/grpc"
 
 	"github.com/SKF/go-enlight-sdk/services/iam"
+	"github.com/SKF/go-enlight-sdk/services/iam/grpcapi"
 )
 
 type client struct {
@@ -31,6 +32,10 @@ func (mock *client) DeepPing() error {
 	return args.Error(0)
 }
 
+func (mock *client) CheckAuthentication(token, method string) (grpcapi.User, error) {
+	args := mock.Called(token, method)
+	return args.Get(0).(grpcapi.User), args.Error(1)
+}
 func (mock *client) GetNodesByUser(userID string) (nodeIDs []string, err error) {
 	args := mock.Called(userID)
 	return args.Get(0).([]string), args.Error(1)

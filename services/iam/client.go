@@ -15,6 +15,7 @@ type IAMClient interface {
 	Close()
 	DeepPing() error
 
+	CheckAuthentication(token, method string) (grpcapi.User, error)
 	GetNodesByUser(userID string) (nodeIDs []string, err error)
 	GetEventRecords(since int, limit *int32) ([]eventsource.Record, error)
 }
