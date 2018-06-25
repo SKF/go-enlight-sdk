@@ -43,11 +43,11 @@ message AssetNode {
 
 message Node {
   string id = 1;
-	string label = 2;
-	string description = 3;
-	string type = 4;
-	string criticality = 5;
-	string subType = 6;
+  string label = 2;
+  string description = 3;
+  string type = 4;
+  string criticality = 5;
+  string subType = 6;
   Origin origin = 7;
 
   AssetNode assetNode = 8;
@@ -69,8 +69,8 @@ message GetEventsOutput {
 }
 
 message SaveNodeInput {
-	string userId = 1;
-	Node node = 3;
+  string userId = 1;
+  Node node = 3;
   string parentId = 2;
   Origin parentOrigin = 4;
 
