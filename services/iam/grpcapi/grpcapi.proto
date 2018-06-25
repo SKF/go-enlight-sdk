@@ -1,0 +1,69 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "com.skf.enlight.iam.grpcapi";
+option java_outer_classname = "iam";
+
+package grpcapi;
+
+service IAM {
+  rpc DeepPing (PrimitiveVoid) returns (PrimitiveString) {}
+  rpc CheckAuthentication (CheckAuthenticationInput) returns (User) {}
+
+  rpc GetHierarchyRelations (GetHierarchyRelationsInput) returns (GetHierarchyRelationsOutput) {}
+
+  rpc GetEventRecords (GetEventRecordsInput) returns (GetEventRecordsOutput) {}
+  rpc GetEventRecordStream (PrimitiveVoid) returns (stream PrimitiveBytes) {}
+}
+
+// Input & output messages
+message GetHierarchyRelationsInput {
+  string user_id = 1;
+}
+
+message GetHierarchyRelationsOutput {
+  repeated string node_ids = 1;
+}
+
+message CheckAuthenticationInput {
+  string token = 1;
+  string methodArn = 2;
+}
+
+message GetEventRecordsInput {
+  int64 since = 1;
+  PrimitiveInt32 limit = 2;
+}
+
+message GetEventRecordsOutput {
+  bytes records = 1;
+}
+
+message User {
+  string id = 1;
+  string email = 2;
+  string eulaAgreedDate = 3;
+  string validEula = 4;
+  string username = 5;
+  string userStatus = 6;
+  string userRoles = 7;
+}
+
+// Primitive types
+message PrimitiveString {
+  string value = 1;
+}
+
+message PrimitiveInt32 {
+  int32 value = 1;
+}
+
+message PrimitiveBool {
+  bool value = 1;
+}
+
+message PrimitiveBytes {
+  bytes value = 1;
+}
+
+message PrimitiveVoid {}
