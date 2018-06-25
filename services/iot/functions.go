@@ -64,3 +64,16 @@ func (c *client) GetUncompletedTasks(userID string) (out []iotgrpcapi.TaskDescri
 	}
 	return
 }
+
+func (c *client) GetUncompletedTasksByHierarchy(hierID string) (out []iotgrpcapi.TaskDescription, err error) {
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
+	defer cancel()
+	input := iotgrpcapi.PrimitiveString{Value: hierID}
+	tasks, err := c.api.GetUncompletedTasksByHierarchy(ctx, &input)
+	if tasks != nil {
+		for _, desc := range tasks.TaskDescriptionArr {
+			out = append(out, *desc)
+		}
+	}
+	return
+}

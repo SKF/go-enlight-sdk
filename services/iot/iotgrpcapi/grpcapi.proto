@@ -10,6 +10,7 @@ service IoT {
   rpc GetUncompletedTasks (PrimitiveString) returns (TaskDescriptions) {}
   rpc SetTaskCompleted (TaskUser) returns (PrimitiveVoid) {}
   rpc DeleteTask (TaskUser) returns (PrimitiveVoid) {}
+  rpc GetUncompletedTasksByHierarchy (PrimitiveString) returns (TaskDescriptions) {}
 }
 
 message TaskDescription {
