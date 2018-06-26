@@ -21,6 +21,7 @@ func main() {
 	CERT_NAME := env.GetAsString("CERT_NAME", "grpc.sandbox.iot.enlight.skf.com")
 
 	userID := uuid.New().String()
+	nodeID := uuid.New().String()
 	var taskID string
 	var err error
 
@@ -78,6 +79,15 @@ func main() {
 			WithError(err).
 			WithField("userId", userID).
 			Error("client.GetUncompletedTasks")
+		return
+	}
+
+	log.Info("Get Uncompleted Tasks By Hierarachy")
+	if _, err = client.GetUncompletedTasksByHierarchy(nodeID); err != nil {
+		log.
+			WithError(err).
+			WithField("nodeID", nodeID).
+			Error("client.GetUncompletedTasksByHierarchy")
 		return
 	}
 
