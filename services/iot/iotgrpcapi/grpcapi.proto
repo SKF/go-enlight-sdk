@@ -11,7 +11,7 @@ service IoT {
   rpc SetTaskCompleted (TaskUser) returns (PrimitiveVoid) {}
   rpc DeleteTask (TaskUser) returns (PrimitiveVoid) {}
   rpc GetUncompletedTasksByHierarchy (PrimitiveString) returns (TaskDescriptions) {}
-  rpc SetStatus (StatusChange) returns (PrimitiveVoid) {}
+  rpc SetTaskStatus (SetTaskStatusInput) returns (PrimitiveVoid) {}
 }
 
 message TaskDescription {
@@ -22,6 +22,7 @@ message TaskDescription {
   int64 due_date_timestamp = 5;
   bool is_completed = 6;
   FunctionalLocationIds functional_location_ids = 7;
+  TaskStatus status = 8;
 }
 
 message InitialTaskDescription {
@@ -31,6 +32,7 @@ message InitialTaskDescription {
   int64 due_date_timestamp = 4;
   FunctionalLocationIds functional_location_ids = 5;
   string external_task_id = 6;
+  TaskStatus status = 7;
 }
 
 message TaskUser {
@@ -38,19 +40,20 @@ message TaskUser {
   string task_id = 2;
 }
 
-message StatusChange {
+message SetTaskStatusInput {
   string task_id = 1;
-  enum Task_Status {
-    NOTSENT = 0;
-    SENT = 1;
-    RECEIVED = 2;
-    COMPLETED = 3;
-  }
-  Task_Status status = 2;
+  TaskStatus status = 2;
 }
 
 message TaskDescriptions {
   repeated TaskDescription task_description_arr = 1;
+}
+
+enum TaskStatus {
+  NOT_SENT = 0;
+  SENT = 1;
+  RECEIVED = 2;
+  COMPLETED = 3;
 }
 
 message FunctionalLocationIds {
