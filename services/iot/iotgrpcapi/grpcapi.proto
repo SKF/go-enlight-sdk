@@ -11,6 +11,7 @@ service IoT {
   rpc SetTaskCompleted (TaskUser) returns (PrimitiveVoid) {}
   rpc DeleteTask (TaskUser) returns (PrimitiveVoid) {}
   rpc GetUncompletedTasksByHierarchy (PrimitiveString) returns (TaskDescriptions) {}
+  rpc SetStatus (StatusChange) returns (PrimitiveVoid) {}
 }
 
 message TaskDescription {
@@ -35,6 +36,17 @@ message InitialTaskDescription {
 message TaskUser {
   string user_id = 1;
   string task_id = 2;
+}
+
+message StatusChange {
+  string task_id = 1;
+  enum Task_Status {
+    NOTSENT = 0;
+    SENT = 1;
+    RECEIVED = 2;
+    COMPLETED = 3;
+  }
+  Task_Status status = 2;
 }
 
 message TaskDescriptions {

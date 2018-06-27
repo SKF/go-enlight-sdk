@@ -23,14 +23,43 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.ProtoPackageIsVersion2 // please upgrade the proto package
 
+type StatusChange_Task_Status int32
+
+const (
+	StatusChange_NOTSENT   StatusChange_Task_Status = 0
+	StatusChange_SENT      StatusChange_Task_Status = 1
+	StatusChange_RECEIVED  StatusChange_Task_Status = 2
+	StatusChange_COMPLETED StatusChange_Task_Status = 3
+)
+
+var StatusChange_Task_Status_name = map[int32]string{
+	0: "NOTSENT",
+	1: "SENT",
+	2: "RECEIVED",
+	3: "COMPLETED",
+}
+var StatusChange_Task_Status_value = map[string]int32{
+	"NOTSENT":   0,
+	"SENT":      1,
+	"RECEIVED":  2,
+	"COMPLETED": 3,
+}
+
+func (x StatusChange_Task_Status) String() string {
+	return proto.EnumName(StatusChange_Task_Status_name, int32(x))
+}
+func (StatusChange_Task_Status) EnumDescriptor() ([]byte, []int) {
+	return fileDescriptor_grpcapi_890960139ce9f505, []int{3, 0}
+}
+
 type TaskDescription struct {
-	UserId                string                 `protobuf:"bytes,1,opt,name=user_id,json=userId" json:"user_id,omitempty"`
-	TaskId                string                 `protobuf:"bytes,2,opt,name=task_id,json=taskId" json:"task_id,omitempty"`
-	TaskName              string                 `protobuf:"bytes,3,opt,name=task_name,json=taskName" json:"task_name,omitempty"`
-	HierarchyId           string                 `protobuf:"bytes,4,opt,name=hierarchy_id,json=hierarchyId" json:"hierarchy_id,omitempty"`
-	DueDateTimestamp      int64                  `protobuf:"varint,5,opt,name=due_date_timestamp,json=dueDateTimestamp" json:"due_date_timestamp,omitempty"`
-	IsCompleted           bool                   `protobuf:"varint,6,opt,name=is_completed,json=isCompleted" json:"is_completed,omitempty"`
-	FunctionalLocationIds *FunctionalLocationIds `protobuf:"bytes,7,opt,name=functional_location_ids,json=functionalLocationIds" json:"functional_location_ids,omitempty"`
+	UserId                string                 `protobuf:"bytes,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	TaskId                string                 `protobuf:"bytes,2,opt,name=task_id,json=taskId,proto3" json:"task_id,omitempty"`
+	TaskName              string                 `protobuf:"bytes,3,opt,name=task_name,json=taskName,proto3" json:"task_name,omitempty"`
+	HierarchyId           string                 `protobuf:"bytes,4,opt,name=hierarchy_id,json=hierarchyId,proto3" json:"hierarchy_id,omitempty"`
+	DueDateTimestamp      int64                  `protobuf:"varint,5,opt,name=due_date_timestamp,json=dueDateTimestamp,proto3" json:"due_date_timestamp,omitempty"`
+	IsCompleted           bool                   `protobuf:"varint,6,opt,name=is_completed,json=isCompleted,proto3" json:"is_completed,omitempty"`
+	FunctionalLocationIds *FunctionalLocationIds `protobuf:"bytes,7,opt,name=functional_location_ids,json=functionalLocationIds,proto3" json:"functional_location_ids,omitempty"`
 	XXX_NoUnkeyedLiteral  struct{}               `json:"-"`
 	XXX_unrecognized      []byte                 `json:"-"`
 	XXX_sizecache         int32                  `json:"-"`
@@ -40,7 +69,7 @@ func (m *TaskDescription) Reset()         { *m = TaskDescription{} }
 func (m *TaskDescription) String() string { return proto.CompactTextString(m) }
 func (*TaskDescription) ProtoMessage()    {}
 func (*TaskDescription) Descriptor() ([]byte, []int) {
-	return fileDescriptor_grpcapi_614b103503974493, []int{0}
+	return fileDescriptor_grpcapi_890960139ce9f505, []int{0}
 }
 func (m *TaskDescription) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_TaskDescription.Unmarshal(m, b)
@@ -110,12 +139,12 @@ func (m *TaskDescription) GetFunctionalLocationIds() *FunctionalLocationIds {
 }
 
 type InitialTaskDescription struct {
-	UserId                string                 `protobuf:"bytes,1,opt,name=user_id,json=userId" json:"user_id,omitempty"`
-	TaskName              string                 `protobuf:"bytes,2,opt,name=task_name,json=taskName" json:"task_name,omitempty"`
-	HierarchyId           string                 `protobuf:"bytes,3,opt,name=hierarchy_id,json=hierarchyId" json:"hierarchy_id,omitempty"`
-	DueDateTimestamp      int64                  `protobuf:"varint,4,opt,name=due_date_timestamp,json=dueDateTimestamp" json:"due_date_timestamp,omitempty"`
-	FunctionalLocationIds *FunctionalLocationIds `protobuf:"bytes,5,opt,name=functional_location_ids,json=functionalLocationIds" json:"functional_location_ids,omitempty"`
-	ExternalTaskId        string                 `protobuf:"bytes,6,opt,name=external_task_id,json=externalTaskId" json:"external_task_id,omitempty"`
+	UserId                string                 `protobuf:"bytes,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	TaskName              string                 `protobuf:"bytes,2,opt,name=task_name,json=taskName,proto3" json:"task_name,omitempty"`
+	HierarchyId           string                 `protobuf:"bytes,3,opt,name=hierarchy_id,json=hierarchyId,proto3" json:"hierarchy_id,omitempty"`
+	DueDateTimestamp      int64                  `protobuf:"varint,4,opt,name=due_date_timestamp,json=dueDateTimestamp,proto3" json:"due_date_timestamp,omitempty"`
+	FunctionalLocationIds *FunctionalLocationIds `protobuf:"bytes,5,opt,name=functional_location_ids,json=functionalLocationIds,proto3" json:"functional_location_ids,omitempty"`
+	ExternalTaskId        string                 `protobuf:"bytes,6,opt,name=external_task_id,json=externalTaskId,proto3" json:"external_task_id,omitempty"`
 	XXX_NoUnkeyedLiteral  struct{}               `json:"-"`
 	XXX_unrecognized      []byte                 `json:"-"`
 	XXX_sizecache         int32                  `json:"-"`
@@ -125,7 +154,7 @@ func (m *InitialTaskDescription) Reset()         { *m = InitialTaskDescription{}
 func (m *InitialTaskDescription) String() string { return proto.CompactTextString(m) }
 func (*InitialTaskDescription) ProtoMessage()    {}
 func (*InitialTaskDescription) Descriptor() ([]byte, []int) {
-	return fileDescriptor_grpcapi_614b103503974493, []int{1}
+	return fileDescriptor_grpcapi_890960139ce9f505, []int{1}
 }
 func (m *InitialTaskDescription) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_InitialTaskDescription.Unmarshal(m, b)
@@ -188,8 +217,8 @@ func (m *InitialTaskDescription) GetExternalTaskId() string {
 }
 
 type TaskUser struct {
-	UserId               string   `protobuf:"bytes,1,opt,name=user_id,json=userId" json:"user_id,omitempty"`
-	TaskId               string   `protobuf:"bytes,2,opt,name=task_id,json=taskId" json:"task_id,omitempty"`
+	UserId               string   `protobuf:"bytes,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	TaskId               string   `protobuf:"bytes,2,opt,name=task_id,json=taskId,proto3" json:"task_id,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
@@ -199,7 +228,7 @@ func (m *TaskUser) Reset()         { *m = TaskUser{} }
 func (m *TaskUser) String() string { return proto.CompactTextString(m) }
 func (*TaskUser) ProtoMessage()    {}
 func (*TaskUser) Descriptor() ([]byte, []int) {
-	return fileDescriptor_grpcapi_614b103503974493, []int{2}
+	return fileDescriptor_grpcapi_890960139ce9f505, []int{2}
 }
 func (m *TaskUser) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_TaskUser.Unmarshal(m, b)
@@ -233,8 +262,54 @@ func (m *TaskUser) GetTaskId() string {
 	return ""
 }
 
+type StatusChange struct {
+	TaskId               string                   `protobuf:"bytes,1,opt,name=task_id,json=taskId,proto3" json:"task_id,omitempty"`
+	Status               StatusChange_Task_Status `protobuf:"varint,2,opt,name=status,proto3,enum=iotgrpcapi.StatusChange_Task_Status" json:"status,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}                 `json:"-"`
+	XXX_unrecognized     []byte                   `json:"-"`
+	XXX_sizecache        int32                    `json:"-"`
+}
+
+func (m *StatusChange) Reset()         { *m = StatusChange{} }
+func (m *StatusChange) String() string { return proto.CompactTextString(m) }
+func (*StatusChange) ProtoMessage()    {}
+func (*StatusChange) Descriptor() ([]byte, []int) {
+	return fileDescriptor_grpcapi_890960139ce9f505, []int{3}
+}
+func (m *StatusChange) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_StatusChange.Unmarshal(m, b)
+}
+func (m *StatusChange) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_StatusChange.Marshal(b, m, deterministic)
+}
+func (dst *StatusChange) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_StatusChange.Merge(dst, src)
+}
+func (m *StatusChange) XXX_Size() int {
+	return xxx_messageInfo_StatusChange.Size(m)
+}
+func (m *StatusChange) XXX_DiscardUnknown() {
+	xxx_messageInfo_StatusChange.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_StatusChange proto.InternalMessageInfo
+
+func (m *StatusChange) GetTaskId() string {
+	if m != nil {
+		return m.TaskId
+	}
+	return ""
+}
+
+func (m *StatusChange) GetStatus() StatusChange_Task_Status {
+	if m != nil {
+		return m.Status
+	}
+	return StatusChange_NOTSENT
+}
+
 type TaskDescriptions struct {
-	TaskDescriptionArr   []*TaskDescription `protobuf:"bytes,1,rep,name=task_description_arr,json=taskDescriptionArr" json:"task_description_arr,omitempty"`
+	TaskDescriptionArr   []*TaskDescription `protobuf:"bytes,1,rep,name=task_description_arr,json=taskDescriptionArr,proto3" json:"task_description_arr,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}           `json:"-"`
 	XXX_unrecognized     []byte             `json:"-"`
 	XXX_sizecache        int32              `json:"-"`
@@ -244,7 +319,7 @@ func (m *TaskDescriptions) Reset()         { *m = TaskDescriptions{} }
 func (m *TaskDescriptions) String() string { return proto.CompactTextString(m) }
 func (*TaskDescriptions) ProtoMessage()    {}
 func (*TaskDescriptions) Descriptor() ([]byte, []int) {
-	return fileDescriptor_grpcapi_614b103503974493, []int{3}
+	return fileDescriptor_grpcapi_890960139ce9f505, []int{4}
 }
 func (m *TaskDescriptions) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_TaskDescriptions.Unmarshal(m, b)
@@ -272,7 +347,7 @@ func (m *TaskDescriptions) GetTaskDescriptionArr() []*TaskDescription {
 }
 
 type FunctionalLocationIds struct {
-	IdArr                []string `protobuf:"bytes,1,rep,name=id_arr,json=idArr" json:"id_arr,omitempty"`
+	IdArr                []string `protobuf:"bytes,1,rep,name=id_arr,json=idArr,proto3" json:"id_arr,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
@@ -282,7 +357,7 @@ func (m *FunctionalLocationIds) Reset()         { *m = FunctionalLocationIds{} }
 func (m *FunctionalLocationIds) String() string { return proto.CompactTextString(m) }
 func (*FunctionalLocationIds) ProtoMessage()    {}
 func (*FunctionalLocationIds) Descriptor() ([]byte, []int) {
-	return fileDescriptor_grpcapi_614b103503974493, []int{4}
+	return fileDescriptor_grpcapi_890960139ce9f505, []int{5}
 }
 func (m *FunctionalLocationIds) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_FunctionalLocationIds.Unmarshal(m, b)
@@ -310,7 +385,7 @@ func (m *FunctionalLocationIds) GetIdArr() []string {
 }
 
 type PrimitiveString struct {
-	Value                string   `protobuf:"bytes,1,opt,name=value" json:"value,omitempty"`
+	Value                string   `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
@@ -320,7 +395,7 @@ func (m *PrimitiveString) Reset()         { *m = PrimitiveString{} }
 func (m *PrimitiveString) String() string { return proto.CompactTextString(m) }
 func (*PrimitiveString) ProtoMessage()    {}
 func (*PrimitiveString) Descriptor() ([]byte, []int) {
-	return fileDescriptor_grpcapi_614b103503974493, []int{5}
+	return fileDescriptor_grpcapi_890960139ce9f505, []int{6}
 }
 func (m *PrimitiveString) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_PrimitiveString.Unmarshal(m, b)
@@ -348,7 +423,7 @@ func (m *PrimitiveString) GetValue() string {
 }
 
 type PrimitiveBool struct {
-	Value                bool     `protobuf:"varint,1,opt,name=value" json:"value,omitempty"`
+	Value                bool     `protobuf:"varint,1,opt,name=value,proto3" json:"value,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
@@ -358,7 +433,7 @@ func (m *PrimitiveBool) Reset()         { *m = PrimitiveBool{} }
 func (m *PrimitiveBool) String() string { return proto.CompactTextString(m) }
 func (*PrimitiveBool) ProtoMessage()    {}
 func (*PrimitiveBool) Descriptor() ([]byte, []int) {
-	return fileDescriptor_grpcapi_614b103503974493, []int{6}
+	return fileDescriptor_grpcapi_890960139ce9f505, []int{7}
 }
 func (m *PrimitiveBool) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_PrimitiveBool.Unmarshal(m, b)
@@ -395,7 +470,7 @@ func (m *PrimitiveVoid) Reset()         { *m = PrimitiveVoid{} }
 func (m *PrimitiveVoid) String() string { return proto.CompactTextString(m) }
 func (*PrimitiveVoid) ProtoMessage()    {}
 func (*PrimitiveVoid) Descriptor() ([]byte, []int) {
-	return fileDescriptor_grpcapi_614b103503974493, []int{7}
+	return fileDescriptor_grpcapi_890960139ce9f505, []int{8}
 }
 func (m *PrimitiveVoid) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_PrimitiveVoid.Unmarshal(m, b)
@@ -419,11 +494,13 @@ func init() {
 	proto.RegisterType((*TaskDescription)(nil), "iotgrpcapi.TaskDescription")
 	proto.RegisterType((*InitialTaskDescription)(nil), "iotgrpcapi.InitialTaskDescription")
 	proto.RegisterType((*TaskUser)(nil), "iotgrpcapi.TaskUser")
+	proto.RegisterType((*StatusChange)(nil), "iotgrpcapi.StatusChange")
 	proto.RegisterType((*TaskDescriptions)(nil), "iotgrpcapi.TaskDescriptions")
 	proto.RegisterType((*FunctionalLocationIds)(nil), "iotgrpcapi.FunctionalLocationIds")
 	proto.RegisterType((*PrimitiveString)(nil), "iotgrpcapi.PrimitiveString")
 	proto.RegisterType((*PrimitiveBool)(nil), "iotgrpcapi.PrimitiveBool")
 	proto.RegisterType((*PrimitiveVoid)(nil), "iotgrpcapi.PrimitiveVoid")
+	proto.RegisterEnum("iotgrpcapi.StatusChange_Task_Status", StatusChange_Task_Status_name, StatusChange_Task_Status_value)
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -445,6 +522,7 @@ type IoTClient interface {
 	SetTaskCompleted(ctx context.Context, in *TaskUser, opts ...grpc.CallOption) (*PrimitiveVoid, error)
 	DeleteTask(ctx context.Context, in *TaskUser, opts ...grpc.CallOption) (*PrimitiveVoid, error)
 	GetUncompletedTasksByHierarchy(ctx context.Context, in *PrimitiveString, opts ...grpc.CallOption) (*TaskDescriptions, error)
+	SetStatus(ctx context.Context, in *StatusChange, opts ...grpc.CallOption) (*PrimitiveVoid, error)
 }
 
 type ioTClient struct {
@@ -518,8 +596,16 @@ func (c *ioTClient) GetUncompletedTasksByHierarchy(ctx context.Context, in *Prim
 	return out, nil
 }
 
-// Server API for IoT service
+func (c *ioTClient) SetStatus(ctx context.Context, in *StatusChange, opts ...grpc.CallOption) (*PrimitiveVoid, error) {
+	out := new(PrimitiveVoid)
+	err := c.cc.Invoke(ctx, "/iotgrpcapi.IoT/SetStatus", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
 
+// IoTServer is the server API for IoT service.
 type IoTServer interface {
 	DeepPing(context.Context, *PrimitiveVoid) (*PrimitiveString, error)
 	CreateTask(context.Context, *InitialTaskDescription) (*PrimitiveString, error)
@@ -528,6 +614,7 @@ type IoTServer interface {
 	SetTaskCompleted(context.Context, *TaskUser) (*PrimitiveVoid, error)
 	DeleteTask(context.Context, *TaskUser) (*PrimitiveVoid, error)
 	GetUncompletedTasksByHierarchy(context.Context, *PrimitiveString) (*TaskDescriptions, error)
+	SetStatus(context.Context, *StatusChange) (*PrimitiveVoid, error)
 }
 
 func RegisterIoTServer(s *grpc.Server, srv IoTServer) {
@@ -660,6 +747,24 @@ func _IoT_GetUncompletedTasksByHierarchy_Handler(srv interface{}, ctx context.Co
 	return interceptor(ctx, in, info, handler)
 }
 
+func _IoT_SetStatus_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(StatusChange)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(IoTServer).SetStatus(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/iotgrpcapi.IoT/SetStatus",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(IoTServer).SetStatus(ctx, req.(*StatusChange))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var _IoT_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "iotgrpcapi.IoT",
 	HandlerType: (*IoTServer)(nil),
@@ -692,48 +797,58 @@ var _IoT_serviceDesc = grpc.ServiceDesc{
 			MethodName: "GetUncompletedTasksByHierarchy",
 			Handler:    _IoT_GetUncompletedTasksByHierarchy_Handler,
 		},
+		{
+			MethodName: "SetStatus",
+			Handler:    _IoT_SetStatus_Handler,
+		},
 	},
 	Streams:  []grpc.StreamDesc{},
 	Metadata: "grpcapi.proto",
 }
 
-func init() { proto.RegisterFile("grpcapi.proto", fileDescriptor_grpcapi_614b103503974493) }
+func init() { proto.RegisterFile("grpcapi.proto", fileDescriptor_grpcapi_890960139ce9f505) }
 
-var fileDescriptor_grpcapi_614b103503974493 = []byte{
-	// 547 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xac, 0x54, 0x4b, 0x6f, 0xd3, 0x4c,
-	0x14, 0x8d, 0xf3, 0x6a, 0x72, 0xf3, 0xf5, 0x4b, 0x34, 0x24, 0xd4, 0x24, 0x08, 0xa5, 0x96, 0x10,
-	0x5e, 0xa0, 0x2c, 0xc2, 0x16, 0x09, 0xb5, 0x0d, 0x14, 0x23, 0x1e, 0x95, 0x9b, 0x22, 0xb1, 0x40,
-	0xd6, 0xe0, 0xb9, 0x6d, 0x47, 0xf1, 0x4b, 0x33, 0x93, 0x8a, 0xfe, 0x1e, 0xd8, 0xf3, 0x17, 0xd1,
-	0x38, 0x71, 0x5e, 0x72, 0xd3, 0x42, 0xd9, 0xcd, 0x9c, 0x73, 0xee, 0xf5, 0x9c, 0xe3, 0x3b, 0x03,
-	0xbb, 0x17, 0x22, 0xf1, 0x69, 0xc2, 0x07, 0x89, 0x88, 0x55, 0x4c, 0x80, 0xc7, 0x6a, 0x8e, 0x58,
-	0xbf, 0x8a, 0xd0, 0x1c, 0x53, 0x39, 0x19, 0xa1, 0xf4, 0x05, 0x4f, 0x14, 0x8f, 0x23, 0xb2, 0x07,
-	0x3b, 0x53, 0x89, 0xc2, 0xe3, 0xcc, 0x34, 0xfa, 0x86, 0x5d, 0x77, 0xab, 0x7a, 0xeb, 0x30, 0x4d,
-	0x28, 0x2a, 0x27, 0x9a, 0x28, 0xce, 0x08, 0xbd, 0x75, 0x18, 0xe9, 0x41, 0x3d, 0x25, 0x22, 0x1a,
-	0xa2, 0x59, 0x4a, 0xa9, 0x9a, 0x06, 0x3e, 0xd2, 0x10, 0xc9, 0x3e, 0xfc, 0x77, 0xc9, 0x51, 0x50,
-	0xe1, 0x5f, 0x5e, 0xeb, 0xd2, 0x72, 0xca, 0x37, 0x16, 0x98, 0xc3, 0xc8, 0x73, 0x20, 0x6c, 0x8a,
-	0x1e, 0xa3, 0x0a, 0x3d, 0xc5, 0x43, 0x94, 0x8a, 0x86, 0x89, 0x59, 0xe9, 0x1b, 0x76, 0xc9, 0x6d,
-	0xb1, 0x29, 0x8e, 0xa8, 0xc2, 0x71, 0x86, 0xeb, 0x86, 0x5c, 0x7a, 0x7e, 0x1c, 0x26, 0x01, 0x2a,
-	0x64, 0x66, 0xb5, 0x6f, 0xd8, 0x35, 0xb7, 0xc1, 0xe5, 0x51, 0x06, 0x91, 0x2f, 0xb0, 0x77, 0x3e,
-	0x8d, 0x7c, 0x6d, 0x87, 0x06, 0x5e, 0x10, 0xfb, 0x54, 0x2f, 0x3d, 0xce, 0xa4, 0xb9, 0xd3, 0x37,
-	0xec, 0xc6, 0x70, 0x7f, 0xb0, 0x0c, 0x61, 0xf0, 0x66, 0x21, 0x7d, 0x3f, 0x57, 0x3a, 0x4c, 0xba,
-	0x9d, 0xf3, 0x3c, 0xd8, 0xfa, 0x59, 0x84, 0x87, 0x4e, 0xc4, 0x15, 0xa7, 0xc1, 0x9d, 0x83, 0x5b,
-	0xcb, 0xa7, 0x78, 0x4b, 0x3e, 0xa5, 0xbb, 0xe6, 0x53, 0xbe, 0x21, 0x9f, 0x2d, 0xe6, 0x2b, 0xf7,
-	0x33, 0x4f, 0x6c, 0x68, 0xe1, 0x77, 0x85, 0x42, 0x37, 0xce, 0x46, 0xa1, 0x9a, 0x9e, 0xf7, 0xff,
-	0x0c, 0x1f, 0xa7, 0x23, 0x61, 0xbd, 0x84, 0x9a, 0x5e, 0x9d, 0x49, 0x14, 0x7f, 0x3e, 0x50, 0x16,
-	0x85, 0xd6, 0x46, 0xb8, 0x92, 0x7c, 0x80, 0x76, 0x2a, 0x66, 0x4b, 0xd0, 0xa3, 0x42, 0x98, 0x46,
-	0xbf, 0x64, 0x37, 0x86, 0xbd, 0x55, 0x4f, 0x1b, 0xb5, 0x2e, 0x51, 0xeb, 0xc0, 0x81, 0x10, 0xd6,
-	0x00, 0x3a, 0xb9, 0xd6, 0x49, 0x07, 0xaa, 0x9c, 0x2d, 0x3a, 0xd7, 0xdd, 0x0a, 0x67, 0x5a, 0xff,
-	0x0c, 0x9a, 0x27, 0x82, 0x87, 0x5c, 0xf1, 0x2b, 0x3c, 0x55, 0x82, 0x47, 0x17, 0xa4, 0x0d, 0x95,
-	0x2b, 0x1a, 0x4c, 0x71, 0xee, 0x6a, 0xb6, 0xb1, 0x9e, 0xc2, 0xee, 0x42, 0x78, 0x18, 0xc7, 0xc1,
-	0xba, 0xac, 0x96, 0xc9, 0x9a, 0x2b, 0xb2, 0xcf, 0x31, 0x67, 0xc3, 0x1f, 0x65, 0x28, 0x39, 0xf1,
-	0x98, 0x8c, 0xa0, 0x36, 0x42, 0x4c, 0x4e, 0xf4, 0x17, 0x1e, 0xad, 0xba, 0x5a, 0x93, 0x77, 0x7b,
-	0xb9, 0xd4, 0xec, 0x64, 0x56, 0x81, 0x7c, 0x02, 0x38, 0x12, 0xa8, 0xe7, 0x82, 0xca, 0x09, 0xb1,
-	0x56, 0xc5, 0xf9, 0xd3, 0x7b, 0x5b, 0xc3, 0x77, 0xd0, 0x38, 0x46, 0x75, 0x10, 0xa4, 0x75, 0x92,
-	0x6c, 0x53, 0x77, 0x1f, 0x6f, 0xf9, 0x19, 0xd2, 0x2a, 0x10, 0x17, 0x1e, 0x1c, 0xa3, 0x3a, 0x8b,
-	0x16, 0x77, 0xf8, 0x1f, 0xf4, 0x7c, 0x0d, 0xad, 0x53, 0x54, 0x9a, 0x58, 0x3e, 0x03, 0xed, 0xcd,
-	0x1a, 0x3d, 0x8e, 0xdd, 0x9b, 0x43, 0xb5, 0x0a, 0xe4, 0x15, 0xc0, 0x08, 0x75, 0x75, 0x9a, 0xdb,
-	0x5f, 0x34, 0xf8, 0x0a, 0x4f, 0x72, 0xbc, 0x1d, 0x5e, 0xbf, 0xcd, 0xee, 0xf3, 0xbd, 0x6c, 0x7e,
-	0xab, 0xa6, 0x6f, 0xf8, 0x8b, 0xdf, 0x01, 0x00, 0x00, 0xff, 0xff, 0x0f, 0xee, 0x47, 0xeb, 0xd4,
-	0x05, 0x00, 0x00,
+var fileDescriptor_grpcapi_890960139ce9f505 = []byte{
+	// 651 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xac, 0x55, 0x4d, 0x6f, 0xd3, 0x40,
+	0x10, 0x8d, 0xf3, 0x55, 0x67, 0xdc, 0x0f, 0x6b, 0x69, 0xa9, 0x69, 0x11, 0x4a, 0x2d, 0x10, 0x39,
+	0xa0, 0x1c, 0xc2, 0xb5, 0x12, 0x6a, 0x63, 0x53, 0x8c, 0xfa, 0x25, 0xc7, 0xad, 0xc4, 0x01, 0x59,
+	0x4b, 0x76, 0xdb, 0xae, 0xea, 0xd8, 0xd6, 0xee, 0xa6, 0xa2, 0xff, 0x87, 0x03, 0x37, 0x7e, 0x16,
+	0x7f, 0x03, 0xad, 0x13, 0xa7, 0x4e, 0x95, 0xa4, 0x85, 0x72, 0xdb, 0x7d, 0xf3, 0xe6, 0x65, 0xe6,
+	0x79, 0x66, 0x03, 0x2b, 0x97, 0x3c, 0xed, 0xe3, 0x94, 0xb5, 0x53, 0x9e, 0xc8, 0x04, 0x01, 0x4b,
+	0xe4, 0x18, 0xb1, 0x7f, 0x95, 0x61, 0x2d, 0xc0, 0xe2, 0xda, 0xa1, 0xa2, 0xcf, 0x59, 0x2a, 0x59,
+	0x12, 0xa3, 0x4d, 0x58, 0x1a, 0x0a, 0xca, 0x43, 0x46, 0x2c, 0xad, 0xa9, 0xb5, 0x1a, 0x7e, 0x5d,
+	0x5d, 0x3d, 0xa2, 0x02, 0x12, 0x8b, 0x6b, 0x15, 0x28, 0x8f, 0x02, 0xea, 0xea, 0x11, 0xb4, 0x0d,
+	0x8d, 0x2c, 0x10, 0xe3, 0x01, 0xb5, 0x2a, 0x59, 0x48, 0x57, 0xc0, 0x31, 0x1e, 0x50, 0xb4, 0x03,
+	0xcb, 0x57, 0x8c, 0x72, 0xcc, 0xfb, 0x57, 0xb7, 0x2a, 0xb5, 0x9a, 0xc5, 0x8d, 0x09, 0xe6, 0x11,
+	0xf4, 0x0e, 0x10, 0x19, 0xd2, 0x90, 0x60, 0x49, 0x43, 0xc9, 0x06, 0x54, 0x48, 0x3c, 0x48, 0xad,
+	0x5a, 0x53, 0x6b, 0x55, 0x7c, 0x93, 0x0c, 0xa9, 0x83, 0x25, 0x0d, 0x72, 0x5c, 0x09, 0x32, 0x11,
+	0xf6, 0x93, 0x41, 0x1a, 0x51, 0x49, 0x89, 0x55, 0x6f, 0x6a, 0x2d, 0xdd, 0x37, 0x98, 0xe8, 0xe6,
+	0x10, 0xfa, 0x02, 0x9b, 0x17, 0xc3, 0xb8, 0xaf, 0xda, 0xc1, 0x51, 0x18, 0x25, 0x7d, 0xac, 0x8e,
+	0x21, 0x23, 0xc2, 0x5a, 0x6a, 0x6a, 0x2d, 0xa3, 0xb3, 0xd3, 0xbe, 0x33, 0xa1, 0xfd, 0x71, 0x42,
+	0x3d, 0x1c, 0x33, 0x3d, 0x22, 0xfc, 0x8d, 0x8b, 0x59, 0xb0, 0xfd, 0xa3, 0x0c, 0xcf, 0xbd, 0x98,
+	0x49, 0x86, 0xa3, 0x47, 0x1b, 0x37, 0xe5, 0x4f, 0xf9, 0x01, 0x7f, 0x2a, 0x8f, 0xf5, 0xa7, 0x3a,
+	0xc7, 0x9f, 0x05, 0xcd, 0xd7, 0x9e, 0xd6, 0x3c, 0x6a, 0x81, 0x49, 0xbf, 0x4b, 0xca, 0x95, 0x70,
+	0x3e, 0x0a, 0xf5, 0xac, 0xde, 0xd5, 0x1c, 0x0f, 0xb2, 0x91, 0xb0, 0x77, 0x41, 0x57, 0xa7, 0x33,
+	0x41, 0xf9, 0xdf, 0x0f, 0x94, 0xfd, 0x53, 0x83, 0xe5, 0x9e, 0xc4, 0x72, 0x28, 0xba, 0x57, 0x38,
+	0xbe, 0xa4, 0x45, 0xa6, 0x36, 0x35, 0x7a, 0xbb, 0x50, 0x17, 0x19, 0x31, 0x53, 0x58, 0xed, 0xbc,
+	0x2e, 0xf6, 0x56, 0x94, 0x68, 0xab, 0x72, 0xc2, 0x11, 0xe2, 0x8f, 0x73, 0xec, 0x3d, 0x30, 0x0a,
+	0x30, 0x32, 0x60, 0xe9, 0xf8, 0x24, 0xe8, 0xb9, 0xc7, 0x81, 0x59, 0x42, 0x3a, 0x54, 0xb3, 0x93,
+	0x86, 0x96, 0x41, 0xf7, 0xdd, 0xae, 0xeb, 0x9d, 0xbb, 0x8e, 0x59, 0x46, 0x2b, 0xd0, 0xe8, 0x9e,
+	0x1c, 0x9d, 0x1e, 0xba, 0x81, 0xeb, 0x98, 0x15, 0x1b, 0x83, 0x79, 0x6f, 0x0e, 0x04, 0x3a, 0x82,
+	0xf5, 0xac, 0x5a, 0x72, 0x07, 0x86, 0x98, 0x73, 0x4b, 0x6b, 0x56, 0x5a, 0x46, 0x67, 0xbb, 0x58,
+	0xe2, 0xbd, 0x5c, 0x1f, 0xc9, 0x69, 0x60, 0x8f, 0x73, 0xbb, 0x0d, 0x1b, 0x33, 0xbf, 0x12, 0xda,
+	0x80, 0x3a, 0x23, 0x13, 0xe5, 0x86, 0x5f, 0x63, 0x44, 0xf1, 0xdf, 0xc2, 0xda, 0x29, 0x67, 0x03,
+	0x26, 0xd9, 0x0d, 0xed, 0x49, 0xce, 0xe2, 0x4b, 0xb4, 0x0e, 0xb5, 0x1b, 0x1c, 0x0d, 0xe9, 0xd8,
+	0xbd, 0xd1, 0xc5, 0x7e, 0x03, 0x2b, 0x13, 0xe2, 0x7e, 0x92, 0x44, 0xd3, 0x34, 0x3d, 0xa7, 0xad,
+	0x15, 0x68, 0xe7, 0x09, 0x23, 0x9d, 0xdf, 0x55, 0xa8, 0x78, 0x49, 0x80, 0x1c, 0xd0, 0x1d, 0x4a,
+	0xd3, 0x53, 0xf5, 0x0b, 0x2f, 0x8a, 0x5d, 0x4d, 0xd1, 0xb7, 0xb6, 0x67, 0x86, 0x46, 0x95, 0xd9,
+	0x25, 0x74, 0x02, 0xd0, 0xe5, 0x54, 0x8d, 0x30, 0x16, 0xd7, 0xc8, 0x2e, 0x92, 0x67, 0x2f, 0xda,
+	0x43, 0x82, 0x9f, 0xc1, 0x38, 0xa0, 0x72, 0x2f, 0xca, 0xf2, 0x04, 0x5a, 0xc4, 0xde, 0x7a, 0xb9,
+	0xe0, 0x63, 0x08, 0xbb, 0x84, 0x7c, 0x78, 0x76, 0x40, 0xe5, 0x59, 0x3c, 0x79, 0x6e, 0xfe, 0x83,
+	0xa6, 0x0b, 0x66, 0x8f, 0x4a, 0x15, 0xb8, 0x7b, 0xb1, 0xd6, 0xef, 0xe7, 0xa8, 0xcd, 0xd9, 0x9a,
+	0x6f, 0xaa, 0x5d, 0x42, 0x1f, 0x00, 0x1c, 0xaa, 0xb2, 0x33, 0xdf, 0xfe, 0x41, 0xe0, 0x2b, 0xbc,
+	0x9a, 0xd1, 0xdb, 0xfe, 0xed, 0xa7, 0xfc, 0xe9, 0x79, 0x5a, 0x9b, 0xfb, 0xd0, 0xe8, 0x51, 0x39,
+	0x5e, 0x2d, 0x6b, 0xde, 0x5e, 0x2e, 0x2c, 0xf1, 0x5b, 0x3d, 0xfb, 0xcb, 0x7a, 0xff, 0x27, 0x00,
+	0x00, 0xff, 0xff, 0x2d, 0xa8, 0xc3, 0x42, 0xc3, 0x06, 0x00, 0x00,
 }
