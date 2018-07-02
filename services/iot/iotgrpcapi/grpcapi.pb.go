@@ -49,7 +49,42 @@ func (x TaskStatus) String() string {
 	return proto.EnumName(TaskStatus_name, int32(x))
 }
 func (TaskStatus) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_grpcapi_1232c0a65f151064, []int{0}
+	return fileDescriptor_grpcapi_bcb1567d9c0128ea, []int{0}
+}
+
+type NodeDataContentType int32
+
+const (
+	NodeDataContentType_DEFAULT     NodeDataContentType = 0
+	NodeDataContentType_DATA_POINT  NodeDataContentType = 1
+	NodeDataContentType_SPECTRUM    NodeDataContentType = 2
+	NodeDataContentType_TIME_SERIES NodeDataContentType = 3
+	NodeDataContentType_NOTE        NodeDataContentType = 4
+	NodeDataContentType_MEDIA       NodeDataContentType = 5
+)
+
+var NodeDataContentType_name = map[int32]string{
+	0: "DEFAULT",
+	1: "DATA_POINT",
+	2: "SPECTRUM",
+	3: "TIME_SERIES",
+	4: "NOTE",
+	5: "MEDIA",
+}
+var NodeDataContentType_value = map[string]int32{
+	"DEFAULT":     0,
+	"DATA_POINT":  1,
+	"SPECTRUM":    2,
+	"TIME_SERIES": 3,
+	"NOTE":        4,
+	"MEDIA":       5,
+}
+
+func (x NodeDataContentType) String() string {
+	return proto.EnumName(NodeDataContentType_name, int32(x))
+}
+func (NodeDataContentType) EnumDescriptor() ([]byte, []int) {
+	return fileDescriptor_grpcapi_bcb1567d9c0128ea, []int{1}
 }
 
 type TaskDescription struct {
@@ -70,7 +105,7 @@ func (m *TaskDescription) Reset()         { *m = TaskDescription{} }
 func (m *TaskDescription) String() string { return proto.CompactTextString(m) }
 func (*TaskDescription) ProtoMessage()    {}
 func (*TaskDescription) Descriptor() ([]byte, []int) {
-	return fileDescriptor_grpcapi_1232c0a65f151064, []int{0}
+	return fileDescriptor_grpcapi_bcb1567d9c0128ea, []int{0}
 }
 func (m *TaskDescription) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_TaskDescription.Unmarshal(m, b)
@@ -163,7 +198,7 @@ func (m *InitialTaskDescription) Reset()         { *m = InitialTaskDescription{}
 func (m *InitialTaskDescription) String() string { return proto.CompactTextString(m) }
 func (*InitialTaskDescription) ProtoMessage()    {}
 func (*InitialTaskDescription) Descriptor() ([]byte, []int) {
-	return fileDescriptor_grpcapi_1232c0a65f151064, []int{1}
+	return fileDescriptor_grpcapi_bcb1567d9c0128ea, []int{1}
 }
 func (m *InitialTaskDescription) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_InitialTaskDescription.Unmarshal(m, b)
@@ -244,7 +279,7 @@ func (m *TaskUser) Reset()         { *m = TaskUser{} }
 func (m *TaskUser) String() string { return proto.CompactTextString(m) }
 func (*TaskUser) ProtoMessage()    {}
 func (*TaskUser) Descriptor() ([]byte, []int) {
-	return fileDescriptor_grpcapi_1232c0a65f151064, []int{2}
+	return fileDescriptor_grpcapi_bcb1567d9c0128ea, []int{2}
 }
 func (m *TaskUser) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_TaskUser.Unmarshal(m, b)
@@ -281,6 +316,7 @@ func (m *TaskUser) GetTaskId() string {
 type SetTaskStatusInput struct {
 	TaskId               string     `protobuf:"bytes,1,opt,name=task_id,json=taskId,proto3" json:"task_id,omitempty"`
 	Status               TaskStatus `protobuf:"varint,2,opt,name=status,proto3,enum=iotgrpcapi.TaskStatus" json:"status,omitempty"`
+	UserId               string     `protobuf:"bytes,3,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}   `json:"-"`
 	XXX_unrecognized     []byte     `json:"-"`
 	XXX_sizecache        int32      `json:"-"`
@@ -290,7 +326,7 @@ func (m *SetTaskStatusInput) Reset()         { *m = SetTaskStatusInput{} }
 func (m *SetTaskStatusInput) String() string { return proto.CompactTextString(m) }
 func (*SetTaskStatusInput) ProtoMessage()    {}
 func (*SetTaskStatusInput) Descriptor() ([]byte, []int) {
-	return fileDescriptor_grpcapi_1232c0a65f151064, []int{3}
+	return fileDescriptor_grpcapi_bcb1567d9c0128ea, []int{3}
 }
 func (m *SetTaskStatusInput) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_SetTaskStatusInput.Unmarshal(m, b)
@@ -324,6 +360,13 @@ func (m *SetTaskStatusInput) GetStatus() TaskStatus {
 	return TaskStatus_NOT_SENT
 }
 
+func (m *SetTaskStatusInput) GetUserId() string {
+	if m != nil {
+		return m.UserId
+	}
+	return ""
+}
+
 type TaskDescriptions struct {
 	TaskDescriptionArr   []*TaskDescription `protobuf:"bytes,1,rep,name=task_description_arr,json=taskDescriptionArr,proto3" json:"task_description_arr,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}           `json:"-"`
@@ -335,7 +378,7 @@ func (m *TaskDescriptions) Reset()         { *m = TaskDescriptions{} }
 func (m *TaskDescriptions) String() string { return proto.CompactTextString(m) }
 func (*TaskDescriptions) ProtoMessage()    {}
 func (*TaskDescriptions) Descriptor() ([]byte, []int) {
-	return fileDescriptor_grpcapi_1232c0a65f151064, []int{4}
+	return fileDescriptor_grpcapi_bcb1567d9c0128ea, []int{4}
 }
 func (m *TaskDescriptions) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_TaskDescriptions.Unmarshal(m, b)
@@ -373,7 +416,7 @@ func (m *FunctionalLocationIds) Reset()         { *m = FunctionalLocationIds{} }
 func (m *FunctionalLocationIds) String() string { return proto.CompactTextString(m) }
 func (*FunctionalLocationIds) ProtoMessage()    {}
 func (*FunctionalLocationIds) Descriptor() ([]byte, []int) {
-	return fileDescriptor_grpcapi_1232c0a65f151064, []int{5}
+	return fileDescriptor_grpcapi_bcb1567d9c0128ea, []int{5}
 }
 func (m *FunctionalLocationIds) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_FunctionalLocationIds.Unmarshal(m, b)
@@ -411,7 +454,7 @@ func (m *PrimitiveString) Reset()         { *m = PrimitiveString{} }
 func (m *PrimitiveString) String() string { return proto.CompactTextString(m) }
 func (*PrimitiveString) ProtoMessage()    {}
 func (*PrimitiveString) Descriptor() ([]byte, []int) {
-	return fileDescriptor_grpcapi_1232c0a65f151064, []int{6}
+	return fileDescriptor_grpcapi_bcb1567d9c0128ea, []int{6}
 }
 func (m *PrimitiveString) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_PrimitiveString.Unmarshal(m, b)
@@ -449,7 +492,7 @@ func (m *PrimitiveBool) Reset()         { *m = PrimitiveBool{} }
 func (m *PrimitiveBool) String() string { return proto.CompactTextString(m) }
 func (*PrimitiveBool) ProtoMessage()    {}
 func (*PrimitiveBool) Descriptor() ([]byte, []int) {
-	return fileDescriptor_grpcapi_1232c0a65f151064, []int{7}
+	return fileDescriptor_grpcapi_bcb1567d9c0128ea, []int{7}
 }
 func (m *PrimitiveBool) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_PrimitiveBool.Unmarshal(m, b)
@@ -486,7 +529,7 @@ func (m *PrimitiveVoid) Reset()         { *m = PrimitiveVoid{} }
 func (m *PrimitiveVoid) String() string { return proto.CompactTextString(m) }
 func (*PrimitiveVoid) ProtoMessage()    {}
 func (*PrimitiveVoid) Descriptor() ([]byte, []int) {
-	return fileDescriptor_grpcapi_1232c0a65f151064, []int{8}
+	return fileDescriptor_grpcapi_bcb1567d9c0128ea, []int{8}
 }
 func (m *PrimitiveVoid) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_PrimitiveVoid.Unmarshal(m, b)
@@ -506,6 +549,484 @@ func (m *PrimitiveVoid) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_PrimitiveVoid proto.InternalMessageInfo
 
+type NodeData struct {
+	CreatedAt            int64               `protobuf:"varint,1,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
+	ContentType          NodeDataContentType `protobuf:"varint,2,opt,name=content_type,json=contentType,proto3,enum=iotgrpcapi.NodeDataContentType" json:"content_type,omitempty"`
+	DataPoint            *DataPoint          `protobuf:"bytes,3,opt,name=data_point,json=dataPoint,proto3" json:"data_point,omitempty"`
+	Spectrum             *Spectrum           `protobuf:"bytes,4,opt,name=spectrum,proto3" json:"spectrum,omitempty"`
+	TimeSeries           *TimeSeries         `protobuf:"bytes,5,opt,name=time_series,json=timeSeries,proto3" json:"time_series,omitempty"`
+	Note                 string              `protobuf:"bytes,6,opt,name=note,proto3" json:"note,omitempty"`
+	Media                []byte              `protobuf:"bytes,7,opt,name=media,proto3" json:"media,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}            `json:"-"`
+	XXX_unrecognized     []byte              `json:"-"`
+	XXX_sizecache        int32               `json:"-"`
+}
+
+func (m *NodeData) Reset()         { *m = NodeData{} }
+func (m *NodeData) String() string { return proto.CompactTextString(m) }
+func (*NodeData) ProtoMessage()    {}
+func (*NodeData) Descriptor() ([]byte, []int) {
+	return fileDescriptor_grpcapi_bcb1567d9c0128ea, []int{9}
+}
+func (m *NodeData) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_NodeData.Unmarshal(m, b)
+}
+func (m *NodeData) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_NodeData.Marshal(b, m, deterministic)
+}
+func (dst *NodeData) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_NodeData.Merge(dst, src)
+}
+func (m *NodeData) XXX_Size() int {
+	return xxx_messageInfo_NodeData.Size(m)
+}
+func (m *NodeData) XXX_DiscardUnknown() {
+	xxx_messageInfo_NodeData.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_NodeData proto.InternalMessageInfo
+
+func (m *NodeData) GetCreatedAt() int64 {
+	if m != nil {
+		return m.CreatedAt
+	}
+	return 0
+}
+
+func (m *NodeData) GetContentType() NodeDataContentType {
+	if m != nil {
+		return m.ContentType
+	}
+	return NodeDataContentType_DEFAULT
+}
+
+func (m *NodeData) GetDataPoint() *DataPoint {
+	if m != nil {
+		return m.DataPoint
+	}
+	return nil
+}
+
+func (m *NodeData) GetSpectrum() *Spectrum {
+	if m != nil {
+		return m.Spectrum
+	}
+	return nil
+}
+
+func (m *NodeData) GetTimeSeries() *TimeSeries {
+	if m != nil {
+		return m.TimeSeries
+	}
+	return nil
+}
+
+func (m *NodeData) GetNote() string {
+	if m != nil {
+		return m.Note
+	}
+	return ""
+}
+
+func (m *NodeData) GetMedia() []byte {
+	if m != nil {
+		return m.Media
+	}
+	return nil
+}
+
+type Coordinate struct {
+	X                    float64  `protobuf:"fixed64,1,opt,name=x,proto3" json:"x,omitempty"`
+	Y                    float64  `protobuf:"fixed64,2,opt,name=y,proto3" json:"y,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *Coordinate) Reset()         { *m = Coordinate{} }
+func (m *Coordinate) String() string { return proto.CompactTextString(m) }
+func (*Coordinate) ProtoMessage()    {}
+func (*Coordinate) Descriptor() ([]byte, []int) {
+	return fileDescriptor_grpcapi_bcb1567d9c0128ea, []int{10}
+}
+func (m *Coordinate) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_Coordinate.Unmarshal(m, b)
+}
+func (m *Coordinate) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_Coordinate.Marshal(b, m, deterministic)
+}
+func (dst *Coordinate) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Coordinate.Merge(dst, src)
+}
+func (m *Coordinate) XXX_Size() int {
+	return xxx_messageInfo_Coordinate.Size(m)
+}
+func (m *Coordinate) XXX_DiscardUnknown() {
+	xxx_messageInfo_Coordinate.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_Coordinate proto.InternalMessageInfo
+
+func (m *Coordinate) GetX() float64 {
+	if m != nil {
+		return m.X
+	}
+	return 0
+}
+
+func (m *Coordinate) GetY() float64 {
+	if m != nil {
+		return m.Y
+	}
+	return 0
+}
+
+type DataPoint struct {
+	Coordinate           *Coordinate `protobuf:"bytes,1,opt,name=coordinate,proto3" json:"coordinate,omitempty"`
+	XUnit                string      `protobuf:"bytes,2,opt,name=x_unit,json=xUnit,proto3" json:"x_unit,omitempty"`
+	YUnit                string      `protobuf:"bytes,3,opt,name=y_unit,json=yUnit,proto3" json:"y_unit,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}    `json:"-"`
+	XXX_unrecognized     []byte      `json:"-"`
+	XXX_sizecache        int32       `json:"-"`
+}
+
+func (m *DataPoint) Reset()         { *m = DataPoint{} }
+func (m *DataPoint) String() string { return proto.CompactTextString(m) }
+func (*DataPoint) ProtoMessage()    {}
+func (*DataPoint) Descriptor() ([]byte, []int) {
+	return fileDescriptor_grpcapi_bcb1567d9c0128ea, []int{11}
+}
+func (m *DataPoint) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_DataPoint.Unmarshal(m, b)
+}
+func (m *DataPoint) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_DataPoint.Marshal(b, m, deterministic)
+}
+func (dst *DataPoint) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DataPoint.Merge(dst, src)
+}
+func (m *DataPoint) XXX_Size() int {
+	return xxx_messageInfo_DataPoint.Size(m)
+}
+func (m *DataPoint) XXX_DiscardUnknown() {
+	xxx_messageInfo_DataPoint.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_DataPoint proto.InternalMessageInfo
+
+func (m *DataPoint) GetCoordinate() *Coordinate {
+	if m != nil {
+		return m.Coordinate
+	}
+	return nil
+}
+
+func (m *DataPoint) GetXUnit() string {
+	if m != nil {
+		return m.XUnit
+	}
+	return ""
+}
+
+func (m *DataPoint) GetYUnit() string {
+	if m != nil {
+		return m.YUnit
+	}
+	return ""
+}
+
+type Spectrum struct {
+	Coordinates          []*Coordinate `protobuf:"bytes,1,rep,name=coordinates,proto3" json:"coordinates,omitempty"`
+	XUnit                string        `protobuf:"bytes,2,opt,name=x_unit,json=xUnit,proto3" json:"x_unit,omitempty"`
+	YUnit                string        `protobuf:"bytes,3,opt,name=y_unit,json=yUnit,proto3" json:"y_unit,omitempty"`
+	WindowFunction       string        `protobuf:"bytes,4,opt,name=window_function,json=windowFunction,proto3" json:"window_function,omitempty"`
+	SpeedRpm             float64       `protobuf:"fixed64,5,opt,name=speed_rpm,json=speedRpm,proto3" json:"speed_rpm,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}      `json:"-"`
+	XXX_unrecognized     []byte        `json:"-"`
+	XXX_sizecache        int32         `json:"-"`
+}
+
+func (m *Spectrum) Reset()         { *m = Spectrum{} }
+func (m *Spectrum) String() string { return proto.CompactTextString(m) }
+func (*Spectrum) ProtoMessage()    {}
+func (*Spectrum) Descriptor() ([]byte, []int) {
+	return fileDescriptor_grpcapi_bcb1567d9c0128ea, []int{12}
+}
+func (m *Spectrum) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_Spectrum.Unmarshal(m, b)
+}
+func (m *Spectrum) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_Spectrum.Marshal(b, m, deterministic)
+}
+func (dst *Spectrum) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Spectrum.Merge(dst, src)
+}
+func (m *Spectrum) XXX_Size() int {
+	return xxx_messageInfo_Spectrum.Size(m)
+}
+func (m *Spectrum) XXX_DiscardUnknown() {
+	xxx_messageInfo_Spectrum.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_Spectrum proto.InternalMessageInfo
+
+func (m *Spectrum) GetCoordinates() []*Coordinate {
+	if m != nil {
+		return m.Coordinates
+	}
+	return nil
+}
+
+func (m *Spectrum) GetXUnit() string {
+	if m != nil {
+		return m.XUnit
+	}
+	return ""
+}
+
+func (m *Spectrum) GetYUnit() string {
+	if m != nil {
+		return m.YUnit
+	}
+	return ""
+}
+
+func (m *Spectrum) GetWindowFunction() string {
+	if m != nil {
+		return m.WindowFunction
+	}
+	return ""
+}
+
+func (m *Spectrum) GetSpeedRpm() float64 {
+	if m != nil {
+		return m.SpeedRpm
+	}
+	return 0
+}
+
+type TimeSeries struct {
+	Coordinates          []*Coordinate `protobuf:"bytes,1,rep,name=coordinates,proto3" json:"coordinates,omitempty"`
+	XUnit                string        `protobuf:"bytes,2,opt,name=x_unit,json=xUnit,proto3" json:"x_unit,omitempty"`
+	YUnit                string        `protobuf:"bytes,3,opt,name=y_unit,json=yUnit,proto3" json:"y_unit,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}      `json:"-"`
+	XXX_unrecognized     []byte        `json:"-"`
+	XXX_sizecache        int32         `json:"-"`
+}
+
+func (m *TimeSeries) Reset()         { *m = TimeSeries{} }
+func (m *TimeSeries) String() string { return proto.CompactTextString(m) }
+func (*TimeSeries) ProtoMessage()    {}
+func (*TimeSeries) Descriptor() ([]byte, []int) {
+	return fileDescriptor_grpcapi_bcb1567d9c0128ea, []int{13}
+}
+func (m *TimeSeries) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_TimeSeries.Unmarshal(m, b)
+}
+func (m *TimeSeries) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_TimeSeries.Marshal(b, m, deterministic)
+}
+func (dst *TimeSeries) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_TimeSeries.Merge(dst, src)
+}
+func (m *TimeSeries) XXX_Size() int {
+	return xxx_messageInfo_TimeSeries.Size(m)
+}
+func (m *TimeSeries) XXX_DiscardUnknown() {
+	xxx_messageInfo_TimeSeries.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_TimeSeries proto.InternalMessageInfo
+
+func (m *TimeSeries) GetCoordinates() []*Coordinate {
+	if m != nil {
+		return m.Coordinates
+	}
+	return nil
+}
+
+func (m *TimeSeries) GetXUnit() string {
+	if m != nil {
+		return m.XUnit
+	}
+	return ""
+}
+
+func (m *TimeSeries) GetYUnit() string {
+	if m != nil {
+		return m.YUnit
+	}
+	return ""
+}
+
+type IngestNodeDataInput struct {
+	NodeId               string    `protobuf:"bytes,1,opt,name=node_id,json=nodeId,proto3" json:"node_id,omitempty"`
+	NodeData             *NodeData `protobuf:"bytes,2,opt,name=node_data,json=nodeData,proto3" json:"node_data,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}  `json:"-"`
+	XXX_unrecognized     []byte    `json:"-"`
+	XXX_sizecache        int32     `json:"-"`
+}
+
+func (m *IngestNodeDataInput) Reset()         { *m = IngestNodeDataInput{} }
+func (m *IngestNodeDataInput) String() string { return proto.CompactTextString(m) }
+func (*IngestNodeDataInput) ProtoMessage()    {}
+func (*IngestNodeDataInput) Descriptor() ([]byte, []int) {
+	return fileDescriptor_grpcapi_bcb1567d9c0128ea, []int{14}
+}
+func (m *IngestNodeDataInput) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_IngestNodeDataInput.Unmarshal(m, b)
+}
+func (m *IngestNodeDataInput) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_IngestNodeDataInput.Marshal(b, m, deterministic)
+}
+func (dst *IngestNodeDataInput) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_IngestNodeDataInput.Merge(dst, src)
+}
+func (m *IngestNodeDataInput) XXX_Size() int {
+	return xxx_messageInfo_IngestNodeDataInput.Size(m)
+}
+func (m *IngestNodeDataInput) XXX_DiscardUnknown() {
+	xxx_messageInfo_IngestNodeDataInput.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_IngestNodeDataInput proto.InternalMessageInfo
+
+func (m *IngestNodeDataInput) GetNodeId() string {
+	if m != nil {
+		return m.NodeId
+	}
+	return ""
+}
+
+func (m *IngestNodeDataInput) GetNodeData() *NodeData {
+	if m != nil {
+		return m.NodeData
+	}
+	return nil
+}
+
+type IngestNodeDataOutput struct {
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *IngestNodeDataOutput) Reset()         { *m = IngestNodeDataOutput{} }
+func (m *IngestNodeDataOutput) String() string { return proto.CompactTextString(m) }
+func (*IngestNodeDataOutput) ProtoMessage()    {}
+func (*IngestNodeDataOutput) Descriptor() ([]byte, []int) {
+	return fileDescriptor_grpcapi_bcb1567d9c0128ea, []int{15}
+}
+func (m *IngestNodeDataOutput) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_IngestNodeDataOutput.Unmarshal(m, b)
+}
+func (m *IngestNodeDataOutput) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_IngestNodeDataOutput.Marshal(b, m, deterministic)
+}
+func (dst *IngestNodeDataOutput) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_IngestNodeDataOutput.Merge(dst, src)
+}
+func (m *IngestNodeDataOutput) XXX_Size() int {
+	return xxx_messageInfo_IngestNodeDataOutput.Size(m)
+}
+func (m *IngestNodeDataOutput) XXX_DiscardUnknown() {
+	xxx_messageInfo_IngestNodeDataOutput.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_IngestNodeDataOutput proto.InternalMessageInfo
+
+type GetNodeDataInput struct {
+	NodeId               string              `protobuf:"bytes,1,opt,name=node_id,json=nodeId,proto3" json:"node_id,omitempty"`
+	Timestamp            int64               `protobuf:"varint,2,opt,name=timestamp,proto3" json:"timestamp,omitempty"`
+	ContentType          NodeDataContentType `protobuf:"varint,3,opt,name=content_type,json=contentType,proto3,enum=iotgrpcapi.NodeDataContentType" json:"content_type,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}            `json:"-"`
+	XXX_unrecognized     []byte              `json:"-"`
+	XXX_sizecache        int32               `json:"-"`
+}
+
+func (m *GetNodeDataInput) Reset()         { *m = GetNodeDataInput{} }
+func (m *GetNodeDataInput) String() string { return proto.CompactTextString(m) }
+func (*GetNodeDataInput) ProtoMessage()    {}
+func (*GetNodeDataInput) Descriptor() ([]byte, []int) {
+	return fileDescriptor_grpcapi_bcb1567d9c0128ea, []int{16}
+}
+func (m *GetNodeDataInput) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_GetNodeDataInput.Unmarshal(m, b)
+}
+func (m *GetNodeDataInput) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_GetNodeDataInput.Marshal(b, m, deterministic)
+}
+func (dst *GetNodeDataInput) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetNodeDataInput.Merge(dst, src)
+}
+func (m *GetNodeDataInput) XXX_Size() int {
+	return xxx_messageInfo_GetNodeDataInput.Size(m)
+}
+func (m *GetNodeDataInput) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetNodeDataInput.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GetNodeDataInput proto.InternalMessageInfo
+
+func (m *GetNodeDataInput) GetNodeId() string {
+	if m != nil {
+		return m.NodeId
+	}
+	return ""
+}
+
+func (m *GetNodeDataInput) GetTimestamp() int64 {
+	if m != nil {
+		return m.Timestamp
+	}
+	return 0
+}
+
+func (m *GetNodeDataInput) GetContentType() NodeDataContentType {
+	if m != nil {
+		return m.ContentType
+	}
+	return NodeDataContentType_DEFAULT
+}
+
+type GetNodeDataOutput struct {
+	NodeDataList         []*NodeData `protobuf:"bytes,1,rep,name=node_data_list,json=nodeDataList,proto3" json:"node_data_list,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}    `json:"-"`
+	XXX_unrecognized     []byte      `json:"-"`
+	XXX_sizecache        int32       `json:"-"`
+}
+
+func (m *GetNodeDataOutput) Reset()         { *m = GetNodeDataOutput{} }
+func (m *GetNodeDataOutput) String() string { return proto.CompactTextString(m) }
+func (*GetNodeDataOutput) ProtoMessage()    {}
+func (*GetNodeDataOutput) Descriptor() ([]byte, []int) {
+	return fileDescriptor_grpcapi_bcb1567d9c0128ea, []int{17}
+}
+func (m *GetNodeDataOutput) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_GetNodeDataOutput.Unmarshal(m, b)
+}
+func (m *GetNodeDataOutput) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_GetNodeDataOutput.Marshal(b, m, deterministic)
+}
+func (dst *GetNodeDataOutput) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetNodeDataOutput.Merge(dst, src)
+}
+func (m *GetNodeDataOutput) XXX_Size() int {
+	return xxx_messageInfo_GetNodeDataOutput.Size(m)
+}
+func (m *GetNodeDataOutput) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetNodeDataOutput.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GetNodeDataOutput proto.InternalMessageInfo
+
+func (m *GetNodeDataOutput) GetNodeDataList() []*NodeData {
+	if m != nil {
+		return m.NodeDataList
+	}
+	return nil
+}
+
 func init() {
 	proto.RegisterType((*TaskDescription)(nil), "iotgrpcapi.TaskDescription")
 	proto.RegisterType((*InitialTaskDescription)(nil), "iotgrpcapi.InitialTaskDescription")
@@ -516,7 +1037,17 @@ func init() {
 	proto.RegisterType((*PrimitiveString)(nil), "iotgrpcapi.PrimitiveString")
 	proto.RegisterType((*PrimitiveBool)(nil), "iotgrpcapi.PrimitiveBool")
 	proto.RegisterType((*PrimitiveVoid)(nil), "iotgrpcapi.PrimitiveVoid")
+	proto.RegisterType((*NodeData)(nil), "iotgrpcapi.NodeData")
+	proto.RegisterType((*Coordinate)(nil), "iotgrpcapi.Coordinate")
+	proto.RegisterType((*DataPoint)(nil), "iotgrpcapi.DataPoint")
+	proto.RegisterType((*Spectrum)(nil), "iotgrpcapi.Spectrum")
+	proto.RegisterType((*TimeSeries)(nil), "iotgrpcapi.TimeSeries")
+	proto.RegisterType((*IngestNodeDataInput)(nil), "iotgrpcapi.IngestNodeDataInput")
+	proto.RegisterType((*IngestNodeDataOutput)(nil), "iotgrpcapi.IngestNodeDataOutput")
+	proto.RegisterType((*GetNodeDataInput)(nil), "iotgrpcapi.GetNodeDataInput")
+	proto.RegisterType((*GetNodeDataOutput)(nil), "iotgrpcapi.GetNodeDataOutput")
 	proto.RegisterEnum("iotgrpcapi.TaskStatus", TaskStatus_name, TaskStatus_value)
+	proto.RegisterEnum("iotgrpcapi.NodeDataContentType", NodeDataContentType_name, NodeDataContentType_value)
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -539,6 +1070,8 @@ type IoTClient interface {
 	DeleteTask(ctx context.Context, in *TaskUser, opts ...grpc.CallOption) (*PrimitiveVoid, error)
 	GetUncompletedTasksByHierarchy(ctx context.Context, in *PrimitiveString, opts ...grpc.CallOption) (*TaskDescriptions, error)
 	SetTaskStatus(ctx context.Context, in *SetTaskStatusInput, opts ...grpc.CallOption) (*PrimitiveVoid, error)
+	IngestNodeData(ctx context.Context, in *IngestNodeDataInput, opts ...grpc.CallOption) (*IngestNodeDataOutput, error)
+	GetNodeData(ctx context.Context, in *GetNodeDataInput, opts ...grpc.CallOption) (*GetNodeDataOutput, error)
 }
 
 type ioTClient struct {
@@ -621,6 +1154,24 @@ func (c *ioTClient) SetTaskStatus(ctx context.Context, in *SetTaskStatusInput, o
 	return out, nil
 }
 
+func (c *ioTClient) IngestNodeData(ctx context.Context, in *IngestNodeDataInput, opts ...grpc.CallOption) (*IngestNodeDataOutput, error) {
+	out := new(IngestNodeDataOutput)
+	err := c.cc.Invoke(ctx, "/iotgrpcapi.IoT/IngestNodeData", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *ioTClient) GetNodeData(ctx context.Context, in *GetNodeDataInput, opts ...grpc.CallOption) (*GetNodeDataOutput, error) {
+	out := new(GetNodeDataOutput)
+	err := c.cc.Invoke(ctx, "/iotgrpcapi.IoT/GetNodeData", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // IoTServer is the server API for IoT service.
 type IoTServer interface {
 	DeepPing(context.Context, *PrimitiveVoid) (*PrimitiveString, error)
@@ -631,6 +1182,8 @@ type IoTServer interface {
 	DeleteTask(context.Context, *TaskUser) (*PrimitiveVoid, error)
 	GetUncompletedTasksByHierarchy(context.Context, *PrimitiveString) (*TaskDescriptions, error)
 	SetTaskStatus(context.Context, *SetTaskStatusInput) (*PrimitiveVoid, error)
+	IngestNodeData(context.Context, *IngestNodeDataInput) (*IngestNodeDataOutput, error)
+	GetNodeData(context.Context, *GetNodeDataInput) (*GetNodeDataOutput, error)
 }
 
 func RegisterIoTServer(s *grpc.Server, srv IoTServer) {
@@ -781,6 +1334,42 @@ func _IoT_SetTaskStatus_Handler(srv interface{}, ctx context.Context, dec func(i
 	return interceptor(ctx, in, info, handler)
 }
 
+func _IoT_IngestNodeData_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(IngestNodeDataInput)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(IoTServer).IngestNodeData(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/iotgrpcapi.IoT/IngestNodeData",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(IoTServer).IngestNodeData(ctx, req.(*IngestNodeDataInput))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _IoT_GetNodeData_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetNodeDataInput)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(IoTServer).GetNodeData(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/iotgrpcapi.IoT/GetNodeData",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(IoTServer).GetNodeData(ctx, req.(*GetNodeDataInput))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var _IoT_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "iotgrpcapi.IoT",
 	HandlerType: (*IoTServer)(nil),
@@ -817,55 +1406,94 @@ var _IoT_serviceDesc = grpc.ServiceDesc{
 			MethodName: "SetTaskStatus",
 			Handler:    _IoT_SetTaskStatus_Handler,
 		},
+		{
+			MethodName: "IngestNodeData",
+			Handler:    _IoT_IngestNodeData_Handler,
+		},
+		{
+			MethodName: "GetNodeData",
+			Handler:    _IoT_GetNodeData_Handler,
+		},
 	},
 	Streams:  []grpc.StreamDesc{},
 	Metadata: "grpcapi.proto",
 }
 
-func init() { proto.RegisterFile("grpcapi.proto", fileDescriptor_grpcapi_1232c0a65f151064) }
+func init() { proto.RegisterFile("grpcapi.proto", fileDescriptor_grpcapi_bcb1567d9c0128ea) }
 
-var fileDescriptor_grpcapi_1232c0a65f151064 = []byte{
-	// 659 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xac, 0x55, 0x5b, 0x4f, 0xdb, 0x4a,
-	0x10, 0x8e, 0x73, 0xc3, 0x99, 0x10, 0x88, 0xf6, 0x70, 0xc9, 0x81, 0x23, 0x14, 0x2c, 0x1d, 0xd5,
-	0xaa, 0xaa, 0x3c, 0xa4, 0xaf, 0x95, 0x2a, 0x88, 0x5d, 0xea, 0x8a, 0x9b, 0x1c, 0x83, 0xd4, 0x07,
-	0x64, 0x6d, 0xb3, 0x0b, 0xac, 0x70, 0x6c, 0x6b, 0x77, 0x8d, 0xca, 0xff, 0xec, 0x7b, 0x7f, 0x43,
-	0xff, 0x41, 0xb5, 0xce, 0xc5, 0x0e, 0x0d, 0x21, 0x2d, 0x7d, 0xf3, 0x7e, 0xf3, 0xcd, 0x97, 0x99,
-	0x6f, 0x67, 0x36, 0xd0, 0xb8, 0xe1, 0xf1, 0x00, 0xc7, 0xac, 0x13, 0xf3, 0x48, 0x46, 0x08, 0x58,
-	0x24, 0xc7, 0x88, 0xf1, 0xbd, 0x08, 0xeb, 0x1e, 0x16, 0x77, 0x16, 0x15, 0x03, 0xce, 0x62, 0xc9,
-	0xa2, 0x10, 0x6d, 0xc3, 0x4a, 0x22, 0x28, 0xf7, 0x19, 0x69, 0x69, 0x6d, 0xcd, 0xac, 0xb9, 0x55,
-	0x75, 0x74, 0x88, 0x0a, 0x48, 0x2c, 0xee, 0x54, 0xa0, 0x38, 0x0a, 0xa8, 0xa3, 0x43, 0xd0, 0x2e,
-	0xd4, 0xd2, 0x40, 0x88, 0x87, 0xb4, 0x55, 0x4a, 0x43, 0xba, 0x02, 0x4e, 0xf1, 0x90, 0xa2, 0x7d,
-	0x58, 0xbd, 0x65, 0x94, 0x63, 0x3e, 0xb8, 0x7d, 0x50, 0xa9, 0xe5, 0x34, 0x5e, 0x9f, 0x62, 0x0e,
-	0x41, 0x6f, 0x00, 0x91, 0x84, 0xfa, 0x04, 0x4b, 0xea, 0x4b, 0x36, 0xa4, 0x42, 0xe2, 0x61, 0xdc,
-	0xaa, 0xb4, 0x35, 0xb3, 0xe4, 0x36, 0x49, 0x42, 0x2d, 0x2c, 0xa9, 0x37, 0xc1, 0x95, 0x20, 0x13,
-	0xfe, 0x20, 0x1a, 0xc6, 0x01, 0x95, 0x94, 0xb4, 0xaa, 0x6d, 0xcd, 0xd4, 0xdd, 0x3a, 0x13, 0xbd,
-	0x09, 0x84, 0x3e, 0xc3, 0xf6, 0x75, 0x12, 0x0e, 0x54, 0x3b, 0x38, 0xf0, 0x83, 0x68, 0x80, 0xd5,
-	0xa7, 0xcf, 0x88, 0x68, 0xad, 0xb4, 0x35, 0xb3, 0xde, 0xdd, 0xef, 0x64, 0x26, 0x74, 0x3e, 0x4c,
-	0xa9, 0xc7, 0x63, 0xa6, 0x43, 0x84, 0xbb, 0x79, 0x3d, 0x0f, 0x46, 0x1d, 0xa8, 0x0a, 0x89, 0x65,
-	0x22, 0x5a, 0x7a, 0x5b, 0x33, 0xd7, 0xba, 0x5b, 0x79, 0x25, 0x65, 0x65, 0x3f, 0x8d, 0xba, 0x63,
-	0x96, 0xf1, 0xad, 0x08, 0x5b, 0x4e, 0xc8, 0x24, 0xc3, 0xc1, 0xd2, 0x46, 0xcf, 0xf8, 0x59, 0x7c,
-	0xc6, 0xcf, 0xd2, 0xb2, 0x7e, 0x96, 0x9f, 0xf0, 0x73, 0x81, 0x59, 0x95, 0x17, 0x9a, 0x65, 0x42,
-	0x93, 0x7e, 0x95, 0x94, 0x2b, 0xe1, 0xc9, 0xe8, 0x54, 0xd3, 0x7a, 0xd7, 0x26, 0xb8, 0x37, 0x1a,
-	0xa1, 0xcc, 0xd6, 0x95, 0xa5, 0x6c, 0x7d, 0x07, 0xba, 0x42, 0x2f, 0x04, 0xe5, 0xbf, 0x3f, 0xb0,
-	0xc6, 0x15, 0xa0, 0x3e, 0x95, 0x99, 0xac, 0x13, 0xc6, 0x89, 0xcc, 0xd3, 0xb5, 0x99, 0xf9, 0xce,
-	0x8a, 0x2b, 0x2e, 0x55, 0x1c, 0x86, 0xe6, 0xa3, 0xbb, 0x16, 0xe8, 0x04, 0x36, 0x52, 0x71, 0x92,
-	0x81, 0x3e, 0xe6, 0xbc, 0xa5, 0xb5, 0x4b, 0x66, 0xbd, 0xbb, 0xfb, 0x58, 0x31, 0x97, 0xeb, 0x22,
-	0x39, 0x0b, 0x1c, 0x70, 0x6e, 0x74, 0x60, 0x73, 0xee, 0x4d, 0xa0, 0x4d, 0xa8, 0x32, 0x32, 0x55,
-	0xae, 0xb9, 0x15, 0x46, 0x14, 0xff, 0x15, 0xac, 0x9f, 0x73, 0x36, 0x64, 0x92, 0xdd, 0xd3, 0xbe,
-	0xe4, 0x2c, 0xbc, 0x41, 0x1b, 0x50, 0xb9, 0xc7, 0x41, 0x42, 0xc7, 0xcd, 0x8e, 0x0e, 0xc6, 0xff,
-	0xd0, 0x98, 0x12, 0x0f, 0xa3, 0x28, 0x98, 0xa5, 0xe9, 0x13, 0xda, 0x7a, 0x8e, 0x76, 0x19, 0x31,
-	0xf2, 0xfa, 0x00, 0x20, 0x73, 0x02, 0xad, 0x82, 0x7e, 0x7a, 0xe6, 0xf9, 0x7d, 0xfb, 0xd4, 0x6b,
-	0x16, 0x90, 0x0e, 0xe5, 0xf4, 0x4b, 0x53, 0xb8, 0x6b, 0xf7, 0x6c, 0xe7, 0xd2, 0xb6, 0x9a, 0x45,
-	0xd4, 0x80, 0x5a, 0xef, 0xec, 0xe4, 0xfc, 0xd8, 0xf6, 0x6c, 0xab, 0x59, 0xea, 0xfe, 0x28, 0x43,
-	0xc9, 0x89, 0x3c, 0x64, 0x81, 0x6e, 0x51, 0x1a, 0x9f, 0xab, 0x22, 0xff, 0xcd, 0x1b, 0x33, 0xf3,
-	0x8b, 0x3b, 0xbb, 0x73, 0x43, 0xa3, 0xe6, 0x8c, 0x02, 0x3a, 0x03, 0xe8, 0x71, 0xaa, 0x26, 0x1d,
-	0x8b, 0x3b, 0x64, 0xe4, 0xc9, 0xf3, 0xf7, 0xf1, 0x39, 0xc1, 0x4f, 0x50, 0x3f, 0xa2, 0xf2, 0x20,
-	0x48, 0xf3, 0x04, 0x5a, 0xc4, 0xde, 0xf9, 0x6f, 0xc1, 0x7d, 0x0a, 0xa3, 0x80, 0x5c, 0xf8, 0xe7,
-	0x88, 0xca, 0x8b, 0x70, 0xfa, 0x8a, 0xfd, 0x05, 0x4d, 0x1b, 0x9a, 0xe3, 0xa1, 0xce, 0x1e, 0xc2,
-	0x8d, 0xc7, 0x39, 0x6a, 0x61, 0x76, 0x9e, 0x36, 0xd5, 0x28, 0xa0, 0xf7, 0x00, 0x16, 0x55, 0xd9,
-	0xa9, 0x6f, 0x7f, 0x20, 0x70, 0x05, 0x7b, 0x73, 0x7a, 0x3b, 0x7c, 0xf8, 0x38, 0x79, 0xa1, 0x5e,
-	0xd6, 0xe6, 0x31, 0x34, 0x66, 0x76, 0x17, 0xed, 0xe5, 0x13, 0x7e, 0x5d, 0xeb, 0x85, 0xc5, 0x7e,
-	0xa9, 0xa6, 0xff, 0x89, 0x6f, 0x7f, 0x06, 0x00, 0x00, 0xff, 0xff, 0x25, 0x5e, 0xb1, 0xfd, 0x24,
-	0x07, 0x00, 0x00,
+var fileDescriptor_grpcapi_bcb1567d9c0128ea = []byte{
+	// 1156 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xbc, 0x57, 0xdd, 0x6e, 0xe3, 0x44,
+	0x14, 0xae, 0x93, 0x26, 0x75, 0x8e, 0xd3, 0xd4, 0xcc, 0xb6, 0xbb, 0xa1, 0xdd, 0x9f, 0xac, 0x25,
+	0xb4, 0xd1, 0x0a, 0x55, 0x10, 0x10, 0x20, 0x84, 0x84, 0xd2, 0xc4, 0x5b, 0x8c, 0xda, 0x26, 0x72,
+	0x9c, 0x95, 0xb8, 0x40, 0xd6, 0x90, 0x99, 0x76, 0x47, 0x9b, 0xd8, 0xc6, 0x9e, 0x74, 0x9b, 0x87,
+	0xe0, 0x96, 0x67, 0xd9, 0x07, 0xe1, 0x9e, 0x57, 0x41, 0x33, 0xf1, 0x6f, 0x9a, 0x76, 0x5b, 0x16,
+	0x71, 0x37, 0xf3, 0x9d, 0x9f, 0x39, 0xe7, 0xf3, 0x39, 0x67, 0xc6, 0xb0, 0x7d, 0x11, 0x06, 0x13,
+	0x1c, 0xb0, 0xc3, 0x20, 0xf4, 0xb9, 0x8f, 0x80, 0xf9, 0x3c, 0x46, 0x8c, 0xbf, 0x4b, 0xb0, 0xe3,
+	0xe0, 0xe8, 0x6d, 0x9f, 0x46, 0x93, 0x90, 0x05, 0x9c, 0xf9, 0x1e, 0x7a, 0x04, 0x5b, 0xf3, 0x88,
+	0x86, 0x2e, 0x23, 0x4d, 0xa5, 0xa5, 0xb4, 0x6b, 0x76, 0x55, 0x6c, 0x2d, 0x22, 0x04, 0x1c, 0x47,
+	0x6f, 0x85, 0xa0, 0xb4, 0x14, 0x88, 0xad, 0x45, 0xd0, 0x01, 0xd4, 0xa4, 0xc0, 0xc3, 0x33, 0xda,
+	0x2c, 0x4b, 0x91, 0x2a, 0x80, 0x33, 0x3c, 0xa3, 0xe8, 0x39, 0xd4, 0xdf, 0x30, 0x1a, 0xe2, 0x70,
+	0xf2, 0x66, 0x21, 0x4c, 0x37, 0xa5, 0x5c, 0x4b, 0x31, 0x8b, 0xa0, 0xcf, 0x01, 0x91, 0x39, 0x75,
+	0x09, 0xe6, 0xd4, 0xe5, 0x6c, 0x46, 0x23, 0x8e, 0x67, 0x41, 0xb3, 0xd2, 0x52, 0xda, 0x65, 0x5b,
+	0x27, 0x73, 0xda, 0xc7, 0x9c, 0x3a, 0x09, 0x2e, 0x1c, 0xb2, 0xc8, 0x9d, 0xf8, 0xb3, 0x60, 0x4a,
+	0x39, 0x25, 0xcd, 0x6a, 0x4b, 0x69, 0xab, 0xb6, 0xc6, 0xa2, 0x5e, 0x02, 0xa1, 0x5f, 0xe0, 0xd1,
+	0xf9, 0xdc, 0x9b, 0x88, 0x74, 0xf0, 0xd4, 0x9d, 0xfa, 0x13, 0x2c, 0x96, 0x2e, 0x23, 0x51, 0x73,
+	0xab, 0xa5, 0xb4, 0xb5, 0xce, 0xf3, 0xc3, 0x8c, 0x84, 0xc3, 0x57, 0xa9, 0xea, 0x49, 0xac, 0x69,
+	0x91, 0xc8, 0xde, 0x3b, 0x5f, 0x07, 0xa3, 0x43, 0xa8, 0x46, 0x1c, 0xf3, 0x79, 0xd4, 0x54, 0x5b,
+	0x4a, 0xbb, 0xd1, 0x79, 0x98, 0xf7, 0x24, 0xa8, 0x1c, 0x49, 0xa9, 0x1d, 0x6b, 0x19, 0x7f, 0x95,
+	0xe0, 0xa1, 0xe5, 0x31, 0xce, 0xf0, 0xf4, 0xce, 0x44, 0x17, 0xf8, 0x2c, 0x7d, 0x80, 0xcf, 0xf2,
+	0x5d, 0xf9, 0xdc, 0xbc, 0x81, 0xcf, 0x5b, 0xc8, 0xaa, 0x7c, 0x24, 0x59, 0x6d, 0xd0, 0xe9, 0x15,
+	0xa7, 0xa1, 0x70, 0x9c, 0x94, 0x4e, 0x55, 0xc6, 0xdb, 0x48, 0x70, 0x67, 0x59, 0x42, 0x19, 0xad,
+	0x5b, 0x77, 0xa2, 0xf5, 0x07, 0x50, 0x05, 0x3a, 0x8e, 0x68, 0x78, 0xff, 0x82, 0x35, 0x2e, 0x01,
+	0x8d, 0x28, 0xcf, 0xdc, 0x5a, 0x5e, 0x30, 0xe7, 0x79, 0x75, 0xa5, 0x50, 0xdf, 0x59, 0x70, 0xa5,
+	0xbb, 0x04, 0x97, 0x0f, 0xa8, 0x9c, 0x0f, 0xc8, 0xc0, 0xa0, 0xaf, 0x14, 0x41, 0x84, 0x4e, 0x61,
+	0x57, 0x9e, 0x4a, 0x32, 0xd0, 0xc5, 0x61, 0xd8, 0x54, 0x5a, 0xe5, 0xb6, 0xd6, 0x39, 0x58, 0x3d,
+	0x2a, 0x67, 0x6b, 0x23, 0x5e, 0x04, 0xba, 0x61, 0x68, 0x1c, 0xc2, 0xde, 0xda, 0x4f, 0x84, 0xf6,
+	0xa0, 0xca, 0x48, 0xea, 0xb9, 0x66, 0x57, 0x18, 0x11, 0xfa, 0x2f, 0x60, 0x67, 0x18, 0xb2, 0x19,
+	0xe3, 0xec, 0x92, 0x8e, 0x78, 0xc8, 0xbc, 0x0b, 0xb4, 0x0b, 0x95, 0x4b, 0x3c, 0x9d, 0xd3, 0x98,
+	0x85, 0xe5, 0xc6, 0xf8, 0x0c, 0xb6, 0x53, 0xc5, 0x23, 0xdf, 0x9f, 0x16, 0xd5, 0xd4, 0x44, 0x6d,
+	0x27, 0xa7, 0xf6, 0xda, 0x67, 0xc4, 0x78, 0x5f, 0x02, 0xf5, 0xcc, 0x27, 0xa2, 0xe8, 0x30, 0x7a,
+	0x02, 0x30, 0x09, 0x29, 0xe6, 0x94, 0xb8, 0x98, 0x4b, 0xc3, 0xb2, 0x5d, 0x8b, 0x91, 0x2e, 0x47,
+	0x47, 0x50, 0x9f, 0xf8, 0x1e, 0xa7, 0x1e, 0x77, 0xf9, 0x22, 0xa0, 0x31, 0xdd, 0xcf, 0xf2, 0x1c,
+	0x24, 0xae, 0x7a, 0x4b, 0x3d, 0x67, 0x11, 0x50, 0x5b, 0x9b, 0x64, 0x1b, 0xf4, 0x35, 0x00, 0xc1,
+	0x1c, 0xbb, 0x81, 0xcf, 0x3c, 0x2e, 0xf9, 0xd7, 0x3a, 0x7b, 0x79, 0x0f, 0xc2, 0x7a, 0x28, 0x84,
+	0x76, 0x8d, 0x24, 0x4b, 0xf4, 0x05, 0xa8, 0x51, 0x40, 0x27, 0x3c, 0x9c, 0xcf, 0x64, 0xa3, 0x68,
+	0x9d, 0xdd, 0xbc, 0xcd, 0x28, 0x96, 0xd9, 0xa9, 0x16, 0xfa, 0x16, 0x34, 0xd1, 0x5b, 0x6e, 0x44,
+	0x43, 0x46, 0x93, 0x56, 0x29, 0x56, 0x06, 0x9b, 0xd1, 0x91, 0x94, 0xda, 0xc0, 0xd3, 0x35, 0x42,
+	0xb0, 0xe9, 0xf9, 0x9c, 0xc6, 0x8d, 0x20, 0xd7, 0x82, 0xcb, 0x19, 0x25, 0x0c, 0xcb, 0xea, 0xaf,
+	0xdb, 0xcb, 0x8d, 0xd1, 0x06, 0xe8, 0xf9, 0x7e, 0x48, 0x98, 0x87, 0x39, 0x45, 0x75, 0x50, 0xae,
+	0x24, 0x65, 0x8a, 0xad, 0x5c, 0x89, 0xdd, 0x42, 0xf2, 0xa3, 0xd8, 0xca, 0xc2, 0xf8, 0x1d, 0x6a,
+	0x69, 0x5a, 0xe8, 0x1b, 0x80, 0x49, 0x6a, 0x26, 0x2d, 0x56, 0x02, 0xcb, 0x9c, 0xda, 0x39, 0x4d,
+	0x51, 0x21, 0x57, 0xee, 0xdc, 0x63, 0x3c, 0xee, 0x96, 0xca, 0xd5, 0xd8, 0x63, 0x5c, 0xc0, 0x8b,
+	0x25, 0xbc, 0x2c, 0xe6, 0xca, 0x42, 0xc0, 0xc6, 0x7b, 0x05, 0xd4, 0x84, 0x16, 0xf4, 0x1d, 0x68,
+	0x99, 0xa3, 0x28, 0xae, 0xdd, 0x9b, 0xce, 0xcc, 0xab, 0xde, 0xef, 0x50, 0xf4, 0x02, 0x76, 0xde,
+	0x31, 0x8f, 0xf8, 0xef, 0xdc, 0x64, 0xe0, 0xc4, 0xf7, 0x49, 0x63, 0x09, 0x27, 0xa5, 0x2f, 0x46,
+	0x68, 0x14, 0x50, 0x4a, 0xdc, 0x30, 0x98, 0xc9, 0x6f, 0xa3, 0xc8, 0x4f, 0x47, 0x89, 0x1d, 0xcc,
+	0x0c, 0x0e, 0x90, 0x7d, 0x9b, 0xff, 0x2b, 0x76, 0x03, 0xc3, 0x03, 0xcb, 0xbb, 0xa0, 0x11, 0x4f,
+	0x4a, 0x38, 0x9d, 0x3a, 0x9e, 0x4f, 0x68, 0x6e, 0xea, 0x88, 0xad, 0x45, 0xd0, 0x97, 0x50, 0x93,
+	0x02, 0x51, 0xa4, 0xf2, 0x80, 0x95, 0x9a, 0x4c, 0xdc, 0xd8, 0xaa, 0x17, 0xaf, 0x8c, 0x87, 0xb0,
+	0x5b, 0x3c, 0x62, 0x30, 0xe7, 0xc1, 0x9c, 0x1b, 0x7f, 0x28, 0xa0, 0x1f, 0xd3, 0xbb, 0x1e, 0xfc,
+	0x18, 0x6a, 0xd9, 0xad, 0x51, 0x5a, 0xf6, 0x68, 0x0a, 0x5c, 0xeb, 0xd1, 0xf2, 0xfd, 0x7b, 0xd4,
+	0x18, 0xc0, 0x27, 0xb9, 0x70, 0x96, 0x41, 0xa2, 0xef, 0xa1, 0x91, 0xe6, 0xeb, 0x4e, 0x59, 0xc4,
+	0xe3, 0x4f, 0xb1, 0x3e, 0xe9, 0x7a, 0x92, 0xf4, 0x09, 0x8b, 0xf8, 0xcb, 0x2e, 0x40, 0x36, 0x87,
+	0x51, 0x1d, 0xd4, 0xb3, 0x81, 0xe3, 0x8e, 0xcc, 0x33, 0x47, 0xdf, 0x40, 0x2a, 0x6c, 0xca, 0x95,
+	0x22, 0x70, 0xdb, 0xec, 0x99, 0xd6, 0x6b, 0xb3, 0xaf, 0x97, 0xd0, 0x36, 0xd4, 0x7a, 0x83, 0xd3,
+	0xe1, 0x89, 0xe9, 0x98, 0x7d, 0xbd, 0xfc, 0xf2, 0x1c, 0x1e, 0xac, 0x89, 0x1b, 0x69, 0xb0, 0xd5,
+	0x37, 0x5f, 0x75, 0xc7, 0x27, 0xc2, 0x55, 0x03, 0xa0, 0xdf, 0x75, 0xba, 0xee, 0x70, 0x60, 0x25,
+	0x0e, 0x47, 0x43, 0xb3, 0xe7, 0xd8, 0xe3, 0x53, 0xbd, 0x84, 0x76, 0x40, 0x73, 0xac, 0x53, 0xd3,
+	0x1d, 0x99, 0xb6, 0x65, 0x8e, 0xf4, 0xb2, 0x38, 0xf9, 0x6c, 0xe0, 0x98, 0xfa, 0x26, 0xaa, 0x41,
+	0xe5, 0xd4, 0xec, 0x5b, 0x5d, 0xbd, 0xd2, 0xf9, 0xb3, 0x0a, 0x65, 0xcb, 0x77, 0x50, 0x1f, 0xd4,
+	0x3e, 0xa5, 0xc1, 0x50, 0x4c, 0xdc, 0x4f, 0xf3, 0x29, 0x16, 0xc6, 0xe7, 0xfe, 0xc1, 0x5a, 0xd1,
+	0x72, 0x52, 0x1b, 0x1b, 0x68, 0x00, 0xd0, 0x93, 0xe3, 0x53, 0xa4, 0x8f, 0x8c, 0xbc, 0xf2, 0xfa,
+	0x57, 0xc7, 0x87, 0x1c, 0xfe, 0x0c, 0xda, 0x31, 0xe5, 0xdd, 0xa9, 0xb4, 0x8b, 0xd0, 0x6d, 0xda,
+	0xfb, 0x8f, 0x6f, 0xb9, 0x9c, 0x22, 0x63, 0x03, 0xd9, 0xf0, 0xe0, 0x98, 0xf2, 0xb1, 0x97, 0xbe,
+	0xd5, 0xfe, 0x03, 0x9f, 0x26, 0xe8, 0xf1, 0xd5, 0x9d, 0x3d, 0xf7, 0x76, 0x57, 0x6d, 0xc4, 0xb3,
+	0x60, 0xff, 0x66, 0x52, 0x8d, 0x0d, 0xf4, 0x23, 0x40, 0x9f, 0x0a, 0x6b, 0xc9, 0xdb, 0xbf, 0x70,
+	0xf0, 0x2b, 0x3c, 0x5d, 0x93, 0xdb, 0xd1, 0xe2, 0xa7, 0xe4, 0x1d, 0xf6, 0x71, 0x69, 0x9e, 0xc0,
+	0x76, 0xe1, 0x85, 0x82, 0x9e, 0x16, 0xae, 0xa3, 0x6b, 0x8f, 0x97, 0xdb, 0x83, 0x1d, 0x43, 0xa3,
+	0x38, 0x17, 0xd0, 0xb3, 0x62, 0xa5, 0x5c, 0x1b, 0x4b, 0xfb, 0xad, 0x9b, 0x15, 0xe2, 0xa1, 0x22,
+	0x82, 0xd4, 0x72, 0x6d, 0x8c, 0x0a, 0x39, 0xad, 0x8e, 0x9b, 0xfd, 0x27, 0x37, 0x48, 0x13, 0x6f,
+	0xbf, 0x55, 0xe5, 0xef, 0xc9, 0x57, 0xff, 0x04, 0x00, 0x00, 0xff, 0xff, 0xac, 0x03, 0x3a, 0xf8,
+	0xaf, 0x0c, 0x00, 0x00,
 }

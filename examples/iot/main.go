@@ -111,6 +111,16 @@ func main() {
 		return
 	}
 
+	log.Info("Set Task Status")
+	if err = client.SetTaskStatus(userID, taskID, iotgrpcapi.TaskStatus_RECEIVED); err != nil {
+		log.
+			WithError(err).
+			WithField("userId", userID).
+			WithField("taskId", taskID).
+			Error("client.SetTaskCompleted")
+		return
+	}
+
 	log.Info("Set Task Completed")
 	if err = client.SetTaskCompleted(userID, taskID); err != nil {
 		log.

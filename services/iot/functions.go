@@ -78,3 +78,15 @@ func (c *client) GetUncompletedTasksByHierarchy(nodeID string) (out []iotgrpcapi
 	}
 	return
 }
+
+func (c *client) SetTaskStatus(taskID, userID string, status iotgrpcapi.TaskStatus) (err error) {
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
+	defer cancel()
+	input := iotgrpcapi.SetTaskStatusInput{
+		TaskId: taskID,
+		UserId: userID,
+		Status: status,
+	}
+	_, err = c.api.SetTaskStatus(ctx, &input)
+	return
+}
