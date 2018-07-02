@@ -90,3 +90,26 @@ func (c *client) SetTaskStatus(taskID, userID string, status iotgrpcapi.TaskStat
 	_, err = c.api.SetTaskStatus(ctx, &input)
 	return
 }
+
+func (c *client) IngestNodeData(nodeID string, nodeData iotgrpcapi.NodeData) (err error) {
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
+	defer cancel()
+	input := iotgrpcapi.IngestNodeDataInput{
+		NodeId:   nodeID,
+		NodeData: &nodeData,
+	}
+	_, err = c.api.IngestNodeData(ctx, &input)
+	return
+}
+
+func (c *client) GetNodeData(input iotgrpcapi.GetNodeDataInput) (out []iotgrpcapi.NodeData, err error) {
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
+	defer cancel()
+	nodeDataList, err := c.api.GetNodeData(ctx, &input)
+	if nodeDataList != nil {
+		for _, elem := range nodeDataList.NodeDataList {
+			out = append(out, *elem)
+		}
+	}
+	return
+}
