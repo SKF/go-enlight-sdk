@@ -11,6 +11,10 @@ service IoT {
   rpc SetTaskCompleted (TaskUser) returns (PrimitiveVoid) {}
   rpc DeleteTask (TaskUser) returns (PrimitiveVoid) {}
   rpc GetUncompletedTasksByHierarchy (PrimitiveString) returns (TaskDescriptions) {}
+  rpc SetTaskStatus (SetTaskStatusInput) returns (PrimitiveVoid) {}
+
+  rpc IngestNodeData (IngestNodeDataInput) returns (IngestNodeDataOutput) {}
+  rpc GetNodeData (GetNodeDataInput) returns (GetNodeDataOutput) {}  
 }
 
 message TaskDescription {
@@ -21,6 +25,7 @@ message TaskDescription {
   int64 due_date_timestamp = 5;
   bool is_completed = 6;
   FunctionalLocationIds functional_location_ids = 7;
+  TaskStatus status = 8;
 }
 
 message InitialTaskDescription {
@@ -30,6 +35,7 @@ message InitialTaskDescription {
   int64 due_date_timestamp = 4;
   FunctionalLocationIds functional_location_ids = 5;
   string external_task_id = 6;
+  TaskStatus status = 7;
 }
 
 message TaskUser {
@@ -37,8 +43,21 @@ message TaskUser {
   string task_id = 2;
 }
 
+message SetTaskStatusInput {
+  string task_id = 1;
+  TaskStatus status = 2;
+  string user_id = 3;
+}
+
 message TaskDescriptions {
   repeated TaskDescription task_description_arr = 1;
+}
+
+enum TaskStatus {
+  NOT_SENT = 0;
+  SENT = 1;
+  RECEIVED = 2;
+  COMPLETED = 3;
 }
 
 message FunctionalLocationIds {
@@ -54,3 +73,65 @@ message PrimitiveBool {
 }
 
 message PrimitiveVoid {}
+
+enum NodeDataContentType {
+  DEFAULT = 0;
+  DATA_POINT = 1;
+  SPECTRUM = 2;
+  TIME_SERIES = 3;
+  NOTE = 4;
+  MEDIA = 5;
+}
+
+message NodeData {
+  int64 created_at = 1;
+  NodeDataContentType content_type = 2;
+
+  DataPoint data_point = 3;
+  Spectrum spectrum = 4;
+  TimeSeries time_series = 5;
+  string note = 6;
+  bytes media = 7;
+}
+
+message Coordinate {
+  double x = 1;
+  double y = 2;
+}
+
+message DataPoint {
+  Coordinate coordinate = 1;
+  string x_unit = 2;
+  string y_unit = 3;
+}
+
+message Spectrum {
+  repeated Coordinate coordinates = 1;
+  string x_unit = 2;
+  string y_unit = 3;
+  string window_function = 4;
+  double speed_rpm = 5;
+}
+
+message TimeSeries {
+  repeated Coordinate coordinates = 1;
+  string x_unit = 2;
+  string y_unit = 3;
+}
+
+message IngestNodeDataInput {
+  string node_id = 1;
+  NodeData node_data = 2;
+}
+
+message IngestNodeDataOutput {}
+
+message GetNodeDataInput {
+  string node_id = 1;
+  int64 timestamp = 2;
+  NodeDataContentType content_type = 3;
+}
+
+message GetNodeDataOutput {
+  repeated NodeData node_data_list = 1;
+}

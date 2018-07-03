@@ -20,6 +20,10 @@ type IoTClient interface {
 	GetAllTasks(userID string) ([]iotgrpcapi.TaskDescription, error)
 	GetUncompletedTasks(userID string) ([]iotgrpcapi.TaskDescription, error)
 	GetUncompletedTasksByHierarchy(nodeID string) (out []iotgrpcapi.TaskDescription, err error)
+	SetTaskStatus(taskID, userID string, status iotgrpcapi.TaskStatus) (err error)
+
+	IngestNodeData(nodeID string, nodeData iotgrpcapi.NodeData) error
+	GetNodeData(input iotgrpcapi.GetNodeDataInput) ([]iotgrpcapi.NodeData, error)
 }
 
 type client struct {
