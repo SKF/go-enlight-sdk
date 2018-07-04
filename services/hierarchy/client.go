@@ -20,6 +20,7 @@ type HierarchyClient interface {
 	GetNodes(parentID string) ([]grpcapi.Node, error)
 	DeleteNode(request grpcapi.DeleteNodeInput) error
 	GetEvents(since int, limit *int32) ([]eventsource.Record, error)
+	GetParentNode(nodeID string) (grpcapi.Node, error)
 }
 
 type client struct {
