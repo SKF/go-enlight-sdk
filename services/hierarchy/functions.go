@@ -65,3 +65,13 @@ func (c *client) GetEvents(since int, limit *int32) (events []eventsource.Record
 	err = json.Unmarshal(output.Events, &events)
 	return
 }
+
+func (c *client) GetParentNode(nodeID string) (node grpcapi.Node, err error) {
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
+	defer cancel()
+	resp, err := c.api.GetParentNode(ctx, &grpcapi.PrimitiveString{Value: nodeID})
+	if resp != nil {
+		node = *resp
+	}
+	return
+}

@@ -1,7 +1,7 @@
 syntax = "proto3";
 
 option java_multiple_files = true;
-option java_package = "com.skf.enlight.testing.grpcapi";
+option java_package = "com.skf.enlight.hierarchy.grpcapi";
 option java_outer_classname = "Hierarchy";
 
 package grpcapi;
@@ -10,6 +10,7 @@ service Hierarchy {
   rpc DeepPing (PrimitiveVoid) returns (PrimitiveString) {}
   rpc GetNode (PrimitiveString) returns (Node) {}
   rpc GetNodes (PrimitiveString) returns (Nodes) {}
+  rpc GetParentNode (PrimitiveString) returns (Node) {}
 
   rpc SaveNode (SaveNodeInput) returns (PrimitiveString) {}
   rpc DeleteNode (DeleteNodeInput) returns (PrimitiveVoid) {}
@@ -32,9 +33,17 @@ message MeasurementPoint {
   string shaftSide = 6;
 }
 
+enum ValueType {
+  NUMERIC = 0;
+  SINGLE_CHOICE = 1;
+  MULTI_CHOICE = 2;
+}
+
 message InspectionPoint {
-  string valueType = 1;
+  string OBSOLETE_valueType = 1;
+  ValueType valueType = 4;
   string numericUnit = 2;
+  repeated string answers = 3;
 }
 
 message AssetNode {
@@ -73,7 +82,6 @@ message SaveNodeInput {
   Node node = 3;
   string parentId = 2;
   Origin parentOrigin = 4;
-
 }
 
 message DeleteNodeInput {
