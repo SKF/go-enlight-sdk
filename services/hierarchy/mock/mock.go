@@ -55,5 +55,5 @@ func (mock *client) GetEvents(since int, limit *int32) ([]eventsource.Record, er
 
 func (mock *client) GetParentNode(nodeID string) (grpcapi.Node, error) {
 	args := mock.Called(nodeID)
-	return args.Get(0).([]eventsource.Record), args.Error(1)
+	return args.String(0), args.Error(1)
 }
