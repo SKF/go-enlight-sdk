@@ -5,7 +5,7 @@ import (
 	"google.golang.org/grpc"
 
 	"github.com/SKF/go-enlight-sdk/services/iot"
-	"github.com/SKF/go-enlight-sdk/services/iot/iotgrpcapi"
+	api "github.com/SKF/go-enlight-sdk/services/iot/iot_grpc_api"
 )
 
 type client struct {
@@ -31,7 +31,7 @@ func (mock *client) DeepPing() error {
 	return args.Error(0)
 }
 
-func (mock *client) CreateTask(task iotgrpcapi.InitialTaskDescription) (string, error) {
+func (mock *client) CreateTask(task api.InitialTaskDescription) (string, error) {
 	args := mock.Called(task)
 	return args.String(0), args.Error(1)
 }
@@ -43,11 +43,11 @@ func (mock *client) SetTaskCompleted(userID, taskID string) error {
 	args := mock.Called(userID, taskID)
 	return args.Error(0)
 }
-func (mock *client) GetAllTasks(userID string) ([]iotgrpcapi.TaskDescription, error) {
+func (mock *client) GetAllTasks(userID string) ([]api.TaskDescription, error) {
 	args := mock.Called(userID)
-	return args.Get(0).([]iotgrpcapi.TaskDescription), args.Error(1)
+	return args.Get(0).([]api.TaskDescription), args.Error(1)
 }
-func (mock *client) GetUncompletedTasks(userID string) ([]iotgrpcapi.TaskDescription, error) {
+func (mock *client) GetUncompletedTasks(userID string) ([]api.TaskDescription, error) {
 	args := mock.Called(userID)
-	return args.Get(0).([]iotgrpcapi.TaskDescription), args.Error(1)
+	return args.Get(0).([]api.TaskDescription), args.Error(1)
 }
