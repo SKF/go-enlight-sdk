@@ -4,7 +4,7 @@ import (
 	"context"
 	"time"
 
-	api "github.com/SKF/go-enlight-sdk/services/iot/iot_grpc_api"
+	api "github.com/SKF/go-enlight-sdk/services/iot/iotgrpcapi"
 )
 
 func (c *client) CreateTask(task api.InitialTaskDescription) (taskID string, err error) {

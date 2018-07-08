@@ -6,7 +6,7 @@ import (
 
 	"google.golang.org/grpc"
 
-	api "github.com/SKF/go-enlight-sdk/services/iot/iot_grpc_api"
+	api "github.com/SKF/go-enlight-sdk/services/iot/iotgrpcapi"
 )
 
 type IoTClient interface {

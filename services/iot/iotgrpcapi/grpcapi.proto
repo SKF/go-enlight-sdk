@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package iot.grpc.api;
+package iotgrpcapi;
 
 service IoT {
   rpc DeepPing (PrimitiveVoid) returns (PrimitiveString) {}

@@ -5,7 +5,7 @@ import (
 	"google.golang.org/grpc"
 
 	"github.com/SKF/go-enlight-sdk/services/iot"
-	api "github.com/SKF/go-enlight-sdk/services/iot/iot_grpc_api"
+	api "github.com/SKF/go-enlight-sdk/services/iot/iotgrpcapi"
 )
 
 type client struct {
