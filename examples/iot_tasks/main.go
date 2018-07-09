@@ -9,7 +9,7 @@ import (
 
 	"github.com/SKF/go-enlight-sdk/grpc"
 	"github.com/SKF/go-enlight-sdk/services/iot"
-	"github.com/SKF/go-enlight-sdk/services/iot/iotgrpcapi"
+	api "github.com/SKF/go-enlight-sdk/services/iot/iotgrpcapi"
 )
 
 func main() {
@@ -92,12 +92,12 @@ func main() {
 	}
 
 	log.Info("Create Task")
-	createTaskInput := iotgrpcapi.InitialTaskDescription{
+	createTaskInput := api.InitialTaskDescription{
 		UserId:           userID,
 		TaskName:         "MyTaskName",
 		HierarchyId:      uuid.New().String(),
 		DueDateTimestamp: time.Now().Unix() * 1000,
-		FunctionalLocationIds: &iotgrpcapi.FunctionalLocationIds{
+		FunctionalLocationIds: &api.FunctionalLocationIds{
 			IdArr: []string{
 				uuid.New().String(),
 				uuid.New().String(),
@@ -112,7 +112,7 @@ func main() {
 	}
 
 	log.Info("Set Task Status")
-	if err = client.SetTaskStatus(userID, taskID, iotgrpcapi.TaskStatus_RECEIVED); err != nil {
+	if err = client.SetTaskStatus(userID, taskID, api.TaskStatus_RECEIVED); err != nil {
 		log.
 			WithError(err).
 			WithField("userId", userID).

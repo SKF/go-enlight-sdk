@@ -81,6 +81,7 @@ enum NodeDataContentType {
   TIME_SERIES = 3;
   NOTE = 4;
   MEDIA = 5;
+  QUESTION_ANSWERS = 6;
 }
 
 message NodeData {
@@ -92,6 +93,7 @@ message NodeData {
   TimeSeries time_series = 5;
   string note = 6;
   bytes media = 7;
+  repeated string question_answers = 8;
 }
 
 message Coordinate {

@@ -6,7 +6,7 @@ import (
 
 	"google.golang.org/grpc"
 
-	"github.com/SKF/go-enlight-sdk/services/iot/iotgrpcapi"
+	api "github.com/SKF/go-enlight-sdk/services/iot/iotgrpcapi"
 )
 
 type IoTClient interface {
@@ -14,21 +14,21 @@ type IoTClient interface {
 	Close()
 	DeepPing() error
 
-	CreateTask(task iotgrpcapi.InitialTaskDescription) (string, error)
+	CreateTask(task api.InitialTaskDescription) (string, error)
 	DeleteTask(userID, taskID string) error
 	SetTaskCompleted(userID, taskID string) error
-	GetAllTasks(userID string) ([]iotgrpcapi.TaskDescription, error)
-	GetUncompletedTasks(userID string) ([]iotgrpcapi.TaskDescription, error)
-	GetUncompletedTasksByHierarchy(nodeID string) (out []iotgrpcapi.TaskDescription, err error)
-	SetTaskStatus(taskID, userID string, status iotgrpcapi.TaskStatus) (err error)
+	GetAllTasks(userID string) ([]api.TaskDescription, error)
+	GetUncompletedTasks(userID string) ([]api.TaskDescription, error)
+	GetUncompletedTasksByHierarchy(nodeID string) (out []api.TaskDescription, err error)
+	SetTaskStatus(taskID, userID string, status api.TaskStatus) (err error)
 
-	IngestNodeData(nodeID string, nodeData iotgrpcapi.NodeData) error
-	GetNodeData(input iotgrpcapi.GetNodeDataInput) ([]iotgrpcapi.NodeData, error)
+	IngestNodeData(nodeID string, nodeData api.NodeData) error
+	GetNodeData(input api.GetNodeDataInput) ([]api.NodeData, error)
 }
 
 type client struct {
 	conn *grpc.ClientConn
-	api  iotgrpcapi.IoTClient
+	api  api.IoTClient
 }
 
 func CreateClient() IoTClient {
@@ -42,7 +42,7 @@ func (c *client) Dial(host, port string, opts ...grpc.DialOption) (err error) {
 	}
 
 	c.conn = conn
-	c.api = iotgrpcapi.NewIoTClient(conn)
+	c.api = api.NewIoTClient(conn)
 	return
 }
 
@@ -54,6 +54,6 @@ func (c *client) DeepPing() error {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 	defer cancel()
 
-	_, err := c.api.DeepPing(ctx, &iotgrpcapi.PrimitiveVoid{})
+	_, err := c.api.DeepPing(ctx, &api.PrimitiveVoid{})
 	return err
 }

@@ -4,10 +4,10 @@ import (
 	"context"
 	"time"
 
-	"github.com/SKF/go-enlight-sdk/services/iot/iotgrpcapi"
+	api "github.com/SKF/go-enlight-sdk/services/iot/iotgrpcapi"
 )
 
-func (c *client) CreateTask(task iotgrpcapi.InitialTaskDescription) (taskID string, err error) {
+func (c *client) CreateTask(task api.InitialTaskDescription) (taskID string, err error) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
 	defer cancel()
 
@@ -22,7 +22,7 @@ func (c *client) DeleteTask(userID, taskID string) (err error) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
 	defer cancel()
 
-	input := iotgrpcapi.TaskUser{UserId: userID, TaskId: taskID}
+	input := api.TaskUser{UserId: userID, TaskId: taskID}
 	_, err = c.api.DeleteTask(ctx, &input)
 	return
 }
@@ -31,16 +31,16 @@ func (c *client) SetTaskCompleted(userID, taskID string) (err error) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
 	defer cancel()
 
-	input := iotgrpcapi.TaskUser{UserId: userID, TaskId: taskID}
+	input := api.TaskUser{UserId: userID, TaskId: taskID}
 	_, err = c.api.SetTaskCompleted(ctx, &input)
 	return
 }
 
-func (c *client) GetAllTasks(userID string) (out []iotgrpcapi.TaskDescription, err error) {
+func (c *client) GetAllTasks(userID string) (out []api.TaskDescription, err error) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
 	defer cancel()
 
-	input := iotgrpcapi.PrimitiveString{Value: userID}
+	input := api.PrimitiveString{Value: userID}
 	output, err := c.api.GetAllTasks(ctx, &input)
 
 	if output != nil {
@@ -51,11 +51,11 @@ func (c *client) GetAllTasks(userID string) (out []iotgrpcapi.TaskDescription, e
 	return
 }
 
-func (c *client) GetUncompletedTasks(userID string) (out []iotgrpcapi.TaskDescription, err error) {
+func (c *client) GetUncompletedTasks(userID string) (out []api.TaskDescription, err error) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
 	defer cancel()
 
-	input := iotgrpcapi.PrimitiveString{Value: userID}
+	input := api.PrimitiveString{Value: userID}
 	output, err := c.api.GetUncompletedTasks(ctx, &input)
 
 	if output != nil {
@@ -66,10 +66,10 @@ func (c *client) GetUncompletedTasks(userID string) (out []iotgrpcapi.TaskDescri
 	return
 }
 
-func (c *client) GetUncompletedTasksByHierarchy(nodeID string) (out []iotgrpcapi.TaskDescription, err error) {
+func (c *client) GetUncompletedTasksByHierarchy(nodeID string) (out []api.TaskDescription, err error) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
 	defer cancel()
-	input := iotgrpcapi.PrimitiveString{Value: nodeID}
+	input := api.PrimitiveString{Value: nodeID}
 	tasks, err := c.api.GetUncompletedTasksByHierarchy(ctx, &input)
 	if tasks != nil {
 		for _, desc := range tasks.TaskDescriptionArr {
@@ -79,10 +79,10 @@ func (c *client) GetUncompletedTasksByHierarchy(nodeID string) (out []iotgrpcapi
 	return
 }
 
-func (c *client) SetTaskStatus(taskID, userID string, status iotgrpcapi.TaskStatus) (err error) {
+func (c *client) SetTaskStatus(taskID, userID string, status api.TaskStatus) (err error) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
 	defer cancel()
-	input := iotgrpcapi.SetTaskStatusInput{
+	input := api.SetTaskStatusInput{
 		TaskId: taskID,
 		UserId: userID,
 		Status: status,
@@ -91,10 +91,10 @@ func (c *client) SetTaskStatus(taskID, userID string, status iotgrpcapi.TaskStat
 	return
 }
 
-func (c *client) IngestNodeData(nodeID string, nodeData iotgrpcapi.NodeData) (err error) {
+func (c *client) IngestNodeData(nodeID string, nodeData api.NodeData) (err error) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
 	defer cancel()
-	input := iotgrpcapi.IngestNodeDataInput{
+	input := api.IngestNodeDataInput{
 		NodeId:   nodeID,
 		NodeData: &nodeData,
 	}
@@ -102,7 +102,7 @@ func (c *client) IngestNodeData(nodeID string, nodeData iotgrpcapi.NodeData) (er
 	return
 }
 
-func (c *client) GetNodeData(input iotgrpcapi.GetNodeDataInput) (out []iotgrpcapi.NodeData, err error) {
+func (c *client) GetNodeData(input api.GetNodeDataInput) (out []api.NodeData, err error) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
 	defer cancel()
 	nodeDataList, err := c.api.GetNodeData(ctx, &input)
