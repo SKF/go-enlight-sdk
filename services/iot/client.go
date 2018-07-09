@@ -24,6 +24,7 @@ type IoTClient interface {
 
 	IngestNodeData(nodeID string, nodeData api.NodeData) error
 	GetNodeData(input api.GetNodeDataInput) ([]api.NodeData, error)
+	GetNodeDataStream(input api.GetNodeDataStreamInput, c chan<- api.GetNodeDataStreamOutput) error
 }
 
 type client struct {
