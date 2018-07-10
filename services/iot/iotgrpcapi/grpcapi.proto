@@ -14,7 +14,8 @@ service IoT {
   rpc SetTaskStatus (SetTaskStatusInput) returns (PrimitiveVoid) {}
 
   rpc IngestNodeData (IngestNodeDataInput) returns (IngestNodeDataOutput) {}
-  rpc GetNodeData (GetNodeDataInput) returns (GetNodeDataOutput) {}  
+  rpc GetNodeData (GetNodeDataInput) returns (GetNodeDataOutput) {}
+  rpc GetNodeDataStream (GetNodeDataStreamInput) returns (stream GetNodeDataStreamOutput) {}
 }
 
 message TaskDescription {
@@ -136,4 +137,11 @@ message GetNodeDataInput {
 
 message GetNodeDataOutput {
   repeated NodeData node_data_list = 1;
+}
+
+message GetNodeDataStreamInput {}
+
+message GetNodeDataStreamOutput {
+  string node_id = 1;
+  NodeData node_data = 2;
 }
