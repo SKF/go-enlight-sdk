@@ -27,6 +27,7 @@ message TaskDescription {
   bool is_completed = 6;
   FunctionalLocationIds functional_location_ids = 7;
   TaskStatus status = 8;
+  string external_task_id = 9;
 }
 
 message InitialTaskDescription {
