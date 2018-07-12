@@ -41,11 +41,49 @@ func (c *client) GetNodes(parentID string) (nodes []grpcapi.Node, err error) {
 	return
 }
 
+func (c *client) GetChildNodes(parentID string) (nodes []grpcapi.Node, err error) {
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
+	defer cancel()
+	resp, err := c.api.GetChildNodes(ctx, &grpcapi.PrimitiveString{Value: parentID})
+	if resp != nil {
+		for _, node := range resp.Nodes {
+			if node != nil {
+				nodes = append(nodes, *node)
+			}
+		}
+	}
+	return
+}
+
 func (c *client) DeleteNode(request grpcapi.DeleteNodeInput) error {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
 	defer cancel()
 	_, err := c.api.DeleteNode(ctx, &request)
 	return err
+}
+
+func (c *client) GetParentNode(nodeID string) (node grpcapi.Node, err error) {
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
+	defer cancel()
+	resp, err := c.api.GetParentNode(ctx, &grpcapi.PrimitiveString{Value: nodeID})
+	if resp != nil {
+		node = *resp
+	}
+	return
+}
+
+func (c *client) GetAncestors(nodeID string) (nodes []grpcapi.AncestorNode, err error) {
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
+	defer cancel()
+	resp, err := c.api.GetAncestors(ctx, &grpcapi.GetAncestorsInput{NodeId: nodeID})
+	if resp != nil {
+		for _, node := range resp.Nodes {
+			if node != nil {
+				nodes = append(nodes, *node)
+			}
+		}
+	}
+	return
 }
 
 func (c *client) GetEvents(since int, limit *int32) (events []eventsource.Record, err error) {
@@ -63,15 +101,5 @@ func (c *client) GetEvents(since int, limit *int32) (events []eventsource.Record
 	}
 
 	err = json.Unmarshal(output.Events, &events)
-	return
-}
-
-func (c *client) GetParentNode(nodeID string) (node grpcapi.Node, err error) {
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
-	defer cancel()
-	resp, err := c.api.GetParentNode(ctx, &grpcapi.PrimitiveString{Value: nodeID})
-	if resp != nil {
-		node = *resp
-	}
 	return
 }

@@ -1,16 +1,15 @@
 syntax = "proto3";
 
-option java_multiple_files = true;
-option java_package = "com.skf.enlight.hierarchy.grpcapi";
-option java_outer_classname = "Hierarchy";
-
 package grpcapi;
 
 service Hierarchy {
   rpc DeepPing (PrimitiveVoid) returns (PrimitiveString) {}
+
   rpc GetNode (PrimitiveString) returns (Node) {}
   rpc GetNodes (PrimitiveString) returns (Nodes) {}
+  rpc GetChildNodes (PrimitiveString) returns (Nodes) {}
   rpc GetParentNode (PrimitiveString) returns (Node) {}
+  rpc GetAncestors (GetAncestorsInput) returns (GetAncestorsOutput) {}
 
   rpc SaveNode (SaveNodeInput) returns (PrimitiveString) {}
   rpc DeleteNode (DeleteNodeInput) returns (PrimitiveVoid) {}
@@ -88,6 +87,24 @@ message DeleteNodeInput {
   string userId = 1;
   string nodeId = 2;
   Origin origin = 3;
+}
+
+message GetAncestorsInput {
+  string node_id = 1;
+}
+
+message GetAncestorsOutput {
+  repeated AncestorNode nodes = 1;
+}
+
+message AncestorNode {
+  string id = 1;
+  Origin origin = 2;
+  string label = 3;
+  string description = 4;
+  string type = 5;
+  string subType = 6;
+  string parentId = 7;
 }
 
 message PrimitiveString {

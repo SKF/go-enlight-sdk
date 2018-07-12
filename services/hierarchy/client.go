@@ -18,7 +18,10 @@ type HierarchyClient interface {
 	SaveNode(request grpcapi.SaveNodeInput) (string, error)
 	GetNode(nodeID string) (grpcapi.Node, error)
 	GetNodes(parentID string) ([]grpcapi.Node, error)
+	GetChildNodes(parentID string) ([]grpcapi.Node, error)
 	DeleteNode(request grpcapi.DeleteNodeInput) error
+	GetAncestors(nodeID string) ([]grpcapi.AncestorNode, error)
+
 	GetEvents(since int, limit *int32) ([]eventsource.Record, error)
 	GetParentNode(nodeID string) (grpcapi.Node, error)
 }
