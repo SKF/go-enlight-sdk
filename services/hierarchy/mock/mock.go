@@ -57,3 +57,8 @@ func (mock *client) GetParentNode(nodeID string) (grpcapi.Node, error) {
 	args := mock.Called(nodeID)
 	return args.Get(0).(grpcapi.Node), args.Error(1)
 }
+
+func (mock *client) GetAncestors(nodeID string) ([]grpcapi.AncestorNode, error) {
+	args := mock.Called(nodeID)
+	return args.Get(0).([]grpcapi.AncestorNode), args.Error(1)
+}
