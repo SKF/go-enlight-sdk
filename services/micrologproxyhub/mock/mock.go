@@ -5,7 +5,7 @@ import (
 	"google.golang.org/grpc"
 
 	"github.com/SKF/go-enlight-sdk/services/iot"
-	api "github.com/SKF/go-enlight-sdk/services/iot/iotgrpcapi"
+	api "github.com/SKF/go-enlight-sdk/services/micrologproxyhub/grpcapi"
 	"github.com/SKF/go-utility/uuid"
 )
 
