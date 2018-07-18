@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package micrologproxyhubgrcpapi;
+package mhubapi;
 
 service MicrologProxyHub {
   rpc DeepPing (Void) returns (DeepPingOutput) {}

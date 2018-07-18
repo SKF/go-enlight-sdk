@@ -1,36 +1,36 @@
-package micrologproxyhub
+package mhub
 
 import (
 	"context"
 	"io"
 	"time"
 
-	api "github.com/SKF/go-enlight-sdk/services/micrologproxyhub/grpcapi"
+	"github.com/SKF/go-enlight-sdk/services/mhub/mhubapi"
 	"github.com/SKF/go-utility/log"
 	"github.com/SKF/go-utility/uuid"
 )
 
-func (c *client) SetTaskStatus(taskID, userID uuid.UUID, status api.TaskStatus) (err error) {
+func (c *client) SetTaskStatus(taskID, userID uuid.UUID, status mhubapi.TaskStatus) (err error) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*30)
 	defer cancel()
-	_, err = c.api.SetTaskStatus(ctx, &api.SetTaskStatusInput{
+	_, err = c.api.SetTaskStatus(ctx, &mhubapi.SetTaskStatusInput{
 		TaskId: taskID.String(),
 		Status: status,
 	})
 	return
 }
 
-func (c *client) GetTasksStream(dc chan<- api.GetTasksStreamOutput) (err error) {
+func (c *client) GetTasksStream(dc chan<- mhubapi.GetTasksStreamOutput) (err error) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
 	defer cancel()
 
-	stream, err := c.api.GetTasksStream(ctx, &api.GetTasksStreamInput{})
+	stream, err := c.api.GetTasksStream(ctx, &mhubapi.GetTasksStreamInput{})
 	if err != nil {
 		return
 	}
 
 	for {
-		var output *api.GetTasksStreamOutput
+		var output *mhubapi.GetTasksStreamOutput
 		output, err = stream.Recv()
 		if err == io.EOF {
 			err = nil

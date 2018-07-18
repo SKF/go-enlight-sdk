@@ -4,18 +4,18 @@ import (
 	"github.com/stretchr/testify/mock"
 	"google.golang.org/grpc"
 
-	"github.com/SKF/go-enlight-sdk/services/iot"
-	api "github.com/SKF/go-enlight-sdk/services/micrologproxyhub/grpcapi"
+	"github.com/SKF/go-enlight-sdk/services/mhub"
+	"github.com/SKF/go-enlight-sdk/services/mhub/mhubapi"
 	"github.com/SKF/go-utility/uuid"
 )
 
 type client struct {
 	mock.Mock
-	iot.IoTClient
+	mhub.MicrologProxyHubClient
 }
 
 // Create returns an empty mock
-func Create() *client {
+func Create() mhub.MicrologProxyHubClient {
 	return new(client)
 }
 
@@ -34,12 +34,12 @@ func (mock *client) DeepPing() error {
 	return args.Error(0)
 }
 
-func (mock *client) SetTaskStatus(taskID, userID uuid.UUID, status api.TaskStatus) error {
+func (mock *client) SetTaskStatus(taskID, userID uuid.UUID, status mhubapi.TaskStatus) error {
 	args := mock.Called(taskID, userID, status)
 	return args.Error(0)
 }
 
-func (mock *client) GetTasksStream(dc chan<- api.GetTasksStreamOutput) error {
+func (mock *client) GetTasksStream(dc chan<- mhubapi.GetTasksStreamOutput) error {
 	args := mock.Called(dc)
 	return args.Error(0)
 }

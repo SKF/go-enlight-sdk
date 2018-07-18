@@ -1,10 +1,10 @@
-package micrologproxyhub
+package mhub
 
 import (
 	"context"
 	"time"
 
-	api "github.com/SKF/go-enlight-sdk/services/micrologproxyhub/grpcapi"
+	"github.com/SKF/go-enlight-sdk/services/mhub/mhubapi"
 
 	"github.com/SKF/go-utility/uuid"
 	"google.golang.org/grpc"
@@ -15,8 +15,8 @@ type MicrologProxyHubClient interface {
 	Close()
 	DeepPing() error
 
-	SetTaskStatus(taskID, userID uuid.UUID, status api.TaskStatus) error
-	GetTasksStream(dc chan<- api.GetTasksStreamOutput) error
+	SetTaskStatus(taskID, userID uuid.UUID, status mhubapi.TaskStatus) error
+	GetTasksStream(dc chan<- mhubapi.GetTasksStreamOutput) error
 }
 
 func CreateClient() MicrologProxyHubClient {
@@ -24,7 +24,7 @@ func CreateClient() MicrologProxyHubClient {
 }
 
 type client struct {
-	api  api.MicrologProxyHubClient
+	api  mhubapi.MicrologProxyHubClient
 	conn *grpc.ClientConn
 }
 
@@ -35,7 +35,7 @@ func (c *client) Dial(host, port string, opts ...grpc.DialOption) (err error) {
 	}
 
 	c.conn = conn
-	c.api = api.NewMicrologProxyHubClient(conn)
+	c.api = mhubapi.NewMicrologProxyHubClient(conn)
 	return
 }
 
@@ -46,6 +46,6 @@ func (c *client) Close() {
 func (c *client) DeepPing() (err error) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
 	defer cancel()
-	_, err = c.api.DeepPing(ctx, &api.Void{})
+	_, err = c.api.DeepPing(ctx, &mhubapi.Void{})
 	return
 }
