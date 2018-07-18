@@ -1,0 +1,34 @@
+syntax = "proto3";
+
+package mhubapi;
+
+service MicrologProxyHub {
+  rpc DeepPing (Void) returns (DeepPingOutput) {}
+  rpc SetTaskStatus (SetTaskStatusInput) returns (Void) {}
+  rpc GetTasksStream (GetTasksStreamInput) returns (stream GetTasksStreamOutput) {}
+}
+
+message GetTasksStreamInput {}
+
+message GetTasksStreamOutput {
+  string task_id = 1;
+}
+
+message SetTaskStatusInput {
+  string task_id = 1;
+  string user_id = 2;
+  TaskStatus status = 3;
+}
+
+enum TaskStatus {
+  NOT_SENT = 0;
+  SENT = 1;
+  RECEIVED = 2;
+  COMPLETED = 3;
+}
+
+message DeepPingOutput {
+  string value = 1;
+}
+
+message Void {}
