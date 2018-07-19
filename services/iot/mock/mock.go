@@ -10,13 +10,14 @@ import (
 
 type client struct {
 	mock.Mock
-	iot.IoTClient
 }
 
 // Create returns an empty mock
 func Create() *client {
 	return new(client)
 }
+
+var _ iot.IoTClient = &client{}
 
 func (mock *client) Dial(host, port string, opts ...grpc.DialOption) error {
 	args := mock.Called(host, port, opts)
@@ -52,6 +53,15 @@ func (mock *client) GetUncompletedTasks(userID string) ([]api.TaskDescription, e
 	return args.Get(0).([]api.TaskDescription), args.Error(1)
 }
 
+func (mock *client) GetUncompletedTasksByHierarchy(nodeID string) ([]api.TaskDescription, error) {
+	args := mock.Called(nodeID)
+	return args.Get(0).([]api.TaskDescription), args.Error(1)
+}
+
+func (mock *client) SetTaskStatus(taskID, userID string, status api.TaskStatus) (err error) {
+	args := mock.Called(taskID, userID, status)
+	return args.Error(0)
+}
 func (mock *client) GetTaskStream(input api.GetTaskStreamInput, dc chan<- api.GetTaskStreamOutput) (err error) {
 	args := mock.Called(input, dc)
 	return args.Error(0)
