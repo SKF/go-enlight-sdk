@@ -139,3 +139,27 @@ func (c *client) GetNodeDataStream(input api.GetNodeDataStreamInput, dc chan<- a
 		dc <- *nodeData
 	}
 }
+
+func (c *client) GetTaskStream(input api.GetTaskStreamInput, dc chan<- api.GetTaskStreamOutput) (err error) {
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
+	defer cancel()
+
+	stream, err := c.api.GetTaskStream(ctx, &input)
+	if err != nil {
+		return
+	}
+
+	for {
+		var nodeData *api.GetTaskStreamOutput
+		nodeData, err = stream.Recv()
+		if err == io.EOF {
+			err = nil
+			return
+		}
+		if err != nil {
+			log.WithError(err).Errorf("stream.Recv")
+			return
+		}
+		dc <- *nodeData
+	}
+}

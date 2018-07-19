@@ -12,6 +12,7 @@ service IoT {
   rpc DeleteTask (TaskUser) returns (PrimitiveVoid) {}
   rpc GetUncompletedTasksByHierarchy (PrimitiveString) returns (TaskDescriptions) {}
   rpc SetTaskStatus (SetTaskStatusInput) returns (PrimitiveVoid) {}
+  rpc GetTaskStream (GetTaskStreamInput) returns (stream GetTaskStreamOutput) {}
 
   rpc IngestNodeData (IngestNodeDataInput) returns (IngestNodeDataOutput) {}
   rpc GetNodeData (GetNodeDataInput) returns (GetNodeDataOutput) {}
@@ -123,6 +124,8 @@ message TimeSeries {
   string y_unit = 3;
 }
 
+
+// IngestNodeData messages
 message IngestNodeDataInput {
   string node_id = 1;
   NodeData node_data = 2;
@@ -130,6 +133,8 @@ message IngestNodeDataInput {
 
 message IngestNodeDataOutput {}
 
+
+// GetNodeData messages
 message GetNodeDataInput {
   string node_id = 1;
   int64 timestamp = 2;
@@ -140,9 +145,19 @@ message GetNodeDataOutput {
   repeated NodeData node_data_list = 1;
 }
 
+
+// GetNodeDataStream messages
 message GetNodeDataStreamInput {}
 
 message GetNodeDataStreamOutput {
   string node_id = 1;
   NodeData node_data = 2;
+}
+
+message GetTaskStreamInput {
+  string hierarchy_id = 1;
+}
+
+message GetTaskStreamOutput {
+  TaskDescription task = 1;
 }
