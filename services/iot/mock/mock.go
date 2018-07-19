@@ -51,3 +51,21 @@ func (mock *client) GetUncompletedTasks(userID string) ([]api.TaskDescription, e
 	args := mock.Called(userID)
 	return args.Get(0).([]api.TaskDescription), args.Error(1)
 }
+
+func (mock *client) GetTaskStream(input api.GetTaskStreamInput, dc chan<- api.GetTaskStreamOutput) (err error) {
+	args := mock.Called(input, dc)
+	return args.Error(0)
+}
+
+func (mock *client) IngestNodeData(nodeID string, nodeData api.NodeData) error {
+	args := mock.Called(nodeID, nodeData)
+	return args.Error(0)
+}
+func (mock *client) GetNodeData(input api.GetNodeDataInput) ([]api.NodeData, error) {
+	args := mock.Called(input)
+	return nil, args.Error(0)
+}
+func (mock *client) GetNodeDataStream(input api.GetNodeDataStreamInput, c chan<- api.GetNodeDataStreamOutput) error {
+	args := mock.Called(input, c)
+	return args.Error(0)
+}

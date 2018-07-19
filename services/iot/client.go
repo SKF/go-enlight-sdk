@@ -21,6 +21,7 @@ type IoTClient interface {
 	GetUncompletedTasks(userID string) ([]api.TaskDescription, error)
 	GetUncompletedTasksByHierarchy(nodeID string) (out []api.TaskDescription, err error)
 	SetTaskStatus(taskID, userID string, status api.TaskStatus) (err error)
+	GetTaskStream(input api.GetTaskStreamInput, dc chan<- api.GetTaskStreamOutput) (err error)
 
 	IngestNodeData(nodeID string, nodeData api.NodeData) error
 	GetNodeData(input api.GetNodeDataInput) ([]api.NodeData, error)
