@@ -19,6 +19,8 @@ func Create() mhub.MicrologProxyHubClient {
 	return new(client)
 }
 
+var _ mhub.MicrologProxyHubClient = &client{}
+
 func (mock *client) Dial(host, port string, opts ...grpc.DialOption) error {
 	args := mock.Called(host, port, opts)
 	return args.Error(0)

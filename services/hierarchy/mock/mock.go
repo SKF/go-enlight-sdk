@@ -19,6 +19,8 @@ func Create() *client {
 	return new(client)
 }
 
+var _ hierarchy.HierarchyClient = &client{}
+
 func (mock *client) Dial(host, port string, opts ...grpc.DialOption) error {
 	args := mock.Called(host, port, opts)
 	return args.Error(0)
