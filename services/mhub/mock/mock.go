@@ -15,9 +15,11 @@ type client struct {
 }
 
 // Create returns an empty mock
-func Create() mhub.MicrologProxyHubClient {
+func Create() *client {
 	return new(client)
 }
+
+var _ mhub.MicrologProxyHubClient = &client{}
 
 func (mock *client) Dial(host, port string, opts ...grpc.DialOption) error {
 	args := mock.Called(host, port, opts)
