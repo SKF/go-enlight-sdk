@@ -62,6 +62,7 @@ func (mock *client) SetTaskStatus(taskID, userID string, status api.TaskStatus) 
 	args := mock.Called(taskID, userID, status)
 	return args.Error(0)
 }
+
 func (mock *client) GetTaskStream(input api.GetTaskStreamInput, dc chan<- api.GetTaskStreamOutput) (err error) {
 	args := mock.Called(input, dc)
 	return args.Error(0)
