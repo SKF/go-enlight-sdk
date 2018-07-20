@@ -104,6 +104,25 @@ func (c *client) IngestNodeData(nodeID string, nodeData api.NodeData) (err error
 	return
 }
 
+func (c *client) IngestNodeDataStream(inputChannel <-chan api.IngestNodeDataStreamInput) (err error) {
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
+	defer cancel()
+
+	stream, err := c.api.IngestNodeDataStream(ctx)
+	if err != nil {
+		return
+	}
+	for nodeData := range inputChannel {
+		nd := nodeData
+		if err = stream.Send(&nd); err != nil {
+			return
+		}
+	}
+
+	_, err = stream.CloseAndRecv()
+	return
+}
+
 func (c *client) GetNodeData(input api.GetNodeDataInput) (out []api.NodeData, err error) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
 	defer cancel()

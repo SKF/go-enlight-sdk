@@ -24,6 +24,7 @@ type IoTClient interface {
 	GetTaskStream(input api.GetTaskStreamInput, dc chan<- api.GetTaskStreamOutput) (err error)
 
 	IngestNodeData(nodeID string, nodeData api.NodeData) error
+	IngestNodeDataStream(c <-chan api.IngestNodeDataStreamInput) error
 	GetNodeData(input api.GetNodeDataInput) ([]api.NodeData, error)
 	GetNodeDataStream(input api.GetNodeDataStreamInput, c chan<- api.GetNodeDataStreamOutput) error
 }

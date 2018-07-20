@@ -72,6 +72,10 @@ func (mock *client) IngestNodeData(nodeID string, nodeData api.NodeData) error {
 	args := mock.Called(nodeID, nodeData)
 	return args.Error(0)
 }
+func (mock *client) IngestNodeDataStream(c <-chan api.IngestNodeDataStreamInput) error {
+	args := mock.Called(c)
+	return args.Error(0)
+}
 func (mock *client) GetNodeData(input api.GetNodeDataInput) ([]api.NodeData, error) {
 	args := mock.Called(input)
 	return nil, args.Error(0)

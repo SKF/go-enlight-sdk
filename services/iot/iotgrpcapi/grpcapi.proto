@@ -15,6 +15,7 @@ service IoT {
   rpc GetTaskStream (GetTaskStreamInput) returns (stream GetTaskStreamOutput) {}
 
   rpc IngestNodeData (IngestNodeDataInput) returns (IngestNodeDataOutput) {}
+  rpc IngestNodeDataStream (stream IngestNodeDataStreamInput) returns (IngestNodeDataStreamOutput) {}
   rpc GetNodeData (GetNodeDataInput) returns (GetNodeDataOutput) {}
   rpc GetNodeDataStream (GetNodeDataStreamInput) returns (stream GetNodeDataStreamOutput) {}
 }
@@ -132,6 +133,15 @@ message IngestNodeDataInput {
 }
 
 message IngestNodeDataOutput {}
+
+
+// IngestNodeDataStream messages
+message IngestNodeDataStreamInput {
+  string node_id = 1;
+  repeated NodeData node_data_list = 2;
+}
+
+message IngestNodeDataStreamOutput {}
 
 
 // GetNodeData messages

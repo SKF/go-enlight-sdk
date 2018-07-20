@@ -20,7 +20,6 @@ func main() {
 	CA_CERT := env.GetAsString("CA_CERT", "cert/ca.crt")
 	CERT_NAME := env.GetAsString("CERT_NAME", "grpc.sandbox.iot.enlight.skf.com")
 
-	nodeID := uuid.New().String()
 	var err error
 
 	log.Info("Setup Client")
@@ -62,48 +61,73 @@ func main() {
 		return
 	}
 
+	nodeID1 := uuid.New().String()
+	nodeID2 := uuid.New().String()
+
 	log.Info("IngestNodeData")
-	exampleData := createExampleData()
-	for _, nodeData := range exampleData {
-		err := client.IngestNodeData(nodeID, nodeData)
+	for _, nodeData := range createExampleData() {
+		err := client.IngestNodeData(nodeID1, *nodeData)
 		if err != nil {
 			log.
 				WithError(err).
-				WithField("nodeID", nodeID).
+				WithField("nodeID", nodeID1).
 				WithField("nodeData", nodeData).
 				Error("client.IngestNodeData")
 		}
 	}
+	log.Info("IngestNodeDataStream")
+
+	doneChannel := make(chan bool)
+	dataChannel := make(chan api.IngestNodeDataStreamInput)
+	go func() {
+		err := client.IngestNodeDataStream(dataChannel)
+		if err != nil {
+			log.
+				WithError(err).
+				Error("client.IngestNodeDataStream")
+		}
+		doneChannel <- true
+	}()
+	dataChannel <- api.IngestNodeDataStreamInput{
+		NodeId:       nodeID1,
+		NodeDataList: createExampleData(),
+	}
+	dataChannel <- api.IngestNodeDataStreamInput{
+		NodeId:       nodeID2,
+		NodeDataList: createExampleData(),
+	}
+	close(dataChannel)
+	<-doneChannel
 
 	var input api.GetNodeDataInput
 	var output []api.NodeData
 
 	log.Info("GetNodeData_All")
 	input = api.GetNodeDataInput{
-		NodeId: nodeID,
+		NodeId: nodeID1,
 	}
 	output, err = client.GetNodeData(input)
 	log.
 		WithError(err).
 		WithField("input", input).
-		WithField("ouput", output).
+		WithField("outputLength", len(output)).
 		Info("client.GetNodeData")
 
 	log.Info("GetNodeData_DataPoint")
 	input = api.GetNodeDataInput{
-		NodeId:      nodeID,
+		NodeId:      nodeID1,
 		ContentType: api.NodeDataContentType_DATA_POINT,
 	}
 	output, err = client.GetNodeData(input)
 	log.
 		WithError(err).
 		WithField("input", input).
-		WithField("ouput", output).
+		WithField("outputLength", len(output)).
 		Info("client.GetNodeData")
 }
 
-func createExampleData() (out []api.NodeData) {
-	out = append(out, api.NodeData{
+func createExampleData() (out []*api.NodeData) {
+	out = append(out, &api.NodeData{
 		CreatedAt:   time.Now().UnixNano(),
 		ContentType: api.NodeDataContentType_DATA_POINT,
 		DataPoint: &api.DataPoint{
@@ -113,7 +137,7 @@ func createExampleData() (out []api.NodeData) {
 		},
 	})
 
-	out = append(out, api.NodeData{
+	out = append(out, &api.NodeData{
 		CreatedAt:   time.Now().UnixNano(),
 		ContentType: api.NodeDataContentType_SPECTRUM,
 		Spectrum: &api.Spectrum{
@@ -122,7 +146,7 @@ func createExampleData() (out []api.NodeData) {
 		},
 	})
 
-	out = append(out, api.NodeData{
+	out = append(out, &api.NodeData{
 		CreatedAt:   time.Now().UnixNano(),
 		ContentType: api.NodeDataContentType_TIME_SERIES,
 		TimeSeries: &api.TimeSeries{
@@ -131,19 +155,19 @@ func createExampleData() (out []api.NodeData) {
 		},
 	})
 
-	out = append(out, api.NodeData{
+	out = append(out, &api.NodeData{
 		CreatedAt:   time.Now().UnixNano(),
 		ContentType: api.NodeDataContentType_NOTE,
 		Note:        "<note>",
 	})
 
-	out = append(out, api.NodeData{
+	out = append(out, &api.NodeData{
 		CreatedAt:   time.Now().UnixNano(),
 		ContentType: api.NodeDataContentType_MEDIA,
 		Media:       []byte("<media>"),
 	})
 
-	out = append(out, api.NodeData{
+	out = append(out, &api.NodeData{
 		CreatedAt:       time.Now().UnixNano(),
 		ContentType:     api.NodeDataContentType_QUESTION_ANSWERS,
 		QuestionAnswers: []string{"<answer>"},
