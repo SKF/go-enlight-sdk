@@ -15,7 +15,7 @@ type client struct {
 }
 
 // Create returns an empty mock
-func Create() mhub.MicrologProxyHubClient {
+func Create() *client {
 	return new(client)
 }
 
