@@ -12,7 +12,6 @@ type client struct {
 	mock.Mock
 }
 
-// Create returns an empty mock
 func Create() *client {
 	return new(client)
 }
