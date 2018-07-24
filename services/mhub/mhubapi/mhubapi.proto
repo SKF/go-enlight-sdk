@@ -5,13 +5,14 @@ package mhubapi;
 service MicrologProxyHub {
   rpc DeepPing (Void) returns (DeepPingOutput) {}
   rpc SetTaskStatus (SetTaskStatusInput) returns (Void) {}
-  rpc GetTasksStream (GetTasksStreamInput) returns (stream GetTasksStreamOutput) {}
+  rpc AvailableDSKFStream (AvailableDSKFStreamInput) returns (stream AvailableDSKFStreamOutput) {}
 }
 
-message GetTasksStreamInput {}
+message AvailableDSKFStreamInput {}
 
-message GetTasksStreamOutput {
+message AvailableDSKFStreamOutput {
   string task_id = 1;
+  string dskf_file = 2;
 }
 
 message SetTaskStatusInput {
