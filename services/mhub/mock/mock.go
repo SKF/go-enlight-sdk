@@ -41,7 +41,7 @@ func (mock *client) SetTaskStatus(taskID, userID uuid.UUID, status mhubapi.TaskS
 	return args.Error(0)
 }
 
-func (mock *client) GetTasksStream(dc chan<- mhubapi.GetTasksStreamOutput) error {
+func (mock *client) AvailableDSKFStream(dc chan<- mhubapi.AvailableDSKFStreamOutput) error {
 	args := mock.Called(dc)
 	return args.Error(0)
 }
