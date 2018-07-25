@@ -11,10 +11,8 @@ import (
 
 type client struct {
 	mock.Mock
-	iam.IAMClient
 }
 
-// Create returns an empty mock
 func Create() *client {
 	return new(client)
 }
