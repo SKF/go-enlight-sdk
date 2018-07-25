@@ -50,11 +50,11 @@ func (mock *client) SetPointStatusWithContext(ctx context.Context, input pasapi.
 
 func (mock *client) GetPointStatus(input pasapi.GetPointStatusInput) (pasapi.AlarmStatus, error) {
 	args := mock.Called(input)
-	return args.Get(1).(pasapi.AlarmStatus), args.Error(0)
+	return args.Get(0).(pasapi.AlarmStatus), args.Error(1)
 }
 func (mock *client) GetPointStatusWithContext(ctx context.Context, input pasapi.GetPointStatusInput) (pasapi.AlarmStatus, error) {
 	args := mock.Called(ctx, input)
-	return args.Get(1).(pasapi.AlarmStatus), args.Error(0)
+	return args.Get(0).(pasapi.AlarmStatus), args.Error(1)
 }
 
 func (mock *client) GetPointStatusStream(dc chan<- pasapi.GetPointStatusStreamOutput) error {
