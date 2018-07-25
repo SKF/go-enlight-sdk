@@ -16,6 +16,12 @@ type PointAlarmStatusClient interface {
 	DeepPing() error
 	DeepPingWithContext(ctx context.Context) error
 
+	SetPointThreshold(input pasapi.SetPointThresholdInput) error
+	SetPointThresholdWithContext(ctx context.Context, input pasapi.SetPointThresholdInput) error
+
+	GetPointThreshold(nodeID string) ([]pasapi.AlarmStatusInterval, error)
+	GetPointThresholdWithContext(ctx context.Context, nodeID string) ([]pasapi.AlarmStatusInterval, error)
+
 	SetPointStatus(input pasapi.SetPointStatusInput) error
 	SetPointStatusWithContext(ctx context.Context, input pasapi.SetPointStatusInput) error
 

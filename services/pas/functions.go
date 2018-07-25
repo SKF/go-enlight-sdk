@@ -9,6 +9,32 @@ import (
 	"github.com/SKF/go-utility/log"
 )
 
+func (c *client) SetPointThreshold(input pasapi.SetPointThresholdInput) error {
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
+	defer cancel()
+	return c.SetPointThresholdWithContext(ctx, input)
+}
+func (c *client) SetPointThresholdWithContext(ctx context.Context, input pasapi.SetPointThresholdInput) error {
+	_, err := c.api.SetPointThreshold(ctx, &input)
+	return err
+}
+
+func (c *client) GetPointThreshold(nodeID string) ([]pasapi.AlarmStatusInterval, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
+	defer cancel()
+	return c.GetPointThresholdWithContext(ctx, nodeID)
+}
+func (c *client) GetPointThresholdWithContext(ctx context.Context, nodeID string) (intervals []pasapi.AlarmStatusInterval, err error) {
+	input := pasapi.GetPointThresholdInput{NodeId: nodeID}
+	output, err := c.api.GetPointThreshold(ctx, &input)
+	if output != nil {
+		for _, interval := range output.Intervals {
+			intervals = append(intervals, *interval)
+		}
+	}
+	return
+}
+
 func (c *client) SetPointStatus(input pasapi.SetPointStatusInput) error {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
 	defer cancel()

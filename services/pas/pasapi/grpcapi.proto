@@ -5,6 +5,9 @@ package pasapi;
 service PointAlarmStatus {
   rpc DeepPing (Void) returns (DeepPingOutput) {}
 
+  rpc SetPointThreshold (SetPointThresholdInput) returns (SetPointThresholdOutput) {}
+  rpc GetPointThreshold (GetPointThresholdInput) returns (GetPointThresholdOutput) {}
+
   rpc SetPointStatus (SetPointStatusInput) returns (SetPointStatusOutput) {}
   rpc GetPointStatus (GetPointStatusInput) returns (GetPointStatusOutput) {}
   rpc GetPointStatusStream (GetPointStatusStreamInput) returns (stream GetPointStatusStreamOutput) {}
@@ -14,6 +17,23 @@ service PointAlarmStatus {
 // DeepPing Messages
 message DeepPingOutput {
   string value = 1;
+}
+
+
+// SetPointThreshold Messages
+message SetPointThresholdInput {
+  string node_id = 1;
+  repeated AlarmStatusInterval intervals = 2;
+}
+message SetPointThresholdOutput {}
+
+
+// GetPointThreshold Messages
+message GetPointThresholdInput {
+  string node_id = 1;
+}
+message GetPointThresholdOutput {
+  repeated AlarmStatusInterval intervals = 1;
 }
 
 
@@ -51,3 +71,22 @@ enum AlarmStatus {
 }
 
 message Void {}
+
+// https://en.wikipedia.org/wiki/Interval_(mathematics)#Classification_of_intervals
+enum IntervalType {
+  BOUNDED_OPEN = 0;                              // (0,1) = 0<x<1    Open Interval
+  BOUNDED_CLOSED = 1;                            // [0,1] = 0<=x<=1  Closed Interval
+  BOUNDED_LEFT_OPEN_RIGHT_CLOSED = 2;            // (0,1] = 0<x<=1   Left-open, Right-closed
+  BOUNDED_LEFT_CLOSED_RIGHT_OPEN = 3;            // [0,1) = 0<=x<1   Left-closed, Right-open
+  LEFT_UNBOUNDED_RIGHT_BOUNDED_RIGHT_OPEN = 4;   // (−∞,1) = x<1     Right-open
+  LEFT_UNBOUNDED_RIGHT_BOUNDED_RIGHT_CLOSED = 5; // (−∞,1] = x<=1    Right-closed
+  LEFT_BOUNDED_RIGHT_UNBOUNDED_LEFT_OPEN = 6;    // (0,+∞) = 0<x     Left-open
+  LEFT_BOUNDED_RIGHT_UNBOUNDED_LEFT_CLOSED = 7;  // [0,+∞) = 0<=x    Left-closed
+}
+
+message AlarmStatusInterval {
+  double left_bound = 1;
+  double right_bound = 2;
+  IntervalType type = 3;
+  AlarmStatus alarm_status = 4;
+}
