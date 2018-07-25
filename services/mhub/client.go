@@ -16,7 +16,7 @@ type MicrologProxyHubClient interface {
 	DeepPing() error
 
 	SetTaskStatus(taskID, userID uuid.UUID, status mhubapi.TaskStatus) error
-	GetTasksStream(dc chan<- mhubapi.GetTasksStreamOutput) error
+	AvailableDSKFStream(dc chan<- mhubapi.AvailableDSKFStreamOutput) error
 }
 
 func CreateClient() MicrologProxyHubClient {

@@ -20,17 +20,17 @@ func (c *client) SetTaskStatus(taskID, userID uuid.UUID, status mhubapi.TaskStat
 	return
 }
 
-func (c *client) GetTasksStream(dc chan<- mhubapi.GetTasksStreamOutput) (err error) {
+func (c *client) AvailableDSKFStream(dc chan<- mhubapi.AvailableDSKFStreamOutput) (err error) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
 	defer cancel()
 
-	stream, err := c.api.GetTasksStream(ctx, &mhubapi.GetTasksStreamInput{})
+	stream, err := c.api.AvailableDSKFStream(ctx, &mhubapi.AvailableDSKFStreamInput{})
 	if err != nil {
 		return
 	}
 
 	for {
-		var output *mhubapi.GetTasksStreamOutput
+		var output *mhubapi.AvailableDSKFStreamOutput
 		output, err = stream.Recv()
 		if err == io.EOF {
 			err = nil
