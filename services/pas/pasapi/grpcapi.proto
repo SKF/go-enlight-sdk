@@ -1,0 +1,53 @@
+syntax = "proto3";
+
+package pasapi;
+
+service PointAlarmStatus {
+  rpc DeepPing (Void) returns (DeepPingOutput) {}
+
+  rpc SetPointStatus (SetPointStatusInput) returns (SetPointStatusOutput) {}
+  rpc GetPointStatus (GetPointStatusInput) returns (GetPointStatusOutput) {}
+  rpc GetPointStatusStream (GetPointStatusStreamInput) returns (stream GetPointStatusStreamOutput) {}
+}
+
+
+// DeepPing Messages
+message DeepPingOutput {
+  string value = 1;
+}
+
+
+// SetPointStatus Messages
+message SetPointStatusInput {
+  string node_id = 1;
+  AlarmStatus alarm_status = 2;
+}
+message SetPointStatusOutput {}
+
+
+// GetPointStatus Messages
+message GetPointStatusInput {
+  string node_id = 1;
+}
+message GetPointStatusOutput {
+  AlarmStatus alarm_status = 1;
+}
+
+
+// GetPointStatusStream Messages
+message GetPointStatusStreamInput {}
+message GetPointStatusStreamOutput {
+  string node_id = 1;
+  AlarmStatus alarm_status = 2;
+}
+
+
+enum AlarmStatus {
+  NOT_CONFIGURED = 0; // No threshold configured.
+  NO_DATA = 1;        // No measurement data.
+  GOOD = 2;           // Latest measurement data within a good interval.
+  ALERT = 3;          // Latest measurement data within an alert interval.
+  DANGER = 4;         // Latest measurement data within a danger interval.
+}
+
+message Void {}
