@@ -11,10 +11,8 @@ import (
 
 type client struct {
 	mock.Mock
-	mhub.MicrologProxyHubClient
 }
 
-// Create returns an empty mock
 func Create() *client {
 	return new(client)
 }
