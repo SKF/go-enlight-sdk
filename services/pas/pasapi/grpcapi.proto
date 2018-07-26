@@ -24,7 +24,7 @@ message DeepPingOutput {
 message SetPointThresholdInput {
   string node_id = 1;
   string user_id = 2;
-  repeated AlarmStatusInterval intervals = 3;
+  AlarmStatusIntervals intervals = 3;
 }
 message SetPointThresholdOutput {}
 
