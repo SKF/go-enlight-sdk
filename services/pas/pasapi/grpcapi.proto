@@ -34,7 +34,7 @@ message GetPointThresholdInput {
   string node_id = 1;
 }
 message GetPointThresholdOutput {
-  repeated AlarmStatusInterval intervals = 1;
+  AlarmStatusIntervals intervals = 1;
 }
 
 
@@ -90,4 +90,8 @@ message AlarmStatusInterval {
   double right_bound = 2;
   IntervalType type = 3;
   AlarmStatus alarm_status = 4;
+}
+
+message AlarmStatusIntervals {
+  repeated AlarmStatusInterval list = 1;
 }
