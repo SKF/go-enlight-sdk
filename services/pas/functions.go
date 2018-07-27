@@ -33,7 +33,7 @@ func (c *client) GetPointStatusWithContext(ctx context.Context, input pasapi.Get
 }
 
 func (c *client) GetPointStatusStream(dc chan<- pasapi.GetPointStatusStreamOutput) error {
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
+	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 	return c.GetPointStatusStreamWithContext(ctx, dc)
 
