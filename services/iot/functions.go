@@ -105,7 +105,7 @@ func (c *client) IngestNodeData(nodeID string, nodeData api.NodeData) (err error
 }
 
 func (c *client) IngestNodeDataStream(inputChannel <-chan api.IngestNodeDataStreamInput) (err error) {
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
+	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
 	stream, err := c.api.IngestNodeDataStream(ctx)
@@ -136,7 +136,7 @@ func (c *client) GetNodeData(input api.GetNodeDataInput) (out []api.NodeData, er
 }
 
 func (c *client) GetNodeDataStream(input api.GetNodeDataStreamInput, dc chan<- api.GetNodeDataStreamOutput) (err error) {
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
+	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
 	stream, err := c.api.GetNodeDataStream(ctx, &input)
