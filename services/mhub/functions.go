@@ -21,7 +21,7 @@ func (c *client) SetTaskStatus(taskID, userID uuid.UUID, status mhubapi.TaskStat
 }
 
 func (c *client) AvailableDSKFStream(dc chan<- mhubapi.AvailableDSKFStreamOutput) (err error) {
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
+	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
 	stream, err := c.api.AvailableDSKFStream(ctx, &mhubapi.AvailableDSKFStreamInput{})

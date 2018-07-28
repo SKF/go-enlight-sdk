@@ -59,7 +59,7 @@ func (c *client) GetPointAlarmStatusWithContext(ctx context.Context, input pasap
 }
 
 func (c *client) GetPointAlarmStatusStream(dc chan<- pasapi.GetPointAlarmStatusStreamOutput) error {
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
+	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 	return c.GetPointAlarmStatusStreamWithContext(ctx, dc)
 
