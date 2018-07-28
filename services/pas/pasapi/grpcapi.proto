@@ -5,8 +5,8 @@ package pasapi;
 service PointAlarmStatus {
   rpc DeepPing (Void) returns (DeepPingOutput) {}
 
-  rpc SetPointAlarmThreshold (SetPointAlarmThresholdInput) returns (SetPointAlarmThresholdOutput) {}
-  rpc GetPointAlarmThreshold (GetPointAlarmThresholdInput) returns (GetPointAlarmThresholdOutput) {}
+  rpc SetPointAlarmThresholds (SetPointAlarmThresholdsInput) returns (SetPointAlarmThresholdsOutput) {}
+  rpc GetPointAlarmThresholds (GetPointAlarmThresholdsInput) returns (GetPointAlarmThresholdsOutput) {}
 
   rpc SetPointAlarmStatus (SetPointAlarmStatusInput) returns (SetPointAlarmStatusOutput) {}
   rpc GetPointAlarmStatus (GetPointAlarmStatusInput) returns (GetPointAlarmStatusOutput) {}
@@ -20,20 +20,20 @@ message DeepPingOutput {
 }
 
 
-// SetPointAlarmThreshold Messages
-message SetPointAlarmThresholdInput {
+// SetPointAlarmThresholds Messages
+message SetPointAlarmThresholdsInput {
   string node_id = 1;
   string user_id = 2;
   AlarmStatusIntervals intervals = 3;
 }
-message SetPointAlarmThresholdOutput {}
+message SetPointAlarmThresholdsOutput {}
 
 
-// GetPointAlarmThreshold Messages
-message GetPointAlarmThresholdInput {
+// GetPointAlarmThresholds Messages
+message GetPointAlarmThresholdsInput {
   string node_id = 1;
 }
-message GetPointAlarmThresholdOutput {
+message GetPointAlarmThresholdsOutput {
   AlarmStatusIntervals intervals = 1;
 }
 
@@ -64,7 +64,7 @@ message GetPointAlarmStatusStreamOutput {
 
 
 enum AlarmStatus {
-  NOT_CONFIGURED = 0; // No threshold configured.
+  NOT_CONFIGURED = 0; // No thresholds configured.
   NO_DATA = 1;        // No measurement data.
   GOOD = 2;           // Latest measurement data within a good interval.
   ALERT = 3;          // Latest measurement data within an alert interval.

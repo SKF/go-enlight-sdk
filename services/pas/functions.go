@@ -9,24 +9,24 @@ import (
 	"github.com/SKF/go-utility/log"
 )
 
-func (c *client) SetPointAlarmThreshold(input pasapi.SetPointAlarmThresholdInput) error {
+func (c *client) SetPointAlarmThresholds(input pasapi.SetPointAlarmThresholdsInput) error {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
 	defer cancel()
-	return c.SetPointAlarmThresholdWithContext(ctx, input)
+	return c.SetPointAlarmThresholdsWithContext(ctx, input)
 }
-func (c *client) SetPointAlarmThresholdWithContext(ctx context.Context, input pasapi.SetPointAlarmThresholdInput) error {
-	_, err := c.api.SetPointAlarmThreshold(ctx, &input)
+func (c *client) SetPointAlarmThresholdsWithContext(ctx context.Context, input pasapi.SetPointAlarmThresholdsInput) error {
+	_, err := c.api.SetPointAlarmThresholds(ctx, &input)
 	return err
 }
 
-func (c *client) GetPointAlarmThreshold(nodeID string) ([]pasapi.AlarmStatusInterval, error) {
+func (c *client) GetPointAlarmThresholds(nodeID string) ([]pasapi.AlarmStatusInterval, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
 	defer cancel()
-	return c.GetPointAlarmThresholdWithContext(ctx, nodeID)
+	return c.GetPointAlarmThresholdsWithContext(ctx, nodeID)
 }
-func (c *client) GetPointAlarmThresholdWithContext(ctx context.Context, nodeID string) (intervals []pasapi.AlarmStatusInterval, err error) {
-	input := pasapi.GetPointAlarmThresholdInput{NodeId: nodeID}
-	output, err := c.api.GetPointAlarmThreshold(ctx, &input)
+func (c *client) GetPointAlarmThresholdsWithContext(ctx context.Context, nodeID string) (intervals []pasapi.AlarmStatusInterval, err error) {
+	input := pasapi.GetPointAlarmThresholdsInput{NodeId: nodeID}
+	output, err := c.api.GetPointAlarmThresholds(ctx, &input)
 	if output != nil {
 		for _, interval := range output.Intervals.List {
 			intervals = append(intervals, *interval)

@@ -39,20 +39,20 @@ func (mock *client) DeepPingWithContext(ctx context.Context) error {
 	return args.Error(0)
 }
 
-func (mock *client) SetPointAlarmThreshold(input pasapi.SetPointAlarmThresholdInput) error {
+func (mock *client) SetPointAlarmThresholds(input pasapi.SetPointAlarmThresholdsInput) error {
 	args := mock.Called(input)
 	return args.Error(0)
 }
-func (mock *client) SetPointAlarmThresholdWithContext(ctx context.Context, input pasapi.SetPointAlarmThresholdInput) error {
+func (mock *client) SetPointAlarmThresholdsWithContext(ctx context.Context, input pasapi.SetPointAlarmThresholdsInput) error {
 	args := mock.Called(ctx, input)
 	return args.Error(0)
 }
 
-func (mock *client) GetPointAlarmThreshold(nodeID string) ([]pasapi.AlarmStatusInterval, error) {
+func (mock *client) GetPointAlarmThresholds(nodeID string) ([]pasapi.AlarmStatusInterval, error) {
 	args := mock.Called(nodeID)
 	return args.Get(0).([]pasapi.AlarmStatusInterval), args.Error(1)
 }
-func (mock *client) GetPointAlarmThresholdWithContext(ctx context.Context, nodeID string) (intervals []pasapi.AlarmStatusInterval, err error) {
+func (mock *client) GetPointAlarmThresholdsWithContext(ctx context.Context, nodeID string) (intervals []pasapi.AlarmStatusInterval, err error) {
 	args := mock.Called(ctx, nodeID)
 	return args.Get(0).([]pasapi.AlarmStatusInterval), args.Error(1)
 }
