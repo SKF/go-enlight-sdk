@@ -16,20 +16,20 @@ type PointAlarmStatusClient interface {
 	DeepPing() error
 	DeepPingWithContext(ctx context.Context) error
 
-	SetPointThreshold(input pasapi.SetPointThresholdInput) error
-	SetPointThresholdWithContext(ctx context.Context, input pasapi.SetPointThresholdInput) error
+	SetPointAlarmThreshold(input pasapi.SetPointAlarmThresholdInput) error
+	SetPointAlarmThresholdWithContext(ctx context.Context, input pasapi.SetPointAlarmThresholdInput) error
 
-	GetPointThreshold(nodeID string) ([]pasapi.AlarmStatusInterval, error)
-	GetPointThresholdWithContext(ctx context.Context, nodeID string) ([]pasapi.AlarmStatusInterval, error)
+	GetPointAlarmThreshold(nodeID string) ([]pasapi.AlarmStatusInterval, error)
+	GetPointAlarmThresholdWithContext(ctx context.Context, nodeID string) ([]pasapi.AlarmStatusInterval, error)
 
-	SetPointStatus(input pasapi.SetPointStatusInput) error
-	SetPointStatusWithContext(ctx context.Context, input pasapi.SetPointStatusInput) error
+	SetPointAlarmStatus(input pasapi.SetPointAlarmStatusInput) error
+	SetPointAlarmStatusWithContext(ctx context.Context, input pasapi.SetPointAlarmStatusInput) error
 
-	GetPointStatus(input pasapi.GetPointStatusInput) (pasapi.AlarmStatus, error)
-	GetPointStatusWithContext(ctx context.Context, input pasapi.GetPointStatusInput) (pasapi.AlarmStatus, error)
+	GetPointAlarmStatus(input pasapi.GetPointAlarmStatusInput) (pasapi.AlarmStatus, error)
+	GetPointAlarmStatusWithContext(ctx context.Context, input pasapi.GetPointAlarmStatusInput) (pasapi.AlarmStatus, error)
 
-	GetPointStatusStream(dc chan<- pasapi.GetPointStatusStreamOutput) error
-	GetPointStatusStreamWithContext(ctx context.Context, dc chan<- pasapi.GetPointStatusStreamOutput) error
+	GetPointAlarmStatusStream(dc chan<- pasapi.GetPointAlarmStatusStreamOutput) error
+	GetPointAlarmStatusStreamWithContext(ctx context.Context, dc chan<- pasapi.GetPointAlarmStatusStreamOutput) error
 }
 
 func CreateClient() PointAlarmStatusClient {

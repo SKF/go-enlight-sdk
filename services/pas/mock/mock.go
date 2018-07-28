@@ -39,47 +39,47 @@ func (mock *client) DeepPingWithContext(ctx context.Context) error {
 	return args.Error(0)
 }
 
-func (mock *client) SetPointThreshold(input pasapi.SetPointThresholdInput) error {
+func (mock *client) SetPointAlarmThreshold(input pasapi.SetPointAlarmThresholdInput) error {
 	args := mock.Called(input)
 	return args.Error(0)
 }
-func (mock *client) SetPointThresholdWithContext(ctx context.Context, input pasapi.SetPointThresholdInput) error {
+func (mock *client) SetPointAlarmThresholdWithContext(ctx context.Context, input pasapi.SetPointAlarmThresholdInput) error {
 	args := mock.Called(ctx, input)
 	return args.Error(0)
 }
 
-func (mock *client) GetPointThreshold(nodeID string) ([]pasapi.AlarmStatusInterval, error) {
+func (mock *client) GetPointAlarmThreshold(nodeID string) ([]pasapi.AlarmStatusInterval, error) {
 	args := mock.Called(nodeID)
 	return args.Get(0).([]pasapi.AlarmStatusInterval), args.Error(1)
 }
-func (mock *client) GetPointThresholdWithContext(ctx context.Context, nodeID string) (intervals []pasapi.AlarmStatusInterval, err error) {
+func (mock *client) GetPointAlarmThresholdWithContext(ctx context.Context, nodeID string) (intervals []pasapi.AlarmStatusInterval, err error) {
 	args := mock.Called(ctx, nodeID)
 	return args.Get(0).([]pasapi.AlarmStatusInterval), args.Error(1)
 }
 
-func (mock *client) SetPointStatus(input pasapi.SetPointStatusInput) error {
+func (mock *client) SetPointAlarmStatus(input pasapi.SetPointAlarmStatusInput) error {
 	args := mock.Called(input)
 	return args.Error(0)
 }
-func (mock *client) SetPointStatusWithContext(ctx context.Context, input pasapi.SetPointStatusInput) error {
+func (mock *client) SetPointAlarmStatusWithContext(ctx context.Context, input pasapi.SetPointAlarmStatusInput) error {
 	args := mock.Called(ctx, input)
 	return args.Error(0)
 }
 
-func (mock *client) GetPointStatus(input pasapi.GetPointStatusInput) (pasapi.AlarmStatus, error) {
+func (mock *client) GetPointAlarmStatus(input pasapi.GetPointAlarmStatusInput) (pasapi.AlarmStatus, error) {
 	args := mock.Called(input)
 	return args.Get(0).(pasapi.AlarmStatus), args.Error(1)
 }
-func (mock *client) GetPointStatusWithContext(ctx context.Context, input pasapi.GetPointStatusInput) (pasapi.AlarmStatus, error) {
+func (mock *client) GetPointAlarmStatusWithContext(ctx context.Context, input pasapi.GetPointAlarmStatusInput) (pasapi.AlarmStatus, error) {
 	args := mock.Called(ctx, input)
 	return args.Get(0).(pasapi.AlarmStatus), args.Error(1)
 }
 
-func (mock *client) GetPointStatusStream(dc chan<- pasapi.GetPointStatusStreamOutput) error {
+func (mock *client) GetPointAlarmStatusStream(dc chan<- pasapi.GetPointAlarmStatusStreamOutput) error {
 	args := mock.Called(dc)
 	return args.Error(0)
 }
-func (mock *client) GetPointStatusStreamWithContext(ctx context.Context, dc chan<- pasapi.GetPointStatusStreamOutput) error {
+func (mock *client) GetPointAlarmStatusStreamWithContext(ctx context.Context, dc chan<- pasapi.GetPointAlarmStatusStreamOutput) error {
 	args := mock.Called(ctx, dc)
 	return args.Error(0)
 }
