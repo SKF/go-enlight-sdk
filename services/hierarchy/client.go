@@ -10,6 +10,9 @@ import (
 	"github.com/SKF/go-enlight-sdk/services/hierarchy/grpcapi"
 )
 
+// HierarchyClient provides the API operation methods for making
+// requests to Enlight Hierarchy Management Service. See this
+// package's package overview docs for details on the service.
 type HierarchyClient interface {
 	Dial(host, port string, opts ...grpc.DialOption) error
 	Close()
@@ -26,16 +29,19 @@ type HierarchyClient interface {
 	GetParentNode(nodeID string) (grpcapi.Node, error)
 }
 
-type client struct {
+// Client implements the HierarchyClient and holds the connection.
+type Client struct {
 	conn *grpc.ClientConn
 	api  grpcapi.HierarchyClient
 }
 
+// CreateClient creates an instance of the HierarchyClient.
 func CreateClient() HierarchyClient {
-	return &client{}
+	return &Client{}
 }
 
-func (c *client) Dial(host, port string, opts ...grpc.DialOption) (err error) {
+// Dial creates a client connection to the given host.
+func (c *Client) Dial(host, port string, opts ...grpc.DialOption) (err error) {
 	conn, err := grpc.Dial(host+":"+port, opts...)
 	if err != nil {
 		return
@@ -46,11 +52,13 @@ func (c *client) Dial(host, port string, opts ...grpc.DialOption) (err error) {
 	return
 }
 
-func (c *client) Close() {
+// Close tears down the ClientConn and all underlying connections.
+func (c *Client) Close() {
 	c.conn.Close()
 }
 
-func (c *client) DeepPing() error {
+// DeepPing pings the service to see if it is alive.
+func (c *Client) DeepPing() error {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 	defer cancel()
 
