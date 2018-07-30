@@ -9,6 +9,9 @@ import (
 	"google.golang.org/grpc"
 )
 
+// PointAlarmStatusClient provides the API operation methods for making
+// requests to the Enlight Point Alarm Status Service. See this
+// package's package overview docs for details on the service.
 type PointAlarmStatusClient interface {
 	Dial(host, port string, opts ...grpc.DialOption) error
 	Close()
@@ -16,11 +19,11 @@ type PointAlarmStatusClient interface {
 	DeepPing() error
 	DeepPingWithContext(ctx context.Context) error
 
-	SetPointAlarmThresholds(input pasapi.SetPointAlarmThresholdsInput) error
-	SetPointAlarmThresholdsWithContext(ctx context.Context, input pasapi.SetPointAlarmThresholdsInput) error
+	SetPointAlarmThreshold(input pasapi.SetPointAlarmThresholdInput) error
+	SetPointAlarmThresholdWithContext(ctx context.Context, input pasapi.SetPointAlarmThresholdInput) error
 
-	GetPointAlarmThresholds(nodeID string) ([]pasapi.AlarmStatusInterval, error)
-	GetPointAlarmThresholdsWithContext(ctx context.Context, nodeID string) ([]pasapi.AlarmStatusInterval, error)
+	GetPointAlarmThreshold(nodeID string) ([]pasapi.AlarmStatusInterval, error)
+	GetPointAlarmThresholdWithContext(ctx context.Context, nodeID string) ([]pasapi.AlarmStatusInterval, error)
 
 	SetPointAlarmStatus(input pasapi.SetPointAlarmStatusInput) error
 	SetPointAlarmStatusWithContext(ctx context.Context, input pasapi.SetPointAlarmStatusInput) error
@@ -32,16 +35,19 @@ type PointAlarmStatusClient interface {
 	GetPointAlarmStatusStreamWithContext(ctx context.Context, dc chan<- pasapi.GetPointAlarmStatusStreamOutput) error
 }
 
-func CreateClient() PointAlarmStatusClient {
-	return &client{}
-}
-
-type client struct {
+// Client implements the PointAlarmStatusClient and holds the connection.
+type Client struct {
 	api  pasapi.PointAlarmStatusClient
 	conn *grpc.ClientConn
 }
 
-func (c *client) Dial(host, port string, opts ...grpc.DialOption) (err error) {
+// CreateClient creates an instance of the PointAlarmStatusClient
+func CreateClient() PointAlarmStatusClient {
+	return &Client{}
+}
+
+// Dial creates a client connection to the given host.
+func (c *Client) Dial(host, port string, opts ...grpc.DialOption) (err error) {
 	conn, err := grpc.Dial(host+":"+port, opts...)
 	if err != nil {
 		return
@@ -52,17 +58,20 @@ func (c *client) Dial(host, port string, opts ...grpc.DialOption) (err error) {
 	return
 }
 
-func (c *client) Close() {
+// Close tears down the ClientConn and all underlying connections.
+func (c *Client) Close() {
 	c.conn.Close()
 }
 
-func (c *client) DeepPing() (err error) {
+// DeepPing pings the service to see if it is alive.
+func (c *Client) DeepPing() (err error) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
 	defer cancel()
 	return c.DeepPingWithContext(ctx)
 }
 
-func (c *client) DeepPingWithContext(ctx context.Context) (err error) {
+// DeepPingWithContext pings the service to see if it is alive.
+func (c *Client) DeepPingWithContext(ctx context.Context) (err error) {
 	_, err = c.api.DeepPing(ctx, &pasapi.Void{})
 	return
 }
