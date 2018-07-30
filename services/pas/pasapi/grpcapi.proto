@@ -5,8 +5,8 @@ package pasapi;
 service PointAlarmStatus {
   rpc DeepPing (Void) returns (DeepPingOutput) {}
 
-  rpc SetPointAlarmThresholds (SetPointAlarmThresholdsInput) returns (SetPointAlarmThresholdsOutput) {}
-  rpc GetPointAlarmThresholds (GetPointAlarmThresholdsInput) returns (GetPointAlarmThresholdsOutput) {}
+  rpc SetPointAlarmThreshold (SetPointAlarmThresholdInput) returns (SetPointAlarmThresholdOutput) {}
+  rpc GetPointAlarmThreshold (GetPointAlarmThresholdInput) returns (GetPointAlarmThresholdOutput) {}
 
   rpc SetPointAlarmStatus (SetPointAlarmStatusInput) returns (SetPointAlarmStatusOutput) {}
   rpc GetPointAlarmStatus (GetPointAlarmStatusInput) returns (GetPointAlarmStatusOutput) {}
@@ -20,21 +20,23 @@ message DeepPingOutput {
 }
 
 
-// SetPointAlarmThresholds Messages
-message SetPointAlarmThresholdsInput {
+// SetPointAlarmThreshold Messages
+message SetPointAlarmThresholdInput {
   string node_id = 1;
   string user_id = 2;
-  AlarmStatusIntervals intervals = 3;
+  ThresholdType type = 3;
+  AlarmStatusIntervals intervals = 4;
 }
-message SetPointAlarmThresholdsOutput {}
+message SetPointAlarmThresholdOutput {}
 
 
-// GetPointAlarmThresholds Messages
-message GetPointAlarmThresholdsInput {
+// GetPointAlarmThreshold Messages
+message GetPointAlarmThresholdInput {
   string node_id = 1;
 }
-message GetPointAlarmThresholdsOutput {
-  AlarmStatusIntervals intervals = 1;
+message GetPointAlarmThresholdOutput {
+  ThresholdType type = 1;
+  AlarmStatusIntervals intervals = 2;
 }
 
 
@@ -64,7 +66,7 @@ message GetPointAlarmStatusStreamOutput {
 
 
 enum AlarmStatus {
-  NOT_CONFIGURED = 0; // No thresholds configured.
+  NOT_CONFIGURED = 0; // No threshold configured.
   NO_DATA = 1;        // No measurement data.
   GOOD = 2;           // Latest measurement data within a good interval.
   ALERT = 3;          // Latest measurement data within an alert interval.
@@ -73,16 +75,23 @@ enum AlarmStatus {
 
 message Void {}
 
+enum ThresholdType {
+  NONE = 0;
+  OVERALL_IN_WINDOW = 1;
+  OVERALL_OUT_OF_WINDOW = 2;
+}
+
 // https://en.wikipedia.org/wiki/Interval_(mathematics)#Classification_of_intervals
 enum IntervalType {
-  BOUNDED_OPEN = 0;                              // (0,1) = 0<x<1    Open Interval
-  BOUNDED_CLOSED = 1;                            // [0,1] = 0<=x<=1  Closed Interval
-  BOUNDED_LEFT_OPEN_RIGHT_CLOSED = 2;            // (0,1] = 0<x<=1   Left-open, Right-closed
-  BOUNDED_LEFT_CLOSED_RIGHT_OPEN = 3;            // [0,1) = 0<=x<1   Left-closed, Right-open
-  LEFT_UNBOUNDED_RIGHT_BOUNDED_RIGHT_OPEN = 4;   // (−∞,1) = x<1     Right-open
-  LEFT_UNBOUNDED_RIGHT_BOUNDED_RIGHT_CLOSED = 5; // (−∞,1] = x<=1    Right-closed
-  LEFT_BOUNDED_RIGHT_UNBOUNDED_LEFT_OPEN = 6;    // (0,+∞) = 0<x     Left-open
-  LEFT_BOUNDED_RIGHT_UNBOUNDED_LEFT_CLOSED = 7;  // [0,+∞) = 0<=x    Left-closed
+  BOUNDED_OPEN = 0;                              // (0,1)   = 0<x<1   Open Interval
+  BOUNDED_CLOSED = 1;                            // [0,1]   = 0<=x<=1 Closed Interval
+  BOUNDED_LEFT_OPEN_RIGHT_CLOSED = 2;            // (0,1]   = 0<x<=1  Left-open, Right-closed
+  BOUNDED_LEFT_CLOSED_RIGHT_OPEN = 3;            // [0,1)   = 0<=x<1  Left-closed, Right-open
+  UNBOUNDED = 4;                                 // (−∞,+∞) = x
+  LEFT_UNBOUNDED_RIGHT_BOUNDED_RIGHT_OPEN = 5;   // (−∞,1)  = x<1     Right-open
+  LEFT_UNBOUNDED_RIGHT_BOUNDED_RIGHT_CLOSED = 6; // (−∞,1]  = x<=1    Right-closed
+  LEFT_BOUNDED_RIGHT_UNBOUNDED_LEFT_OPEN = 7;    // (0,+∞)  = 0<x     Left-open
+  LEFT_BOUNDED_RIGHT_UNBOUNDED_LEFT_CLOSED = 8;  // [0,+∞)  = 0<=x    Left-closed
 }
 
 message AlarmStatusInterval {
