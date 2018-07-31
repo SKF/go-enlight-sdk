@@ -25,7 +25,7 @@ func (mock *client) Close() {
 	mock.Called()
 	return
 }
-func (mock *client) DeepPing() (output api.DeepPingOutput, error) {
+func (mock *client) DeepPing() (output api.DeepPingOutput, err error) {
 	args := mock.Called()
 	return args.Get(0).(api.DeepPingOutput), args.Error(1)
 }
