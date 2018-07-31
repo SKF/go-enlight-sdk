@@ -1,0 +1,52 @@
+syntax = "proto3";
+
+package reportsgrpcapi;
+
+service Reports {
+  rpc DeepPing (PrimitiveVoid) returns (PrimitiveString) {}
+  rpc GetAssetHealth (GetAssetHealthInput) returns (GetAssetHealthOutput) {}
+  rpc GetFunctionalLocationHealth (GetFunctionalLocationHealthInput) returns (GetFunctionalLocationHealthOutput) {}
+  rpc GetComplianceLog (GetComplianceLogInput) returns (GetComplianceLogOutput) {}
+}
+
+message PrimitiveString {
+  string value = 1;
+}
+
+message PrimitiveVoid {}
+
+// GET ASSET HEALTH
+message GetAssetHealthInput {
+  string node_id = 1;
+}
+
+message GetAssetHealthOutput {
+  string healh_status = 1; 
+}
+
+// GET FL HEALTH
+message GetFunctionalLocationHealthInput {
+  string node_id = 1;
+}
+
+message GetFunctionalLocationHealthOutput {
+  string healh_status = 1; 
+}
+
+
+//GET COMPLIANCE GetComplianceLog
+
+message GetComplianceLogInput {
+  string node_id = 1;
+}
+
+message GetComplianceLogOutput {
+  repeated ComplianceItem compliance_list = 1;
+}
+
+message ComplianceItem {
+  string asset_class_id = 1; 
+  bool is_compliant = 2; 
+  string compliance_note = 3;
+  int64 created = 4;   
+}
