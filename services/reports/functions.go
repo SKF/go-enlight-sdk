@@ -7,14 +7,7 @@ import (
 	"github.com/SKF/go-enlight-sdk/services/reports/reportsgrpcapi"
 )
 
-func (c *client) DeepPing() (_ reportsgrpcapi.PrimitiveString, err error) {
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
-	defer cancel()
-	_, err = c.api.DeepPing(ctx, &reportsgrpcapi.PrimitiveVoid{})
-	return
-}
-
-func (c *client) GetAssetHealth(input reportsgrpcapi.GetAssetHealthInput) (output reportsgrpcapi.GetAssetHealthOutput, err error) {
+func (c *client) GetAssetHealth(input reportsgrpcapi.GetAssetHealthInput) (output *reportsgrpcapi.GetAssetHealthOutput, err error) {
 
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
 	defer cancel()
@@ -22,7 +15,7 @@ func (c *client) GetAssetHealth(input reportsgrpcapi.GetAssetHealthInput) (outpu
 	return
 }
 
-func (c *client) GetFunctionalLocationHealth(input reportsgrpcapi.GetFunctionalLocationHealthInput) (output reportsgrpcapi.GetFunctionalLocationHealthOutput, err error) {
+func (c *client) GetFunctionalLocationHealth(input *reportsgrpcapi.GetFunctionalLocationHealthInput) (output reportsgrpcapi.GetFunctionalLocationHealthOutput, err error) {
 
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
 	defer cancel()
@@ -30,7 +23,7 @@ func (c *client) GetFunctionalLocationHealth(input reportsgrpcapi.GetFunctionalL
 	return
 }
 
-func (c *client) GetComplianceLog(input reportsgrpcapi.GetComplianceLogInput) (output reportsgrpcapi.GetComplianceLogOutput, err error) {
+func (c *client) GetComplianceLog(input reportsgrpcapi.GetComplianceLogInput) (output *reportsgrpcapi.GetComplianceLogOutput, err error) {
 
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
 	defer cancel()
