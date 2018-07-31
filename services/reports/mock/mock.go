@@ -4,7 +4,7 @@ import (
 	"github.com/stretchr/testify/mock"
 	"google.golang.org/grpc"
 	"skfdc.visualstudio.com/enlightcentre/go-enlight-sdk/services/reports"
-	"skfdc.visualstudio.com/enlightcentre/reports/backend/api/reportsgrpcapi"
+	"skfdc.visualstudio.com/enlightcentre/go-enlight-sdk/services/reports/reportsgrpcapi"
 )
 
 type client struct {
