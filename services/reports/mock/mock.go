@@ -2,7 +2,7 @@ package mock
 
 import (
 	"github.com/SKF/go-enlight-sdk/services/reports"
-	"github.com/SKF/go-enlight-sdk/services/reports/reportsgrpcapi"
+	api "github.com/SKF/go-enlight-sdk/services/reports/reportsgrpcapi"
 	"github.com/stretchr/testify/mock"
 	"google.golang.org/grpc"
 )
@@ -30,17 +30,17 @@ func (mock *client) DeepPing() error {
 	return args.Error(0)
 }
 
-func (mock *client) GetFunctionalLocationHealth(input reportsgrpcapi.GetFunctionalLocationHealthInput) (output reportsgrpcapi.GetFunctionalLocationHealthOutput, err error) {
+func (mock *client) GetFunctionalLocationHealth(input api.GetFunctionalLocationHealthInput) (output api.GetFunctionalLocationHealthOutput, err error) {
 	args := mock.Called(input)
-	return args.Error(0)
+	return args.Get(0).(api.GetFunctionalLocationHealthOutput), args.Error(1)
 }
 
-func (mock *client) GetAssetHealth(input reportsgrpcapi.GetAssetHealthInput) (output reportsgrpcapi.GetAssetHealthOutput, err error) {
+func (mock *client) GetAssetHealth(input api.GetAssetHealthInput) (output api.GetAssetHealthOutput, err error) {
 	args := mock.Called(input)
-	return args.Error(0)
+	return args.Get(0).(api.GetAssetHealthOutput), args.Error(1)
 }
 
-func (mock *client) GetComplianceLog(input reportsgrpcapi.GetComplianceLogInput) (output reportsgrpcapi.GetComplianceLogOutput, err error) {
+func (mock *client) GetComplianceLog(input api.GetComplianceLogInput) (output api.GetComplianceLogOutput, err error) {
 	args := mock.Called(input)
-	return args.Error(0)
+	return args.Get(0).(api.GetComplianceLogOutput), args.Error(1)
 }
