@@ -42,7 +42,7 @@ func (c *client) Dial(host, port string, opts ...grpc.DialOption) (err error) {
 	return
 }
 
-func (c *client) DeepPing() (output &api.DeepPingResponse, err error) {
+func (c *client) DeepPing() (output reportsgrpcapi.DeepPingResponse, err error) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
 	defer cancel()
 	return c.api.DeepPing(ctx, &api.PrimitiveVoid{})
