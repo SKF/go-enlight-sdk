@@ -27,20 +27,20 @@ func (mock *client) Close() {
 }
 func (mock *client) DeepPing() (output *api.DeepPingOutput, err error) {
 	args := mock.Called()
-	return args.Get(0).(&api.DeepPingOutput), args.Error(1)
+	return args.Get(0).(*api.DeepPingOutput), args.Error(1)
 }
 
 func (mock *client) GetFunctionalLocationHealth(input api.GetFunctionalLocationHealthInput) (output *api.GetFunctionalLocationHealthOutput, err error) {
 	args := mock.Called(input)
-	return args.Get(0).(&api.GetFunctionalLocationHealthOutput), args.Error(1)
+	return args.Get(0).(api.GetFunctionalLocationHealthOutput), args.Error(1)
 }
 
 func (mock *client) GetAssetHealth(input api.GetAssetHealthInput) (output *api.GetAssetHealthOutput, err error) {
 	args := mock.Called(input)
-	return args.Get(0).(&api.GetAssetHealthOutput), args.Error(1)
+	return args.Get(0).(*api.GetAssetHealthOutput), args.Error(1)
 }
 
 func (mock *client) GetComplianceLog(input api.GetComplianceLogInput) (output *api.GetComplianceLogOutput, err error) {
 	args := mock.Called(input)
-	return args.Get(0).(&api.GetComplianceLogOutput), args.Error(1)
+	return args.Get(0).(*api.GetComplianceLogOutput), args.Error(1)
 }
