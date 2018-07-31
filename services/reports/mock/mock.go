@@ -25,12 +25,12 @@ func (mock *client) Close() {
 	mock.Called()
 	return
 }
-func (mock *client) DeepPing() error {
+func (mock *client) DeepPing() (output api.DeepPingOutput, error) {
 	args := mock.Called()
-	return args.Error(0)
+	return args.Get(0).(api.DeepPingOutput), args.Error(1)
 }
 
-func (mock *client) GetFunctionalLocationHealth(input api.GetFunctionalLocationHealthInput) (output api.GetFunctionalLocationHealthOutput, err error) {
+func (mock *client) GetFunctionalLocationHealth(input *api.GetFunctionalLocationHealthInput) (output api.GetFunctionalLocationHealthOutput, err error) {
 	args := mock.Called(input)
 	return args.Get(0).(api.GetFunctionalLocationHealthOutput), args.Error(1)
 }
