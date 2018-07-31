@@ -15,7 +15,7 @@ func (c *client) GetAssetHealth(input reportsgrpcapi.GetAssetHealthInput) (outpu
 	return
 }
 
-func (c *client) GetFunctionalLocationHealth(input *reportsgrpcapi.GetFunctionalLocationHealthInput) (output reportsgrpcapi.GetFunctionalLocationHealthOutput, err error) {
+func (c *client) GetFunctionalLocationHealth(input reportsgrpcapi.GetFunctionalLocationHealthInput) (output *reportsgrpcapi.GetFunctionalLocationHealthOutput, err error) {
 
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
 	defer cancel()
