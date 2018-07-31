@@ -12,7 +12,7 @@ type ReportsClient interface {
 	Dial(host, port string, opts ...grpc.DialOption) error
 	Close()
 
-	DeepPing() error
+	DeepPing() (output DeepPingResponse, err error)
 	GetFunctionalLocationHealth(input reportsgrpcapi.GetFunctionalLocationHealthInput) (output reportsgrpcapi.GetFunctionalLocationHealthOutput, err error)
 	GetAssetHealth(input reportsgrpcapi.GetAssetHealthInput) (output reportsgrpcapi.GetAssetHealthOutput, err error)
 	GetComplianceLog(input reportsgrpcapi.GetComplianceLogInput) (output reportsgrpcapi.GetComplianceLogOutput, err error)
@@ -42,8 +42,8 @@ func (c *client) Dial(host, port string, opts ...grpc.DialOption) (err error) {
 	return
 }
 
-func (c *client) DeepPing() (err error) {
+func (c *client) DeepPing() (output &api.DeepPingResponse, err error) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
 	defer cancel()
-	return c.api.DeepPing(ctx)
+	return c.api.DeepPing(ctx, &api.PrimitiveVoid{})
 }

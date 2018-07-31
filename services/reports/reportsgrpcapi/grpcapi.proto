@@ -3,13 +3,14 @@ syntax = "proto3";
 package reportsgrpcapi;
 
 service Reports {
-  rpc DeepPing (PrimitiveVoid) returns (PrimitiveString) {}
+  rpc DeepPing (PrimitiveVoid) returns (DeepPingOutput) {}
   rpc GetAssetHealth (GetAssetHealthInput) returns (GetAssetHealthOutput) {}
   rpc GetFunctionalLocationHealth (GetFunctionalLocationHealthInput) returns (GetFunctionalLocationHealthOutput) {}
   rpc GetComplianceLog (GetComplianceLogInput) returns (GetComplianceLogOutput) {}
 }
 
-message PrimitiveString {
+
+message DeepPingOutput {
   string value = 1;
 }
 
