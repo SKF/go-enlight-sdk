@@ -13,9 +13,9 @@ type ReportsClient interface {
 	Close()
 
 	DeepPing() (output reportsgrpcapi.DeepPingOutput, err error)
-	GetFunctionalLocationHealth(input reportsgrpcapi.GetFunctionalLocationHealthInput) (output reportsgrpcapi.GetFunctionalLocationHealthOutput, err error)
-	GetAssetHealth(input reportsgrpcapi.GetAssetHealthInput) (output reportsgrpcapi.GetAssetHealthOutput, err error)
-	GetComplianceLog(input reportsgrpcapi.GetComplianceLogInput) (output reportsgrpcapi.GetComplianceLogOutput, err error)
+	GetFunctionalLocationHealth(input reportsgrpcapi.GetFunctionalLocationHealthInput) (output *reportsgrpcapi.GetFunctionalLocationHealthOutput, err error)
+	GetAssetHealth(input reportsgrpcapi.GetAssetHealthInput) (output *reportsgrpcapi.GetAssetHealthOutput, err error)
+	GetComplianceLog(input reportsgrpcapi.GetComplianceLogInput) (output *reportsgrpcapi.GetComplianceLogOutput, err error)
 }
 
 type client struct {
