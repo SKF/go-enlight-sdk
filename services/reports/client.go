@@ -45,5 +45,5 @@ func (c *client) Dial(host, port string, opts ...grpc.DialOption) (err error) {
 func (c *client) DeepPing() (output *reportsgrpcapi.DeepPingOutput, err error) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
 	defer cancel()
-	return c.api.DeepPing(ctx, reportsgrpcapi.PrimitiveVoid{})
+	return c.api.DeepPing(ctx, &reportsgrpcapi.PrimitiveVoid{})
 }
