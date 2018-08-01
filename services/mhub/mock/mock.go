@@ -1,6 +1,8 @@
 package mock
 
 import (
+	"context"
+
 	"github.com/stretchr/testify/mock"
 	"google.golang.org/grpc"
 
@@ -34,12 +36,27 @@ func (mock *client) DeepPing() error {
 	return args.Error(0)
 }
 
+func (mock *client) DeepPingWithContext(ctx context.Context) error {
+	args := mock.Called(ctx)
+	return args.Error(0)
+}
+
 func (mock *client) SetTaskStatus(taskID, userID uuid.UUID, status mhubapi.TaskStatus) error {
 	args := mock.Called(taskID, userID, status)
 	return args.Error(0)
 }
 
+func (mock *client) SetTaskStatusWithContext(ctx context.Context, taskID, userID uuid.UUID, status mhubapi.TaskStatus) error {
+	args := mock.Called(ctx, taskID, userID, status)
+	return args.Error(0)
+}
+
 func (mock *client) AvailableDSKFStream(dc chan<- mhubapi.AvailableDSKFStreamOutput) error {
 	args := mock.Called(dc)
+	return args.Error(0)
+}
+
+func (mock *client) AvailableDSKFStreamWithContext(ctx context.Context, dc chan<- mhubapi.AvailableDSKFStreamOutput) error {
+	args := mock.Called(ctx, dc)
 	return args.Error(0)
 }

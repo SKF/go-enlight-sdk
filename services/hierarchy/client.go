@@ -16,17 +16,33 @@ import (
 type HierarchyClient interface {
 	Dial(host, port string, opts ...grpc.DialOption) error
 	Close()
+
 	DeepPing() error
+	DeepPingWithContext(ctx context.Context) error
 
 	SaveNode(request grpcapi.SaveNodeInput) (string, error)
+	SaveNodeWithContext(ctx context.Context, request grpcapi.SaveNodeInput) (string, error)
+
 	GetNode(nodeID string) (grpcapi.Node, error)
+	GetNodeWithContext(ctx context.Context, nodeID string) (grpcapi.Node, error)
+
 	GetNodes(parentID string) ([]grpcapi.Node, error)
+	GetNodesWithContext(ctx context.Context, parentID string) ([]grpcapi.Node, error)
+
 	GetChildNodes(parentID string) ([]grpcapi.Node, error)
+	GetChildNodesWithContext(ctx context.Context, parentID string) ([]grpcapi.Node, error)
+
 	DeleteNode(request grpcapi.DeleteNodeInput) error
+	DeleteNodeWithContext(ctx context.Context, request grpcapi.DeleteNodeInput) error
+
 	GetAncestors(nodeID string) ([]grpcapi.AncestorNode, error)
+	GetAncestorsWithContext(ctx context.Context, nodeID string) ([]grpcapi.AncestorNode, error)
 
 	GetEvents(since int, limit *int32) ([]eventsource.Record, error)
+	GetEventsWithContext(ctx context.Context, since int, limit *int32) ([]eventsource.Record, error)
+
 	GetParentNode(nodeID string) (grpcapi.Node, error)
+	GetParentNodeWithContext(ctx context.Context, nodeID string) (grpcapi.Node, error)
 }
 
 // Client implements the HierarchyClient and holds the connection.
@@ -61,7 +77,11 @@ func (c *Client) Close() {
 func (c *Client) DeepPing() error {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 	defer cancel()
+	return c.DeepPingWithContext(ctx)
+}
 
+// DeepPingWithContext pings the service to see if it is alive.
+func (c *Client) DeepPingWithContext(ctx context.Context) error {
 	_, err := c.api.DeepPing(ctx, &grpcapi.PrimitiveVoid{})
 	return err
 }
