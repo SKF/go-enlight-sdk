@@ -61,6 +61,7 @@ enum TaskStatus {
   NOT_SENT = 0;
   SENT = 1;
   RECEIVED = 2;
+  IN_PROGRESS = 4;
   COMPLETED = 3;
 }
 
