@@ -23,20 +23,18 @@ func (c *Client) SetPointAlarmThresholdWithContext(ctx context.Context, input pa
 }
 
 // GetPointAlarmThreshold gets the alarm threshold for a specific point
-func (c *Client) GetPointAlarmThreshold(nodeID string) ([]pasapi.AlarmStatusInterval, error) {
+func (c *Client) GetPointAlarmThreshold(nodeID string) (pasapi.GetPointAlarmThresholdOutput, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
 	defer cancel()
 	return c.GetPointAlarmThresholdWithContext(ctx, nodeID)
 }
 
 // GetPointAlarmThresholdWithContext gets the alarm threshold for a specific point
-func (c *Client) GetPointAlarmThresholdWithContext(ctx context.Context, nodeID string) (intervals []pasapi.AlarmStatusInterval, err error) {
+func (c *Client) GetPointAlarmThresholdWithContext(ctx context.Context, nodeID string) (output pasapi.GetPointAlarmThresholdOutput, err error) {
 	input := pasapi.GetPointAlarmThresholdInput{NodeId: nodeID}
-	output, err := c.api.GetPointAlarmThreshold(ctx, &input)
-	if output != nil {
-		for _, interval := range output.Intervals.List {
-			intervals = append(intervals, *interval)
-		}
+	resp, err := c.api.GetPointAlarmThreshold(ctx, &input)
+	if resp != nil {
+		output = *resp
 	}
 	return
 }

@@ -22,8 +22,8 @@ type PointAlarmStatusClient interface {
 	SetPointAlarmThreshold(input pasapi.SetPointAlarmThresholdInput) error
 	SetPointAlarmThresholdWithContext(ctx context.Context, input pasapi.SetPointAlarmThresholdInput) error
 
-	GetPointAlarmThreshold(nodeID string) ([]pasapi.AlarmStatusInterval, error)
-	GetPointAlarmThresholdWithContext(ctx context.Context, nodeID string) ([]pasapi.AlarmStatusInterval, error)
+	GetPointAlarmThreshold(nodeID string) (pasapi.GetPointAlarmThresholdOutput, error)
+	GetPointAlarmThresholdWithContext(ctx context.Context, nodeID string) (pasapi.GetPointAlarmThresholdOutput, error)
 
 	SetPointAlarmStatus(input pasapi.SetPointAlarmStatusInput) error
 	SetPointAlarmStatusWithContext(ctx context.Context, input pasapi.SetPointAlarmStatusInput) error

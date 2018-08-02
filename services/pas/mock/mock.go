@@ -49,13 +49,13 @@ func (mock *client) SetPointAlarmThresholdWithContext(ctx context.Context, input
 	return args.Error(0)
 }
 
-func (mock *client) GetPointAlarmThreshold(nodeID string) ([]pasapi.AlarmStatusInterval, error) {
+func (mock *client) GetPointAlarmThreshold(nodeID string) (pasapi.GetPointAlarmThresholdOutput, error) {
 	args := mock.Called(nodeID)
-	return args.Get(0).([]pasapi.AlarmStatusInterval), args.Error(1)
+	return args.Get(0).(pasapi.GetPointAlarmThresholdOutput), args.Error(1)
 }
-func (mock *client) GetPointAlarmThresholdWithContext(ctx context.Context, nodeID string) (intervals []pasapi.AlarmStatusInterval, err error) {
+func (mock *client) GetPointAlarmThresholdWithContext(ctx context.Context, nodeID string) (pasapi.GetPointAlarmThresholdOutput, error) {
 	args := mock.Called(ctx, nodeID)
-	return args.Get(0).([]pasapi.AlarmStatusInterval), args.Error(1)
+	return args.Get(0).(pasapi.GetPointAlarmThresholdOutput), args.Error(1)
 }
 
 func (mock *client) SetPointAlarmStatus(input pasapi.SetPointAlarmStatusInput) error {
