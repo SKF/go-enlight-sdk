@@ -91,20 +91,20 @@ func (mock *client) GetUncompletedTasksByHierarchyWithContext(ctx context.Contex
 	return args.Get(0).([]api.TaskDescription), args.Error(1)
 }
 
-func (mock *client) SetTaskStatus(taskID, userID string, status api.TaskStatus) (err error) {
+func (mock *client) SetTaskStatus(taskID, userID string, status api.TaskStatus) error {
 	args := mock.Called(taskID, userID, status)
 	return args.Error(0)
 }
-func (mock *client) SetTaskStatusWithContext(ctx context.Context, taskID, userID string, status api.TaskStatus) (err error) {
+func (mock *client) SetTaskStatusWithContext(ctx context.Context, taskID, userID string, status api.TaskStatus) error {
 	args := mock.Called(ctx, taskID, userID, status)
 	return args.Error(0)
 }
 
-func (mock *client) GetTaskStream(input api.GetTaskStreamInput, dc chan<- api.GetTaskStreamOutput) (err error) {
+func (mock *client) GetTaskStream(input api.GetTaskStreamInput, dc chan<- api.GetTaskStreamOutput) error {
 	args := mock.Called(input, dc)
 	return args.Error(0)
 }
-func (mock *client) GetTaskStreamWithContext(ctx context.Context, input api.GetTaskStreamInput, dc chan<- api.GetTaskStreamOutput) (err error) {
+func (mock *client) GetTaskStreamWithContext(ctx context.Context, input api.GetTaskStreamInput, dc chan<- api.GetTaskStreamOutput) error {
 	args := mock.Called(ctx, input, dc)
 	return args.Error(0)
 }
@@ -132,7 +132,7 @@ func (mock *client) GetLatestNodeData(input *api.GetLatestNodeDataInput) (api.No
 	return args.Get(0).(api.NodeData), args.Error(1)
 }
 
-func (mock *client) GetLatestNodeDataContext(ctx context.Context, input *api.GetLatestNodeDataInput) (nodeData api.NodeData, err error) {
+func (mock *client) GetLatestNodeDataContext(ctx context.Context, input *api.GetLatestNodeDataInput) (api.NodeData, error) {
 	args := mock.Called(ctx, input)
 	return args.Get(0).(api.NodeData), args.Error(1)
 }
