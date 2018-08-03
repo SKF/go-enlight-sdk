@@ -46,6 +46,9 @@ type IoTClient interface {
 	IngestNodeDataStream(c <-chan api.IngestNodeDataStreamInput) error
 	IngestNodeDataStreamWithContext(ctx context.Context, c <-chan api.IngestNodeDataStreamInput) error
 
+	GetLatestNodeData(input *api.GetLatestNodeDataInput) (api.NodeData, error)
+	GetLatestNodeDataContext(ctx context.Context, input *api.GetLatestNodeDataInput) (api.NodeData, error)
+
 	GetNodeData(input api.GetNodeDataInput) ([]api.NodeData, error)
 	GetNodeDataWithContext(ctx context.Context, input api.GetNodeDataInput) ([]api.NodeData, error)
 
