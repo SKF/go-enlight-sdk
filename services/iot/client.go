@@ -34,8 +34,8 @@ type IoTClient interface {
 	GetUncompletedTasksByHierarchy(nodeID string) (out []api.TaskDescription, err error)
 	GetUncompletedTasksByHierarchyWithContext(ctx context.Context, nodeID string) (out []api.TaskDescription, err error)
 
-	SetTaskStatus(taskID, userID string, status api.TaskStatus) (err error)
-	SetTaskStatusWithContext(ctx context.Context, taskID, userID string, status api.TaskStatus) (err error)
+	SetTaskStatus(input api.SetTaskStatusInput) (err error)
+	SetTaskStatusWithContext(ctx context.Context, input api.SetTaskStatusInput) (err error)
 
 	GetTaskStream(input api.GetTaskStreamInput, dc chan<- api.GetTaskStreamOutput) (err error)
 	GetTaskStreamWithContext(ctx context.Context, input api.GetTaskStreamInput, dc chan<- api.GetTaskStreamOutput) (err error)
