@@ -6,7 +6,6 @@ import (
 	"time"
 
 	"github.com/SKF/go-enlight-sdk/services/mhub/mhubapi"
-	"github.com/SKF/go-utility/log"
 	"github.com/SKF/go-utility/uuid"
 )
 
@@ -44,7 +43,6 @@ func (c *client) AvailableDSKFStreamWithContext(ctx context.Context, dc chan<- m
 			return
 		}
 		if err != nil {
-			log.WithError(err).Errorf("stream.Recv")
 			return
 		}
 		dc <- *output

@@ -6,7 +6,6 @@ import (
 	"time"
 
 	"github.com/SKF/go-enlight-sdk/services/pas/pasapi"
-	"github.com/SKF/go-utility/log"
 )
 
 // SetPointAlarmThreshold sets the alarm threshold for a specific point
@@ -91,7 +90,6 @@ func (c *Client) GetPointAlarmStatusStreamWithContext(ctx context.Context, dc ch
 			return
 		}
 		if err != nil {
-			log.WithError(err).Errorf("stream.Recv")
 			return
 		}
 		dc <- *output
