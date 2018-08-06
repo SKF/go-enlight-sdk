@@ -109,16 +109,12 @@ func (c *client) SetTaskStatusWithContext(ctx context.Context, taskID, userID st
 	return
 }
 
-func (c *client) IngestNodeData(nodeID string, nodeData api.NodeData) (err error) {
+func (c *client) IngestNodeData(input api.IngestNodeDataInput) (err error) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
 	defer cancel()
-	return c.IngestNodeDataWithContext(ctx, nodeID, nodeData)
+	return c.IngestNodeDataWithContext(ctx, input)
 }
-func (c *client) IngestNodeDataWithContext(ctx context.Context, nodeID string, nodeData api.NodeData) (err error) {
-	input := api.IngestNodeDataInput{
-		NodeId:   nodeID,
-		NodeData: &nodeData,
-	}
+func (c *client) IngestNodeDataWithContext(ctx context.Context, input api.IngestNodeDataInput) (err error) {
 	_, err = c.api.IngestNodeData(ctx, &input)
 	return
 }

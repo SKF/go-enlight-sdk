@@ -109,12 +109,12 @@ func (mock *client) GetTaskStreamWithContext(ctx context.Context, input api.GetT
 	return args.Error(0)
 }
 
-func (mock *client) IngestNodeData(nodeID string, nodeData api.NodeData) error {
-	args := mock.Called(nodeID, nodeData)
+func (mock *client) IngestNodeData(input api.IngestNodeDataInput) error {
+	args := mock.Called(input)
 	return args.Error(0)
 }
-func (mock *client) IngestNodeDataWithContext(ctx context.Context, nodeID string, nodeData api.NodeData) error {
-	args := mock.Called(ctx, nodeID, nodeData)
+func (mock *client) IngestNodeDataWithContext(ctx context.Context, input api.IngestNodeDataInput) error {
+	args := mock.Called(ctx, input)
 	return args.Error(0)
 }
 
