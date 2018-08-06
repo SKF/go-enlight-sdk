@@ -56,16 +56,16 @@ type IoTClient interface {
 	GetNodeDataStreamWithContext(ctx context.Context, input api.GetNodeDataStreamInput, c chan<- api.GetNodeDataStreamOutput) error
 }
 
-type client struct {
+type Client struct {
 	conn *grpc.ClientConn
 	api  api.IoTClient
 }
 
 func CreateClient() IoTClient {
-	return &client{}
+	return &Client{}
 }
 
-func (c *client) Dial(host, port string, opts ...grpc.DialOption) (err error) {
+func (c *Client) Dial(host, port string, opts ...grpc.DialOption) (err error) {
 	conn, err := grpc.Dial(host+":"+port, opts...)
 	if err != nil {
 		return
@@ -76,17 +76,17 @@ func (c *client) Dial(host, port string, opts ...grpc.DialOption) (err error) {
 	return
 }
 
-func (c *client) Close() {
+func (c *Client) Close() {
 	c.conn.Close()
 }
 
-func (c *client) DeepPing() error {
+func (c *Client) DeepPing() error {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 	defer cancel()
 	return c.DeepPingWithContext(ctx)
 }
 
-func (c *client) DeepPingWithContext(ctx context.Context) error {
+func (c *Client) DeepPingWithContext(ctx context.Context) error {
 	_, err := c.api.DeepPing(ctx, &api.PrimitiveVoid{})
 	return err
 }
