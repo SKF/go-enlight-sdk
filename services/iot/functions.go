@@ -6,7 +6,6 @@ import (
 	"time"
 
 	api "github.com/SKF/go-enlight-sdk/services/iot/iotgrpcapi"
-	"github.com/SKF/go-utility/log"
 )
 
 func (c *client) CreateTask(task api.InitialTaskDescription) (taskID string, err error) {
@@ -178,7 +177,6 @@ func (c *client) GetNodeDataStreamWithContext(ctx context.Context, input api.Get
 			return
 		}
 		if err != nil {
-			log.WithError(err).Errorf("stream.Recv")
 			return
 		}
 		dc <- *nodeData
@@ -204,7 +202,6 @@ func (c *client) GetTaskStreamWithContext(ctx context.Context, input api.GetTask
 			return
 		}
 		if err != nil {
-			log.WithError(err).Errorf("stream.Recv")
 			return
 		}
 		dc <- *nodeData
