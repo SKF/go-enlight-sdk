@@ -14,4 +14,4 @@ Services for accessing Enlight's point alarm status
 - SetPointAlarmThresholdWithContext
 
 # example usage
-See [doc.go](https://github.com/SKF/go-enlight-sdk/blob/master/services/pas/doc.go)
+See go doc - [package pas](https://godoc.org/github.com/SKF/go-enlight-sdk/services/pas)
