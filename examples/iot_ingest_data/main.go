@@ -66,7 +66,9 @@ func main() {
 
 	log.Info("IngestNodeData")
 	for _, nodeData := range createExampleData() {
-		err := client.IngestNodeData(nodeID1, *nodeData)
+		nd := *nodeData
+		input := api.IngestNodeDataInput{NodeId: nodeID1, NodeData: &nd}
+		err := client.IngestNodeData(input)
 		if err != nil {
 			log.
 				WithError(err).
