@@ -139,6 +139,22 @@ func (c *client) IngestNodeDataStreamWithContext(ctx context.Context, inputChann
 	return
 }
 
+func (c *client) GetLatestNodeData(input api.GetLatestNodeDataInput) (api.NodeData, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
+	defer cancel()
+	return c.GetLatestNodeDataWithContext(ctx, input)
+}
+
+func (c *client) GetLatestNodeDataWithContext(ctx context.Context, input api.GetLatestNodeDataInput) (nodeData api.NodeData, err error) {
+	resp, err := c.api.GetLatestNodeData(ctx, &input)
+	if err != nil {
+		return
+	}
+
+	nodeData = *resp.NodeData
+	return
+}
+
 func (c *client) GetNodeData(input api.GetNodeDataInput) (out []api.NodeData, err error) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
 	defer cancel()
