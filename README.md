@@ -6,4 +6,4 @@ SDK for accessing Enlight
 - IAM: Identity and Access Management
 - IoT: Internet of Things
 - MHub: Microlog Hub
-- PAS: Point Alarm Status
+- [PAS: Point Alarm Status](services/pas/README.md)

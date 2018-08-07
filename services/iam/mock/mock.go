@@ -1,6 +1,8 @@
 package mock
 
 import (
+	"context"
+
 	"github.com/SKF/go-eventsource/eventsource"
 	"github.com/stretchr/testify/mock"
 	"google.golang.org/grpc"
@@ -27,8 +29,13 @@ func (mock *client) Close() {
 	mock.Called()
 	return
 }
+
 func (mock *client) DeepPing() error {
 	args := mock.Called()
+	return args.Error(0)
+}
+func (mock *client) DeepPingWithContext(ctx context.Context) error {
+	args := mock.Called(ctx)
 	return args.Error(0)
 }
 
@@ -36,11 +43,25 @@ func (mock *client) CheckAuthentication(token, method string) (grpcapi.User, err
 	args := mock.Called(token, method)
 	return args.Get(0).(grpcapi.User), args.Error(1)
 }
+func (mock *client) CheckAuthenticationWithContext(ctx context.Context, token, method string) (grpcapi.User, error) {
+	args := mock.Called(ctx, token, method)
+	return args.Get(0).(grpcapi.User), args.Error(1)
+}
+
 func (mock *client) GetNodesByUser(userID string) (nodeIDs []string, err error) {
 	args := mock.Called(userID)
 	return args.Get(0).([]string), args.Error(1)
 }
+func (mock *client) GetNodesByUserWithContext(ctx context.Context, userID string) (nodeIDs []string, err error) {
+	args := mock.Called(ctx, userID)
+	return args.Get(0).([]string), args.Error(1)
+}
+
 func (mock *client) GetEventRecords(since int, limit *int32) ([]eventsource.Record, error) {
 	args := mock.Called(since, limit)
+	return args.Get(0).([]eventsource.Record), args.Error(1)
+}
+func (mock *client) GetEventRecordsWithContext(ctx context.Context, since int, limit *int32) ([]eventsource.Record, error) {
+	args := mock.Called(ctx, since, limit)
 	return args.Get(0).([]eventsource.Record), args.Error(1)
 }

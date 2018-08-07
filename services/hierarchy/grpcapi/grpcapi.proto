@@ -11,6 +11,8 @@ service Hierarchy {
   rpc GetParentNode (PrimitiveString) returns (Node) {}
   rpc GetAncestors (GetAncestorsInput) returns (GetAncestorsOutput) {}
 
+  rpc GetNodeIdByOrigin (Origin) returns (PrimitiveString) {}
+
   rpc SaveNode (SaveNodeInput) returns (PrimitiveString) {}
   rpc DeleteNode (DeleteNodeInput) returns (PrimitiveVoid) {}
 

@@ -5,9 +5,9 @@ import (
 	"crypto/tls"
 	"crypto/x509"
 	"errors"
+	"fmt"
 	"io/ioutil"
 
-	"github.com/SKF/go-utility/log"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
 )
@@ -35,29 +35,23 @@ func FailOnNonTempDialError(f bool) grpc.DialOption {
 // WithTransportCredentials returns a DialOption which configures
 // a connection level security credentials (e.g., TLS/SSL).
 func WithTransportCredentials(serverName, clientCert, clientKey, caCert string) (opt grpc.DialOption, err error) {
-	certificate, err := tls.LoadX509KeyPair(
-		clientCert,
-		clientKey,
-	)
+	certificate, err := tls.LoadX509KeyPair(clientCert, clientKey)
 
 	if err != nil {
-		log.WithField("error", err).
-			Error("Failed to load client certs")
+		err = fmt.Errorf("Failed to load client certs, %+v", err)
 		return
 	}
 
 	certPool := x509.NewCertPool()
 	bs, err := ioutil.ReadFile(caCert)
 	if err != nil {
-		log.WithField("error", err).
-			Error("Failed to read ca cert")
+		err = fmt.Errorf("Failed to read ca cert, %+v", err)
 		return
 	}
 
 	ok := certPool.AppendCertsFromPEM(bs)
 	if !ok {
-		err = errors.New("failed to append certs")
-		log.Error(err.Error())
+		err = errors.New("Failed to append certs")
 		return
 	}
 

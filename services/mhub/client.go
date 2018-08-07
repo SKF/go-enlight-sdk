@@ -13,10 +13,15 @@ import (
 type MicrologProxyHubClient interface {
 	Dial(host, port string, opts ...grpc.DialOption) error
 	Close()
+
 	DeepPing() error
+	DeepPingWithContext(ctx context.Context) error
 
 	SetTaskStatus(taskID, userID uuid.UUID, status mhubapi.TaskStatus) error
+	SetTaskStatusWithContext(ctx context.Context, taskID, userID uuid.UUID, status mhubapi.TaskStatus) error
+
 	AvailableDSKFStream(dc chan<- mhubapi.AvailableDSKFStreamOutput) error
+	AvailableDSKFStreamWithContext(ctx context.Context, dc chan<- mhubapi.AvailableDSKFStreamOutput) error
 }
 
 func CreateClient() MicrologProxyHubClient {
@@ -43,9 +48,13 @@ func (c *client) Close() {
 	c.conn.Close()
 }
 
-func (c *client) DeepPing() (err error) {
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
+func (c *client) DeepPing() error {
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 	defer cancel()
-	_, err = c.api.DeepPing(ctx, &mhubapi.Void{})
-	return
+	return c.DeepPingWithContext(ctx)
+}
+
+func (c *client) DeepPingWithContext(ctx context.Context) error {
+	_, err := c.api.DeepPing(ctx, &mhubapi.Void{})
+	return err
 }
