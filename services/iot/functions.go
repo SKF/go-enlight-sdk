@@ -6,6 +6,8 @@ import (
 	"time"
 
 	api "github.com/SKF/go-enlight-sdk/services/iot/iotgrpcapi"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
 func (c *Client) CreateTask(task api.InitialTaskDescription) (taskID string, err error) {
@@ -101,7 +103,7 @@ func (c *Client) GetUncompletedTasksByHierarchyWithContext(ctx context.Context, 
 //     - allowed values: NOT_SENT, SENT, RECEIVED, IN_PROGRESS, COMPLETED
 //     updated_at int (optional)
 //     - UNIX timestamp in ms
-// 
+//
 func (c *Client) SetTaskStatus(input api.SetTaskStatusInput) (err error) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
 	defer cancel()
@@ -143,19 +145,23 @@ func (c *Client) IngestNodeDataStreamWithContext(ctx context.Context, inputChann
 	return
 }
 
-func (c *Client) GetLatestNodeData(input api.GetLatestNodeDataInput) (api.NodeData, error) {
+func (c *Client) GetLatestNodeData(input api.GetLatestNodeDataInput) (*api.NodeData, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
 	defer cancel()
 	return c.GetLatestNodeDataWithContext(ctx, input)
 }
 
-func (c *Client) GetLatestNodeDataWithContext(ctx context.Context, input api.GetLatestNodeDataInput) (nodeData api.NodeData, err error) {
+func (c *Client) GetLatestNodeDataWithContext(ctx context.Context, input api.GetLatestNodeDataInput) (nodeData *api.NodeData, err error) {
 	resp, err := c.api.GetLatestNodeData(ctx, &input)
 	if err != nil {
+		if status.Code(err) != codes.NotFound {
+			err = nil
+		}
+
 		return
 	}
 
-	nodeData = *resp.NodeData
+	nodeData = resp.NodeData
 	return
 }
 

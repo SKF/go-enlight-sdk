@@ -127,14 +127,14 @@ func (mock *client) IngestNodeDataStreamWithContext(ctx context.Context, c <-cha
 	return args.Error(0)
 }
 
-func (mock *client) GetLatestNodeData(input api.GetLatestNodeDataInput) (api.NodeData, error) {
+func (mock *client) GetLatestNodeData(input api.GetLatestNodeDataInput) (*api.NodeData, error) {
 	args := mock.Called(input)
-	return args.Get(0).(api.NodeData), args.Error(1)
+	return args.Get(0).(*api.NodeData), args.Error(1)
 }
 
-func (mock *client) GetLatestNodeDataWithContext(ctx context.Context, input api.GetLatestNodeDataInput) (api.NodeData, error) {
+func (mock *client) GetLatestNodeDataWithContext(ctx context.Context, input api.GetLatestNodeDataInput) (*api.NodeData, error) {
 	args := mock.Called(ctx, input)
-	return args.Get(0).(api.NodeData), args.Error(1)
+	return args.Get(0).(*api.NodeData), args.Error(1)
 }
 
 func (mock *client) GetNodeData(input api.GetNodeDataInput) ([]api.NodeData, error) {
