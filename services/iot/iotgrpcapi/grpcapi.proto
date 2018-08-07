@@ -29,8 +29,9 @@ message TaskDescription {
   int64 due_date_timestamp = 5;
   bool is_completed = 6;
   FunctionalLocationIds functional_location_ids = 7;
-  TaskStatus status = 8;
   string external_task_id = 9;
+  TaskStatus status = 8;
+  int64 status_updated_at = 10; // ms
 }
 
 message InitialTaskDescription {
@@ -50,8 +51,9 @@ message TaskUser {
 
 message SetTaskStatusInput {
   string task_id = 1;
-  TaskStatus status = 2;
   string user_id = 3;
+  TaskStatus status = 2;
+  int64 updated_at = 4; // ms
 }
 
 message TaskDescriptions {
