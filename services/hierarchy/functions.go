@@ -41,6 +41,19 @@ func (c *Client) GetNodeWithContext(ctx context.Context, uuid string) (node grpc
 	return
 }
 
+// GetNodeIDByOrigin takes an origin and returns the Enlight ID.
+func (c *Client) GetNodeIDByOrigin(origin grpcapi.Origin) (string, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
+	defer cancel()
+	return c.GetNodeIDByOriginWithContext(ctx, origin)
+}
+
+// GetNodeIDByOriginWithContext takes an origin and returns the Enlight ID.
+func (c *Client) GetNodeIDByOriginWithContext(ctx context.Context, origin grpcapi.Origin) (string, error) {
+	resp, err := c.api.GetNodeIdByOrigin(ctx, &origin)
+	return resp.GetValue(), err
+}
+
 // GetNodes will get all child nodes for the node id it takes as
 // an argument.
 func (c *Client) GetNodes(parentID string) (nodes []grpcapi.Node, err error) {

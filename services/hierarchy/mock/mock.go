@@ -57,6 +57,15 @@ func (mock *client) GetNodeWithContext(ctx context.Context, uuid string) (grpcap
 	return args.Get(0).(grpcapi.Node), args.Error(1)
 }
 
+func (mock *client) GetNodeIDByOrigin(origin grpcapi.Origin) (string, error) {
+	args := mock.Called(origin)
+	return args.String(0), args.Error(1)
+}
+func (mock *client) GetNodeIDByOriginWithContext(ctx context.Context, origin grpcapi.Origin) (string, error) {
+	args := mock.Called(ctx, origin)
+	return args.String(0), args.Error(1)
+}
+
 func (mock *client) GetNodes(parentID string) ([]grpcapi.Node, error) {
 	args := mock.Called(parentID)
 	return args.Get(0).([]grpcapi.Node), args.Error(1)

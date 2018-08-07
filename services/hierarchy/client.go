@@ -43,6 +43,9 @@ type HierarchyClient interface {
 
 	GetParentNode(nodeID string) (grpcapi.Node, error)
 	GetParentNodeWithContext(ctx context.Context, nodeID string) (grpcapi.Node, error)
+
+	GetNodeIDByOrigin(origin grpcapi.Origin) (string, error)
+	GetNodeIDByOriginWithContext(ctx context.Context, origin grpcapi.Origin) (string, error)
 }
 
 // Client implements the HierarchyClient and holds the connection.
