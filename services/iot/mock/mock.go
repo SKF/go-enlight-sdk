@@ -91,12 +91,12 @@ func (mock *client) GetUncompletedTasksByHierarchyWithContext(ctx context.Contex
 	return args.Get(0).([]api.TaskDescription), args.Error(1)
 }
 
-func (mock *client) SetTaskStatus(taskID, userID string, status api.TaskStatus) error {
-	args := mock.Called(taskID, userID, status)
+func (mock *client) SetTaskStatus(input api.SetTaskStatusInput) error {
+	args := mock.Called(input)
 	return args.Error(0)
 }
-func (mock *client) SetTaskStatusWithContext(ctx context.Context, taskID, userID string, status api.TaskStatus) error {
-	args := mock.Called(ctx, taskID, userID, status)
+func (mock *client) SetTaskStatusWithContext(ctx context.Context, input api.SetTaskStatusInput) error {
+	args := mock.Called(ctx, input)
 	return args.Error(0)
 }
 

@@ -112,7 +112,10 @@ func main() {
 	}
 
 	log.Info("Set Task Status")
-	if err = client.SetTaskStatus(userID, taskID, api.TaskStatus_RECEIVED); err != nil {
+	setTaskStatusInput :=  api.SetTaskStatusInput{
+		UserId: userID, TaskId: taskID, Status: api.TaskStatus_RECEIVED,
+	}
+	if err = client.SetTaskStatus(setTaskStatusInput); err != nil {
 		log.
 			WithError(err).
 			WithField("userId", userID).
