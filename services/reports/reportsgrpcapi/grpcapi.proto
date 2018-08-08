@@ -22,7 +22,7 @@ message GetAssetHealthInput {
 }
 
 message GetAssetHealthOutput {
-  string healh_status = 1; 
+  string health_status = 1; 
 }
 
 // GET FL HEALTH
@@ -31,7 +31,7 @@ message GetFunctionalLocationHealthInput {
 }
 
 message GetFunctionalLocationHealthOutput {
-  string healh_status = 1; 
+  string health_status = 1; 
 }
 
 
