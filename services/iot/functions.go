@@ -154,7 +154,7 @@ func (c *Client) GetLatestNodeData(input api.GetLatestNodeDataInput) (*api.NodeD
 func (c *Client) GetLatestNodeDataWithContext(ctx context.Context, input api.GetLatestNodeDataInput) (nodeData *api.NodeData, err error) {
 	resp, err := c.api.GetLatestNodeData(ctx, &input)
 	if err != nil {
-		if status.Code(err) != codes.NotFound {
+		if status.Code(err) == codes.NotFound {
 			err = nil
 		}
 
