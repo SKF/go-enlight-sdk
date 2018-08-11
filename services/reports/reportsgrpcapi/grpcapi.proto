@@ -7,6 +7,7 @@ service Reports {
   rpc GetAssetHealth (GetAssetHealthInput) returns (GetAssetHealthOutput) {}
   rpc GetFunctionalLocationHealth (GetFunctionalLocationHealthInput) returns (GetFunctionalLocationHealthOutput) {}
   rpc GetComplianceLog (GetComplianceLogInput) returns (GetComplianceLogOutput) {}
+  rpc GetReports (GetReportsInput) returns (GetReportsOutput) {}
 }
 
 
@@ -50,4 +51,60 @@ message ComplianceItem {
   bool is_compliant = 2; 
   string compliance_note = 3;
   int64 created = 4;   
+}
+
+// GET Reports
+
+message GetReportsInput {
+  repeated string node_ids = 1;
+}
+
+message GetReportsOutput {
+  repeated ReportsItem reports_list = 1;
+}
+
+message ReportsItem {
+  string functional_location_id = 1;
+  string functional_location_name = 2; 
+  double functional_location_risk = 3;
+  string functional_location_health = 4; 
+  repeated string names = 5;
+  repeated string uuids = 6; 
+  repeated Asset assets = 7;
+
+}
+
+message Asset {
+  string asset_class_id = 1; 
+  string asset_class_name = 2; 
+  double asset_class_risk = 3;
+  string asset_class_health = 4; 
+  int64 asset_class_risk_label_since = 5; 
+  string compliance_status = 6; 
+  repeated FaultItem faults = 7; 
+}
+
+message FaultItem {
+  string fault_UUID = 1; 
+  string asset_class_id = 2;
+  string fault_type = 3; 
+  string author = 4; 
+  int64 created = 5; 
+  int64 last_modified = 6; 
+  bool is_open = 7; 
+  string fault_status = 8; 
+  string fault_observation = 9; 
+  string severity = 10; 
+  string close_comment = 11; 
+  repeated RecommendedActionItem recommended_actions = 12; 
+}
+
+message RecommendedActionItem {
+  string action = 1; 
+  int64 created = 2; 
+  string comment = 3; 
+  string work_id = 4; 
+  int64 last_modified = 5; 
+  string action_UUID = 6; 
+  string status = 7; 
 }
