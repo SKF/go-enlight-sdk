@@ -33,3 +33,12 @@ func (c *client) GetComplianceLog(input reportsgrpcapi.GetComplianceLogInput) (o
 func (c *client) GetComplianceLogWithContext(ctx context.Context, input reportsgrpcapi.GetComplianceLogInput) (output *reportsgrpcapi.GetComplianceLogOutput, err error) {
 	return c.api.GetComplianceLog(ctx, &input)
 }
+
+func (c *client) GetReports(input reportsgrpcapi.GetReportsInput) (output *reportsgrpcapi.GetReportsOutput, err error) {
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
+	defer cancel()
+	return c.GetReportsWithContext(ctx, input)
+}
+func (c *client) GetReportsWithContext(ctx context.Context, input reportsgrpcapi.GetReportsInput) (output *reportsgrpcapi.GetReportsOutput, err error) {
+	return c.api.GetReports(ctx, &input)
+}
