@@ -135,9 +135,16 @@ message TimeSeries {
   string y_unit = 3;
 }
 
+enum MediaType {
+  UNKNOWN = 0;
+  AUDIO_WAV = 1;
+  IMAGE_JPEG = 2;
+  IMAGE_PNG = 3;
+}
+
 message Media {
   string id = 1;
-  string type = 2;
+  MediaType type = 2;
   bytes media = 3;
 }
 
