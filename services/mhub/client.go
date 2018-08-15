@@ -17,8 +17,8 @@ type MicrologProxyHubClient interface {
 	DeepPing() error
 	DeepPingWithContext(ctx context.Context) error
 
-	SetTaskStatus(taskID, userID uuid.UUID, status mhubapi.TaskStatus) error
-	SetTaskStatusWithContext(ctx context.Context, taskID, userID uuid.UUID, status mhubapi.TaskStatus) error
+	SetTaskStatus(id int64, userID uuid.UUID, status mhubapi.TaskStatus) error
+	SetTaskStatusWithContext(ctx context.Context, id int64, userID uuid.UUID, status mhubapi.TaskStatus) error
 
 	AvailableDSKFStream(dc chan<- mhubapi.AvailableDSKFStreamOutput) error
 	AvailableDSKFStreamWithContext(ctx context.Context, dc chan<- mhubapi.AvailableDSKFStreamOutput) error

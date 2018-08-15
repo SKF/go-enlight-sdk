@@ -41,13 +41,13 @@ func (mock *client) DeepPingWithContext(ctx context.Context) error {
 	return args.Error(0)
 }
 
-func (mock *client) SetTaskStatus(taskID, userID uuid.UUID, status mhubapi.TaskStatus) error {
-	args := mock.Called(taskID, userID, status)
+func (mock *client) SetTaskStatus(id int64, userID uuid.UUID, status mhubapi.TaskStatus) error {
+	args := mock.Called(id, userID, status)
 	return args.Error(0)
 }
 
-func (mock *client) SetTaskStatusWithContext(ctx context.Context, taskID, userID uuid.UUID, status mhubapi.TaskStatus) error {
-	args := mock.Called(ctx, taskID, userID, status)
+func (mock *client) SetTaskStatusWithContext(ctx context.Context, id int64, userID uuid.UUID, status mhubapi.TaskStatus) error {
+	args := mock.Called(ctx, id, userID, status)
 	return args.Error(0)
 }
 
