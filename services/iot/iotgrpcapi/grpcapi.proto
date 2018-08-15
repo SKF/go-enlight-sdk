@@ -8,7 +8,9 @@ service IoT {
   rpc CreateTask (InitialTaskDescription) returns (PrimitiveString) {}
   rpc GetAllTasks (PrimitiveString) returns (TaskDescriptions) {}
   rpc GetUncompletedTasks (PrimitiveString) returns (TaskDescriptions) {}
-  rpc SetTaskCompleted (TaskUser) returns (PrimitiveVoid) {}
+  rpc SetTaskCompleted (TaskUser) returns (PrimitiveVoid) {
+    option deprecated = true;
+  }
   rpc DeleteTask (TaskUser) returns (PrimitiveVoid) {}
   rpc GetUncompletedTasksByHierarchy (PrimitiveString) returns (TaskDescriptions) {}
   rpc SetTaskStatus (SetTaskStatusInput) returns (PrimitiveVoid) {}
@@ -19,6 +21,8 @@ service IoT {
   rpc GetLatestNodeData (GetLatestNodeDataInput) returns (GetLatestNodeDataOutput) {}
   rpc GetNodeData (GetNodeDataInput) returns (GetNodeDataOutput) {}
   rpc GetNodeDataStream (GetNodeDataStreamInput) returns (stream GetNodeDataStreamOutput) {}
+
+  rpc GetMedia (GetMediaInput) returns (GetMediaOutput) {}
 }
 
 message TaskDescription {
@@ -88,7 +92,8 @@ enum NodeDataContentType {
   SPECTRUM = 2;
   TIME_SERIES = 3;
   NOTE = 4;
-  MEDIA = 5;
+  MEDIA = 5 [deprecated=true];
+  MEDIA_V2 = 7;
   QUESTION_ANSWERS = 6;
 }
 
@@ -100,7 +105,8 @@ message NodeData {
   Spectrum spectrum = 4;
   TimeSeries time_series = 5;
   string note = 6;
-  bytes media = 7;
+  bytes media = 7 [deprecated=true];
+  Media media_v2 = 9;
   repeated string question_answers = 8;
 }
 
@@ -127,6 +133,19 @@ message TimeSeries {
   repeated Coordinate coordinates = 1;
   string x_unit = 2;
   string y_unit = 3;
+}
+
+enum MediaType {
+  UNKNOWN = 0;
+  AUDIO_WAV = 1;
+  IMAGE_JPEG = 2;
+  IMAGE_PNG = 3;
+}
+
+message Media {
+  string id = 1;
+  MediaType type = 2;
+  bytes media = 3;
 }
 
 message Origin {
@@ -182,6 +201,16 @@ message GetNodeDataStreamInput {}
 message GetNodeDataStreamOutput {
   string node_id = 1;
   NodeData node_data = 2;
+}
+
+// GetMedia messages
+message GetMediaInput {
+  string node_id = 1;
+  string media_id = 2;
+}
+
+message GetMediaOutput {
+  Media media = 1;
 }
 
 message GetTaskStreamInput {
