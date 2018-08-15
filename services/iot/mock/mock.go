@@ -154,3 +154,12 @@ func (mock *client) GetNodeDataStreamWithContext(ctx context.Context, input api.
 	args := mock.Called(ctx, input, c)
 	return args.Error(0)
 }
+
+func (mock *client) GetMedia(input api.GetMediaInput) (api.Media, error) {
+	args := mock.Called(input)
+	return args.Get(0).(api.Media), args.Error(1)
+}
+func (mock *client) GetMediaWithContext(ctx context.Context, input api.GetMediaInput) (media api.Media, err error) {
+	args := mock.Called(ctx, input)
+	return args.Get(0).(api.Media), args.Error(1)
+}

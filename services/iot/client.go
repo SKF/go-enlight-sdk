@@ -54,6 +54,9 @@ type IoTClient interface {
 
 	GetNodeDataStream(input api.GetNodeDataStreamInput, c chan<- api.GetNodeDataStreamOutput) error
 	GetNodeDataStreamWithContext(ctx context.Context, input api.GetNodeDataStreamInput, c chan<- api.GetNodeDataStreamOutput) error
+
+	GetMedia(input api.GetMediaInput) (api.Media, error)
+	GetMediaWithContext(ctx context.Context, input api.GetMediaInput) (api.Media, error)
 }
 
 type Client struct {
