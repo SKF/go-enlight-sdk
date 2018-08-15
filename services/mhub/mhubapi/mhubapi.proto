@@ -11,8 +11,7 @@ service MicrologProxyHub {
 message AvailableDSKFStreamInput {}
 
 message AvailableDSKFStreamOutput {
-  string task_id = 1;
-  string dskf_file = 2;
+  int64 id = 1;
 }
 
 message SetTaskStatusInput {
