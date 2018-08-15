@@ -205,6 +205,19 @@ func (c *Client) GetNodeDataStreamWithContext(ctx context.Context, input api.Get
 	}
 }
 
+func (c *Client) GetMedia(input api.GetMediaInput) (api.Media, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
+	defer cancel()
+	return c.GetMediaWithContext(ctx, input)
+}
+func (c *Client) GetMediaWithContext(ctx context.Context, input api.GetMediaInput) (media api.Media, err error) {
+	output, err := c.api.GetMedia(ctx, &input)
+	if output != nil && output.Media != nil {
+		media = *output.Media
+	}
+	return
+}
+
 func (c *Client) GetTaskStream(input api.GetTaskStreamInput, dc chan<- api.GetTaskStreamOutput) (err error) {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
