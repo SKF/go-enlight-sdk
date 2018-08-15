@@ -21,6 +21,7 @@ service IoT {
   rpc GetLatestNodeData (GetLatestNodeDataInput) returns (GetLatestNodeDataOutput) {}
   rpc GetNodeData (GetNodeDataInput) returns (GetNodeDataOutput) {}
   rpc GetNodeDataStream (GetNodeDataStreamInput) returns (stream GetNodeDataStreamOutput) {}
+
   rpc GetMedia (GetMediaInput) returns (GetMediaOutput) {}
 }
 
@@ -202,7 +203,7 @@ message GetMediaInput {
 }
 
 message GetMediaOutput {
-  repeated NodeData node_data_list = 1;
+  Media media = 1;
 }
 
 message GetTaskStreamInput {
