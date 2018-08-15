@@ -52,7 +52,7 @@ func (x AlarmStatus) String() string {
 	return proto.EnumName(AlarmStatus_name, int32(x))
 }
 func (AlarmStatus) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_grpcapi_94551e85cbefe61f, []int{0}
+	return fileDescriptor_grpcapi_222316e60a71da40, []int{0}
 }
 
 type ThresholdType int32
@@ -78,7 +78,7 @@ func (x ThresholdType) String() string {
 	return proto.EnumName(ThresholdType_name, int32(x))
 }
 func (ThresholdType) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_grpcapi_94551e85cbefe61f, []int{1}
+	return fileDescriptor_grpcapi_222316e60a71da40, []int{1}
 }
 
 // DeepPing Messages
@@ -93,7 +93,7 @@ func (m *DeepPingOutput) Reset()         { *m = DeepPingOutput{} }
 func (m *DeepPingOutput) String() string { return proto.CompactTextString(m) }
 func (*DeepPingOutput) ProtoMessage()    {}
 func (*DeepPingOutput) Descriptor() ([]byte, []int) {
-	return fileDescriptor_grpcapi_94551e85cbefe61f, []int{0}
+	return fileDescriptor_grpcapi_222316e60a71da40, []int{0}
 }
 func (m *DeepPingOutput) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_DeepPingOutput.Unmarshal(m, b)
@@ -135,7 +135,7 @@ func (m *SetPointAlarmThresholdInput) Reset()         { *m = SetPointAlarmThresh
 func (m *SetPointAlarmThresholdInput) String() string { return proto.CompactTextString(m) }
 func (*SetPointAlarmThresholdInput) ProtoMessage()    {}
 func (*SetPointAlarmThresholdInput) Descriptor() ([]byte, []int) {
-	return fileDescriptor_grpcapi_94551e85cbefe61f, []int{1}
+	return fileDescriptor_grpcapi_222316e60a71da40, []int{1}
 }
 func (m *SetPointAlarmThresholdInput) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_SetPointAlarmThresholdInput.Unmarshal(m, b)
@@ -193,7 +193,7 @@ func (m *SetPointAlarmThresholdOutput) Reset()         { *m = SetPointAlarmThres
 func (m *SetPointAlarmThresholdOutput) String() string { return proto.CompactTextString(m) }
 func (*SetPointAlarmThresholdOutput) ProtoMessage()    {}
 func (*SetPointAlarmThresholdOutput) Descriptor() ([]byte, []int) {
-	return fileDescriptor_grpcapi_94551e85cbefe61f, []int{2}
+	return fileDescriptor_grpcapi_222316e60a71da40, []int{2}
 }
 func (m *SetPointAlarmThresholdOutput) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_SetPointAlarmThresholdOutput.Unmarshal(m, b)
@@ -225,7 +225,7 @@ func (m *GetPointAlarmThresholdInput) Reset()         { *m = GetPointAlarmThresh
 func (m *GetPointAlarmThresholdInput) String() string { return proto.CompactTextString(m) }
 func (*GetPointAlarmThresholdInput) ProtoMessage()    {}
 func (*GetPointAlarmThresholdInput) Descriptor() ([]byte, []int) {
-	return fileDescriptor_grpcapi_94551e85cbefe61f, []int{3}
+	return fileDescriptor_grpcapi_222316e60a71da40, []int{3}
 }
 func (m *GetPointAlarmThresholdInput) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_GetPointAlarmThresholdInput.Unmarshal(m, b)
@@ -264,7 +264,7 @@ func (m *GetPointAlarmThresholdOutput) Reset()         { *m = GetPointAlarmThres
 func (m *GetPointAlarmThresholdOutput) String() string { return proto.CompactTextString(m) }
 func (*GetPointAlarmThresholdOutput) ProtoMessage()    {}
 func (*GetPointAlarmThresholdOutput) Descriptor() ([]byte, []int) {
-	return fileDescriptor_grpcapi_94551e85cbefe61f, []int{4}
+	return fileDescriptor_grpcapi_222316e60a71da40, []int{4}
 }
 func (m *GetPointAlarmThresholdOutput) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_GetPointAlarmThresholdOutput.Unmarshal(m, b)
@@ -311,7 +311,7 @@ func (m *SetPointAlarmStatusInput) Reset()         { *m = SetPointAlarmStatusInp
 func (m *SetPointAlarmStatusInput) String() string { return proto.CompactTextString(m) }
 func (*SetPointAlarmStatusInput) ProtoMessage()    {}
 func (*SetPointAlarmStatusInput) Descriptor() ([]byte, []int) {
-	return fileDescriptor_grpcapi_94551e85cbefe61f, []int{5}
+	return fileDescriptor_grpcapi_222316e60a71da40, []int{5}
 }
 func (m *SetPointAlarmStatusInput) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_SetPointAlarmStatusInput.Unmarshal(m, b)
@@ -355,7 +355,7 @@ func (m *SetPointAlarmStatusOutput) Reset()         { *m = SetPointAlarmStatusOu
 func (m *SetPointAlarmStatusOutput) String() string { return proto.CompactTextString(m) }
 func (*SetPointAlarmStatusOutput) ProtoMessage()    {}
 func (*SetPointAlarmStatusOutput) Descriptor() ([]byte, []int) {
-	return fileDescriptor_grpcapi_94551e85cbefe61f, []int{6}
+	return fileDescriptor_grpcapi_222316e60a71da40, []int{6}
 }
 func (m *SetPointAlarmStatusOutput) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_SetPointAlarmStatusOutput.Unmarshal(m, b)
@@ -387,7 +387,7 @@ func (m *GetPointAlarmStatusInput) Reset()         { *m = GetPointAlarmStatusInp
 func (m *GetPointAlarmStatusInput) String() string { return proto.CompactTextString(m) }
 func (*GetPointAlarmStatusInput) ProtoMessage()    {}
 func (*GetPointAlarmStatusInput) Descriptor() ([]byte, []int) {
-	return fileDescriptor_grpcapi_94551e85cbefe61f, []int{7}
+	return fileDescriptor_grpcapi_222316e60a71da40, []int{7}
 }
 func (m *GetPointAlarmStatusInput) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_GetPointAlarmStatusInput.Unmarshal(m, b)
@@ -425,7 +425,7 @@ func (m *GetPointAlarmStatusOutput) Reset()         { *m = GetPointAlarmStatusOu
 func (m *GetPointAlarmStatusOutput) String() string { return proto.CompactTextString(m) }
 func (*GetPointAlarmStatusOutput) ProtoMessage()    {}
 func (*GetPointAlarmStatusOutput) Descriptor() ([]byte, []int) {
-	return fileDescriptor_grpcapi_94551e85cbefe61f, []int{8}
+	return fileDescriptor_grpcapi_222316e60a71da40, []int{8}
 }
 func (m *GetPointAlarmStatusOutput) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_GetPointAlarmStatusOutput.Unmarshal(m, b)
@@ -463,7 +463,7 @@ func (m *GetPointAlarmStatusStreamInput) Reset()         { *m = GetPointAlarmSta
 func (m *GetPointAlarmStatusStreamInput) String() string { return proto.CompactTextString(m) }
 func (*GetPointAlarmStatusStreamInput) ProtoMessage()    {}
 func (*GetPointAlarmStatusStreamInput) Descriptor() ([]byte, []int) {
-	return fileDescriptor_grpcapi_94551e85cbefe61f, []int{9}
+	return fileDescriptor_grpcapi_222316e60a71da40, []int{9}
 }
 func (m *GetPointAlarmStatusStreamInput) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_GetPointAlarmStatusStreamInput.Unmarshal(m, b)
@@ -495,7 +495,7 @@ func (m *GetPointAlarmStatusStreamOutput) Reset()         { *m = GetPointAlarmSt
 func (m *GetPointAlarmStatusStreamOutput) String() string { return proto.CompactTextString(m) }
 func (*GetPointAlarmStatusStreamOutput) ProtoMessage()    {}
 func (*GetPointAlarmStatusStreamOutput) Descriptor() ([]byte, []int) {
-	return fileDescriptor_grpcapi_94551e85cbefe61f, []int{10}
+	return fileDescriptor_grpcapi_222316e60a71da40, []int{10}
 }
 func (m *GetPointAlarmStatusStreamOutput) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_GetPointAlarmStatusStreamOutput.Unmarshal(m, b)
@@ -539,7 +539,7 @@ func (m *Void) Reset()         { *m = Void{} }
 func (m *Void) String() string { return proto.CompactTextString(m) }
 func (*Void) ProtoMessage()    {}
 func (*Void) Descriptor() ([]byte, []int) {
-	return fileDescriptor_grpcapi_94551e85cbefe61f, []int{11}
+	return fileDescriptor_grpcapi_222316e60a71da40, []int{11}
 }
 func (m *Void) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Void.Unmarshal(m, b)
@@ -570,7 +570,7 @@ func (m *DoubleObject) Reset()         { *m = DoubleObject{} }
 func (m *DoubleObject) String() string { return proto.CompactTextString(m) }
 func (*DoubleObject) ProtoMessage()    {}
 func (*DoubleObject) Descriptor() ([]byte, []int) {
-	return fileDescriptor_grpcapi_94551e85cbefe61f, []int{12}
+	return fileDescriptor_grpcapi_222316e60a71da40, []int{12}
 }
 func (m *DoubleObject) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_DoubleObject.Unmarshal(m, b)
@@ -598,10 +598,10 @@ func (m *DoubleObject) GetValue() float64 {
 }
 
 type Overall struct {
-	OuterHigh            *DoubleObject `protobuf:"bytes,3,opt,name=outer_high,json=outerHigh,proto3" json:"outer_high,omitempty"`
-	InnerHigh            *DoubleObject `protobuf:"bytes,4,opt,name=inner_high,json=innerHigh,proto3" json:"inner_high,omitempty"`
-	InnerLow             *DoubleObject `protobuf:"bytes,5,opt,name=inner_low,json=innerLow,proto3" json:"inner_low,omitempty"`
-	OuterLow             *DoubleObject `protobuf:"bytes,6,opt,name=outer_low,json=outerLow,proto3" json:"outer_low,omitempty"`
+	OuterHigh            *DoubleObject `protobuf:"bytes,1,opt,name=outer_high,json=outerHigh,proto3" json:"outer_high,omitempty"`
+	InnerHigh            *DoubleObject `protobuf:"bytes,2,opt,name=inner_high,json=innerHigh,proto3" json:"inner_high,omitempty"`
+	InnerLow             *DoubleObject `protobuf:"bytes,3,opt,name=inner_low,json=innerLow,proto3" json:"inner_low,omitempty"`
+	OuterLow             *DoubleObject `protobuf:"bytes,4,opt,name=outer_low,json=outerLow,proto3" json:"outer_low,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}      `json:"-"`
 	XXX_unrecognized     []byte        `json:"-"`
 	XXX_sizecache        int32         `json:"-"`
@@ -611,7 +611,7 @@ func (m *Overall) Reset()         { *m = Overall{} }
 func (m *Overall) String() string { return proto.CompactTextString(m) }
 func (*Overall) ProtoMessage()    {}
 func (*Overall) Descriptor() ([]byte, []int) {
-	return fileDescriptor_grpcapi_94551e85cbefe61f, []int{13}
+	return fileDescriptor_grpcapi_222316e60a71da40, []int{13}
 }
 func (m *Overall) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Overall.Unmarshal(m, b)
@@ -944,11 +944,11 @@ var _PointAlarmStatus_serviceDesc = grpc.ServiceDesc{
 }
 
 func init() {
-	proto.RegisterFile("services/pas/pasapi/grpcapi.proto", fileDescriptor_grpcapi_94551e85cbefe61f)
+	proto.RegisterFile("services/pas/pasapi/grpcapi.proto", fileDescriptor_grpcapi_222316e60a71da40)
 }
 
-var fileDescriptor_grpcapi_94551e85cbefe61f = []byte{
-	// 647 bytes of a gzipped FileDescriptorProto
+var fileDescriptor_grpcapi_222316e60a71da40 = []byte{
+	// 646 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xac, 0x55, 0xdb, 0x4e, 0xdb, 0x4c,
 	0x10, 0x66, 0x83, 0x49, 0x60, 0xc2, 0x9f, 0xdf, 0x5d, 0x0e, 0x0d, 0x01, 0xd1, 0xe0, 0x22, 0x0a,
 	0x5c, 0x40, 0x1b, 0x24, 0xee, 0xa3, 0x3a, 0x6c, 0xa3, 0x46, 0x5e, 0xe4, 0x04, 0xb8, 0xa9, 0x64,
@@ -972,22 +972,22 @@ var fileDescriptor_grpcapi_94551e85cbefe61f = []byte{
 	0xd8, 0xcc, 0x11, 0xed, 0x47, 0x01, 0xb3, 0xaf, 0x45, 0x3d, 0x5a, 0x00, 0x6f, 0x9e, 0x44, 0x4c,
 	0xcc, 0xff, 0xf9, 0xe5, 0x95, 0x41, 0x39, 0xe7, 0xce, 0x50, 0xdb, 0x86, 0x45, 0x9d, 0xc7, 0x97,
 	0x2e, 0xa3, 0x97, 0x5f, 0xd9, 0xd5, 0xa3, 0x69, 0x42, 0x72, 0x9a, 0x7e, 0x22, 0xa8, 0x4c, 0x1e,
-	0x1b, 0x1f, 0x01, 0xf0, 0x38, 0x62, 0x81, 0x35, 0x76, 0x46, 0x63, 0x31, 0x0d, 0xd5, 0xd6, 0xb2,
-	0xf4, 0xcb, 0x6a, 0x99, 0x0b, 0x02, 0xf7, 0xc9, 0x19, 0x8d, 0x13, 0x92, 0xe3, 0x79, 0x92, 0xa4,
-	0x14, 0x91, 0x04, 0x4e, 0x90, 0x3e, 0x40, 0x1a, 0x58, 0x2e, 0xbf, 0xad, 0xcf, 0x15, 0x70, 0xe6,
-	0x05, 0xac, 0xc7, 0x6f, 0x13, 0x4a, 0x5a, 0x5c, 0x42, 0x29, 0x17, 0x51, 0x04, 0xac, 0xc7, 0x6f,
-	0xf7, 0x29, 0x54, 0x33, 0xb7, 0x84, 0x31, 0xd4, 0x0c, 0x3a, 0xb0, 0x3e, 0x52, 0xe3, 0xa4, 0x4b,
-	0xce, 0xcc, 0x8e, 0xae, 0xce, 0xe0, 0x2a, 0x54, 0x0c, 0x6a, 0xe9, 0xed, 0x41, 0x5b, 0x45, 0x78,
-	0x1e, 0x14, 0x42, 0xa9, 0xae, 0x96, 0xf0, 0x02, 0xcc, 0xb5, 0x7b, 0x1d, 0x73, 0xa0, 0xce, 0x62,
-	0x80, 0xb2, 0xde, 0x36, 0x48, 0xc7, 0x54, 0x95, 0xfd, 0xcf, 0xf0, 0xdf, 0x83, 0x31, 0x4a, 0x18,
-	0x06, 0x35, 0x3a, 0xea, 0x0c, 0x5e, 0x81, 0x57, 0xf4, 0xbc, 0x63, 0xb6, 0x7b, 0x3d, 0xab, 0x6b,
-	0x58, 0x17, 0x5d, 0x43, 0xa7, 0x17, 0x2a, 0xc2, 0x6b, 0xb0, 0x22, 0x8f, 0xe9, 0xd9, 0xc0, 0xa2,
-	0x27, 0x32, 0x55, 0x6a, 0xfd, 0x50, 0x40, 0x7d, 0xfc, 0xcf, 0xc0, 0x2d, 0x98, 0x97, 0x4b, 0x10,
-	0x2f, 0xca, 0xf6, 0x92, 0xe7, 0x6c, 0xac, 0xde, 0x37, 0xfb, 0x60, 0x49, 0x6a, 0x33, 0x98, 0xc1,
-	0x6a, 0xfe, 0xa2, 0xc1, 0x6f, 0x25, 0xa7, 0x60, 0x5f, 0x36, 0xb6, 0x8b, 0x41, 0x59, 0x1b, 0x32,
-	0xc5, 0x86, 0x3c, 0xc7, 0x86, 0x14, 0xdb, 0x7c, 0x81, 0xa5, 0x9c, 0xd9, 0xc7, 0xcd, 0xdc, 0x2a,
-	0x33, 0xb3, 0xdf, 0xd8, 0x2a, 0x40, 0x64, 0xd5, 0x49, 0x91, 0x3a, 0x99, 0xaa, 0x4e, 0x0a, 0xd4,
-	0xfd, 0xdc, 0x2d, 0x93, 0x8e, 0x3b, 0xde, 0x29, 0x50, 0xc8, 0xec, 0x8c, 0xc6, 0xbb, 0xa9, 0x38,
-	0xe9, 0xf7, 0x1e, 0x5d, 0x96, 0xc5, 0x37, 0xf4, 0xe8, 0x57, 0x00, 0x00, 0x00, 0xff, 0xff, 0xaa,
-	0x9c, 0x68, 0xfa, 0x68, 0x07, 0x00, 0x00,
+	0x1b, 0x1f, 0x01, 0xf0, 0x38, 0x62, 0x81, 0x35, 0x76, 0x46, 0x63, 0x01, 0xab, 0xb6, 0x96, 0xa5,
+	0x5f, 0x56, 0xcb, 0x5c, 0x10, 0xb8, 0x4f, 0xce, 0x68, 0x9c, 0x90, 0x1c, 0xcf, 0x93, 0xa4, 0x52,
+	0x11, 0x49, 0xe0, 0x04, 0xe9, 0x03, 0xa4, 0x81, 0xe5, 0xf2, 0x5b, 0x31, 0x76, 0x4f, 0x71, 0xe6,
+	0x05, 0xac, 0xc7, 0x6f, 0x13, 0x4a, 0x5a, 0x5c, 0x42, 0x51, 0x8a, 0x28, 0x02, 0xd6, 0xe3, 0xb7,
+	0xfb, 0x14, 0xaa, 0x99, 0x5b, 0xc2, 0x18, 0x6a, 0x06, 0x1d, 0x58, 0x1f, 0xa9, 0x71, 0xd2, 0x25,
+	0x67, 0x66, 0x47, 0x57, 0x67, 0x70, 0x15, 0x2a, 0x06, 0xb5, 0xf4, 0xf6, 0xa0, 0xad, 0x22, 0x3c,
+	0x0f, 0x0a, 0xa1, 0x54, 0x57, 0x4b, 0x78, 0x01, 0xe6, 0xda, 0xbd, 0x8e, 0x39, 0x50, 0x67, 0x31,
+	0x40, 0x59, 0x6f, 0x1b, 0xa4, 0x63, 0xaa, 0xca, 0xfe, 0x67, 0xf8, 0xef, 0xc1, 0x18, 0x25, 0x0c,
+	0x83, 0x1a, 0x1d, 0x75, 0x06, 0xaf, 0xc0, 0x2b, 0x7a, 0xde, 0x31, 0xdb, 0xbd, 0x9e, 0xd5, 0x35,
+	0xac, 0x8b, 0xae, 0xa1, 0xd3, 0x0b, 0x15, 0xe1, 0x35, 0x58, 0x91, 0xc7, 0xf4, 0x6c, 0x60, 0xd1,
+	0x13, 0x99, 0x2a, 0xb5, 0x7e, 0x28, 0xa0, 0x3e, 0xfe, 0x67, 0xe0, 0x16, 0xcc, 0xcb, 0x25, 0x88,
+	0x17, 0x65, 0x7b, 0xc9, 0x73, 0x36, 0x56, 0xef, 0x9b, 0x7d, 0xb0, 0x24, 0xb5, 0x19, 0xcc, 0x60,
+	0x35, 0x7f, 0xd1, 0xe0, 0xb7, 0x92, 0x53, 0xb0, 0x2f, 0x1b, 0xdb, 0xc5, 0xa0, 0xac, 0x0d, 0x99,
+	0x62, 0x43, 0x9e, 0x63, 0x43, 0x8a, 0x6d, 0xbe, 0xc0, 0x52, 0xce, 0xec, 0xe3, 0x66, 0x6e, 0x95,
+	0x99, 0xd9, 0x6f, 0x6c, 0x15, 0x20, 0xb2, 0xea, 0xa4, 0x48, 0x9d, 0x4c, 0x55, 0x27, 0x05, 0xea,
+	0x7e, 0xee, 0x96, 0x49, 0xc7, 0x1d, 0xef, 0x14, 0x28, 0x64, 0x76, 0x46, 0xe3, 0xdd, 0x54, 0x9c,
+	0xf4, 0x7b, 0x8f, 0x2e, 0xcb, 0xe2, 0x1b, 0x7a, 0xf4, 0x2b, 0x00, 0x00, 0xff, 0xff, 0xe6, 0xbd,
+	0x85, 0xba, 0x68, 0x07, 0x00, 0x00,
 }

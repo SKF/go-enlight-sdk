@@ -86,8 +86,8 @@ message DoubleObject {
 }
 
 message Overall {
-  DoubleObject outer_high = 3;
-  DoubleObject inner_high = 4;
-  DoubleObject inner_low = 5;
-  DoubleObject outer_low = 6;
+  DoubleObject outer_high = 1;
+  DoubleObject inner_high = 2;
+  DoubleObject inner_low = 3;
+  DoubleObject outer_low = 4;
 }
