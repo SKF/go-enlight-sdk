@@ -15,7 +15,7 @@ message AvailableDSKFStreamOutput {
 }
 
 message SetTaskStatusInput {
-  string task_id = 1;
+  int64 id = 1;
   string user_id = 2;
   TaskStatus status = 3;
 }
