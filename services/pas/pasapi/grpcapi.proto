@@ -82,7 +82,7 @@ enum ThresholdType {
 }
 
 message DoubleObject {
-  double d = 1;
+  double value = 1;
 }
 
 message Overall {
