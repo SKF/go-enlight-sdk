@@ -16,8 +16,7 @@ message AvailableDSKFStreamOutput {
 
 message SetTaskStatusInput {
   int64 id = 1;
-  string user_id = 2;
-  TaskStatus status = 3;
+  TaskStatus status = 2;
 }
 
 enum TaskStatus {
