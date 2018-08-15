@@ -25,7 +25,7 @@ message SetPointAlarmThresholdInput {
   string node_id = 1;
   string user_id = 2;
   ThresholdType type = 3;
-  AlarmStatusIntervals intervals = 4;
+  Overall overall = 4;
 }
 message SetPointAlarmThresholdOutput {}
 
@@ -36,7 +36,7 @@ message GetPointAlarmThresholdInput {
 }
 message GetPointAlarmThresholdOutput {
   ThresholdType type = 1;
-  AlarmStatusIntervals intervals = 2;
+  Overall overall = 2;
 }
 
 
@@ -81,26 +81,13 @@ enum ThresholdType {
   OVERALL_OUT_OF_WINDOW = 2;
 }
 
-// https://en.wikipedia.org/wiki/Interval_(mathematics)#Classification_of_intervals
-enum IntervalType {
-  BOUNDED_OPEN = 0;                              // (0,1)   = 0<x<1   Open Interval
-  BOUNDED_CLOSED = 1;                            // [0,1]   = 0<=x<=1 Closed Interval
-  BOUNDED_LEFT_OPEN_RIGHT_CLOSED = 2;            // (0,1]   = 0<x<=1  Left-open, Right-closed
-  BOUNDED_LEFT_CLOSED_RIGHT_OPEN = 3;            // [0,1)   = 0<=x<1  Left-closed, Right-open
-  UNBOUNDED = 4;                                 // (−∞,+∞) = x
-  LEFT_UNBOUNDED_RIGHT_BOUNDED_RIGHT_OPEN = 5;   // (−∞,1)  = x<1     Right-open
-  LEFT_UNBOUNDED_RIGHT_BOUNDED_RIGHT_CLOSED = 6; // (−∞,1]  = x<=1    Right-closed
-  LEFT_BOUNDED_RIGHT_UNBOUNDED_LEFT_OPEN = 7;    // (0,+∞)  = 0<x     Left-open
-  LEFT_BOUNDED_RIGHT_UNBOUNDED_LEFT_CLOSED = 8;  // [0,+∞)  = 0<=x    Left-closed
+message DoubleObject {
+  double value = 1;
 }
 
-message AlarmStatusInterval {
-  double left_bound = 1;
-  double right_bound = 2;
-  IntervalType type = 3;
-  AlarmStatus alarm_status = 4;
-}
-
-message AlarmStatusIntervals {
-  repeated AlarmStatusInterval list = 1;
+message Overall {
+  DoubleObject outer_high = 1;
+  DoubleObject inner_high = 2;
+  DoubleObject inner_low = 3;
+  DoubleObject outer_low = 4;
 }
