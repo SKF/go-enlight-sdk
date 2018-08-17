@@ -13,7 +13,6 @@ service IAM {
   rpc GetHierarchyRelations (GetHierarchyRelationsInput) returns (GetHierarchyRelationsOutput) {}
 
   rpc GetEventRecords (GetEventRecordsInput) returns (GetEventRecordsOutput) {}
-  rpc GetEventRecordStream (PrimitiveVoid) returns (stream PrimitiveBytes) {}
 }
 
 // Input & output messages
