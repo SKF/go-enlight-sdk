@@ -17,7 +17,6 @@ service Hierarchy {
   rpc DeleteNode (DeleteNodeInput) returns (PrimitiveVoid) {}
 
   rpc GetEvents (GetEventsInput) returns (GetEventsOutput) {}
-  rpc GetEventStream (PrimitiveVoid) returns (stream PrimitiveBytes) {}
 }
 
 message Origin {

@@ -6,18 +6,17 @@ import (
 	"time"
 
 	"github.com/SKF/go-enlight-sdk/services/mhub/mhubapi"
-	"github.com/SKF/go-utility/uuid"
 )
 
-func (c *client) SetTaskStatus(taskID, userID uuid.UUID, status mhubapi.TaskStatus) (err error) {
+func (c *client) SetTaskStatus(id int64, status mhubapi.TaskStatus) (err error) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*30)
 	defer cancel()
-	return c.SetTaskStatusWithContext(ctx, taskID, userID, status)
+	return c.SetTaskStatusWithContext(ctx, id, status)
 }
 
-func (c *client) SetTaskStatusWithContext(ctx context.Context, taskID, userID uuid.UUID, status mhubapi.TaskStatus) (err error) {
+func (c *client) SetTaskStatusWithContext(ctx context.Context, id int64, status mhubapi.TaskStatus) (err error) {
 	_, err = c.api.SetTaskStatus(ctx, &mhubapi.SetTaskStatusInput{
-		TaskId: taskID.String(),
+		Id:     id,
 		Status: status,
 	})
 	return

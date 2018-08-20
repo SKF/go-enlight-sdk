@@ -68,7 +68,16 @@ func (mock *client) GetReports(input api.GetReportsInput) (output *api.GetReport
 	args := mock.Called(input)
 	return args.Get(0).(*api.GetReportsOutput), args.Error(1)
 }
-func (mock *client) GetReportsWithContext(ctx context.Context, input apiGetReportsInput) (output *api.GetReportsOutput, err error) {
+func (mock *client) GetReportsWithContext(ctx context.Context, input api.GetReportsInput) (output *api.GetReportsOutput, err error) {
 	args := mock.Called(ctx, input)
 	return args.Get(0).(*api.GetReportsOutput), args.Error(1)
+}
+
+func (mock *client) GetComplianceSummary(input api.GetComplianceSummaryInput) (output *api.GetComplianceSummaryOutput, err error) {
+	args := mock.Called(input)
+	return args.Get(0).(*api.GetComplianceSummaryOutput), args.Error(1)
+}
+func (mock *client) GetComplianceSummaryWithContext(ctx context.Context, input api.GetComplianceSummaryInput) (output *api.GetComplianceSummaryOutput, err error) {
+	args := mock.Called(ctx, input)
+	return args.Get(0).(*api.GetComplianceSummaryOutput), args.Error(1)
 }

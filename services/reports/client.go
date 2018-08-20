@@ -26,6 +26,9 @@ type ReportsClient interface {
 
 	GetReports(input reportsgrpcapi.GetReportsInput) (output *reportsgrpcapi.GetReportsOutput, err error)
 	GetReportsWithContext(ctx context.Context, input reportsgrpcapi.GetReportsInput) (output *reportsgrpcapi.GetReportsOutput, err error)
+
+	GetComplianceSummary(input reportsgrpcapi.GetComplianceSummaryInput) (output *reportsgrpcapi.GetComplianceSummaryOutput, err error)
+	GetComplianceSummaryWithContext(ctx context.Context, input reportsgrpcapi.GetComplianceSummaryInput) (output *reportsgrpcapi.GetComplianceSummaryOutput, err error)
 }
 
 type client struct {
