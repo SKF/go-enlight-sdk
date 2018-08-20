@@ -42,3 +42,12 @@ func (c *client) GetReports(input reportsgrpcapi.GetReportsInput) (output *repor
 func (c *client) GetReportsWithContext(ctx context.Context, input reportsgrpcapi.GetReportsInput) (output *reportsgrpcapi.GetReportsOutput, err error) {
 	return c.api.GetReports(ctx, &input)
 }
+
+func (c *client) GetComplianceSummary(input reportsgrpcapi.GetComplianceSummaryInput) (output *reportsgrpcapi.GetComplianceSummaryOutput, err error) {
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
+	defer cancel()
+	return c.GetComplianceSummaryWithContext(ctx, input)
+}
+func (c *client) GetComplianceSummaryWithContext(ctx context.Context, input reportsgrpcapi.GetComplianceSummaryInput) (output *reportsgrpcapi.GetComplianceSummaryOutput, err error) {
+	return c.api.GetComplianceSummary(ctx, &input)
+}
