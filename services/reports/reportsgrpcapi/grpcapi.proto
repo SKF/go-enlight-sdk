@@ -8,6 +8,7 @@ service Reports {
   rpc GetFunctionalLocationHealth (GetFunctionalLocationHealthInput) returns (GetFunctionalLocationHealthOutput) {}
   rpc GetComplianceLog (GetComplianceLogInput) returns (GetComplianceLogOutput) {}
   rpc GetReports (GetReportsInput) returns (GetReportsOutput) {}
+  rpc GetComplianceSummary (GetComplianceSummaryInput) returns (GetComplianceSummaryOutput) {}
 }
 
 
@@ -107,4 +108,30 @@ message RecommendedActionItem {
   int64 last_modified = 5; 
   string action_UUID = 6; 
   string status = 7; 
+}
+
+message GetComplianceSummaryInput {
+  repeated string uuids = 1; 
+  int64 start = 2; 
+  int64 end = 3; 
+}
+
+message GetComplianceSummaryOutput {
+  int64 start = 1;
+  int64 end = 2;
+  repeated StatusNote status_notes = 3;
+  repeated System systems = 4;
+}
+
+message StatusNote {	
+  string reason = 1;
+  int64 count = 2;
+}
+
+message System {
+  string area_id = 1;
+  string area_name = 2; 
+  int64 compliant = 3; 
+  int64 non_compliant = 4; 
+  int64 overdue  = 5; 
 }
