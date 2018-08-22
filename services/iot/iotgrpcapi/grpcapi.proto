@@ -15,6 +15,7 @@ service IoT {
   rpc GetUncompletedTasksByHierarchy (PrimitiveString) returns (TaskDescriptions) {}
   rpc SetTaskStatus (SetTaskStatusInput) returns (PrimitiveVoid) {}
   rpc GetTaskStream (GetTaskStreamInput) returns (stream GetTaskStreamOutput) {}
+  rpc GetTasksByStatus (GetTasksByStatusInput) returns (GetTasksByStatusOutput) {}
 
   rpc IngestNodeData (IngestNodeDataInput) returns (IngestNodeDataOutput) {}
   rpc IngestNodeDataStream (stream IngestNodeDataStreamInput) returns (IngestNodeDataStreamOutput) {}
@@ -219,4 +220,13 @@ message GetTaskStreamInput {
 
 message GetTaskStreamOutput {
   TaskDescription task = 1;
+}
+
+message GetTasksByStatusInput {
+  string hierarchy_id = 1;
+  TaskStatus status = 2;
+}
+
+message GetTasksByStatusOutput {
+  repeated TaskDescription task_list = 1;
 }
