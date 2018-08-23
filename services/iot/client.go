@@ -4,9 +4,8 @@ import (
 	"context"
 	"time"
 
-	"google.golang.org/grpc"
-
 	api "github.com/SKF/go-enlight-sdk/services/iot/iotgrpcapi"
+	"google.golang.org/grpc"
 )
 
 type IoTClient interface {
