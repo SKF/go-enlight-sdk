@@ -145,6 +145,32 @@ func (c *Client) IngestNodeDataStreamWithContext(ctx context.Context, inputChann
 	return
 }
 
+func (c *Client) GetTaskByUUID(input api.PrimitiveString) (output *api.TaskDescription, err error) {
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
+	defer cancel()
+	return c.GetTaskByUUIDWithContext(ctx, input)
+}
+func (c *Client) GetTaskByUUIDWithContext(ctx context.Context, input api.PrimitiveString) (output *api.TaskDescription, err error) {
+	response, err := c.api.GetTaskByUUID(ctx, &input)
+	if response != nil {
+		output = response
+	}
+	return
+}
+
+func (c *Client) GetTaskByLongId(input api.PrimitiveLong) (output *api.TaskDescription, err error) {
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
+	defer cancel()
+	return c.GetTaskByLongIdWithContext(ctx, input)
+}
+func (c *Client) GetTaskByLongIdWithContext(ctx context.Context, input api.PrimitiveLong) (output *api.TaskDescription, err error) {
+	response, err := c.api.GetTaskByLongId(ctx, &input)
+	if response != nil {
+		output = response
+	}
+	return
+}
+
 func (c *Client) GetLatestNodeData(input api.GetLatestNodeDataInput) (*api.NodeData, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
 	defer cancel()

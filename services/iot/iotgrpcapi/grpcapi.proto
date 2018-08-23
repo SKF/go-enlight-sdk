@@ -16,6 +16,8 @@ service IoT {
   rpc SetTaskStatus (SetTaskStatusInput) returns (PrimitiveVoid) {}
   rpc GetTaskStream (GetTaskStreamInput) returns (stream GetTaskStreamOutput) {}
   rpc GetTasksByStatus (GetTasksByStatusInput) returns (GetTasksByStatusOutput) {}
+  rpc GetTaskByUUID (PrimitiveString) returns (TaskDescription) {}
+  rpc GetTaskByLongId (PrimitiveLong) returns (TaskDescription) {}
 
   rpc IngestNodeData (IngestNodeDataInput) returns (IngestNodeDataOutput) {}
   rpc IngestNodeDataStream (stream IngestNodeDataStreamInput) returns (IngestNodeDataStreamOutput) {}
@@ -79,6 +81,10 @@ message FunctionalLocationIds {
 
 message PrimitiveString {
   string value = 1;
+}
+
+message PrimitiveLong {
+  uint64 value = 1;
 }
 
 message PrimitiveBool {
