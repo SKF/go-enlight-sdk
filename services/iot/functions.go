@@ -242,3 +242,16 @@ func (c *Client) GetTaskStreamWithContext(ctx context.Context, input api.GetTask
 		dc <- *nodeData
 	}
 }
+
+func (c *Client) GetTasksByStatus(input api.GetTasksByStatusInput) ([]*api.TaskDescription, error) {
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+	return c.GetTasksByStatusWithContext(ctx, input)
+}
+func (c *Client) GetTasksByStatusWithContext(ctx context.Context, input api.GetTasksByStatusInput) (tasks []*api.TaskDescription, err error) {
+	result, err := c.api.GetTasksByStatus(ctx, &input)
+	if result != nil {
+		tasks = result.TaskList
+	}
+	return
+}
