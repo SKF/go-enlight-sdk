@@ -39,6 +39,7 @@ message TaskDescription {
   string external_task_id = 9;
   TaskStatus status = 8;
   int64 status_updated_at = 10; // ms
+  uint64 long_id = 11;
 }
 
 message InitialTaskDescription {
