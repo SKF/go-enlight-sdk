@@ -172,3 +172,20 @@ func (mock *client) GetTasksByStatusWithContext(ctx context.Context, input api.G
 	args := mock.Called(ctx, input)
 	return args.Get(0).([]*api.TaskDescription), args.Error(1)
 }
+
+func (mock *client) GetTaskByUUID(input api.GetTaskByUUIDInput) (output *api.GetTaskByUUIDOutput, err error) {
+	args := mock.Called(input)
+	return args.Get(0).(*api.GetTaskByUUIDOutput), args.Error(1)
+}
+func (mock *client) GetTaskByUUIDWithContext(ctx context.Context, input api.GetTaskByUUIDInput) (output *api.GetTaskByUUIDOutput, err error) {
+	args := mock.Called(ctx, input)
+	return args.Get(0).(*api.GetTaskByUUIDOutput), args.Error(1)
+}
+func (mock *client) GetTaskByLongId(input api.GetTaskByLongIdInput) (output *api.GetTaskByLongIdOutput, err error) {
+	args := mock.Called(input)
+	return args.Get(0).(*api.GetTaskByLongIdOutput), args.Error(1)
+}
+func (mock *client) GetTaskByLongIdWithContext(ctx context.Context, input api.GetTaskByLongIdInput) (output *api.GetTaskByLongIdOutput, err error) {
+	args := mock.Called(ctx, input)
+	return args.Get(0).(*api.GetTaskByLongIdOutput), args.Error(1)
+}
