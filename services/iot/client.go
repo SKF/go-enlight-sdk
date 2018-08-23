@@ -42,11 +42,11 @@ type IoTClient interface {
 	GetTasksByStatus(input api.GetTasksByStatusInput) ([]*api.TaskDescription, error)
 	GetTasksByStatusWithContext(ctx context.Context, input api.GetTasksByStatusInput) ([]*api.TaskDescription, error)
 
-	GetTaskByUUID(input api.GetTaskByUUIDInput) (*api.GetTaskByUUIDOutput, error)
-	GetTaskByUUIDWithContext(ctx context.Context, input api.GetTaskByUUIDInput) (*api.GetTaskByUUIDOutput, error)
+	GetTaskByUUID(input string) (*api.TaskDescription, error)
+	GetTaskByUUIDWithContext(ctx context.Context, input string) (*api.TaskDescription, error)
 
-	GetTaskByLongId(input api.GetTaskByLongIdInput) (*api.GetTaskByLongIdOutput, error)
-	GetTaskByLongIdWithContext(ctx context.Context, input api.GetTaskByLongIdInput) (*api.GetTaskByLongIdOutput, error)
+	GetTaskByLongId(input uint64) (*api.TaskDescription, error)
+	GetTaskByLongIdWithContext(ctx context.Context, input uint64) (*api.TaskDescription, error)
 
 	IngestNodeData(input api.IngestNodeDataInput) error
 	IngestNodeDataWithContext(ctx context.Context, input api.IngestNodeDataInput) error

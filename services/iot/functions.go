@@ -145,28 +145,34 @@ func (c *Client) IngestNodeDataStreamWithContext(ctx context.Context, inputChann
 	return
 }
 
-func (c *Client) GetTaskByUUID(input api.GetTaskByUUIDInput) (output *api.GetTaskByUUIDOutput, err error) {
+func (c *Client) GetTaskByUUID(input string) (output *api.TaskDescription, err error) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
 	defer cancel()
 	return c.GetTaskByUUIDWithContext(ctx, input)
 }
-func (c *Client) GetTaskByUUIDWithContext(ctx context.Context, input api.GetTaskByUUIDInput) (output *api.GetTaskByUUIDOutput, err error) {
-	response, err := c.api.GetTaskByUUID(ctx, &input)
+func (c *Client) GetTaskByUUIDWithContext(ctx context.Context, input string) (output *api.TaskDescription, err error) {
+	grpcInput := api.GetTaskByUUIDInput{
+		TaskId: input,
+	}
+	response, err := c.api.GetTaskByUUID(ctx, &grpcInput)
 	if response != nil {
-		output = response
+		output = response.Task
 	}
 	return
 }
 
-func (c *Client) GetTaskByLongId(input api.GetTaskByLongIdInput) (output *api.GetTaskByLongIdOutput, err error) {
+func (c *Client) GetTaskByLongId(input uint64) (output *api.TaskDescription, err error) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
 	defer cancel()
 	return c.GetTaskByLongIdWithContext(ctx, input)
 }
-func (c *Client) GetTaskByLongIdWithContext(ctx context.Context, input api.GetTaskByLongIdInput) (output *api.GetTaskByLongIdOutput, err error) {
-	response, err := c.api.GetTaskByLongId(ctx, &input)
+func (c *Client) GetTaskByLongIdWithContext(ctx context.Context, input uint64) (output *api.TaskDescription, err error) {
+	grpcInput := api.GetTaskByLongIdInput{
+		TaskId: input,
+	}
+	response, err := c.api.GetTaskByLongId(ctx, &grpcInput)
 	if response != nil {
-		output = response
+		output = response.Task
 	}
 	return
 }
