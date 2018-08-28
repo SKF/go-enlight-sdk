@@ -121,6 +121,7 @@ message GetComplianceSummaryOutput {
   int64 end = 2;
   repeated StatusNote status_notes = 3;
   repeated System systems = 4;
+  repeated int64 time_non_compliant = 5;
 }
 
 message StatusNote {	
