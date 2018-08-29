@@ -161,12 +161,12 @@ func (c *Client) GetTaskByUUIDWithContext(ctx context.Context, input string) (ou
 	return
 }
 
-func (c *Client) GetTaskByLongId(input uint64) (output *api.TaskDescription, err error) {
+func (c *Client) GetTaskByLongId(input int64) (output *api.TaskDescription, err error) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
 	defer cancel()
 	return c.GetTaskByLongIdWithContext(ctx, input)
 }
-func (c *Client) GetTaskByLongIdWithContext(ctx context.Context, input uint64) (output *api.TaskDescription, err error) {
+func (c *Client) GetTaskByLongIdWithContext(ctx context.Context, input int64) (output *api.TaskDescription, err error) {
 	grpcInput := api.GetTaskByLongIdInput{
 		TaskId: input,
 	}

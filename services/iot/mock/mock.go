@@ -181,11 +181,11 @@ func (mock *client) GetTaskByUUIDWithContext(ctx context.Context, input string) 
 	args := mock.Called(ctx, input)
 	return args.Get(0).(*api.TaskDescription), args.Error(1)
 }
-func (mock *client) GetTaskByLongId(input uint64) (output *api.TaskDescription, err error) {
+func (mock *client) GetTaskByLongId(input int64) (output *api.TaskDescription, err error) {
 	args := mock.Called(input)
 	return args.Get(0).(*api.TaskDescription), args.Error(1)
 }
-func (mock *client) GetTaskByLongIdWithContext(ctx context.Context, input uint64) (output *api.TaskDescription, err error) {
+func (mock *client) GetTaskByLongIdWithContext(ctx context.Context, input int64) (output *api.TaskDescription, err error) {
 	args := mock.Called(ctx, input)
 	return args.Get(0).(*api.TaskDescription), args.Error(1)
 }
