@@ -17,6 +17,9 @@ service Hierarchy {
   rpc DeleteNode (DeleteNodeInput) returns (PrimitiveVoid) {}
 
   rpc GetEvents (GetEventsInput) returns (GetEventsOutput) {}
+  
+  rpc GetFaultFrequencies(PrimitiveString) returns (FaultFrequencies) {}
+  rpc SetFaultFrequencies(FaultFrequencies) returns (PrimitiveVoid) {}  
 }
 
 message Origin {
@@ -106,6 +109,27 @@ message AncestorNode {
   string type = 5;
   string subType = 6;
   string parentId = 7;
+}
+
+message FaultFrequencies {
+  string nodeId = 1;
+  repeated FaultFrequency faultfrequencies = 2;
+}
+
+message FaultFrequency {
+  string id = 1;
+  string name = 2;
+  string description = 3;
+  string manufacturer = 4;
+  string familyType = 5;
+  double BPFO = 6;
+  double BPFI = 7;
+  double BSF = 8;
+  double FTF = 9;
+  double RPM  = 10;
+  int32 type = 11;
+  int32 multiple = 12;
+  int32 bandwidth = 13;
 }
 
 message PrimitiveString {
