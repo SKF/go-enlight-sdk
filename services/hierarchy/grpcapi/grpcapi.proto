@@ -58,10 +58,10 @@ message Node {
   string criticality = 5;
   string subType = 6;
   Origin origin = 7;
-
   AssetNode assetNode = 8;
   MeasurementPoint measurementPoint = 9;
   InspectionPoint inspectionPoint = 10;
+  int64 childOrderNumber = 11;
 }
 
 message Nodes {
