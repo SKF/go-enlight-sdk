@@ -61,7 +61,8 @@ message Node {
   AssetNode assetNode = 8;
   MeasurementPoint measurementPoint = 9;
   InspectionPoint inspectionPoint = 10;
-  int64 childOrderNumber = 11;
+  PrimitiveInt64 childOrderNumber = 12;
+
 }
 
 message Nodes {
@@ -114,6 +115,10 @@ message PrimitiveString {
 
 message PrimitiveInt32 {
   int32 value = 1;
+}
+
+message PrimitiveInt64{
+  int64 value = 1;
 }
 
 message PrimitiveBytes {
