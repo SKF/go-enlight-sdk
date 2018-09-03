@@ -61,8 +61,8 @@ message Node {
   AssetNode assetNode = 8;
   MeasurementPoint measurementPoint = 9;
   InspectionPoint inspectionPoint = 10;
-  PrimitiveInt64 childOrderNumber = 12;
-
+  int64 childOrderNumber = 11 [deprecated=true];
+  PrimitiveInt64 position = 12;
 }
 
 message Nodes {
