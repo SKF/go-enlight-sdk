@@ -4,7 +4,7 @@ import (
 	"context"
 	"time"
 
-	api "github.com/SKF/go-enlight-sdk/services/iot/iotgrpcapi"
+	iot_grpcapi "github.com/SKF/proto/iot"
 	"google.golang.org/grpc"
 )
 
@@ -15,8 +15,8 @@ type IoTClient interface {
 	DeepPing() error
 	DeepPingWithContext(ctx context.Context) error
 
-	CreateTask(task api.InitialTaskDescription) (string, error)
-	CreateTaskWithContext(ctx context.Context, task api.InitialTaskDescription) (string, error)
+	CreateTask(task iot_grpcapi.InitialTaskDescription) (string, error)
+	CreateTaskWithContext(ctx context.Context, task iot_grpcapi.InitialTaskDescription) (string, error)
 
 	DeleteTask(userID, taskID string) error
 	DeleteTaskWithContext(ctx context.Context, userID, taskID string) error
@@ -24,52 +24,52 @@ type IoTClient interface {
 	SetTaskCompleted(userID, taskID string) error
 	SetTaskCompletedWithContext(ctx context.Context, userID, taskID string) error
 
-	GetAllTasks(userID string) ([]api.TaskDescription, error)
-	GetAllTasksWithContext(ctx context.Context, userID string) ([]api.TaskDescription, error)
+	GetAllTasks(userID string) ([]iot_grpcapi.TaskDescription, error)
+	GetAllTasksWithContext(ctx context.Context, userID string) ([]iot_grpcapi.TaskDescription, error)
 
-	GetUncompletedTasks(userID string) ([]api.TaskDescription, error)
-	GetUncompletedTasksWithContext(ctx context.Context, userID string) ([]api.TaskDescription, error)
+	GetUncompletedTasks(userID string) ([]iot_grpcapi.TaskDescription, error)
+	GetUncompletedTasksWithContext(ctx context.Context, userID string) ([]iot_grpcapi.TaskDescription, error)
 
-	GetUncompletedTasksByHierarchy(nodeID string) (out []api.TaskDescription, err error)
-	GetUncompletedTasksByHierarchyWithContext(ctx context.Context, nodeID string) (out []api.TaskDescription, err error)
+	GetUncompletedTasksByHierarchy(nodeID string) (out []iot_grpcapi.TaskDescription, err error)
+	GetUncompletedTasksByHierarchyWithContext(ctx context.Context, nodeID string) (out []iot_grpcapi.TaskDescription, err error)
 
-	SetTaskStatus(input api.SetTaskStatusInput) (err error)
-	SetTaskStatusWithContext(ctx context.Context, input api.SetTaskStatusInput) (err error)
+	SetTaskStatus(input iot_grpcapi.SetTaskStatusInput) (err error)
+	SetTaskStatusWithContext(ctx context.Context, input iot_grpcapi.SetTaskStatusInput) (err error)
 
-	GetTaskStream(input api.GetTaskStreamInput, dc chan<- api.GetTaskStreamOutput) (err error)
-	GetTaskStreamWithContext(ctx context.Context, input api.GetTaskStreamInput, dc chan<- api.GetTaskStreamOutput) (err error)
+	GetTaskStream(input iot_grpcapi.GetTaskStreamInput, dc chan<- iot_grpcapi.GetTaskStreamOutput) (err error)
+	GetTaskStreamWithContext(ctx context.Context, input iot_grpcapi.GetTaskStreamInput, dc chan<- iot_grpcapi.GetTaskStreamOutput) (err error)
 
-	GetTasksByStatus(input api.GetTasksByStatusInput) ([]*api.TaskDescription, error)
-	GetTasksByStatusWithContext(ctx context.Context, input api.GetTasksByStatusInput) ([]*api.TaskDescription, error)
+	GetTasksByStatus(input iot_grpcapi.GetTasksByStatusInput) ([]*iot_grpcapi.TaskDescription, error)
+	GetTasksByStatusWithContext(ctx context.Context, input iot_grpcapi.GetTasksByStatusInput) ([]*iot_grpcapi.TaskDescription, error)
 
-	GetTaskByUUID(input string) (*api.TaskDescription, error)
-	GetTaskByUUIDWithContext(ctx context.Context, input string) (*api.TaskDescription, error)
+	GetTaskByUUID(input string) (*iot_grpcapi.TaskDescription, error)
+	GetTaskByUUIDWithContext(ctx context.Context, input string) (*iot_grpcapi.TaskDescription, error)
 
-	GetTaskByLongId(input int64) (*api.TaskDescription, error)
-	GetTaskByLongIdWithContext(ctx context.Context, input int64) (*api.TaskDescription, error)
+	GetTaskByLongId(input int64) (*iot_grpcapi.TaskDescription, error)
+	GetTaskByLongIdWithContext(ctx context.Context, input int64) (*iot_grpcapi.TaskDescription, error)
 
-	IngestNodeData(input api.IngestNodeDataInput) error
-	IngestNodeDataWithContext(ctx context.Context, input api.IngestNodeDataInput) error
+	IngestNodeData(input iot_grpcapi.IngestNodeDataInput) error
+	IngestNodeDataWithContext(ctx context.Context, input iot_grpcapi.IngestNodeDataInput) error
 
-	IngestNodeDataStream(c <-chan api.IngestNodeDataStreamInput) error
-	IngestNodeDataStreamWithContext(ctx context.Context, c <-chan api.IngestNodeDataStreamInput) error
+	IngestNodeDataStream(c <-chan iot_grpcapi.IngestNodeDataStreamInput) error
+	IngestNodeDataStreamWithContext(ctx context.Context, c <-chan iot_grpcapi.IngestNodeDataStreamInput) error
 
-	GetLatestNodeData(input api.GetLatestNodeDataInput) (*api.NodeData, error)
-	GetLatestNodeDataWithContext(ctx context.Context, input api.GetLatestNodeDataInput) (*api.NodeData, error)
+	GetLatestNodeData(input iot_grpcapi.GetLatestNodeDataInput) (*iot_grpcapi.NodeData, error)
+	GetLatestNodeDataWithContext(ctx context.Context, input iot_grpcapi.GetLatestNodeDataInput) (*iot_grpcapi.NodeData, error)
 
-	GetNodeData(input api.GetNodeDataInput) ([]api.NodeData, error)
-	GetNodeDataWithContext(ctx context.Context, input api.GetNodeDataInput) ([]api.NodeData, error)
+	GetNodeData(input iot_grpcapi.GetNodeDataInput) ([]iot_grpcapi.NodeData, error)
+	GetNodeDataWithContext(ctx context.Context, input iot_grpcapi.GetNodeDataInput) ([]iot_grpcapi.NodeData, error)
 
-	GetNodeDataStream(input api.GetNodeDataStreamInput, c chan<- api.GetNodeDataStreamOutput) error
-	GetNodeDataStreamWithContext(ctx context.Context, input api.GetNodeDataStreamInput, c chan<- api.GetNodeDataStreamOutput) error
+	GetNodeDataStream(input iot_grpcapi.GetNodeDataStreamInput, c chan<- iot_grpcapi.GetNodeDataStreamOutput) error
+	GetNodeDataStreamWithContext(ctx context.Context, input iot_grpcapi.GetNodeDataStreamInput, c chan<- iot_grpcapi.GetNodeDataStreamOutput) error
 
-	GetMedia(input api.GetMediaInput) (api.Media, error)
-	GetMediaWithContext(ctx context.Context, input api.GetMediaInput) (api.Media, error)
+	GetMedia(input iot_grpcapi.GetMediaInput) (iot_grpcapi.Media, error)
+	GetMediaWithContext(ctx context.Context, input iot_grpcapi.GetMediaInput) (iot_grpcapi.Media, error)
 }
 
 type Client struct {
 	conn *grpc.ClientConn
-	api  api.IoTClient
+	api  iot_grpcapi.IoTClient
 }
 
 func CreateClient() IoTClient {
@@ -83,7 +83,7 @@ func (c *Client) Dial(host, port string, opts ...grpc.DialOption) (err error) {
 	}
 
 	c.conn = conn
-	c.api = api.NewIoTClient(conn)
+	c.api = iot_grpcapi.NewIoTClient(conn)
 	return
 }
 
@@ -98,6 +98,6 @@ func (c *Client) DeepPing() error {
 }
 
 func (c *Client) DeepPingWithContext(ctx context.Context) error {
-	_, err := c.api.DeepPing(ctx, &api.PrimitiveVoid{})
+	_, err := c.api.DeepPing(ctx, &iot_grpcapi.PrimitiveVoid{})
 	return err
 }

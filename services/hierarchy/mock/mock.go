@@ -8,7 +8,7 @@ import (
 	"google.golang.org/grpc"
 
 	"github.com/SKF/go-enlight-sdk/services/hierarchy"
-	"github.com/SKF/go-enlight-sdk/services/hierarchy/grpcapi"
+	hierarchy_grpcapi "github.com/SKF/proto/hierarchy"
 )
 
 type client struct {
@@ -39,47 +39,47 @@ func (mock *client) DeepPingWithContext(ctx context.Context) error {
 	return args.Error(0)
 }
 
-func (mock *client) SaveNode(request grpcapi.SaveNodeInput) (string, error) {
+func (mock *client) SaveNode(request hierarchy_grpcapi.SaveNodeInput) (string, error) {
 	args := mock.Called(request)
 	return args.String(0), args.Error(1)
 }
-func (mock *client) SaveNodeWithContext(ctx context.Context, request grpcapi.SaveNodeInput) (string, error) {
+func (mock *client) SaveNodeWithContext(ctx context.Context, request hierarchy_grpcapi.SaveNodeInput) (string, error) {
 	args := mock.Called(ctx, request)
 	return args.String(0), args.Error(1)
 }
 
-func (mock *client) GetNode(uuid string) (grpcapi.Node, error) {
+func (mock *client) GetNode(uuid string) (hierarchy_grpcapi.Node, error) {
 	args := mock.Called(uuid)
-	return args.Get(0).(grpcapi.Node), args.Error(1)
+	return args.Get(0).(hierarchy_grpcapi.Node), args.Error(1)
 }
-func (mock *client) GetNodeWithContext(ctx context.Context, uuid string) (grpcapi.Node, error) {
+func (mock *client) GetNodeWithContext(ctx context.Context, uuid string) (hierarchy_grpcapi.Node, error) {
 	args := mock.Called(ctx, uuid)
-	return args.Get(0).(grpcapi.Node), args.Error(1)
+	return args.Get(0).(hierarchy_grpcapi.Node), args.Error(1)
 }
 
-func (mock *client) GetNodeIDByOrigin(origin grpcapi.Origin) (string, error) {
+func (mock *client) GetNodeIDByOrigin(origin hierarchy_grpcapi.Origin) (string, error) {
 	args := mock.Called(origin)
 	return args.String(0), args.Error(1)
 }
-func (mock *client) GetNodeIDByOriginWithContext(ctx context.Context, origin grpcapi.Origin) (string, error) {
+func (mock *client) GetNodeIDByOriginWithContext(ctx context.Context, origin hierarchy_grpcapi.Origin) (string, error) {
 	args := mock.Called(ctx, origin)
 	return args.String(0), args.Error(1)
 }
 
-func (mock *client) GetNodes(parentID string) ([]grpcapi.Node, error) {
+func (mock *client) GetNodes(parentID string) ([]hierarchy_grpcapi.Node, error) {
 	args := mock.Called(parentID)
-	return args.Get(0).([]grpcapi.Node), args.Error(1)
+	return args.Get(0).([]hierarchy_grpcapi.Node), args.Error(1)
 }
-func (mock *client) GetNodesWithContext(ctx context.Context, parentID string) ([]grpcapi.Node, error) {
+func (mock *client) GetNodesWithContext(ctx context.Context, parentID string) ([]hierarchy_grpcapi.Node, error) {
 	args := mock.Called(ctx, parentID)
-	return args.Get(0).([]grpcapi.Node), args.Error(1)
+	return args.Get(0).([]hierarchy_grpcapi.Node), args.Error(1)
 }
 
-func (mock *client) DeleteNode(request grpcapi.DeleteNodeInput) error {
+func (mock *client) DeleteNode(request hierarchy_grpcapi.DeleteNodeInput) error {
 	args := mock.Called(request)
 	return args.Error(0)
 }
-func (mock *client) DeleteNodeWithContext(ctx context.Context, request grpcapi.DeleteNodeInput) error {
+func (mock *client) DeleteNodeWithContext(ctx context.Context, request hierarchy_grpcapi.DeleteNodeInput) error {
 	args := mock.Called(ctx, request)
 	return args.Error(0)
 }
@@ -93,29 +93,29 @@ func (mock *client) GetEventsWithContext(ctx context.Context, since int, limit *
 	return args.Get(0).([]eventsource.Record), args.Error(1)
 }
 
-func (mock *client) GetParentNode(nodeID string) (grpcapi.Node, error) {
+func (mock *client) GetParentNode(nodeID string) (hierarchy_grpcapi.Node, error) {
 	args := mock.Called(nodeID)
-	return args.Get(0).(grpcapi.Node), args.Error(1)
+	return args.Get(0).(hierarchy_grpcapi.Node), args.Error(1)
 }
-func (mock *client) GetParentNodeWithContext(ctx context.Context, nodeID string) (grpcapi.Node, error) {
+func (mock *client) GetParentNodeWithContext(ctx context.Context, nodeID string) (hierarchy_grpcapi.Node, error) {
 	args := mock.Called(ctx, nodeID)
-	return args.Get(0).(grpcapi.Node), args.Error(1)
+	return args.Get(0).(hierarchy_grpcapi.Node), args.Error(1)
 }
 
-func (mock *client) GetAncestors(nodeID string) ([]grpcapi.AncestorNode, error) {
+func (mock *client) GetAncestors(nodeID string) ([]hierarchy_grpcapi.AncestorNode, error) {
 	args := mock.Called(nodeID)
-	return args.Get(0).([]grpcapi.AncestorNode), args.Error(1)
+	return args.Get(0).([]hierarchy_grpcapi.AncestorNode), args.Error(1)
 }
-func (mock *client) GetAncestorsWithContext(ctx context.Context, nodeID string) ([]grpcapi.AncestorNode, error) {
+func (mock *client) GetAncestorsWithContext(ctx context.Context, nodeID string) ([]hierarchy_grpcapi.AncestorNode, error) {
 	args := mock.Called(ctx, nodeID)
-	return args.Get(0).([]grpcapi.AncestorNode), args.Error(1)
+	return args.Get(0).([]hierarchy_grpcapi.AncestorNode), args.Error(1)
 }
 
-func (mock *client) GetChildNodes(parentID string) ([]grpcapi.Node, error) {
+func (mock *client) GetChildNodes(parentID string) ([]hierarchy_grpcapi.Node, error) {
 	args := mock.Called(parentID)
-	return args.Get(0).([]grpcapi.Node), args.Error(1)
+	return args.Get(0).([]hierarchy_grpcapi.Node), args.Error(1)
 }
-func (mock *client) GetChildNodesWithContext(ctx context.Context, parentID string) ([]grpcapi.Node, error) {
+func (mock *client) GetChildNodesWithContext(ctx context.Context, parentID string) ([]hierarchy_grpcapi.Node, error) {
 	args := mock.Called(ctx, parentID)
-	return args.Get(0).([]grpcapi.Node), args.Error(1)
+	return args.Get(0).([]hierarchy_grpcapi.Node), args.Error(1)
 }

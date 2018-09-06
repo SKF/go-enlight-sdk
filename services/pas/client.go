@@ -4,7 +4,7 @@ import (
 	"context"
 	"time"
 
-	"github.com/SKF/go-enlight-sdk/services/pas/pasapi"
+	pas_api "github.com/SKF/proto/pas"
 
 	"google.golang.org/grpc"
 )
@@ -19,25 +19,25 @@ type PointAlarmStatusClient interface {
 	DeepPing() error
 	DeepPingWithContext(ctx context.Context) error
 
-	SetPointAlarmThreshold(input pasapi.SetPointAlarmThresholdInput) error
-	SetPointAlarmThresholdWithContext(ctx context.Context, input pasapi.SetPointAlarmThresholdInput) error
+	SetPointAlarmThreshold(input pas_api.SetPointAlarmThresholdInput) error
+	SetPointAlarmThresholdWithContext(ctx context.Context, input pas_api.SetPointAlarmThresholdInput) error
 
-	GetPointAlarmThreshold(nodeID string) (pasapi.GetPointAlarmThresholdOutput, error)
-	GetPointAlarmThresholdWithContext(ctx context.Context, nodeID string) (pasapi.GetPointAlarmThresholdOutput, error)
+	GetPointAlarmThreshold(nodeID string) (pas_api.GetPointAlarmThresholdOutput, error)
+	GetPointAlarmThresholdWithContext(ctx context.Context, nodeID string) (pas_api.GetPointAlarmThresholdOutput, error)
 
-	SetPointAlarmStatus(input pasapi.SetPointAlarmStatusInput) error
-	SetPointAlarmStatusWithContext(ctx context.Context, input pasapi.SetPointAlarmStatusInput) error
+	SetPointAlarmStatus(input pas_api.SetPointAlarmStatusInput) error
+	SetPointAlarmStatusWithContext(ctx context.Context, input pas_api.SetPointAlarmStatusInput) error
 
-	GetPointAlarmStatus(input pasapi.GetPointAlarmStatusInput) (pasapi.AlarmStatus, error)
-	GetPointAlarmStatusWithContext(ctx context.Context, input pasapi.GetPointAlarmStatusInput) (pasapi.AlarmStatus, error)
+	GetPointAlarmStatus(input pas_api.GetPointAlarmStatusInput) (pas_api.AlarmStatus, error)
+	GetPointAlarmStatusWithContext(ctx context.Context, input pas_api.GetPointAlarmStatusInput) (pas_api.AlarmStatus, error)
 
-	GetPointAlarmStatusStream(dc chan<- pasapi.GetPointAlarmStatusStreamOutput) error
-	GetPointAlarmStatusStreamWithContext(ctx context.Context, dc chan<- pasapi.GetPointAlarmStatusStreamOutput) error
+	GetPointAlarmStatusStream(dc chan<- pas_api.GetPointAlarmStatusStreamOutput) error
+	GetPointAlarmStatusStreamWithContext(ctx context.Context, dc chan<- pas_api.GetPointAlarmStatusStreamOutput) error
 }
 
 // Client implements the PointAlarmStatusClient and holds the connection.
 type Client struct {
-	api  pasapi.PointAlarmStatusClient
+	api  pas_api.PointAlarmStatusClient
 	conn *grpc.ClientConn
 }
 
@@ -54,7 +54,7 @@ func (c *Client) Dial(host, port string, opts ...grpc.DialOption) (err error) {
 	}
 
 	c.conn = conn
-	c.api = pasapi.NewPointAlarmStatusClient(conn)
+	c.api = pas_api.NewPointAlarmStatusClient(conn)
 	return
 }
 
@@ -72,6 +72,6 @@ func (c *Client) DeepPing() (err error) {
 
 // DeepPingWithContext pings the service to see if it is alive.
 func (c *Client) DeepPingWithContext(ctx context.Context) (err error) {
-	_, err = c.api.DeepPing(ctx, &pasapi.Void{})
+	_, err = c.api.DeepPing(ctx, &pas_api.Void{})
 	return
 }
