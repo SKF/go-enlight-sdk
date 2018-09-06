@@ -3,9 +3,10 @@ package hierarchy_test
 import (
 	"log"
 
+	hierarchy_grpcapi "github.com/SKF/proto/hierarchy"
+
 	"github.com/SKF/go-enlight-sdk/grpc"
 	"github.com/SKF/go-enlight-sdk/services/hierarchy"
-	"github.com/SKF/go-enlight-sdk/services/hierarchy/grpcapi"
 )
 
 func ExampleClient() {
@@ -38,9 +39,9 @@ func ExampleClient() {
 
 func ExampleClient_SaveNode_create() {
 	var client hierarchy.HierarchyClient
-	saveNodeInput := grpcapi.SaveNodeInput{
+	saveNodeInput := hierarchy_grpcapi.SaveNodeInput{
 		UserId:   "<user_id>",
-		Node:     &grpcapi.Node{},
+		Node:     &hierarchy_grpcapi.Node{},
 		ParentId: "<parent_id>",
 	}
 	nodeID, err := client.SaveNode(saveNodeInput)
@@ -53,9 +54,9 @@ func ExampleClient_SaveNode_create() {
 
 func ExampleClient_SaveNode_update() {
 	var client hierarchy.HierarchyClient
-	saveNodeInput := grpcapi.SaveNodeInput{
+	saveNodeInput := hierarchy_grpcapi.SaveNodeInput{
 		UserId: "<user_id>",
-		Node: &grpcapi.Node{
+		Node: &hierarchy_grpcapi.Node{
 			Id: "<node_id>",
 		},
 		ParentId: "<parent_id>",

@@ -5,9 +5,8 @@ import (
 	"time"
 
 	"github.com/SKF/go-eventsource/eventsource"
+	hierarchy_grpcapi "github.com/SKF/proto/hierarchy"
 	"google.golang.org/grpc"
-
-	"github.com/SKF/go-enlight-sdk/services/hierarchy/grpcapi"
 )
 
 // HierarchyClient provides the API operation methods for making
@@ -20,38 +19,38 @@ type HierarchyClient interface {
 	DeepPing() error
 	DeepPingWithContext(ctx context.Context) error
 
-	SaveNode(request grpcapi.SaveNodeInput) (string, error)
-	SaveNodeWithContext(ctx context.Context, request grpcapi.SaveNodeInput) (string, error)
+	SaveNode(request hierarchy_grpcapi.SaveNodeInput) (string, error)
+	SaveNodeWithContext(ctx context.Context, request hierarchy_grpcapi.SaveNodeInput) (string, error)
 
-	GetNode(nodeID string) (grpcapi.Node, error)
-	GetNodeWithContext(ctx context.Context, nodeID string) (grpcapi.Node, error)
+	GetNode(nodeID string) (hierarchy_grpcapi.Node, error)
+	GetNodeWithContext(ctx context.Context, nodeID string) (hierarchy_grpcapi.Node, error)
 
-	GetNodes(parentID string) ([]grpcapi.Node, error)
-	GetNodesWithContext(ctx context.Context, parentID string) ([]grpcapi.Node, error)
+	GetNodes(parentID string) ([]hierarchy_grpcapi.Node, error)
+	GetNodesWithContext(ctx context.Context, parentID string) ([]hierarchy_grpcapi.Node, error)
 
-	GetChildNodes(parentID string) ([]grpcapi.Node, error)
-	GetChildNodesWithContext(ctx context.Context, parentID string) ([]grpcapi.Node, error)
+	GetChildNodes(parentID string) ([]hierarchy_grpcapi.Node, error)
+	GetChildNodesWithContext(ctx context.Context, parentID string) ([]hierarchy_grpcapi.Node, error)
 
-	DeleteNode(request grpcapi.DeleteNodeInput) error
-	DeleteNodeWithContext(ctx context.Context, request grpcapi.DeleteNodeInput) error
+	DeleteNode(request hierarchy_grpcapi.DeleteNodeInput) error
+	DeleteNodeWithContext(ctx context.Context, request hierarchy_grpcapi.DeleteNodeInput) error
 
-	GetAncestors(nodeID string) ([]grpcapi.AncestorNode, error)
-	GetAncestorsWithContext(ctx context.Context, nodeID string) ([]grpcapi.AncestorNode, error)
+	GetAncestors(nodeID string) ([]hierarchy_grpcapi.AncestorNode, error)
+	GetAncestorsWithContext(ctx context.Context, nodeID string) ([]hierarchy_grpcapi.AncestorNode, error)
 
 	GetEvents(since int, limit *int32) ([]eventsource.Record, error)
 	GetEventsWithContext(ctx context.Context, since int, limit *int32) ([]eventsource.Record, error)
 
-	GetParentNode(nodeID string) (grpcapi.Node, error)
-	GetParentNodeWithContext(ctx context.Context, nodeID string) (grpcapi.Node, error)
+	GetParentNode(nodeID string) (hierarchy_grpcapi.Node, error)
+	GetParentNodeWithContext(ctx context.Context, nodeID string) (hierarchy_grpcapi.Node, error)
 
-	GetNodeIDByOrigin(origin grpcapi.Origin) (string, error)
-	GetNodeIDByOriginWithContext(ctx context.Context, origin grpcapi.Origin) (string, error)
+	GetNodeIDByOrigin(origin hierarchy_grpcapi.Origin) (string, error)
+	GetNodeIDByOriginWithContext(ctx context.Context, origin hierarchy_grpcapi.Origin) (string, error)
 }
 
 // Client implements the HierarchyClient and holds the connection.
 type Client struct {
 	conn *grpc.ClientConn
-	api  grpcapi.HierarchyClient
+	api  hierarchy_grpcapi.HierarchyClient
 }
 
 // CreateClient creates an instance of the HierarchyClient.
@@ -67,7 +66,7 @@ func (c *Client) Dial(host, port string, opts ...grpc.DialOption) (err error) {
 	}
 
 	c.conn = conn
-	c.api = grpcapi.NewHierarchyClient(conn)
+	c.api = hierarchy_grpcapi.NewHierarchyClient(conn)
 	return
 }
 
@@ -85,6 +84,6 @@ func (c *Client) DeepPing() error {
 
 // DeepPingWithContext pings the service to see if it is alive.
 func (c *Client) DeepPingWithContext(ctx context.Context) error {
-	_, err := c.api.DeepPing(ctx, &grpcapi.PrimitiveVoid{})
+	_, err := c.api.DeepPing(ctx, &hierarchy_grpcapi.PrimitiveVoid{})
 	return err
 }

@@ -5,32 +5,32 @@ import (
 	"io"
 	"time"
 
-	"github.com/SKF/go-enlight-sdk/services/pas/pasapi"
+	pas_api "github.com/SKF/proto/pas"
 )
 
 // SetPointAlarmThreshold sets the alarm threshold for a specific point
-func (c *Client) SetPointAlarmThreshold(input pasapi.SetPointAlarmThresholdInput) error {
+func (c *Client) SetPointAlarmThreshold(input pas_api.SetPointAlarmThresholdInput) error {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
 	defer cancel()
 	return c.SetPointAlarmThresholdWithContext(ctx, input)
 }
 
 // SetPointAlarmThresholdWithContext sets the alarm threshold for a specific point
-func (c *Client) SetPointAlarmThresholdWithContext(ctx context.Context, input pasapi.SetPointAlarmThresholdInput) error {
+func (c *Client) SetPointAlarmThresholdWithContext(ctx context.Context, input pas_api.SetPointAlarmThresholdInput) error {
 	_, err := c.api.SetPointAlarmThreshold(ctx, &input)
 	return err
 }
 
 // GetPointAlarmThreshold gets the alarm threshold for a specific point
-func (c *Client) GetPointAlarmThreshold(nodeID string) (pasapi.GetPointAlarmThresholdOutput, error) {
+func (c *Client) GetPointAlarmThreshold(nodeID string) (pas_api.GetPointAlarmThresholdOutput, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
 	defer cancel()
 	return c.GetPointAlarmThresholdWithContext(ctx, nodeID)
 }
 
 // GetPointAlarmThresholdWithContext gets the alarm threshold for a specific point
-func (c *Client) GetPointAlarmThresholdWithContext(ctx context.Context, nodeID string) (output pasapi.GetPointAlarmThresholdOutput, err error) {
-	input := pasapi.GetPointAlarmThresholdInput{NodeId: nodeID}
+func (c *Client) GetPointAlarmThresholdWithContext(ctx context.Context, nodeID string) (output pas_api.GetPointAlarmThresholdOutput, err error) {
+	input := pas_api.GetPointAlarmThresholdInput{NodeId: nodeID}
 	resp, err := c.api.GetPointAlarmThreshold(ctx, &input)
 	if resp != nil {
 		output = *resp
@@ -39,27 +39,27 @@ func (c *Client) GetPointAlarmThresholdWithContext(ctx context.Context, nodeID s
 }
 
 // SetPointAlarmStatus sets the alarm status for a specific point
-func (c *Client) SetPointAlarmStatus(input pasapi.SetPointAlarmStatusInput) error {
+func (c *Client) SetPointAlarmStatus(input pas_api.SetPointAlarmStatusInput) error {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
 	defer cancel()
 	return c.SetPointAlarmStatusWithContext(ctx, input)
 }
 
 // SetPointAlarmStatusWithContext sets the alarm status for a specific point
-func (c *Client) SetPointAlarmStatusWithContext(ctx context.Context, input pasapi.SetPointAlarmStatusInput) error {
+func (c *Client) SetPointAlarmStatusWithContext(ctx context.Context, input pas_api.SetPointAlarmStatusInput) error {
 	_, err := c.api.SetPointAlarmStatus(ctx, &input)
 	return err
 }
 
 // GetPointAlarmStatus gets the alarm status for a specific point
-func (c *Client) GetPointAlarmStatus(input pasapi.GetPointAlarmStatusInput) (pasapi.AlarmStatus, error) {
+func (c *Client) GetPointAlarmStatus(input pas_api.GetPointAlarmStatusInput) (pas_api.AlarmStatus, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
 	defer cancel()
 	return c.GetPointAlarmStatusWithContext(ctx, input)
 }
 
 // GetPointAlarmStatusWithContext gets the alarm status for a specific point
-func (c *Client) GetPointAlarmStatusWithContext(ctx context.Context, input pasapi.GetPointAlarmStatusInput) (status pasapi.AlarmStatus, err error) {
+func (c *Client) GetPointAlarmStatusWithContext(ctx context.Context, input pas_api.GetPointAlarmStatusInput) (status pas_api.AlarmStatus, err error) {
 	output, err := c.api.GetPointAlarmStatus(ctx, &input)
 	if output != nil {
 		status = output.AlarmStatus
@@ -68,7 +68,7 @@ func (c *Client) GetPointAlarmStatusWithContext(ctx context.Context, input pasap
 }
 
 // GetPointAlarmStatusStream gets a stream of alarm status updates for all points
-func (c *Client) GetPointAlarmStatusStream(dc chan<- pasapi.GetPointAlarmStatusStreamOutput) error {
+func (c *Client) GetPointAlarmStatusStream(dc chan<- pas_api.GetPointAlarmStatusStreamOutput) error {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 	return c.GetPointAlarmStatusStreamWithContext(ctx, dc)
@@ -76,14 +76,14 @@ func (c *Client) GetPointAlarmStatusStream(dc chan<- pasapi.GetPointAlarmStatusS
 }
 
 // GetPointAlarmStatusStreamWithContext gets a stream of alarm status updates for all points
-func (c *Client) GetPointAlarmStatusStreamWithContext(ctx context.Context, dc chan<- pasapi.GetPointAlarmStatusStreamOutput) (err error) {
-	stream, err := c.api.GetPointAlarmStatusStream(ctx, &pasapi.GetPointAlarmStatusStreamInput{})
+func (c *Client) GetPointAlarmStatusStreamWithContext(ctx context.Context, dc chan<- pas_api.GetPointAlarmStatusStreamOutput) (err error) {
+	stream, err := c.api.GetPointAlarmStatusStream(ctx, &pas_api.GetPointAlarmStatusStreamInput{})
 	if err != nil {
 		return
 	}
 
 	for {
-		var output *pasapi.GetPointAlarmStatusStreamOutput
+		var output *pas_api.GetPointAlarmStatusStreamOutput
 		output, err = stream.Recv()
 		if err == io.EOF {
 			err = nil
