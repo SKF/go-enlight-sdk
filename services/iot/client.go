@@ -4,7 +4,8 @@ import (
 	"context"
 	"time"
 
-	iot_grpcapi "github.com/SKF/proto/iot"
+	proto_common "github.com/SKF/proto/common"
+	proto_iot "github.com/SKF/proto/iot"
 	"google.golang.org/grpc"
 )
 
@@ -15,8 +16,8 @@ type IoTClient interface {
 	DeepPing() error
 	DeepPingWithContext(ctx context.Context) error
 
-	CreateTask(task iot_grpcapi.InitialTaskDescription) (string, error)
-	CreateTaskWithContext(ctx context.Context, task iot_grpcapi.InitialTaskDescription) (string, error)
+	CreateTask(task proto_iot.InitialTaskDescription) (string, error)
+	CreateTaskWithContext(ctx context.Context, task proto_iot.InitialTaskDescription) (string, error)
 
 	DeleteTask(userID, taskID string) error
 	DeleteTaskWithContext(ctx context.Context, userID, taskID string) error
@@ -24,52 +25,52 @@ type IoTClient interface {
 	SetTaskCompleted(userID, taskID string) error
 	SetTaskCompletedWithContext(ctx context.Context, userID, taskID string) error
 
-	GetAllTasks(userID string) ([]iot_grpcapi.TaskDescription, error)
-	GetAllTasksWithContext(ctx context.Context, userID string) ([]iot_grpcapi.TaskDescription, error)
+	GetAllTasks(userID string) ([]proto_iot.TaskDescription, error)
+	GetAllTasksWithContext(ctx context.Context, userID string) ([]proto_iot.TaskDescription, error)
 
-	GetUncompletedTasks(userID string) ([]iot_grpcapi.TaskDescription, error)
-	GetUncompletedTasksWithContext(ctx context.Context, userID string) ([]iot_grpcapi.TaskDescription, error)
+	GetUncompletedTasks(userID string) ([]proto_iot.TaskDescription, error)
+	GetUncompletedTasksWithContext(ctx context.Context, userID string) ([]proto_iot.TaskDescription, error)
 
-	GetUncompletedTasksByHierarchy(nodeID string) (out []iot_grpcapi.TaskDescription, err error)
-	GetUncompletedTasksByHierarchyWithContext(ctx context.Context, nodeID string) (out []iot_grpcapi.TaskDescription, err error)
+	GetUncompletedTasksByHierarchy(nodeID string) (out []proto_iot.TaskDescription, err error)
+	GetUncompletedTasksByHierarchyWithContext(ctx context.Context, nodeID string) (out []proto_iot.TaskDescription, err error)
 
-	SetTaskStatus(input iot_grpcapi.SetTaskStatusInput) (err error)
-	SetTaskStatusWithContext(ctx context.Context, input iot_grpcapi.SetTaskStatusInput) (err error)
+	SetTaskStatus(input proto_iot.SetTaskStatusInput) (err error)
+	SetTaskStatusWithContext(ctx context.Context, input proto_iot.SetTaskStatusInput) (err error)
 
-	GetTaskStream(input iot_grpcapi.GetTaskStreamInput, dc chan<- iot_grpcapi.GetTaskStreamOutput) (err error)
-	GetTaskStreamWithContext(ctx context.Context, input iot_grpcapi.GetTaskStreamInput, dc chan<- iot_grpcapi.GetTaskStreamOutput) (err error)
+	GetTaskStream(input proto_iot.GetTaskStreamInput, dc chan<- proto_iot.GetTaskStreamOutput) (err error)
+	GetTaskStreamWithContext(ctx context.Context, input proto_iot.GetTaskStreamInput, dc chan<- proto_iot.GetTaskStreamOutput) (err error)
 
-	GetTasksByStatus(input iot_grpcapi.GetTasksByStatusInput) ([]*iot_grpcapi.TaskDescription, error)
-	GetTasksByStatusWithContext(ctx context.Context, input iot_grpcapi.GetTasksByStatusInput) ([]*iot_grpcapi.TaskDescription, error)
+	GetTasksByStatus(input proto_iot.GetTasksByStatusInput) ([]*proto_iot.TaskDescription, error)
+	GetTasksByStatusWithContext(ctx context.Context, input proto_iot.GetTasksByStatusInput) ([]*proto_iot.TaskDescription, error)
 
-	GetTaskByUUID(input string) (*iot_grpcapi.TaskDescription, error)
-	GetTaskByUUIDWithContext(ctx context.Context, input string) (*iot_grpcapi.TaskDescription, error)
+	GetTaskByUUID(input string) (*proto_iot.TaskDescription, error)
+	GetTaskByUUIDWithContext(ctx context.Context, input string) (*proto_iot.TaskDescription, error)
 
-	GetTaskByLongId(input int64) (*iot_grpcapi.TaskDescription, error)
-	GetTaskByLongIdWithContext(ctx context.Context, input int64) (*iot_grpcapi.TaskDescription, error)
+	GetTaskByLongId(input int64) (*proto_iot.TaskDescription, error)
+	GetTaskByLongIdWithContext(ctx context.Context, input int64) (*proto_iot.TaskDescription, error)
 
-	IngestNodeData(input iot_grpcapi.IngestNodeDataInput) error
-	IngestNodeDataWithContext(ctx context.Context, input iot_grpcapi.IngestNodeDataInput) error
+	IngestNodeData(input proto_iot.IngestNodeDataInput) error
+	IngestNodeDataWithContext(ctx context.Context, input proto_iot.IngestNodeDataInput) error
 
-	IngestNodeDataStream(c <-chan iot_grpcapi.IngestNodeDataStreamInput) error
-	IngestNodeDataStreamWithContext(ctx context.Context, c <-chan iot_grpcapi.IngestNodeDataStreamInput) error
+	IngestNodeDataStream(c <-chan proto_iot.IngestNodeDataStreamInput) error
+	IngestNodeDataStreamWithContext(ctx context.Context, c <-chan proto_iot.IngestNodeDataStreamInput) error
 
-	GetLatestNodeData(input iot_grpcapi.GetLatestNodeDataInput) (*iot_grpcapi.NodeData, error)
-	GetLatestNodeDataWithContext(ctx context.Context, input iot_grpcapi.GetLatestNodeDataInput) (*iot_grpcapi.NodeData, error)
+	GetLatestNodeData(input proto_iot.GetLatestNodeDataInput) (*proto_iot.NodeData, error)
+	GetLatestNodeDataWithContext(ctx context.Context, input proto_iot.GetLatestNodeDataInput) (*proto_iot.NodeData, error)
 
-	GetNodeData(input iot_grpcapi.GetNodeDataInput) ([]iot_grpcapi.NodeData, error)
-	GetNodeDataWithContext(ctx context.Context, input iot_grpcapi.GetNodeDataInput) ([]iot_grpcapi.NodeData, error)
+	GetNodeData(input proto_iot.GetNodeDataInput) ([]proto_iot.NodeData, error)
+	GetNodeDataWithContext(ctx context.Context, input proto_iot.GetNodeDataInput) ([]proto_iot.NodeData, error)
 
-	GetNodeDataStream(input iot_grpcapi.GetNodeDataStreamInput, c chan<- iot_grpcapi.GetNodeDataStreamOutput) error
-	GetNodeDataStreamWithContext(ctx context.Context, input iot_grpcapi.GetNodeDataStreamInput, c chan<- iot_grpcapi.GetNodeDataStreamOutput) error
+	GetNodeDataStream(input proto_iot.GetNodeDataStreamInput, c chan<- proto_iot.GetNodeDataStreamOutput) error
+	GetNodeDataStreamWithContext(ctx context.Context, input proto_iot.GetNodeDataStreamInput, c chan<- proto_iot.GetNodeDataStreamOutput) error
 
-	GetMedia(input iot_grpcapi.GetMediaInput) (iot_grpcapi.Media, error)
-	GetMediaWithContext(ctx context.Context, input iot_grpcapi.GetMediaInput) (iot_grpcapi.Media, error)
+	GetMedia(input proto_iot.GetMediaInput) (proto_iot.Media, error)
+	GetMediaWithContext(ctx context.Context, input proto_iot.GetMediaInput) (proto_iot.Media, error)
 }
 
 type Client struct {
 	conn *grpc.ClientConn
-	api  iot_grpcapi.IoTClient
+	api  proto_iot.IoTClient
 }
 
 func CreateClient() IoTClient {
@@ -83,7 +84,7 @@ func (c *Client) Dial(host, port string, opts ...grpc.DialOption) (err error) {
 	}
 
 	c.conn = conn
-	c.api = iot_grpcapi.NewIoTClient(conn)
+	c.api = proto_iot.NewIoTClient(conn)
 	return
 }
 
@@ -98,6 +99,6 @@ func (c *Client) DeepPing() error {
 }
 
 func (c *Client) DeepPingWithContext(ctx context.Context) error {
-	_, err := c.api.DeepPing(ctx, &iot_grpcapi.PrimitiveVoid{})
+	_, err := c.api.DeepPing(ctx, &proto_common.Void{})
 	return err
 }

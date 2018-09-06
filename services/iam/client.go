@@ -5,7 +5,8 @@ import (
 	"time"
 
 	"github.com/SKF/go-eventsource/eventsource"
-	iam_grpcapi "github.com/SKF/proto/iam"
+	proto_common "github.com/SKF/proto/common"
+	proto_iam "github.com/SKF/proto/iam"
 	"google.golang.org/grpc"
 )
 
@@ -16,8 +17,8 @@ type IAMClient interface {
 	DeepPing() error
 	DeepPingWithContext(ctx context.Context) error
 
-	CheckAuthentication(token, method string) (iam_grpcapi.User, error)
-	CheckAuthenticationWithContext(ctx context.Context, token, method string) (iam_grpcapi.User, error)
+	CheckAuthentication(token, method string) (proto_iam.User, error)
+	CheckAuthenticationWithContext(ctx context.Context, token, method string) (proto_iam.User, error)
 
 	GetNodesByUser(userID string) (nodeIDs []string, err error)
 	GetNodesByUserWithContext(ctx context.Context, userID string) (nodeIDs []string, err error)
@@ -28,7 +29,7 @@ type IAMClient interface {
 
 type client struct {
 	conn *grpc.ClientConn
-	api  iam_grpcapi.IAMClient
+	api  proto_iam.IAMClient
 }
 
 func CreateClient() IAMClient {
@@ -42,7 +43,7 @@ func (c *client) Dial(host, port string, opts ...grpc.DialOption) (err error) {
 	}
 
 	c.conn = conn
-	c.api = iam_grpcapi.NewIAMClient(conn)
+	c.api = proto_iam.NewIAMClient(conn)
 	return
 }
 
@@ -57,6 +58,6 @@ func (c *client) DeepPing() error {
 }
 
 func (c *client) DeepPingWithContext(ctx context.Context) error {
-	_, err := c.api.DeepPing(ctx, &iam_grpcapi.PrimitiveVoid{})
+	_, err := c.api.DeepPing(ctx, &proto_common.Void{})
 	return err
 }

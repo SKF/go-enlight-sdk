@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"github.com/SKF/go-eventsource/eventsource"
-	iam_grpcapi "github.com/SKF/proto/iam"
+	proto_iam "github.com/SKF/proto/iam"
 	"github.com/stretchr/testify/mock"
 	"google.golang.org/grpc"
 
@@ -39,13 +39,13 @@ func (mock *client) DeepPingWithContext(ctx context.Context) error {
 	return args.Error(0)
 }
 
-func (mock *client) CheckAuthentication(token, method string) (iam_grpcapi.User, error) {
+func (mock *client) CheckAuthentication(token, method string) (proto_iam.User, error) {
 	args := mock.Called(token, method)
-	return args.Get(0).(iam_grpcapi.User), args.Error(1)
+	return args.Get(0).(proto_iam.User), args.Error(1)
 }
-func (mock *client) CheckAuthenticationWithContext(ctx context.Context, token, method string) (iam_grpcapi.User, error) {
+func (mock *client) CheckAuthenticationWithContext(ctx context.Context, token, method string) (proto_iam.User, error) {
 	args := mock.Called(ctx, token, method)
-	return args.Get(0).(iam_grpcapi.User), args.Error(1)
+	return args.Get(0).(proto_iam.User), args.Error(1)
 }
 
 func (mock *client) GetNodesByUser(userID string) (nodeIDs []string, err error) {

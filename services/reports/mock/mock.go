@@ -3,7 +3,7 @@ package mock
 import (
 	"context"
 
-	reports_grpcapi "github.com/SKF/proto/reports"
+	proto_reports "github.com/SKF/proto/reports"
 	"github.com/stretchr/testify/mock"
 	"google.golang.org/grpc"
 
@@ -29,56 +29,56 @@ func (mock *client) Close() {
 	return
 }
 
-func (mock *client) DeepPing() (output *reports_grpcapi.DeepPingOutput, err error) {
+func (mock *client) DeepPing() (output *proto_reports.DeepPingOutput, err error) {
 	args := mock.Called()
-	return args.Get(0).(*reports_grpcapi.DeepPingOutput), args.Error(1)
+	return args.Get(0).(*proto_reports.DeepPingOutput), args.Error(1)
 }
-func (mock *client) DeepPingWithContext(ctx context.Context) (output *reports_grpcapi.DeepPingOutput, err error) {
+func (mock *client) DeepPingWithContext(ctx context.Context) (output *proto_reports.DeepPingOutput, err error) {
 	args := mock.Called(ctx)
-	return args.Get(0).(*reports_grpcapi.DeepPingOutput), args.Error(1)
+	return args.Get(0).(*proto_reports.DeepPingOutput), args.Error(1)
 }
 
-func (mock *client) GetFunctionalLocationHealth(input reports_grpcapi.GetFunctionalLocationHealthInput) (output *reports_grpcapi.GetFunctionalLocationHealthOutput, err error) {
+func (mock *client) GetFunctionalLocationHealth(input proto_reports.GetFunctionalLocationHealthInput) (output *proto_reports.GetFunctionalLocationHealthOutput, err error) {
 	args := mock.Called(input)
-	return args.Get(0).(*reports_grpcapi.GetFunctionalLocationHealthOutput), args.Error(1)
+	return args.Get(0).(*proto_reports.GetFunctionalLocationHealthOutput), args.Error(1)
 }
-func (mock *client) GetFunctionalLocationHealthWithContext(ctx context.Context, input reports_grpcapi.GetFunctionalLocationHealthInput) (output *reports_grpcapi.GetFunctionalLocationHealthOutput, err error) {
+func (mock *client) GetFunctionalLocationHealthWithContext(ctx context.Context, input proto_reports.GetFunctionalLocationHealthInput) (output *proto_reports.GetFunctionalLocationHealthOutput, err error) {
 	args := mock.Called(ctx, input)
-	return args.Get(0).(*reports_grpcapi.GetFunctionalLocationHealthOutput), args.Error(1)
+	return args.Get(0).(*proto_reports.GetFunctionalLocationHealthOutput), args.Error(1)
 }
 
-func (mock *client) GetAssetHealth(input reports_grpcapi.GetAssetHealthInput) (output *reports_grpcapi.GetAssetHealthOutput, err error) {
+func (mock *client) GetAssetHealth(input proto_reports.GetAssetHealthInput) (output *proto_reports.GetAssetHealthOutput, err error) {
 	args := mock.Called(input)
-	return args.Get(0).(*reports_grpcapi.GetAssetHealthOutput), args.Error(1)
+	return args.Get(0).(*proto_reports.GetAssetHealthOutput), args.Error(1)
 }
-func (mock *client) GetAssetHealthWithContext(ctx context.Context, input reports_grpcapi.GetAssetHealthInput) (output *reports_grpcapi.GetAssetHealthOutput, err error) {
+func (mock *client) GetAssetHealthWithContext(ctx context.Context, input proto_reports.GetAssetHealthInput) (output *proto_reports.GetAssetHealthOutput, err error) {
 	args := mock.Called(ctx, input)
-	return args.Get(0).(*reports_grpcapi.GetAssetHealthOutput), args.Error(1)
+	return args.Get(0).(*proto_reports.GetAssetHealthOutput), args.Error(1)
 }
 
-func (mock *client) GetComplianceLog(input reports_grpcapi.GetComplianceLogInput) (output *reports_grpcapi.GetComplianceLogOutput, err error) {
+func (mock *client) GetComplianceLog(input proto_reports.GetComplianceLogInput) (output *proto_reports.GetComplianceLogOutput, err error) {
 	args := mock.Called(input)
-	return args.Get(0).(*reports_grpcapi.GetComplianceLogOutput), args.Error(1)
+	return args.Get(0).(*proto_reports.GetComplianceLogOutput), args.Error(1)
 }
-func (mock *client) GetComplianceLogWithContext(ctx context.Context, input reports_grpcapi.GetComplianceLogInput) (output *reports_grpcapi.GetComplianceLogOutput, err error) {
+func (mock *client) GetComplianceLogWithContext(ctx context.Context, input proto_reports.GetComplianceLogInput) (output *proto_reports.GetComplianceLogOutput, err error) {
 	args := mock.Called(ctx, input)
-	return args.Get(0).(*reports_grpcapi.GetComplianceLogOutput), args.Error(1)
+	return args.Get(0).(*proto_reports.GetComplianceLogOutput), args.Error(1)
 }
 
-func (mock *client) GetReports(input reports_grpcapi.GetReportsInput) (output *reports_grpcapi.GetReportsOutput, err error) {
+func (mock *client) GetReports(input proto_reports.GetReportsInput) (output *proto_reports.GetReportsOutput, err error) {
 	args := mock.Called(input)
-	return args.Get(0).(*reports_grpcapi.GetReportsOutput), args.Error(1)
+	return args.Get(0).(*proto_reports.GetReportsOutput), args.Error(1)
 }
-func (mock *client) GetReportsWithContext(ctx context.Context, input reports_grpcapi.GetReportsInput) (output *reports_grpcapi.GetReportsOutput, err error) {
+func (mock *client) GetReportsWithContext(ctx context.Context, input proto_reports.GetReportsInput) (output *proto_reports.GetReportsOutput, err error) {
 	args := mock.Called(ctx, input)
-	return args.Get(0).(*reports_grpcapi.GetReportsOutput), args.Error(1)
+	return args.Get(0).(*proto_reports.GetReportsOutput), args.Error(1)
 }
 
-func (mock *client) GetComplianceSummary(input reports_grpcapi.GetComplianceSummaryInput) (output *reports_grpcapi.GetComplianceSummaryOutput, err error) {
+func (mock *client) GetComplianceSummary(input proto_reports.GetComplianceSummaryInput) (output *proto_reports.GetComplianceSummaryOutput, err error) {
 	args := mock.Called(input)
-	return args.Get(0).(*reports_grpcapi.GetComplianceSummaryOutput), args.Error(1)
+	return args.Get(0).(*proto_reports.GetComplianceSummaryOutput), args.Error(1)
 }
-func (mock *client) GetComplianceSummaryWithContext(ctx context.Context, input reports_grpcapi.GetComplianceSummaryInput) (output *reports_grpcapi.GetComplianceSummaryOutput, err error) {
+func (mock *client) GetComplianceSummaryWithContext(ctx context.Context, input proto_reports.GetComplianceSummaryInput) (output *proto_reports.GetComplianceSummaryOutput, err error) {
 	args := mock.Called(ctx, input)
-	return args.Get(0).(*reports_grpcapi.GetComplianceSummaryOutput), args.Error(1)
+	return args.Get(0).(*proto_reports.GetComplianceSummaryOutput), args.Error(1)
 }

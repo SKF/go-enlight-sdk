@@ -6,10 +6,10 @@ import (
 	"github.com/SKF/go-utility/env"
 	"github.com/SKF/go-utility/log"
 	"github.com/SKF/go-utility/uuid"
+	proto_iot "github.com/SKF/proto/iot"
 
 	"github.com/SKF/go-enlight-sdk/grpc"
 	"github.com/SKF/go-enlight-sdk/services/iot"
-	api "github.com/SKF/proto/iot"
 )
 
 func main() {
@@ -92,12 +92,12 @@ func main() {
 	}
 
 	log.Info("Create Task")
-	createTaskInput := api.InitialTaskDescription{
+	createTaskInput := proto_iot.InitialTaskDescription{
 		UserId:           userID,
 		TaskName:         "MyTaskName",
 		HierarchyId:      uuid.New().String(),
 		DueDateTimestamp: time.Now().Unix() * 1000,
-		FunctionalLocationIds: &api.FunctionalLocationIds{
+		FunctionalLocationIds: &proto_iot.FunctionalLocationIds{
 			IdArr: []string{
 				uuid.New().String(),
 				uuid.New().String(),
@@ -112,8 +112,8 @@ func main() {
 	}
 
 	log.Info("Set Task Status")
-	setTaskStatusInput := api.SetTaskStatusInput{
-		UserId: userID, TaskId: taskID, Status: api.TaskStatus_RECEIVED,
+	setTaskStatusInput := proto_iot.SetTaskStatusInput{
+		UserId: userID, TaskId: taskID, Status: proto_iot.TaskStatus_RECEIVED,
 	}
 	if err = client.SetTaskStatus(setTaskStatusInput); err != nil {
 		log.

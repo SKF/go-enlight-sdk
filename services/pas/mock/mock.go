@@ -4,7 +4,7 @@ package mock
 import (
 	"context"
 
-	pas_api "github.com/SKF/proto/pas"
+	proto_pas "github.com/SKF/proto/pas"
 	"github.com/stretchr/testify/mock"
 	"google.golang.org/grpc"
 
@@ -40,47 +40,47 @@ func (mock *client) DeepPingWithContext(ctx context.Context) error {
 	return args.Error(0)
 }
 
-func (mock *client) SetPointAlarmThreshold(input pas_api.SetPointAlarmThresholdInput) error {
+func (mock *client) SetPointAlarmThreshold(input proto_pas.SetPointAlarmThresholdInput) error {
 	args := mock.Called(input)
 	return args.Error(0)
 }
-func (mock *client) SetPointAlarmThresholdWithContext(ctx context.Context, input pas_api.SetPointAlarmThresholdInput) error {
+func (mock *client) SetPointAlarmThresholdWithContext(ctx context.Context, input proto_pas.SetPointAlarmThresholdInput) error {
 	args := mock.Called(ctx, input)
 	return args.Error(0)
 }
 
-func (mock *client) GetPointAlarmThreshold(nodeID string) (pas_api.GetPointAlarmThresholdOutput, error) {
+func (mock *client) GetPointAlarmThreshold(nodeID string) (proto_pas.GetPointAlarmThresholdOutput, error) {
 	args := mock.Called(nodeID)
-	return args.Get(0).(pas_api.GetPointAlarmThresholdOutput), args.Error(1)
+	return args.Get(0).(proto_pas.GetPointAlarmThresholdOutput), args.Error(1)
 }
-func (mock *client) GetPointAlarmThresholdWithContext(ctx context.Context, nodeID string) (pas_api.GetPointAlarmThresholdOutput, error) {
+func (mock *client) GetPointAlarmThresholdWithContext(ctx context.Context, nodeID string) (proto_pas.GetPointAlarmThresholdOutput, error) {
 	args := mock.Called(ctx, nodeID)
-	return args.Get(0).(pas_api.GetPointAlarmThresholdOutput), args.Error(1)
+	return args.Get(0).(proto_pas.GetPointAlarmThresholdOutput), args.Error(1)
 }
 
-func (mock *client) SetPointAlarmStatus(input pas_api.SetPointAlarmStatusInput) error {
+func (mock *client) SetPointAlarmStatus(input proto_pas.SetPointAlarmStatusInput) error {
 	args := mock.Called(input)
 	return args.Error(0)
 }
-func (mock *client) SetPointAlarmStatusWithContext(ctx context.Context, input pas_api.SetPointAlarmStatusInput) error {
+func (mock *client) SetPointAlarmStatusWithContext(ctx context.Context, input proto_pas.SetPointAlarmStatusInput) error {
 	args := mock.Called(ctx, input)
 	return args.Error(0)
 }
 
-func (mock *client) GetPointAlarmStatus(input pas_api.GetPointAlarmStatusInput) (pas_api.AlarmStatus, error) {
+func (mock *client) GetPointAlarmStatus(input proto_pas.GetPointAlarmStatusInput) (proto_pas.AlarmStatus, error) {
 	args := mock.Called(input)
-	return args.Get(0).(pas_api.AlarmStatus), args.Error(1)
+	return args.Get(0).(proto_pas.AlarmStatus), args.Error(1)
 }
-func (mock *client) GetPointAlarmStatusWithContext(ctx context.Context, input pas_api.GetPointAlarmStatusInput) (pas_api.AlarmStatus, error) {
+func (mock *client) GetPointAlarmStatusWithContext(ctx context.Context, input proto_pas.GetPointAlarmStatusInput) (proto_pas.AlarmStatus, error) {
 	args := mock.Called(ctx, input)
-	return args.Get(0).(pas_api.AlarmStatus), args.Error(1)
+	return args.Get(0).(proto_pas.AlarmStatus), args.Error(1)
 }
 
-func (mock *client) GetPointAlarmStatusStream(dc chan<- pas_api.GetPointAlarmStatusStreamOutput) error {
+func (mock *client) GetPointAlarmStatusStream(dc chan<- proto_pas.GetPointAlarmStatusStreamOutput) error {
 	args := mock.Called(dc)
 	return args.Error(0)
 }
-func (mock *client) GetPointAlarmStatusStreamWithContext(ctx context.Context, dc chan<- pas_api.GetPointAlarmStatusStreamOutput) error {
+func (mock *client) GetPointAlarmStatusStreamWithContext(ctx context.Context, dc chan<- proto_pas.GetPointAlarmStatusStreamOutput) error {
 	args := mock.Called(ctx, dc)
 	return args.Error(0)
 }

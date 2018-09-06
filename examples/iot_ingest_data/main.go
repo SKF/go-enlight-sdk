@@ -6,10 +6,10 @@ import (
 	"github.com/SKF/go-utility/env"
 	"github.com/SKF/go-utility/log"
 	"github.com/SKF/go-utility/uuid"
+	proto_iot "github.com/SKF/proto/iot"
 
 	"github.com/SKF/go-enlight-sdk/grpc"
 	"github.com/SKF/go-enlight-sdk/services/iot"
-	api "github.com/SKF/proto/iot"
 )
 
 func main() {
@@ -67,7 +67,7 @@ func main() {
 	log.Info("IngestNodeData")
 	for _, nodeData := range createExampleData() {
 		nd := *nodeData
-		input := api.IngestNodeDataInput{NodeId: nodeID1, NodeData: &nd}
+		input := proto_iot.IngestNodeDataInput{NodeId: nodeID1, NodeData: &nd}
 		err := client.IngestNodeData(input)
 		if err != nil {
 			log.
@@ -80,7 +80,7 @@ func main() {
 	log.Info("IngestNodeDataStream")
 
 	doneChannel := make(chan bool)
-	dataChannel := make(chan api.IngestNodeDataStreamInput)
+	dataChannel := make(chan proto_iot.IngestNodeDataStreamInput)
 	go func() {
 		err := client.IngestNodeDataStream(dataChannel)
 		if err != nil {
@@ -90,22 +90,22 @@ func main() {
 		}
 		doneChannel <- true
 	}()
-	dataChannel <- api.IngestNodeDataStreamInput{
+	dataChannel <- proto_iot.IngestNodeDataStreamInput{
 		NodeId:       nodeID1,
 		NodeDataList: createExampleData(),
 	}
-	dataChannel <- api.IngestNodeDataStreamInput{
+	dataChannel <- proto_iot.IngestNodeDataStreamInput{
 		NodeId:       nodeID2,
 		NodeDataList: createExampleData(),
 	}
 	close(dataChannel)
 	<-doneChannel
 
-	var input api.GetNodeDataInput
-	var output []api.NodeData
+	var input proto_iot.GetNodeDataInput
+	var output []proto_iot.NodeData
 
 	log.Info("GetNodeData_All")
-	input = api.GetNodeDataInput{
+	input = proto_iot.GetNodeDataInput{
 		NodeId: nodeID1,
 	}
 	output, err = client.GetNodeData(input)
@@ -116,9 +116,9 @@ func main() {
 		Info("client.GetNodeData")
 
 	log.Info("GetNodeData_DataPoint")
-	input = api.GetNodeDataInput{
+	input = proto_iot.GetNodeDataInput{
 		NodeId:      nodeID1,
-		ContentType: api.NodeDataContentType_DATA_POINT,
+		ContentType: proto_iot.NodeDataContentType_DATA_POINT,
 	}
 	output, err = client.GetNodeData(input)
 	log.
@@ -128,50 +128,50 @@ func main() {
 		Info("client.GetNodeData")
 }
 
-func createExampleData() (out []*api.NodeData) {
-	out = append(out, &api.NodeData{
+func createExampleData() (out []*proto_iot.NodeData) {
+	out = append(out, &proto_iot.NodeData{
 		CreatedAt:   time.Now().UnixNano(),
-		ContentType: api.NodeDataContentType_DATA_POINT,
-		DataPoint: &api.DataPoint{
-			Coordinate: &api.Coordinate{X: 1.0, Y: 2.0},
+		ContentType: proto_iot.NodeDataContentType_DATA_POINT,
+		DataPoint: &proto_iot.DataPoint{
+			Coordinate: &proto_iot.Coordinate{X: 1.0, Y: 2.0},
 			XUnit:      "<dp-xunit>",
 			YUnit:      "<dp-yunit>",
 		},
 	})
 
-	out = append(out, &api.NodeData{
+	out = append(out, &proto_iot.NodeData{
 		CreatedAt:   time.Now().UnixNano(),
-		ContentType: api.NodeDataContentType_SPECTRUM,
-		Spectrum: &api.Spectrum{
+		ContentType: proto_iot.NodeDataContentType_SPECTRUM,
+		Spectrum: &proto_iot.Spectrum{
 			XUnit: "<s-xunit>",
 			YUnit: "<s-yunit>",
 		},
 	})
 
-	out = append(out, &api.NodeData{
+	out = append(out, &proto_iot.NodeData{
 		CreatedAt:   time.Now().UnixNano(),
-		ContentType: api.NodeDataContentType_TIME_SERIES,
-		TimeSeries: &api.TimeSeries{
+		ContentType: proto_iot.NodeDataContentType_TIME_SERIES,
+		TimeSeries: &proto_iot.TimeSeries{
 			XUnit: "<ts-xunit>",
 			YUnit: "<ts-yunit>",
 		},
 	})
 
-	out = append(out, &api.NodeData{
+	out = append(out, &proto_iot.NodeData{
 		CreatedAt:   time.Now().UnixNano(),
-		ContentType: api.NodeDataContentType_NOTE,
+		ContentType: proto_iot.NodeDataContentType_NOTE,
 		Note:        "<note>",
 	})
 
-	out = append(out, &api.NodeData{
+	out = append(out, &proto_iot.NodeData{
 		CreatedAt:   time.Now().UnixNano(),
-		ContentType: api.NodeDataContentType_MEDIA,
+		ContentType: proto_iot.NodeDataContentType_MEDIA,
 		Media:       []byte("<media>"),
 	})
 
-	out = append(out, &api.NodeData{
+	out = append(out, &proto_iot.NodeData{
 		CreatedAt:       time.Now().UnixNano(),
-		ContentType:     api.NodeDataContentType_QUESTION_ANSWERS,
+		ContentType:     proto_iot.NodeDataContentType_QUESTION_ANSWERS,
 		QuestionAnswers: []string{"<answer>"},
 	})
 

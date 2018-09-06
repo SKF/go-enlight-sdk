@@ -3,7 +3,7 @@ package mock
 import (
 	"context"
 
-	iot_grpcapi "github.com/SKF/proto/iot"
+	proto_iot "github.com/SKF/proto/iot"
 	"github.com/stretchr/testify/mock"
 	"google.golang.org/grpc"
 
@@ -37,11 +37,11 @@ func (mock *client) DeepPingWithContext(ctx context.Context) error {
 	return args.Error(0)
 }
 
-func (mock *client) CreateTask(task iot_grpcapi.InitialTaskDescription) (string, error) {
+func (mock *client) CreateTask(task proto_iot.InitialTaskDescription) (string, error) {
 	args := mock.Called(task)
 	return args.String(0), args.Error(1)
 }
-func (mock *client) CreateTaskWithContext(ctx context.Context, task iot_grpcapi.InitialTaskDescription) (string, error) {
+func (mock *client) CreateTaskWithContext(ctx context.Context, task proto_iot.InitialTaskDescription) (string, error) {
 	args := mock.Called(ctx, task)
 	return args.String(0), args.Error(1)
 }
@@ -64,128 +64,128 @@ func (mock *client) SetTaskCompletedWithContext(ctx context.Context, userID, tas
 	return args.Error(0)
 }
 
-func (mock *client) GetAllTasks(userID string) ([]iot_grpcapi.TaskDescription, error) {
+func (mock *client) GetAllTasks(userID string) ([]proto_iot.TaskDescription, error) {
 	args := mock.Called(userID)
-	return args.Get(0).([]iot_grpcapi.TaskDescription), args.Error(1)
+	return args.Get(0).([]proto_iot.TaskDescription), args.Error(1)
 }
-func (mock *client) GetAllTasksWithContext(ctx context.Context, userID string) ([]iot_grpcapi.TaskDescription, error) {
+func (mock *client) GetAllTasksWithContext(ctx context.Context, userID string) ([]proto_iot.TaskDescription, error) {
 	args := mock.Called(ctx, userID)
-	return args.Get(0).([]iot_grpcapi.TaskDescription), args.Error(1)
+	return args.Get(0).([]proto_iot.TaskDescription), args.Error(1)
 }
 
-func (mock *client) GetUncompletedTasks(userID string) ([]iot_grpcapi.TaskDescription, error) {
+func (mock *client) GetUncompletedTasks(userID string) ([]proto_iot.TaskDescription, error) {
 	args := mock.Called(userID)
-	return args.Get(0).([]iot_grpcapi.TaskDescription), args.Error(1)
+	return args.Get(0).([]proto_iot.TaskDescription), args.Error(1)
 }
-func (mock *client) GetUncompletedTasksWithContext(ctx context.Context, userID string) ([]iot_grpcapi.TaskDescription, error) {
+func (mock *client) GetUncompletedTasksWithContext(ctx context.Context, userID string) ([]proto_iot.TaskDescription, error) {
 	args := mock.Called(ctx, userID)
-	return args.Get(0).([]iot_grpcapi.TaskDescription), args.Error(1)
+	return args.Get(0).([]proto_iot.TaskDescription), args.Error(1)
 }
 
-func (mock *client) GetUncompletedTasksByHierarchy(nodeID string) ([]iot_grpcapi.TaskDescription, error) {
+func (mock *client) GetUncompletedTasksByHierarchy(nodeID string) ([]proto_iot.TaskDescription, error) {
 	args := mock.Called(nodeID)
-	return args.Get(0).([]iot_grpcapi.TaskDescription), args.Error(1)
+	return args.Get(0).([]proto_iot.TaskDescription), args.Error(1)
 }
-func (mock *client) GetUncompletedTasksByHierarchyWithContext(ctx context.Context, nodeID string) ([]iot_grpcapi.TaskDescription, error) {
+func (mock *client) GetUncompletedTasksByHierarchyWithContext(ctx context.Context, nodeID string) ([]proto_iot.TaskDescription, error) {
 	args := mock.Called(ctx, nodeID)
-	return args.Get(0).([]iot_grpcapi.TaskDescription), args.Error(1)
+	return args.Get(0).([]proto_iot.TaskDescription), args.Error(1)
 }
 
-func (mock *client) SetTaskStatus(input iot_grpcapi.SetTaskStatusInput) error {
+func (mock *client) SetTaskStatus(input proto_iot.SetTaskStatusInput) error {
 	args := mock.Called(input)
 	return args.Error(0)
 }
-func (mock *client) SetTaskStatusWithContext(ctx context.Context, input iot_grpcapi.SetTaskStatusInput) error {
+func (mock *client) SetTaskStatusWithContext(ctx context.Context, input proto_iot.SetTaskStatusInput) error {
 	args := mock.Called(ctx, input)
 	return args.Error(0)
 }
 
-func (mock *client) GetTaskStream(input iot_grpcapi.GetTaskStreamInput, dc chan<- iot_grpcapi.GetTaskStreamOutput) error {
+func (mock *client) GetTaskStream(input proto_iot.GetTaskStreamInput, dc chan<- proto_iot.GetTaskStreamOutput) error {
 	args := mock.Called(input, dc)
 	return args.Error(0)
 }
-func (mock *client) GetTaskStreamWithContext(ctx context.Context, input iot_grpcapi.GetTaskStreamInput, dc chan<- iot_grpcapi.GetTaskStreamOutput) error {
+func (mock *client) GetTaskStreamWithContext(ctx context.Context, input proto_iot.GetTaskStreamInput, dc chan<- proto_iot.GetTaskStreamOutput) error {
 	args := mock.Called(ctx, input, dc)
 	return args.Error(0)
 }
 
-func (mock *client) IngestNodeData(input iot_grpcapi.IngestNodeDataInput) error {
+func (mock *client) IngestNodeData(input proto_iot.IngestNodeDataInput) error {
 	args := mock.Called(input)
 	return args.Error(0)
 }
-func (mock *client) IngestNodeDataWithContext(ctx context.Context, input iot_grpcapi.IngestNodeDataInput) error {
+func (mock *client) IngestNodeDataWithContext(ctx context.Context, input proto_iot.IngestNodeDataInput) error {
 	args := mock.Called(ctx, input)
 	return args.Error(0)
 }
 
-func (mock *client) IngestNodeDataStream(c <-chan iot_grpcapi.IngestNodeDataStreamInput) error {
+func (mock *client) IngestNodeDataStream(c <-chan proto_iot.IngestNodeDataStreamInput) error {
 	args := mock.Called(c)
 	return args.Error(0)
 }
-func (mock *client) IngestNodeDataStreamWithContext(ctx context.Context, c <-chan iot_grpcapi.IngestNodeDataStreamInput) error {
+func (mock *client) IngestNodeDataStreamWithContext(ctx context.Context, c <-chan proto_iot.IngestNodeDataStreamInput) error {
 	args := mock.Called(ctx, c)
 	return args.Error(0)
 }
 
-func (mock *client) GetLatestNodeData(input iot_grpcapi.GetLatestNodeDataInput) (*iot_grpcapi.NodeData, error) {
+func (mock *client) GetLatestNodeData(input proto_iot.GetLatestNodeDataInput) (*proto_iot.NodeData, error) {
 	args := mock.Called(input)
-	return args.Get(0).(*iot_grpcapi.NodeData), args.Error(1)
+	return args.Get(0).(*proto_iot.NodeData), args.Error(1)
 }
 
-func (mock *client) GetLatestNodeDataWithContext(ctx context.Context, input iot_grpcapi.GetLatestNodeDataInput) (*iot_grpcapi.NodeData, error) {
+func (mock *client) GetLatestNodeDataWithContext(ctx context.Context, input proto_iot.GetLatestNodeDataInput) (*proto_iot.NodeData, error) {
 	args := mock.Called(ctx, input)
-	return args.Get(0).(*iot_grpcapi.NodeData), args.Error(1)
+	return args.Get(0).(*proto_iot.NodeData), args.Error(1)
 }
 
-func (mock *client) GetNodeData(input iot_grpcapi.GetNodeDataInput) ([]iot_grpcapi.NodeData, error) {
+func (mock *client) GetNodeData(input proto_iot.GetNodeDataInput) ([]proto_iot.NodeData, error) {
 	args := mock.Called(input)
-	return args.Get(0).([]iot_grpcapi.NodeData), args.Error(1)
+	return args.Get(0).([]proto_iot.NodeData), args.Error(1)
 }
-func (mock *client) GetNodeDataWithContext(ctx context.Context, input iot_grpcapi.GetNodeDataInput) ([]iot_grpcapi.NodeData, error) {
+func (mock *client) GetNodeDataWithContext(ctx context.Context, input proto_iot.GetNodeDataInput) ([]proto_iot.NodeData, error) {
 	args := mock.Called(ctx, input)
-	return args.Get(0).([]iot_grpcapi.NodeData), args.Error(1)
+	return args.Get(0).([]proto_iot.NodeData), args.Error(1)
 }
 
-func (mock *client) GetNodeDataStream(input iot_grpcapi.GetNodeDataStreamInput, c chan<- iot_grpcapi.GetNodeDataStreamOutput) error {
+func (mock *client) GetNodeDataStream(input proto_iot.GetNodeDataStreamInput, c chan<- proto_iot.GetNodeDataStreamOutput) error {
 	args := mock.Called(input, c)
 	return args.Error(0)
 }
-func (mock *client) GetNodeDataStreamWithContext(ctx context.Context, input iot_grpcapi.GetNodeDataStreamInput, c chan<- iot_grpcapi.GetNodeDataStreamOutput) error {
+func (mock *client) GetNodeDataStreamWithContext(ctx context.Context, input proto_iot.GetNodeDataStreamInput, c chan<- proto_iot.GetNodeDataStreamOutput) error {
 	args := mock.Called(ctx, input, c)
 	return args.Error(0)
 }
 
-func (mock *client) GetMedia(input iot_grpcapi.GetMediaInput) (iot_grpcapi.Media, error) {
+func (mock *client) GetMedia(input proto_iot.GetMediaInput) (proto_iot.Media, error) {
 	args := mock.Called(input)
-	return args.Get(0).(iot_grpcapi.Media), args.Error(1)
+	return args.Get(0).(proto_iot.Media), args.Error(1)
 }
-func (mock *client) GetMediaWithContext(ctx context.Context, input iot_grpcapi.GetMediaInput) (media iot_grpcapi.Media, err error) {
+func (mock *client) GetMediaWithContext(ctx context.Context, input proto_iot.GetMediaInput) (media proto_iot.Media, err error) {
 	args := mock.Called(ctx, input)
-	return args.Get(0).(iot_grpcapi.Media), args.Error(1)
+	return args.Get(0).(proto_iot.Media), args.Error(1)
 }
 
-func (mock *client) GetTasksByStatus(input iot_grpcapi.GetTasksByStatusInput) ([]*iot_grpcapi.TaskDescription, error) {
+func (mock *client) GetTasksByStatus(input proto_iot.GetTasksByStatusInput) ([]*proto_iot.TaskDescription, error) {
 	args := mock.Called(input)
-	return args.Get(0).([]*iot_grpcapi.TaskDescription), args.Error(1)
+	return args.Get(0).([]*proto_iot.TaskDescription), args.Error(1)
 }
-func (mock *client) GetTasksByStatusWithContext(ctx context.Context, input iot_grpcapi.GetTasksByStatusInput) ([]*iot_grpcapi.TaskDescription, error) {
+func (mock *client) GetTasksByStatusWithContext(ctx context.Context, input proto_iot.GetTasksByStatusInput) ([]*proto_iot.TaskDescription, error) {
 	args := mock.Called(ctx, input)
-	return args.Get(0).([]*iot_grpcapi.TaskDescription), args.Error(1)
+	return args.Get(0).([]*proto_iot.TaskDescription), args.Error(1)
 }
 
-func (mock *client) GetTaskByUUID(input string) (output *iot_grpcapi.TaskDescription, err error) {
+func (mock *client) GetTaskByUUID(input string) (output *proto_iot.TaskDescription, err error) {
 	args := mock.Called(input)
-	return args.Get(0).(*iot_grpcapi.TaskDescription), args.Error(1)
+	return args.Get(0).(*proto_iot.TaskDescription), args.Error(1)
 }
-func (mock *client) GetTaskByUUIDWithContext(ctx context.Context, input string) (output *iot_grpcapi.TaskDescription, err error) {
+func (mock *client) GetTaskByUUIDWithContext(ctx context.Context, input string) (output *proto_iot.TaskDescription, err error) {
 	args := mock.Called(ctx, input)
-	return args.Get(0).(*iot_grpcapi.TaskDescription), args.Error(1)
+	return args.Get(0).(*proto_iot.TaskDescription), args.Error(1)
 }
-func (mock *client) GetTaskByLongId(input int64) (output *iot_grpcapi.TaskDescription, err error) {
+func (mock *client) GetTaskByLongId(input int64) (output *proto_iot.TaskDescription, err error) {
 	args := mock.Called(input)
-	return args.Get(0).(*iot_grpcapi.TaskDescription), args.Error(1)
+	return args.Get(0).(*proto_iot.TaskDescription), args.Error(1)
 }
-func (mock *client) GetTaskByLongIdWithContext(ctx context.Context, input int64) (output *iot_grpcapi.TaskDescription, err error) {
+func (mock *client) GetTaskByLongIdWithContext(ctx context.Context, input int64) (output *proto_iot.TaskDescription, err error) {
 	args := mock.Called(ctx, input)
-	return args.Get(0).(*iot_grpcapi.TaskDescription), args.Error(1)
+	return args.Get(0).(*proto_iot.TaskDescription), args.Error(1)
 }

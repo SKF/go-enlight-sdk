@@ -4,7 +4,8 @@ import (
 	"context"
 	"time"
 
-	reports_grpcapi "github.com/SKF/proto/reports"
+	proto_common "github.com/SKF/proto/common"
+	proto_reports "github.com/SKF/proto/reports"
 	"google.golang.org/grpc"
 )
 
@@ -12,27 +13,27 @@ type ReportsClient interface {
 	Dial(host, port string, opts ...grpc.DialOption) error
 	Close()
 
-	DeepPing() (output *reports_grpcapi.DeepPingOutput, err error)
-	DeepPingWithContext(ctx context.Context) (output *reports_grpcapi.DeepPingOutput, err error)
+	DeepPing() (output *proto_reports.DeepPingOutput, err error)
+	DeepPingWithContext(ctx context.Context) (output *proto_reports.DeepPingOutput, err error)
 
-	GetFunctionalLocationHealth(input reports_grpcapi.GetFunctionalLocationHealthInput) (output *reports_grpcapi.GetFunctionalLocationHealthOutput, err error)
-	GetFunctionalLocationHealthWithContext(ctx context.Context, input reports_grpcapi.GetFunctionalLocationHealthInput) (output *reports_grpcapi.GetFunctionalLocationHealthOutput, err error)
+	GetFunctionalLocationHealth(input proto_reports.GetFunctionalLocationHealthInput) (output *proto_reports.GetFunctionalLocationHealthOutput, err error)
+	GetFunctionalLocationHealthWithContext(ctx context.Context, input proto_reports.GetFunctionalLocationHealthInput) (output *proto_reports.GetFunctionalLocationHealthOutput, err error)
 
-	GetAssetHealth(input reports_grpcapi.GetAssetHealthInput) (output *reports_grpcapi.GetAssetHealthOutput, err error)
-	GetAssetHealthWithContext(ctx context.Context, input reports_grpcapi.GetAssetHealthInput) (output *reports_grpcapi.GetAssetHealthOutput, err error)
+	GetAssetHealth(input proto_reports.GetAssetHealthInput) (output *proto_reports.GetAssetHealthOutput, err error)
+	GetAssetHealthWithContext(ctx context.Context, input proto_reports.GetAssetHealthInput) (output *proto_reports.GetAssetHealthOutput, err error)
 
-	GetComplianceLog(input reports_grpcapi.GetComplianceLogInput) (output *reports_grpcapi.GetComplianceLogOutput, err error)
-	GetComplianceLogWithContext(ctx context.Context, input reports_grpcapi.GetComplianceLogInput) (output *reports_grpcapi.GetComplianceLogOutput, err error)
+	GetComplianceLog(input proto_reports.GetComplianceLogInput) (output *proto_reports.GetComplianceLogOutput, err error)
+	GetComplianceLogWithContext(ctx context.Context, input proto_reports.GetComplianceLogInput) (output *proto_reports.GetComplianceLogOutput, err error)
 
-	GetReports(input reports_grpcapi.GetReportsInput) (output *reports_grpcapi.GetReportsOutput, err error)
-	GetReportsWithContext(ctx context.Context, input reports_grpcapi.GetReportsInput) (output *reports_grpcapi.GetReportsOutput, err error)
+	GetReports(input proto_reports.GetReportsInput) (output *proto_reports.GetReportsOutput, err error)
+	GetReportsWithContext(ctx context.Context, input proto_reports.GetReportsInput) (output *proto_reports.GetReportsOutput, err error)
 
-	GetComplianceSummary(input reports_grpcapi.GetComplianceSummaryInput) (output *reports_grpcapi.GetComplianceSummaryOutput, err error)
-	GetComplianceSummaryWithContext(ctx context.Context, input reports_grpcapi.GetComplianceSummaryInput) (output *reports_grpcapi.GetComplianceSummaryOutput, err error)
+	GetComplianceSummary(input proto_reports.GetComplianceSummaryInput) (output *proto_reports.GetComplianceSummaryOutput, err error)
+	GetComplianceSummaryWithContext(ctx context.Context, input proto_reports.GetComplianceSummaryInput) (output *proto_reports.GetComplianceSummaryOutput, err error)
 }
 
 type client struct {
-	api  reports_grpcapi.ReportsClient
+	api  proto_reports.ReportsClient
 	conn *grpc.ClientConn
 }
 
@@ -51,15 +52,15 @@ func (c *client) Dial(host, port string, opts ...grpc.DialOption) (err error) {
 	}
 
 	c.conn = conn
-	c.api = reports_grpcapi.NewReportsClient(conn)
+	c.api = proto_reports.NewReportsClient(conn)
 	return
 }
 
-func (c *client) DeepPing() (output *reports_grpcapi.DeepPingOutput, err error) {
+func (c *client) DeepPing() (output *proto_reports.DeepPingOutput, err error) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
 	defer cancel()
 	return c.DeepPingWithContext(ctx)
 }
-func (c *client) DeepPingWithContext(ctx context.Context) (output *reports_grpcapi.DeepPingOutput, err error) {
-	return c.api.DeepPing(ctx, &reports_grpcapi.PrimitiveVoid{})
+func (c *client) DeepPingWithContext(ctx context.Context) (output *proto_reports.DeepPingOutput, err error) {
+	return c.api.DeepPing(ctx, &proto_common.Void{})
 }
