@@ -5,6 +5,8 @@ import (
 	"io"
 	"time"
 
+	"github.com/SKF/proto/common"
+
 	iot_grpcapi "github.com/SKF/proto/iot"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -51,7 +53,7 @@ func (c *Client) GetAllTasks(userID string) (out []iot_grpcapi.TaskDescription, 
 	return c.GetAllTasksWithContext(ctx, userID)
 }
 func (c *Client) GetAllTasksWithContext(ctx context.Context, userID string) (out []iot_grpcapi.TaskDescription, err error) {
-	input := iot_grpcapi.PrimitiveString{Value: userID}
+	input := common.PrimitiveString{Value: userID}
 	output, err := c.api.GetAllTasks(ctx, &input)
 
 	if output != nil {
@@ -68,7 +70,7 @@ func (c *Client) GetUncompletedTasks(userID string) (out []iot_grpcapi.TaskDescr
 	return c.GetUncompletedTasksWithContext(ctx, userID)
 }
 func (c *Client) GetUncompletedTasksWithContext(ctx context.Context, userID string) (out []iot_grpcapi.TaskDescription, err error) {
-	input := iot_grpcapi.PrimitiveString{Value: userID}
+	input := common.PrimitiveString{Value: userID}
 	output, err := c.api.GetUncompletedTasks(ctx, &input)
 
 	if output != nil {
@@ -85,7 +87,7 @@ func (c *Client) GetUncompletedTasksByHierarchy(nodeID string) (out []iot_grpcap
 	return c.GetUncompletedTasksByHierarchyWithContext(ctx, nodeID)
 }
 func (c *Client) GetUncompletedTasksByHierarchyWithContext(ctx context.Context, nodeID string) (out []iot_grpcapi.TaskDescription, err error) {
-	input := iot_grpcapi.PrimitiveString{Value: nodeID}
+	input := common.PrimitiveString{Value: nodeID}
 	tasks, err := c.api.GetUncompletedTasksByHierarchy(ctx, &input)
 	if tasks != nil {
 		for _, desc := range tasks.TaskDescriptionArr {
@@ -235,6 +237,18 @@ func (c *Client) GetNodeDataStreamWithContext(ctx context.Context, input iot_grp
 		}
 		dc <- *nodeData
 	}
+}
+
+func (c *Client) DeleteNodeData(input iot_grpcapi.DeleteNodeDataInput) (err error) {
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
+	defer cancel()
+	return c.DeleteNodeDataWithContext(ctx, input)
+}
+
+func (c *Client) DeleteNodeDataWithContext(ctx context.Context, input iot_grpcapi.DeleteNodeDataInput) (err error) {
+	_, err = c.api.DeleteNodeData(ctx, &input)
+
+	return
 }
 
 func (c *Client) GetMedia(input iot_grpcapi.GetMediaInput) (iot_grpcapi.Media, error) {

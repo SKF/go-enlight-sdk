@@ -4,6 +4,8 @@ import (
 	"context"
 	"time"
 
+	"github.com/SKF/proto/common"
+
 	iot_grpcapi "github.com/SKF/proto/iot"
 	"google.golang.org/grpc"
 )
@@ -65,6 +67,9 @@ type IoTClient interface {
 
 	GetMedia(input iot_grpcapi.GetMediaInput) (iot_grpcapi.Media, error)
 	GetMediaWithContext(ctx context.Context, input iot_grpcapi.GetMediaInput) (iot_grpcapi.Media, error)
+
+	DeleteNodeData(input iot_grpcapi.DeleteNodeDataInput) error
+	DeleteNodeDataWithContext(ctx context.Context, input iot_grpcapi.DeleteNodeDataInput) error
 }
 
 type Client struct {
@@ -98,6 +103,6 @@ func (c *Client) DeepPing() error {
 }
 
 func (c *Client) DeepPingWithContext(ctx context.Context) error {
-	_, err := c.api.DeepPing(ctx, &iot_grpcapi.PrimitiveVoid{})
+	_, err := c.api.DeepPing(ctx, &common.Void{})
 	return err
 }

@@ -4,6 +4,7 @@ import (
 	"context"
 	"time"
 
+	"github.com/SKF/proto/common"
 	pas_api "github.com/SKF/proto/pas"
 
 	"google.golang.org/grpc"
@@ -72,6 +73,6 @@ func (c *Client) DeepPing() (err error) {
 
 // DeepPingWithContext pings the service to see if it is alive.
 func (c *Client) DeepPingWithContext(ctx context.Context) (err error) {
-	_, err = c.api.DeepPing(ctx, &pas_api.Void{})
+	_, err = c.api.DeepPing(ctx, &common.Void{})
 	return
 }
