@@ -4,6 +4,8 @@ import (
 	"context"
 	"time"
 
+	"github.com/SKF/proto/common"
+
 	reports_grpcapi "github.com/SKF/proto/reports"
 	"google.golang.org/grpc"
 )
@@ -61,5 +63,5 @@ func (c *client) DeepPing() (output *reports_grpcapi.DeepPingOutput, err error) 
 	return c.DeepPingWithContext(ctx)
 }
 func (c *client) DeepPingWithContext(ctx context.Context) (output *reports_grpcapi.DeepPingOutput, err error) {
-	return c.api.DeepPing(ctx, &reports_grpcapi.PrimitiveVoid{})
+	return c.api.DeepPing(ctx, &common.Void{})
 }

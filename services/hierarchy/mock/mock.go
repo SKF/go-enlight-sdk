@@ -8,6 +8,7 @@ import (
 	"google.golang.org/grpc"
 
 	"github.com/SKF/go-enlight-sdk/services/hierarchy"
+	"github.com/SKF/proto/common"
 	hierarchy_grpcapi "github.com/SKF/proto/hierarchy"
 )
 
@@ -57,11 +58,11 @@ func (mock *client) GetNodeWithContext(ctx context.Context, uuid string) (hierar
 	return args.Get(0).(hierarchy_grpcapi.Node), args.Error(1)
 }
 
-func (mock *client) GetNodeIDByOrigin(origin hierarchy_grpcapi.Origin) (string, error) {
+func (mock *client) GetNodeIDByOrigin(origin common.Origin) (string, error) {
 	args := mock.Called(origin)
 	return args.String(0), args.Error(1)
 }
-func (mock *client) GetNodeIDByOriginWithContext(ctx context.Context, origin hierarchy_grpcapi.Origin) (string, error) {
+func (mock *client) GetNodeIDByOriginWithContext(ctx context.Context, origin common.Origin) (string, error) {
 	args := mock.Called(ctx, origin)
 	return args.String(0), args.Error(1)
 }
