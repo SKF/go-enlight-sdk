@@ -247,7 +247,6 @@ func (c *Client) DeleteNodeData(input iot_grpcapi.DeleteNodeDataInput) (err erro
 
 func (c *Client) DeleteNodeDataWithContext(ctx context.Context, input iot_grpcapi.DeleteNodeDataInput) (err error) {
 	_, err = c.api.DeleteNodeData(ctx, &input)
-
 	return
 }
 

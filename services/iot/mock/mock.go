@@ -191,9 +191,9 @@ func (mock *client) GetTaskByLongIdWithContext(ctx context.Context, input int64)
 }
 func (mock *client) DeleteNodeData(input iot_grpcapi.DeleteNodeDataInput) error {
 	args := mock.Called(input)
-	return args.Error(1)
+	return args.Error(0)
 }
 func (mock *client) DeleteNodeDataWithContext(ctx context.Context, input iot_grpcapi.DeleteNodeDataInput) error {
 	args := mock.Called(ctx, input)
-	return args.Error(1)
+	return args.Error(0)
 }
