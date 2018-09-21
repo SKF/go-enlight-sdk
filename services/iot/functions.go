@@ -239,6 +239,7 @@ func (c *Client) GetNodeDataStreamWithContext(ctx context.Context, input iot_grp
 	}
 }
 
+// Delete Node data functions
 func (c *Client) DeleteNodeData(input iot_grpcapi.DeleteNodeDataInput) (err error) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
 	defer cancel()
