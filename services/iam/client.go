@@ -4,6 +4,8 @@ import (
 	"context"
 	"time"
 
+	"github.com/SKF/proto/common"
+
 	"github.com/SKF/go-eventsource/eventsource"
 	iam_grpcapi "github.com/SKF/proto/iam"
 	"google.golang.org/grpc"
@@ -57,6 +59,6 @@ func (c *client) DeepPing() error {
 }
 
 func (c *client) DeepPingWithContext(ctx context.Context) error {
-	_, err := c.api.DeepPing(ctx, &iam_grpcapi.PrimitiveVoid{})
+	_, err := c.api.DeepPing(ctx, &common.Void{})
 	return err
 }

@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/SKF/go-eventsource/eventsource"
+	"github.com/SKF/proto/common"
 	hierarchy_grpcapi "github.com/SKF/proto/hierarchy"
 )
 
@@ -33,7 +34,7 @@ func (c *Client) GetNode(uuid string) (node hierarchy_grpcapi.Node, err error) {
 
 // GetNodeWithContext takes an id of a node and returns the node.
 func (c *Client) GetNodeWithContext(ctx context.Context, uuid string) (node hierarchy_grpcapi.Node, err error) {
-	resp, err := c.api.GetNode(ctx, &hierarchy_grpcapi.PrimitiveString{Value: uuid})
+	resp, err := c.api.GetNode(ctx, &common.PrimitiveString{Value: uuid})
 	if resp != nil {
 		node = *resp
 	}
@@ -41,14 +42,14 @@ func (c *Client) GetNodeWithContext(ctx context.Context, uuid string) (node hier
 }
 
 // GetNodeIDByOrigin takes an origin and returns the Enlight ID.
-func (c *Client) GetNodeIDByOrigin(origin hierarchy_grpcapi.Origin) (string, error) {
+func (c *Client) GetNodeIDByOrigin(origin common.Origin) (string, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
 	defer cancel()
 	return c.GetNodeIDByOriginWithContext(ctx, origin)
 }
 
 // GetNodeIDByOriginWithContext takes an origin and returns the Enlight ID.
-func (c *Client) GetNodeIDByOriginWithContext(ctx context.Context, origin hierarchy_grpcapi.Origin) (string, error) {
+func (c *Client) GetNodeIDByOriginWithContext(ctx context.Context, origin common.Origin) (string, error) {
 	resp, err := c.api.GetNodeIdByOrigin(ctx, &origin)
 	return resp.GetValue(), err
 }
@@ -64,7 +65,7 @@ func (c *Client) GetNodes(parentID string) (nodes []hierarchy_grpcapi.Node, err 
 // GetNodesWithContext will get all child nodes for the node id it takes as
 // an argument.
 func (c *Client) GetNodesWithContext(ctx context.Context, parentID string) (nodes []hierarchy_grpcapi.Node, err error) {
-	resp, err := c.api.GetNodes(ctx, &hierarchy_grpcapi.PrimitiveString{Value: parentID})
+	resp, err := c.api.GetNodes(ctx, &common.PrimitiveString{Value: parentID})
 	if resp != nil {
 		for _, node := range resp.Nodes {
 			if node != nil {
@@ -86,7 +87,7 @@ func (c *Client) GetChildNodes(parentID string) (nodes []hierarchy_grpcapi.Node,
 // GetChildNodesWithContext will get all child nodes for the node id it takes as
 // an argument.
 func (c *Client) GetChildNodesWithContext(ctx context.Context, parentID string) (nodes []hierarchy_grpcapi.Node, err error) {
-	resp, err := c.api.GetChildNodes(ctx, &hierarchy_grpcapi.PrimitiveString{Value: parentID})
+	resp, err := c.api.GetChildNodes(ctx, &common.PrimitiveString{Value: parentID})
 	if resp != nil {
 		for _, node := range resp.Nodes {
 			if node != nil {
@@ -123,7 +124,7 @@ func (c *Client) GetParentNode(nodeID string) (node hierarchy_grpcapi.Node, err 
 // GetParentNodeWithContext will return the parent of the node id it takes as
 // an argument.
 func (c *Client) GetParentNodeWithContext(ctx context.Context, nodeID string) (node hierarchy_grpcapi.Node, err error) {
-	resp, err := c.api.GetParentNode(ctx, &hierarchy_grpcapi.PrimitiveString{Value: nodeID})
+	resp, err := c.api.GetParentNode(ctx, &common.PrimitiveString{Value: nodeID})
 	if resp != nil {
 		node = *resp
 	}
@@ -165,7 +166,7 @@ func (c *Client) GetEvents(since int, limit *int32) (events []eventsource.Record
 func (c *Client) GetEventsWithContext(ctx context.Context, since int, limit *int32) (events []eventsource.Record, err error) {
 	input := hierarchy_grpcapi.GetEventsInput{Since: int64(since)}
 	if limit != nil {
-		input.Limit = &hierarchy_grpcapi.PrimitiveInt32{Value: *limit}
+		input.Limit = &common.PrimitiveInt32{Value: *limit}
 	}
 
 	output, err := c.api.GetEvents(ctx, &input)

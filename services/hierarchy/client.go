@@ -4,6 +4,8 @@ import (
 	"context"
 	"time"
 
+	"github.com/SKF/proto/common"
+
 	"github.com/SKF/go-eventsource/eventsource"
 	hierarchy_grpcapi "github.com/SKF/proto/hierarchy"
 	"google.golang.org/grpc"
@@ -43,8 +45,8 @@ type HierarchyClient interface {
 	GetParentNode(nodeID string) (hierarchy_grpcapi.Node, error)
 	GetParentNodeWithContext(ctx context.Context, nodeID string) (hierarchy_grpcapi.Node, error)
 
-	GetNodeIDByOrigin(origin hierarchy_grpcapi.Origin) (string, error)
-	GetNodeIDByOriginWithContext(ctx context.Context, origin hierarchy_grpcapi.Origin) (string, error)
+	GetNodeIDByOrigin(origin common.Origin) (string, error)
+	GetNodeIDByOriginWithContext(ctx context.Context, origin common.Origin) (string, error)
 }
 
 // Client implements the HierarchyClient and holds the connection.
@@ -84,6 +86,6 @@ func (c *Client) DeepPing() error {
 
 // DeepPingWithContext pings the service to see if it is alive.
 func (c *Client) DeepPingWithContext(ctx context.Context) error {
-	_, err := c.api.DeepPing(ctx, &hierarchy_grpcapi.PrimitiveVoid{})
+	_, err := c.api.DeepPing(ctx, &common.Void{})
 	return err
 }

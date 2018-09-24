@@ -5,6 +5,8 @@ import (
 	"encoding/json"
 	"time"
 
+	"github.com/SKF/proto/common"
+
 	"github.com/SKF/go-eventsource/eventsource"
 	iam_grpcapi "github.com/SKF/proto/iam"
 )
@@ -47,7 +49,7 @@ func (c *client) GetEventRecords(since int, limit *int32) (records []eventsource
 func (c *client) GetEventRecordsWithContext(ctx context.Context, since int, limit *int32) (records []eventsource.Record, err error) {
 	input := iam_grpcapi.GetEventRecordsInput{Since: int64(since)}
 	if limit != nil {
-		input.Limit = &iam_grpcapi.PrimitiveInt32{Value: *limit}
+		input.Limit = &common.PrimitiveInt32{Value: *limit}
 	}
 
 	output, err := c.api.GetEventRecords(ctx, &input)
