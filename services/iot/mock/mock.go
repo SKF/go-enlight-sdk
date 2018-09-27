@@ -198,11 +198,11 @@ func (mock *client) DeleteNodeDataWithContext(ctx context.Context, input iot_grp
 	return args.Error(0)
 }
 
-func (mock *client) GetTasksModifiedSinceTimeStamp(input iot_grpcapi.GetTasksModifiedSinceTimestampInput) (*iot_grpcapi.GetTasksModifiedSinceTimestampOutput, error) {
+func (mock *client) GetTasksModifiedSinceTimestamp(input iot_grpcapi.GetTasksModifiedSinceTimestampInput) (*iot_grpcapi.GetTasksModifiedSinceTimestampOutput, error) {
 	args := mock.Called(input)
 	return args.Get(0).(*iot_grpcapi.GetTasksModifiedSinceTimestampOutput), args.Error(1)
 }
-func (mock *client) GetTasksModifiedSinceTimeStampWithContext(ctx context.Context, input iot_grpcapi.GetTasksModifiedSinceTimestampInput) (output *iot_grpcapi.GetTasksModifiedSinceTimestampOutput, err error) {
+func (mock *client) GetTasksModifiedSinceTimestampWithContext(ctx context.Context, input iot_grpcapi.GetTasksModifiedSinceTimestampInput) (output *iot_grpcapi.GetTasksModifiedSinceTimestampOutput, err error) {
 	args := mock.Called(ctx, input)
 	return args.Get(0).(*iot_grpcapi.GetTasksModifiedSinceTimestampOutput), args.Error(1)
 }
