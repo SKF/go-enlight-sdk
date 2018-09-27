@@ -301,3 +301,14 @@ func (c *Client) GetTasksByStatusWithContext(ctx context.Context, input iot_grpc
 	}
 	return
 }
+
+func (c *Client) GetTasksModifiedSinceTimestamp(input iot_grpcapi.GetTasksModifiedSinceTimestampInput) (*iot_grpcapi.GetTasksModifiedSinceTimestampOutput, error) {
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+	return c.GetTasksModifiedSinceTimestampWithContext(ctx, input)
+
+}
+func (c *Client) GetTasksModifiedSinceTimestampWithContext(ctx context.Context, input iot_grpcapi.GetTasksModifiedSinceTimestampInput) (output *iot_grpcapi.GetTasksModifiedSinceTimestampOutput, err error) {
+	output, err = c.api.GetTasksModifiedSinceTimestamp(ctx, &input)
+	return
+}

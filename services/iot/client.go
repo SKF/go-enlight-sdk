@@ -50,6 +50,9 @@ type IoTClient interface {
 	GetTaskByLongId(input int64) (*iot_grpcapi.TaskDescription, error)
 	GetTaskByLongIdWithContext(ctx context.Context, input int64) (*iot_grpcapi.TaskDescription, error)
 
+	GetTasksModifiedSinceTimestamp(input iot_grpcapi.GetTasksModifiedSinceTimestampInput) (*iot_grpcapi.GetTasksModifiedSinceTimestampOutput, error)
+	GetTasksModifiedSinceTimestampWithContext(ctx context.Context, input iot_grpcapi.GetTasksModifiedSinceTimestampInput) (*iot_grpcapi.GetTasksModifiedSinceTimestampOutput, error)
+
 	IngestNodeData(input iot_grpcapi.IngestNodeDataInput) error
 	IngestNodeDataWithContext(ctx context.Context, input iot_grpcapi.IngestNodeDataInput) error
 
