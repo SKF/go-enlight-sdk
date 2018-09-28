@@ -12,4 +12,5 @@ type BaseNode struct {
 	Origin      *Origin     `json:"origin,omitempty"`
 	Label       string      `json:"label"`
 	Description string      `json:"description"`
+	Tags        string      `json:"tags"`
 }
