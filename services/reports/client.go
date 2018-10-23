@@ -10,6 +10,7 @@ import (
 	"google.golang.org/grpc"
 )
 
+// ReportsClient describes the exported methods on the reports service
 type ReportsClient interface {
 	Dial(host, port string, opts ...grpc.DialOption) error
 	Close()
@@ -42,6 +43,7 @@ func (c *client) Close() {
 	c.conn.Close()
 }
 
+// CreateClient returns a client for invoking reports service methods
 func CreateClient() ReportsClient {
 	return &client{}
 }
