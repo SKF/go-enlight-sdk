@@ -16,6 +16,7 @@ import (
 // package's package overview docs for details on the service.
 type HierarchyClient interface {
 	Dial(host, port string, opts ...grpc.DialOption) error
+	DialWithContext(ctx context.Context, host, port string, opts ...grpc.DialOption) error
 	Close()
 
 	DeepPing() error
@@ -60,9 +61,21 @@ func CreateClient() HierarchyClient {
 	return &Client{}
 }
 
-// Dial creates a client connection to the given host.
+// Dial creates a client connection to the given host with background context and no timeout
 func (c *Client) Dial(host, port string, opts ...grpc.DialOption) (err error) {
 	conn, err := grpc.Dial(host+":"+port, opts...)
+	if err != nil {
+		return
+	}
+
+	c.conn = conn
+	c.api = hierarchy_grpcapi.NewHierarchyClient(conn)
+	return
+}
+
+// DialWithContext creates a client connection to the given host with context (for timeout and transaction id)
+func (c *Client) DialWithContext(ctx context.Context, host, port string, opts ...grpc.DialOption) (err error) {
+	conn, err := grpc.DialContext(ctx, host+":"+port, opts...)
 	if err != nil {
 		return
 	}
