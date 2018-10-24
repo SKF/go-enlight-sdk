@@ -1,7 +1,6 @@
 package hierarchy_test
 
 import (
-	"context"
 	"log"
 
 	hierarchy_grpcapi "github.com/SKF/proto/hierarchy"
@@ -26,34 +25,6 @@ func ExampleClient() {
 
 	// Dial the Hierarchy Service
 	err = client.Dial(host, port, dialOption)
-	if err != nil {
-		log.Fatalf("Couldn't dial due to error: %+v", err)
-	}
-	defer client.Close()
-
-	// Ping the Hierarchy Service
-	err = client.DeepPing()
-	if err != nil {
-		log.Fatalf("Couldn't ping the Hierarchy Service due to error: %+v", err)
-	}
-}
-
-func ExampleClientWithContext() {
-	host, port := "<host>", "<port>"
-	clientCert, clientKey := "<clientCertPath>", "<clientKey>"
-	caCert := "<caCert>"
-
-	// Create a Hierarchy Service client
-	client := hierarchy.CreateClient()
-
-	// Dial the Hierarchy Service
-	dialOption, err := grpc.WithTransportCredentials(host, clientCert, clientKey, caCert)
-	if err != nil {
-		log.Fatalf("Couldn't connect due to error: %+v", err)
-	}
-
-	// Dial the Hierarchy Service
-	err = client.DialWithContext(context.Background(), host, port, dialOption)
 	if err != nil {
 		log.Fatalf("Couldn't dial due to error: %+v", err)
 	}
