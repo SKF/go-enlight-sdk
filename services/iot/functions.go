@@ -312,3 +312,13 @@ func (c *Client) GetTasksModifiedSinceTimestampWithContext(ctx context.Context, 
 	output, err = c.api.GetTasksModifiedSinceTimestamp(ctx, &input)
 	return
 }
+
+func (c *Client) GetNodeDataLog(input iot_grpcapi.GetNodeDataLogInput) (output *iot_grpcapi.GetNodeDataLogOutput, err error) {
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
+	defer cancel()
+	return c.GetNodeDataLogWithContext(ctx, input)
+}
+func (c *Client) GetNodeDataLogWithContext(ctx context.Context, input iot_grpcapi.GetNodeDataLogInput) (output *iot_grpcapi.GetNodeDataLogOutput, err error) {
+	output, err = c.api.GetNodeDataLog(ctx, &input)
+	return
+}
