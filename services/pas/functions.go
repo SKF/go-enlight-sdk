@@ -95,3 +95,16 @@ func (c *Client) GetPointAlarmStatusStreamWithContext(ctx context.Context, dc ch
 		dc <- *output
 	}
 }
+
+// CalculateAndSetPointAlarmStatus calculates and sets new PAS based on input data
+func (c *Client) CalculateAndSetPointAlarmStatus(input pas_api.CalculateAndSetPointAlarmStatusInput) error {
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
+	defer cancel()
+	return c.CalculateAndSetPointAlarmStatusContext(ctx, input)
+}
+
+// CalculateAndSetPointAlarmStatusWithContext calculates and sets new PAS based on input data
+func (c *Client) CalculateAndSetPointAlarmStatusContext(ctx context.Context, input pas_api.CalculateAndSetPointAlarmStatusInput) error {
+	_, err := c.api.CalculateAndSetPointAlarmStatusContext(ctx, &input)
+	return err
+}
