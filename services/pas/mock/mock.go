@@ -84,3 +84,15 @@ func (mock *client) GetPointAlarmStatusStreamWithContext(ctx context.Context, dc
 	args := mock.Called(ctx, dc)
 	return args.Error(0)
 }
+
+// CalculateAndSetPointAlarmStatus calculates and sets new PAS based on input data
+func (mock *client) CalculateAndSetPointAlarmStatus(input pas_api.CalculateAndSetPointAlarmStatusInput) error {
+	args := mock.Called(input)
+	return args.Error(0)
+}
+
+// CalculateAndSetPointAlarmStatusWithContext calculates and sets new PAS based on input data
+func (mock *client) CalculateAndSetPointAlarmStatusWithContext(ctx context.Context, input pas_api.CalculateAndSetPointAlarmStatusInput) error {
+	args := mock.Called(ctx, input)
+	return args.Error(0)
+}

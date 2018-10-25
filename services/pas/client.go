@@ -34,6 +34,9 @@ type PointAlarmStatusClient interface {
 
 	GetPointAlarmStatusStream(dc chan<- pas_api.GetPointAlarmStatusStreamOutput) error
 	GetPointAlarmStatusStreamWithContext(ctx context.Context, dc chan<- pas_api.GetPointAlarmStatusStreamOutput) error
+
+	CalculateAndSetPointAlarmStatus(input pas_api.CalculateAndSetPointAlarmStatusInput) error
+	CalculateAndSetPointAlarmStatusWithContext(ctx context.Context, input pas_api.CalculateAndSetPointAlarmStatusInput) error
 }
 
 // Client implements the PointAlarmStatusClient and holds the connection.
