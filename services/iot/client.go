@@ -74,8 +74,8 @@ type IoTClient interface {
 	DeleteNodeData(input iot_grpcapi.DeleteNodeDataInput) error
 	DeleteNodeDataWithContext(ctx context.Context, input iot_grpcapi.DeleteNodeDataInput) error
 
-	GetNodeDataLog(input iot_grpcapi.GetNodeDataLogInput) (*iot_grpcapi.GetNodeDataLogOutput, error)
-	GetNodeDataLogWithContext(ctx context.Context, input iot_grpcapi.GetNodeDataLogInput) (*iot_grpcapi.GetNodeDataLogOutput, error)
+	GetNodeEventLog(input iot_grpcapi.GetNodeEventLogInput) (*iot_grpcapi.GetNodeEventLogOutput, error)
+	GetNodeEventLogWithContext(ctx context.Context, input iot_grpcapi.GetNodeEventLogInput) (*iot_grpcapi.GetNodeEventLogOutput, error)
 }
 
 type Client struct {
