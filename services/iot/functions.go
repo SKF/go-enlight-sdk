@@ -2,6 +2,7 @@ package iot
 
 import (
 	"context"
+	"fmt"
 	"io"
 	"time"
 
@@ -114,6 +115,29 @@ func (c *Client) SetTaskStatus(input iot_grpcapi.SetTaskStatusInput) (err error)
 func (c *Client) SetTaskStatusWithContext(ctx context.Context, input iot_grpcapi.SetTaskStatusInput) (err error) {
 	_, err = c.api.SetTaskStatus(ctx, &input)
 	return
+}
+
+//IngestNodesData ingest nodes, this operation can success or fail. Fail means that no data is stored.
+func (c *Client) IngestNodesData(input iot_grpcapi.IngestNodesDataInput) (err error) {
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
+	defer cancel()
+	return c.IngestNodesDataWithContext(ctx, input)
+}
+
+//IngestNodesDataWithContext ingest nodes with context, this operation can success or fail. Fail means that no data is stored.
+func (c *Client) IngestNodesDataWithContext(ctx context.Context, input iot_grpcapi.IngestNodesDataInput) error {
+	if len(input.Nodes) == 0 {
+		return fmt.Errorf("IngestNodesData missing nodes to insert")
+	}
+
+	res, err := c.api.IngestNodesData(ctx, &input)
+	if err != nil {
+		return err
+	}
+	if !res.Success {
+		return fmt.Errorf("IngestNodesData failed")
+	}
+	return nil
 }
 
 func (c *Client) IngestNodeData(input iot_grpcapi.IngestNodeDataInput) (err error) {

@@ -113,7 +113,18 @@ func (mock *client) IngestNodeData(input iot_grpcapi.IngestNodeDataInput) error 
 	args := mock.Called(input)
 	return args.Error(0)
 }
+
 func (mock *client) IngestNodeDataWithContext(ctx context.Context, input iot_grpcapi.IngestNodeDataInput) error {
+	args := mock.Called(ctx, input)
+	return args.Error(0)
+}
+
+func (mock *client) IngestNodesData(input iot_grpcapi.IngestNodesDataInput) error {
+	args := mock.Called(input)
+	return args.Error(0)
+}
+
+func (mock *client) IngestNodesDataWithContext(ctx context.Context, input iot_grpcapi.IngestNodesDataInput) error {
 	args := mock.Called(ctx, input)
 	return args.Error(0)
 }

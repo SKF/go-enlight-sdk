@@ -56,6 +56,9 @@ type IoTClient interface {
 	IngestNodeData(input iot_grpcapi.IngestNodeDataInput) error
 	IngestNodeDataWithContext(ctx context.Context, input iot_grpcapi.IngestNodeDataInput) error
 
+	IngestNodesData(input iot_grpcapi.IngestNodesDataInput) error
+	IngestNodesDataWithContext(ctx context.Context, input iot_grpcapi.IngestNodesDataInput) error
+
 	IngestNodeDataStream(c <-chan iot_grpcapi.IngestNodeDataStreamInput) error
 	IngestNodeDataStreamWithContext(ctx context.Context, c <-chan iot_grpcapi.IngestNodeDataStreamInput) error
 
