@@ -26,6 +26,15 @@ type IAMClient interface {
 
 	GetEventRecords(since int, limit *int32) ([]eventsource.Record, error)
 	GetEventRecordsWithContext(ctx context.Context, since int, limit *int32) ([]eventsource.Record, error)
+
+	IsAuthorized(userID, action string, origin *common.Origin) error
+	IsAuthorizedWithContext(ctx context.Context, userID, action string, origin *common.Origin) error
+
+	AddResource(resource common.Origin, parent *common.Origin) error
+	AddResourceWithContext(ctx context.Context, resource common.Origin, parent *common.Origin) error
+
+	RemoveResource(resource common.Origin) error
+	RemoveResourceWithContext(ctx context.Context, resource common.Origin) error
 }
 
 type client struct {
