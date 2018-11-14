@@ -60,3 +60,75 @@ func (c *client) GetEventRecordsWithContext(ctx context.Context, since int, limi
 	err = json.Unmarshal(output.Records, &records)
 	return
 }
+
+func (c *client) IsAuthorized(userID, action string, resource *common.Origin) error {
+	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
+	defer cancel()
+	return c.IsAuthorizedWithContext(ctx, userID, action, resource)
+}
+
+func (c *client) IsAuthorizedWithContext(ctx context.Context, userID, action string, resource *common.Origin) error {
+	_, err := c.api.IsAuthorized(ctx, &iam_grpcapi.IsAuthorizedInput{
+		UserId:   userID,
+		Action:   action,
+		Resource: resource,
+	})
+	return err
+}
+
+func (c *client) AddResource(resource common.Origin, parent *common.Origin) error {
+	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
+	defer cancel()
+	return c.AddResourceWithContext(ctx, resource, parent)
+}
+
+func (c *client) AddResourceWithContext(ctx context.Context, resource common.Origin, parent *common.Origin) error {
+	_, err := c.api.AddResource(ctx, &iam_grpcapi.AddResourceInput{
+		Resource: &resource,
+		Parent:   parent,
+	})
+	return err
+}
+
+func (c *client) RemoveResource(resource common.Origin) error {
+	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
+	defer cancel()
+	return c.RemoveResourceWithContext(ctx, resource)
+}
+
+func (c *client) RemoveResourceWithContext(ctx context.Context, resource common.Origin) error {
+	_, err := c.api.RemoveResource(ctx, &iam_grpcapi.RemoveResourceInput{
+		Resource: &resource,
+	})
+	return err
+}
+
+func (c *client) AddUserPermission(userID, action string, resource common.Origin) error {
+	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
+	defer cancel()
+	return c.AddUserPermissionWithContext(ctx, userID, action, resource)
+}
+
+func (c *client) AddUserPermissionWithContext(ctx context.Context, userID, action string, resource common.Origin) error {
+	_, err := c.api.AddUserPermission(ctx, &iam_grpcapi.AddUserPermissionInput{
+		UserId:   userID,
+		Action:   action,
+		Resource: &resource,
+	})
+	return err
+}
+
+func (c *client) RemoveUserPermission(userID, action string, resource common.Origin) error {
+	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
+	defer cancel()
+	return c.RemoveUserPermissionWithContext(ctx, userID, action, resource)
+}
+
+func (c *client) RemoveUserPermissionWithContext(ctx context.Context, userID, action string, resource common.Origin) error {
+	_, err := c.api.RemoveUserPermission(ctx, &iam_grpcapi.RemoveUserPermissionInput{
+		UserId:   userID,
+		Action:   action,
+		Resource: &resource,
+	})
+	return err
+}

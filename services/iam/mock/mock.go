@@ -3,6 +3,8 @@ package mock
 import (
 	"context"
 
+	"github.com/SKF/proto/common"
+
 	"github.com/SKF/go-eventsource/eventsource"
 	iam_grpcapi "github.com/SKF/proto/iam"
 	"github.com/stretchr/testify/mock"
@@ -64,4 +66,49 @@ func (mock *client) GetEventRecords(since int, limit *int32) ([]eventsource.Reco
 func (mock *client) GetEventRecordsWithContext(ctx context.Context, since int, limit *int32) ([]eventsource.Record, error) {
 	args := mock.Called(ctx, since, limit)
 	return args.Get(0).([]eventsource.Record), args.Error(1)
+}
+
+func (mock *client) IsAuthorized(userID, action string, resource *common.Origin) error {
+	args := mock.Called(userID, action, resource)
+	return args.Error(0)
+}
+func (mock *client) IsAuthorizedWithContext(ctx context.Context, userID, action string, resource *common.Origin) error {
+	args := mock.Called(ctx, userID, action, resource)
+	return args.Error(0)
+}
+
+func (mock *client) AddResource(resource common.Origin, parent *common.Origin) error {
+	args := mock.Called(resource, parent)
+	return args.Error(0)
+}
+func (mock *client) AddResourceWithContext(ctx context.Context, resource common.Origin, parent *common.Origin) error {
+	args := mock.Called(ctx, resource, parent)
+	return args.Error(0)
+}
+
+func (mock *client) RemoveResource(resource common.Origin) error {
+	args := mock.Called(resource)
+	return args.Error(0)
+}
+func (mock *client) RemoveResourceWithContext(ctx context.Context, resource common.Origin) error {
+	args := mock.Called(ctx, resource)
+	return args.Error(0)
+}
+
+func (mock *client) AddUserPermission(userID, action string, resource common.Origin) error {
+	args := mock.Called(userID, action, resource)
+	return args.Error(0)
+}
+func (mock *client) AddUserPermissionWithContext(ctx context.Context, userID, action string, resource common.Origin) error {
+	args := mock.Called(ctx, userID, action, resource)
+	return args.Error(0)
+}
+
+func (mock *client) RemoveUserPermission(userID, action string, resource common.Origin) error {
+	args := mock.Called(userID, action, resource)
+	return args.Error(0)
+}
+func (mock *client) RemoveUserPermissionWithContext(ctx context.Context, userID, action string, resource common.Origin) error {
+	args := mock.Called(ctx, userID, action, resource)
+	return args.Error(0)
 }
