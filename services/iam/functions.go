@@ -96,7 +96,7 @@ func (c *client) RemoveResource(resource common.Origin) error {
 }
 
 func (c *client) RemoveResourceWithContext(ctx context.Context, resource common.Origin) error {
-	_, err := c.api.RemoveResource(ctx, &iam_grpcapi.RemoveResourceWithContextInput{
+	_, err := c.api.RemoveAuthorizationResource(ctx, &iam_grpcapi.RemoveAuthorizationResourceInput{
 		Resource: &resource,
 	})
 	return err
