@@ -104,11 +104,11 @@ func (mock *client) RemoveAuthorizationResourceParentWithContext(ctx context.Con
 	return args.Error(0)
 }
 
-func (mock *client) RemoveResource(resource common.Origin) error {
+func (mock *client) RemoveAuthorizationResource(resource common.Origin) error {
 	args := mock.Called(resource)
 	return args.Error(0)
 }
-func (mock *client) RemoveResourceWithContext(ctx context.Context, resource common.Origin) error {
+func (mock *client) RemoveAuthorizationResourceWithContext(ctx context.Context, resource common.Origin) error {
 	args := mock.Called(ctx, resource)
 	return args.Error(0)
 }

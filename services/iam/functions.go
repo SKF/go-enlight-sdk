@@ -89,13 +89,13 @@ func (c *client) AddAuthorizationResourceWithContext(ctx context.Context, resour
 	return err
 }
 
-func (c *client) RemoveResource(resource common.Origin) error {
+func (c *client) RemoveAuthorizationResource(resource common.Origin) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
 	defer cancel()
-	return c.RemoveResourceWithContext(ctx, resource)
+	return c.RemoveAuthorizationResourceWithContext(ctx, resource)
 }
 
-func (c *client) RemoveResourceWithContext(ctx context.Context, resource common.Origin) error {
+func (c *client) RemoveAuthorizationResourceWithContext(ctx context.Context, resource common.Origin) error {
 	_, err := c.api.RemoveAuthorizationResource(ctx, &iam_grpcapi.RemoveAuthorizationResourceInput{
 		Resource: &resource,
 	})
