@@ -77,29 +77,29 @@ func (mock *client) IsAuthorizedWithContext(ctx context.Context, userID, action 
 	return args.Error(0)
 }
 
-func (mock *client) AddResource(resource common.Origin) error {
+func (mock *client) AddAuthorizationResource(resource common.Origin) error {
 	args := mock.Called(resource)
 	return args.Error(0)
 }
-func (mock *client) AddResourceWithContext(ctx context.Context, resource common.Origin) error {
+func (mock *client) AddAuthorizationResourceWithContext(ctx context.Context, resource common.Origin) error {
 	args := mock.Called(ctx, resource)
 	return args.Error(0)
 }
 
-func (mock *client) AddResourceParent(resource common.Origin, parent common.Origin) error {
+func (mock *client) AddAuthorizationResourceParent(resource common.Origin, parent common.Origin) error {
 	args := mock.Called(resource, parent)
 	return args.Error(0)
 }
-func (mock *client) AddResourceParentWithContext(ctx context.Context, resource common.Origin, parent common.Origin) error {
+func (mock *client) AddAuthorizationResourceParentWithContext(ctx context.Context, resource common.Origin, parent common.Origin) error {
 	args := mock.Called(ctx, resource, parent)
 	return args.Error(0)
 }
 
-func (mock *client) RemoveResourceParent(resource common.Origin, parent common.Origin) error {
+func (mock *client) RemoveAuthorizationResourceParent(resource common.Origin, parent common.Origin) error {
 	args := mock.Called(resource, parent)
 	return args.Error(0)
 }
-func (mock *client) RemoveResourceParentWithContext(ctx context.Context, resource common.Origin, parent common.Origin) error {
+func (mock *client) RemoveAuthorizationResourceParentWithContext(ctx context.Context, resource common.Origin, parent common.Origin) error {
 	args := mock.Called(ctx, resource, parent)
 	return args.Error(0)
 }
@@ -122,11 +122,11 @@ func (mock *client) AddUserPermissionWithContext(ctx context.Context, userID, ac
 	return args.Error(0)
 }
 
-func (mock *client) RemoveUserRole(userID, role string, resource common.Origin) error {
+func (mock *client) RemoveUserPermission(userID, role string, resource common.Origin) error {
 	args := mock.Called(userID, role, resource)
 	return args.Error(0)
 }
-func (mock *client) RemoveUserRoleWithContext(ctx context.Context, userID, role string, resource common.Origin) error {
+func (mock *client) RemoveUserPermissionWithContext(ctx context.Context, userID, role string, resource common.Origin) error {
 	args := mock.Called(ctx, userID, role, resource)
 	return args.Error(0)
 }
