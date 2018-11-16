@@ -288,6 +288,30 @@ func (c *Client) GetMediaWithContext(ctx context.Context, input iot_grpcapi.GetM
 	return
 }
 
+//RequestGetMediaSignedURLWithContext if successful returns a url where media data can be accessed.
+func (c *Client) RequestGetMediaSignedURLWithContext(ctx context.Context, in *iot_grpcapi.GetMediaSignedUrlInput) (*iot_grpcapi.GetMediaSignedUrlOutput, error) {
+	return c.api.RequestGetMediaSignedUrl(ctx, in)
+}
+
+//RequestGetMediaSignedURL if successful returns a url where media data can be accessed.
+func (c *Client) RequestGetMediaSignedURL(in *iot_grpcapi.GetMediaSignedUrlInput) (*iot_grpcapi.GetMediaSignedUrlOutput, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
+	defer cancel()
+	return c.RequestGetMediaSignedURLWithContext(ctx, in)
+}
+
+//RequestPutMediaSignedURLWithContext if successful returns a url where media data can be uploaded.
+func (c *Client) RequestPutMediaSignedURLWithContext(ctx context.Context, in *iot_grpcapi.PutMediaSignedUrlInput) (*iot_grpcapi.PutMediaSignedUrlOutput, error) {
+	return c.api.RequestPutMediaSignedUrl(ctx, in)
+}
+
+//RequestPutMediaSignedURL if successful returns a url where media data can be uploaded.
+func (c *Client) RequestPutMediaSignedURL(in *iot_grpcapi.PutMediaSignedUrlInput) (*iot_grpcapi.PutMediaSignedUrlOutput, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
+	defer cancel()
+	return c.RequestPutMediaSignedURLWithContext(ctx, in)
+}
+
 func (c *Client) GetTaskStream(input iot_grpcapi.GetTaskStreamInput, dc chan<- iot_grpcapi.GetTaskStreamOutput) (err error) {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
