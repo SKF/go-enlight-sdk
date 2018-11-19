@@ -175,6 +175,24 @@ func (mock *client) GetMediaWithContext(ctx context.Context, input iot_grpcapi.G
 	return args.Get(0).(iot_grpcapi.Media), args.Error(1)
 }
 
+func (mock *client) RequestGetMediaSignedURLWithContext(ctx context.Context, in *iot_grpcapi.GetMediaSignedUrlInput) (*iot_grpcapi.GetMediaSignedUrlOutput, error) {
+	args := mock.Called(ctx, in)
+	return args.Get(0).(*iot_grpcapi.GetMediaSignedUrlOutput), args.Error(1)
+}
+func (mock *client) RequestGetMediaSignedURL(in *iot_grpcapi.GetMediaSignedUrlInput) (*iot_grpcapi.GetMediaSignedUrlOutput, error) {
+	args := mock.Called(in)
+	return args.Get(0).(*iot_grpcapi.GetMediaSignedUrlOutput), args.Error(1)
+}
+
+func (mock *client) RequestPutMediaSignedURLWithContext(ctx context.Context, in *iot_grpcapi.PutMediaSignedUrlInput) (*iot_grpcapi.PutMediaSignedUrlOutput, error) {
+	args := mock.Called(ctx, in)
+	return args.Get(0).(*iot_grpcapi.PutMediaSignedUrlOutput), args.Error(1)
+}
+func (mock *client) RequestPutMediaSignedURL(in *iot_grpcapi.PutMediaSignedUrlInput) (*iot_grpcapi.PutMediaSignedUrlOutput, error) {
+	args := mock.Called(in)
+	return args.Get(0).(*iot_grpcapi.PutMediaSignedUrlOutput), args.Error(1)
+}
+
 func (mock *client) GetTasksByStatus(input iot_grpcapi.GetTasksByStatusInput) ([]*iot_grpcapi.TaskDescription, error) {
 	args := mock.Called(input)
 	return args.Get(0).([]*iot_grpcapi.TaskDescription), args.Error(1)
