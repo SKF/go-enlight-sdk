@@ -30,17 +30,23 @@ type IAMClient interface {
 	IsAuthorized(userID, action string, resource *common.Origin) error
 	IsAuthorizedWithContext(ctx context.Context, userID, action string, resource *common.Origin) error
 
-	AddResource(resource common.Origin, parent *common.Origin) error
-	AddResourceWithContext(ctx context.Context, resource common.Origin, parent *common.Origin) error
+	AddAuthorizationResource(resource common.Origin) error
+	AddAuthorizationResourceWithContext(ctx context.Context, resource common.Origin) error
 
-	RemoveResource(resource common.Origin) error
-	RemoveResourceWithContext(ctx context.Context, resource common.Origin) error
+	RemoveAuthorizationResource(resource common.Origin) error
+	RemoveAuthorizationResourceWithContext(ctx context.Context, resource common.Origin) error
 
-	AddUserPermission(userID, action string, resource common.Origin) error
-	AddUserPermissionWithContext(ctx context.Context, userID, action string, resource common.Origin) error
+	AddAuthorizationResourceParent(resource common.Origin, parent common.Origin) error
+	AddAuthorizationResourceParentWithContext(ctx context.Context, resource common.Origin, parent common.Origin) error
 
-	RemoveUserPermission(userID, action string, resource common.Origin) error
-	RemoveUserPermissionWithContext(ctx context.Context, userID, action string, resource common.Origin) error
+	RemoveAuthorizationResourceParent(resource common.Origin, parent common.Origin) error
+	RemoveAuthorizationResourceParentWithContext(ctx context.Context, resource common.Origin, parent common.Origin) error
+
+	AddUserPermission(userID, role string, resource common.Origin) error
+	AddUserPermissionWithContext(ctx context.Context, userID, role string, resource common.Origin) error
+
+	RemoveUserPermission(userID, role string, resource common.Origin) error
+	RemoveUserPermissionWithContext(ctx context.Context, userID, role string, resource common.Origin) error
 }
 
 type client struct {
