@@ -74,6 +74,12 @@ type IoTClient interface {
 	GetMedia(input iot_grpcapi.GetMediaInput) (iot_grpcapi.Media, error)
 	GetMediaWithContext(ctx context.Context, input iot_grpcapi.GetMediaInput) (iot_grpcapi.Media, error)
 
+	RequestGetMediaSignedURL(in *iot_grpcapi.GetMediaSignedUrlInput) (*iot_grpcapi.GetMediaSignedUrlOutput, error)
+	RequestGetMediaSignedURLWithContext(ctx context.Context, in *iot_grpcapi.GetMediaSignedUrlInput) (*iot_grpcapi.GetMediaSignedUrlOutput, error)
+
+	RequestPutMediaSignedURL(in *iot_grpcapi.PutMediaSignedUrlInput) (*iot_grpcapi.PutMediaSignedUrlOutput, error)
+	RequestPutMediaSignedURLWithContext(ctx context.Context, in *iot_grpcapi.PutMediaSignedUrlInput) (*iot_grpcapi.PutMediaSignedUrlOutput, error)
+
 	DeleteNodeData(input iot_grpcapi.DeleteNodeDataInput) error
 	DeleteNodeDataWithContext(ctx context.Context, input iot_grpcapi.DeleteNodeDataInput) error
 
