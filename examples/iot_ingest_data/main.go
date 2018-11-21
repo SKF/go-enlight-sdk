@@ -62,7 +62,6 @@ func main() {
 	}
 
 	nodeID1 := uuid.New().String()
-	nodeID2 := uuid.New().String()
 
 	log.Info("IngestNodeData")
 	for _, nodeData := range createExampleData() {
