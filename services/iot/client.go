@@ -59,17 +59,11 @@ type IoTClient interface {
 	IngestNodesData(input iot_grpcapi.IngestNodesDataInput) error
 	IngestNodesDataWithContext(ctx context.Context, input iot_grpcapi.IngestNodesDataInput) error
 
-	IngestNodeDataStream(c <-chan iot_grpcapi.IngestNodeDataStreamInput) error
-	IngestNodeDataStreamWithContext(ctx context.Context, c <-chan iot_grpcapi.IngestNodeDataStreamInput) error
-
 	GetLatestNodeData(input iot_grpcapi.GetLatestNodeDataInput) (*iot_grpcapi.NodeData, error)
 	GetLatestNodeDataWithContext(ctx context.Context, input iot_grpcapi.GetLatestNodeDataInput) (*iot_grpcapi.NodeData, error)
 
 	GetNodeData(input iot_grpcapi.GetNodeDataInput) ([]iot_grpcapi.NodeData, error)
 	GetNodeDataWithContext(ctx context.Context, input iot_grpcapi.GetNodeDataInput) ([]iot_grpcapi.NodeData, error)
-
-	GetNodeDataStream(input iot_grpcapi.GetNodeDataStreamInput, c chan<- iot_grpcapi.GetNodeDataStreamOutput) error
-	GetNodeDataStreamWithContext(ctx context.Context, input iot_grpcapi.GetNodeDataStreamInput, c chan<- iot_grpcapi.GetNodeDataStreamOutput) error
 
 	GetMedia(input iot_grpcapi.GetMediaInput) (iot_grpcapi.Media, error)
 	GetMediaWithContext(ctx context.Context, input iot_grpcapi.GetMediaInput) (iot_grpcapi.Media, error)
