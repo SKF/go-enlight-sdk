@@ -62,7 +62,6 @@ func main() {
 	}
 
 	nodeID1 := uuid.New().String()
-	nodeID2 := uuid.New().String()
 
 	log.Info("IngestNodeData")
 	for _, nodeData := range createExampleData() {
@@ -77,29 +76,6 @@ func main() {
 				Error("client.IngestNodeData")
 		}
 	}
-	log.Info("IngestNodeDataStream")
-
-	doneChannel := make(chan bool)
-	dataChannel := make(chan api.IngestNodeDataStreamInput)
-	go func() {
-		err := client.IngestNodeDataStream(dataChannel)
-		if err != nil {
-			log.
-				WithError(err).
-				Error("client.IngestNodeDataStream")
-		}
-		doneChannel <- true
-	}()
-	dataChannel <- api.IngestNodeDataStreamInput{
-		NodeId:       nodeID1,
-		NodeDataList: createExampleData(),
-	}
-	dataChannel <- api.IngestNodeDataStreamInput{
-		NodeId:       nodeID2,
-		NodeDataList: createExampleData(),
-	}
-	close(dataChannel)
-	<-doneChannel
 
 	var input api.GetNodeDataInput
 	var output []api.NodeData

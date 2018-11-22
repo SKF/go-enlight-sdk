@@ -129,15 +129,6 @@ func (mock *client) IngestNodesDataWithContext(ctx context.Context, input iot_gr
 	return args.Error(0)
 }
 
-func (mock *client) IngestNodeDataStream(c <-chan iot_grpcapi.IngestNodeDataStreamInput) error {
-	args := mock.Called(c)
-	return args.Error(0)
-}
-func (mock *client) IngestNodeDataStreamWithContext(ctx context.Context, c <-chan iot_grpcapi.IngestNodeDataStreamInput) error {
-	args := mock.Called(ctx, c)
-	return args.Error(0)
-}
-
 func (mock *client) GetLatestNodeData(input iot_grpcapi.GetLatestNodeDataInput) (*iot_grpcapi.NodeData, error) {
 	args := mock.Called(input)
 	return args.Get(0).(*iot_grpcapi.NodeData), args.Error(1)
@@ -155,15 +146,6 @@ func (mock *client) GetNodeData(input iot_grpcapi.GetNodeDataInput) ([]iot_grpca
 func (mock *client) GetNodeDataWithContext(ctx context.Context, input iot_grpcapi.GetNodeDataInput) ([]iot_grpcapi.NodeData, error) {
 	args := mock.Called(ctx, input)
 	return args.Get(0).([]iot_grpcapi.NodeData), args.Error(1)
-}
-
-func (mock *client) GetNodeDataStream(input iot_grpcapi.GetNodeDataStreamInput, c chan<- iot_grpcapi.GetNodeDataStreamOutput) error {
-	args := mock.Called(input, c)
-	return args.Error(0)
-}
-func (mock *client) GetNodeDataStreamWithContext(ctx context.Context, input iot_grpcapi.GetNodeDataStreamInput, c chan<- iot_grpcapi.GetNodeDataStreamOutput) error {
-	args := mock.Called(ctx, input, c)
-	return args.Error(0)
 }
 
 func (mock *client) GetMedia(input iot_grpcapi.GetMediaInput) (iot_grpcapi.Media, error) {

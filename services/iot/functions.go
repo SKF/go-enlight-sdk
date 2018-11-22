@@ -18,6 +18,7 @@ func (c *Client) CreateTask(task iot_grpcapi.InitialTaskDescription) (taskID str
 	defer cancel()
 	return c.CreateTaskWithContext(ctx, task)
 }
+
 func (c *Client) CreateTaskWithContext(ctx context.Context, task iot_grpcapi.InitialTaskDescription) (taskID string, err error) {
 	output, err := c.api.CreateTask(ctx, &task)
 	if output != nil {
@@ -150,27 +151,6 @@ func (c *Client) IngestNodeDataWithContext(ctx context.Context, input iot_grpcap
 	return
 }
 
-func (c *Client) IngestNodeDataStream(inputChannel <-chan iot_grpcapi.IngestNodeDataStreamInput) (err error) {
-	ctx, cancel := context.WithCancel(context.Background())
-	defer cancel()
-	return c.IngestNodeDataStreamWithContext(ctx, inputChannel)
-}
-func (c *Client) IngestNodeDataStreamWithContext(ctx context.Context, inputChannel <-chan iot_grpcapi.IngestNodeDataStreamInput) (err error) {
-	stream, err := c.api.IngestNodeDataStream(ctx)
-	if err != nil {
-		return
-	}
-	for nodeData := range inputChannel {
-		nd := nodeData
-		if err = stream.Send(&nd); err != nil {
-			return
-		}
-	}
-
-	_, err = stream.CloseAndRecv()
-	return
-}
-
 func (c *Client) GetTaskByUUID(input string) (output *iot_grpcapi.TaskDescription, err error) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
 	defer cancel()
@@ -236,31 +216,6 @@ func (c *Client) GetNodeDataWithContext(ctx context.Context, input iot_grpcapi.G
 		}
 	}
 	return
-}
-
-func (c *Client) GetNodeDataStream(input iot_grpcapi.GetNodeDataStreamInput, dc chan<- iot_grpcapi.GetNodeDataStreamOutput) (err error) {
-	ctx, cancel := context.WithCancel(context.Background())
-	defer cancel()
-	return c.GetNodeDataStreamWithContext(ctx, input, dc)
-}
-func (c *Client) GetNodeDataStreamWithContext(ctx context.Context, input iot_grpcapi.GetNodeDataStreamInput, dc chan<- iot_grpcapi.GetNodeDataStreamOutput) (err error) {
-	stream, err := c.api.GetNodeDataStream(ctx, &input)
-	if err != nil {
-		return
-	}
-
-	for {
-		var nodeData *iot_grpcapi.GetNodeDataStreamOutput
-		nodeData, err = stream.Recv()
-		if err == io.EOF {
-			err = nil
-			return
-		}
-		if err != nil {
-			return
-		}
-		dc <- *nodeData
-	}
 }
 
 // Delete Node data functions
