@@ -4,9 +4,9 @@ import:
     subpackages:
       - log
   - package: github.com/SKF/proto
-    version: v1.6.4-go
+    version: v1.6.7-go
   - package: github.com/golang/protobuf
-    version: v1.1.0
+    version: v1.2.0
     subpackages:
       - proto
   - package: golang.org/x/net
