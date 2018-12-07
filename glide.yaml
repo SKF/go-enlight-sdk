@@ -6,7 +6,6 @@ import:
   - package: github.com/SKF/proto
     version: v1.6.5-go
   - package: github.com/golang/protobuf
-    version: v1.1.0
     subpackages:
       - proto
   - package: golang.org/x/net
