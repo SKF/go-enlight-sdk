@@ -96,6 +96,23 @@ func (c *Client) GetPointAlarmStatusStreamWithContext(ctx context.Context, dc ch
 	}
 }
 
+// GetPointAlarmStatusEventLog get all alarm events after a given sequence ID
+func (c *Client) GetPointAlarmStatusEventLog(seqID string) (events pas_api.GetPointAlarmStatusEventLogOutput, err error) {
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+	return c.GetPointAlarmStatusEventLogWithContext(ctx, seqID)
+}
+
+// GetPointAlarmStatusEventLogWithContext get all alarm events after a given sequence ID
+func (c *Client) GetPointAlarmStatusEventLogWithContext(ctx context.Context, seqID string) (events pas_api.GetPointAlarmStatusEventLogOutput, err error) {
+	input := pas_api.GetPointAlarmStatusEventLogInput{SeqId: seqID}
+	resp, err := c.api.GetPointAlarmStatusEventLog(ctx, &input)
+	if resp != nil {
+		events = *resp
+	}
+	return
+}
+
 // CalculateAndSetPointAlarmStatus calculates and sets new PAS based on input data
 func (c *Client) CalculateAndSetPointAlarmStatus(input pas_api.CalculateAndSetPointAlarmStatusInput) error {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
