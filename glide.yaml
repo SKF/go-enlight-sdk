@@ -4,7 +4,7 @@ import:
     subpackages:
       - log
   - package: github.com/SKF/proto
-    version: v1.6.5-go
+    version: v1.6.7-go
   - package: github.com/golang/protobuf
     subpackages:
       - proto
