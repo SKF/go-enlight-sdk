@@ -27,8 +27,8 @@ type IAMClient interface {
 	GetEventRecords(since int, limit *int32) ([]eventsource.Record, error)
 	GetEventRecordsWithContext(ctx context.Context, since int, limit *int32) ([]eventsource.Record, error)
 
-	IsAuthorized(userID, action string, resource *common.Origin) error
-	IsAuthorizedWithContext(ctx context.Context, userID, action string, resource *common.Origin) error
+	IsAuthorized(userID, action string, resource *common.Origin) (bool, error)
+	IsAuthorizedWithContext(ctx context.Context, userID, action string, resource *common.Origin) (bool, error)
 
 	AddAuthorizationResource(resource common.Origin) error
 	AddAuthorizationResourceWithContext(ctx context.Context, resource common.Origin) error
@@ -36,11 +36,11 @@ type IAMClient interface {
 	RemoveAuthorizationResource(resource common.Origin) error
 	RemoveAuthorizationResourceWithContext(ctx context.Context, resource common.Origin) error
 
-	AddAuthorizationResourceParent(resource common.Origin, parent common.Origin) error
-	AddAuthorizationResourceParentWithContext(ctx context.Context, resource common.Origin, parent common.Origin) error
+	AddAuthorizationResourceRelation(resource common.Origin, parent common.Origin) error
+	AddAuthorizationResourceRelationWithContext(ctx context.Context, resource common.Origin, parent common.Origin) error
 
-	RemoveAuthorizationResourceParent(resource common.Origin, parent common.Origin) error
-	RemoveAuthorizationResourceParentWithContext(ctx context.Context, resource common.Origin, parent common.Origin) error
+	RemoveAuthorizationResourceRelation(resource common.Origin, parent common.Origin) error
+	RemoveAuthorizationResourceRelationWithContext(ctx context.Context, resource common.Origin, parent common.Origin) error
 
 	AddUserPermission(userID, role string, resource common.Origin) error
 	AddUserPermissionWithContext(ctx context.Context, userID, role string, resource common.Origin) error
