@@ -73,6 +73,10 @@ func (c *client) IsAuthorizedWithContext(ctx context.Context, userID, action str
 		Action:   action,
 		Resource: resource,
 	})
+	if err != nil {
+		return false, err
+	}
+
 	return result.Ok, err
 }
 
