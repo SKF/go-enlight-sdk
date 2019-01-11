@@ -23,7 +23,6 @@ func (c *client) CheckAuthenticationWithContext(ctx context.Context, token, arn 
 		user = *output
 	}
 	return
-
 }
 
 func (c *client) CheckAuthenticationByEndpoint(token, api, method, endpoint string) (user iam_grpcapi.User, err error) {
@@ -43,7 +42,6 @@ func (c *client) CheckAuthenticationByEndpointWithContext(ctx context.Context, t
 		user = *output
 	}
 	return
-
 }
 
 func (c *client) GetNodesByUser(userID string) (nodeIDs []string, err error) {
@@ -86,7 +84,6 @@ func (c *client) IsAuthorized(userID, action string, resource *common.Origin) (b
 	defer cancel()
 	return c.IsAuthorizedWithContext(ctx, userID, action, resource)
 }
-
 func (c *client) IsAuthorizedWithContext(ctx context.Context, userID, action string, resource *common.Origin) (bool, error) {
 	result, err := c.api.IsAuthorized(ctx, &iam_grpcapi.IsAuthorizedInput{
 		UserId:   userID,
@@ -105,7 +102,6 @@ func (c *client) AddAuthorizationResource(resource common.Origin) error {
 	defer cancel()
 	return c.AddAuthorizationResourceWithContext(ctx, resource)
 }
-
 func (c *client) AddAuthorizationResourceWithContext(ctx context.Context, resource common.Origin) error {
 	_, err := c.api.AddAuthorizationResource(ctx, &iam_grpcapi.AddAuthorizationResourceInput{
 		Resource: &resource,
@@ -118,7 +114,6 @@ func (c *client) RemoveAuthorizationResource(resource common.Origin) error {
 	defer cancel()
 	return c.RemoveAuthorizationResourceWithContext(ctx, resource)
 }
-
 func (c *client) RemoveAuthorizationResourceWithContext(ctx context.Context, resource common.Origin) error {
 	_, err := c.api.RemoveAuthorizationResource(ctx, &iam_grpcapi.RemoveAuthorizationResourceInput{
 		Resource: &resource,
@@ -126,12 +121,32 @@ func (c *client) RemoveAuthorizationResourceWithContext(ctx context.Context, res
 	return err
 }
 
+func (c *client) GetAuthorizationResourcesByType(resourceType string) (resources []common.Origin, err error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
+	defer cancel()
+	return c.GetAuthorizationResourcesByTypeWithContext(ctx, resourceType)
+}
+func (c *client) GetAuthorizationResourcesByTypeWithContext(ctx context.Context, resourceType string) (resources []common.Origin, err error) {
+	input := iam_grpcapi.GetAuthorizationResourcesByTypeInput{ResourceType: resourceType}
+	output, err := c.api.GetAuthorizationResourcesByType(ctx, &input)
+	if err != nil {
+		return
+	}
+	if output != nil {
+		for _, resource := range output.Resources {
+			if resource != nil {
+				resources = append(resources, *resource)
+			}
+		}
+	}
+	return
+}
+
 func (c *client) AddAuthorizationResourceRelation(resource common.Origin, parent common.Origin) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
 	defer cancel()
 	return c.AddAuthorizationResourceRelationWithContext(ctx, resource, parent)
 }
-
 func (c *client) AddAuthorizationResourceRelationWithContext(ctx context.Context, resource common.Origin, parent common.Origin) error {
 	_, err := c.api.AddAuthorizationResourceRelation(ctx, &iam_grpcapi.AddAuthorizationResourceRelationInput{
 		Resource: &resource,
@@ -145,7 +160,6 @@ func (c *client) RemoveAuthorizationResourceRelation(resource common.Origin, par
 	defer cancel()
 	return c.RemoveAuthorizationResourceRelationWithContext(ctx, resource, parent)
 }
-
 func (c *client) RemoveAuthorizationResourceRelationWithContext(ctx context.Context, resource common.Origin, parent common.Origin) error {
 	_, err := c.api.RemoveAuthorizationResourceRelation(ctx, &iam_grpcapi.RemoveAuthorizationResourceRelationInput{
 		Resource: &resource,
@@ -154,12 +168,32 @@ func (c *client) RemoveAuthorizationResourceRelationWithContext(ctx context.Cont
 	return err
 }
 
+func (c *client) GetAuthorizationResourceRelations(resource common.Origin) (resources []common.Origin, err error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
+	defer cancel()
+	return c.GetAuthorizationResourceRelationsWithContext(ctx, resource)
+}
+func (c *client) GetAuthorizationResourceRelationsWithContext(ctx context.Context, resource common.Origin) (resources []common.Origin, err error) {
+	input := iam_grpcapi.GetAuthorizationResourceRelationsInput{}
+	output, err := c.api.GetAuthorizationResourceRelations(ctx, &input)
+	if err != nil {
+		return
+	}
+	if output != nil {
+		for _, resource := range output.Resources {
+			if resource != nil {
+				resources = append(resources, *resource)
+			}
+		}
+	}
+	return
+}
+
 func (c *client) AddUserPermission(userID, role string, resource common.Origin) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
 	defer cancel()
 	return c.AddUserPermissionWithContext(ctx, userID, role, resource)
 }
-
 func (c *client) AddUserPermissionWithContext(ctx context.Context, userID, role string, resource common.Origin) error {
 	_, err := c.api.AddUserPermission(ctx, &iam_grpcapi.AddUserPermissionInput{
 		UserId:   userID,
@@ -174,7 +208,6 @@ func (c *client) RemoveUserPermission(userID, role string, resource common.Origi
 	defer cancel()
 	return c.RemoveUserPermissionWithContext(ctx, userID, role, resource)
 }
-
 func (c *client) RemoveUserPermissionWithContext(ctx context.Context, userID, role string, resource common.Origin) error {
 	_, err := c.api.RemoveUserPermission(ctx, &iam_grpcapi.RemoveUserPermissionInput{
 		UserId:   userID,
