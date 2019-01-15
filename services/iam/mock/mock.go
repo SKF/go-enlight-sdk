@@ -50,7 +50,7 @@ func (mock *client) CheckAuthenticationWithContext(ctx context.Context, token, a
 	return args.Get(0).(iam_grpcapi.User), args.Error(1)
 }
 
-func (mock *client) CheckAuthenticationByEndpoint(api, token, api, method, endpoint string) (iam_grpcapi.User, error) {
+func (mock *client) CheckAuthenticationByEndpoint(token, api, method, endpoint string) (iam_grpcapi.User, error) {
 	args := mock.Called(token, api, method, endpoint)
 	return args.Get(0).(iam_grpcapi.User), args.Error(1)
 }
