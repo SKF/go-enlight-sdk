@@ -11,13 +11,13 @@ import (
 	iam_grpcapi "github.com/SKF/proto/iam"
 )
 
-func (c *client) CheckAuthentication(token, method string) (user iam_grpcapi.User, err error) {
+func (c *client) CheckAuthentication(token, arn string) (user iam_grpcapi.User, err error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
 	defer cancel()
-	return c.CheckAuthenticationWithContext(ctx, token, method)
+	return c.CheckAuthenticationWithContext(ctx, token, arn)
 }
-func (c *client) CheckAuthenticationWithContext(ctx context.Context, token, method string) (user iam_grpcapi.User, err error) {
-	input := &iam_grpcapi.CheckAuthenticationInput{Token: token, MethodArn: method}
+func (c *client) CheckAuthenticationWithContext(ctx context.Context, token, arn string) (user iam_grpcapi.User, err error) {
+	input := &iam_grpcapi.CheckAuthenticationInput{Token: token, MethodArn: arn}
 	output, err := c.api.CheckAuthentication(ctx, input)
 	if output != nil {
 		user = *output
@@ -26,13 +26,18 @@ func (c *client) CheckAuthenticationWithContext(ctx context.Context, token, meth
 
 }
 
-func (c *client) CheckAuthenticationByEndpoint(api, token, method string) (user iam_grpcapi.User, err error) {
+func (c *client) CheckAuthenticationByEndpoint(token, api, method, endpoint string) (user iam_grpcapi.User, err error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
 	defer cancel()
-	return c.CheckAuthenticationByEndpointWithContext(ctx, token, method)
+	return c.CheckAuthenticationByEndpointWithContext(ctx, token, api, method, endpoint)
 }
-func (c *client) CheckAuthenticationByEndpointWithContext(ctx context.Context, api, token, method string) (user iam_grpcapi.User, err error) {
-	input := &iam_grpcapi.CheckAuthenticationByEndpointInput{Api: api, Token: token, MethodArn: method}
+func (c *client) CheckAuthenticationByEndpointWithContext(ctx context.Context, token, api, method, endpoint string) (user iam_grpcapi.User, err error) {
+	input := &iam_grpcapi.CheckAuthenticationByEndpointInput{
+		Api:      api,
+		Token:    token,
+		Method:   method,
+		Endpoint: endpoint,
+	}
 	output, err := c.api.CheckAuthenticationByEndpoint(ctx, input)
 	if output != nil {
 		user = *output
