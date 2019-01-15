@@ -21,6 +21,9 @@ type IAMClient interface {
 	CheckAuthentication(token, method string) (iam_grpcapi.User, error)
 	CheckAuthenticationWithContext(ctx context.Context, token, method string) (iam_grpcapi.User, error)
 
+	CheckAuthenticationByEndpoint(api, token, method string) (iam_grpcapi.User, error)
+	CheckAuthenticationByEndpointWithContext(ctx context.Context, api, token, method string) (iam_grpcapi.User, error)
+
 	GetNodesByUser(userID string) (nodeIDs []string, err error)
 	GetNodesByUserWithContext(ctx context.Context, userID string) (nodeIDs []string, err error)
 

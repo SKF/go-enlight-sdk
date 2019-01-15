@@ -50,6 +50,15 @@ func (mock *client) CheckAuthenticationWithContext(ctx context.Context, token, m
 	return args.Get(0).(iam_grpcapi.User), args.Error(1)
 }
 
+func (mock *client) CheckAuthenticationByEndpoint(api, token, method string) (iam_grpcapi.User, error) {
+	args := mock.Called(api, token, method)
+	return args.Get(0).(iam_grpcapi.User), args.Error(1)
+}
+func (mock *client) CheckAuthenticationByEndpointWithContext(ctx context.Context, api, token, method string) (iam_grpcapi.User, error) {
+	args := mock.Called(ctx, api, token, method)
+	return args.Get(0).(iam_grpcapi.User), args.Error(1)
+}
+
 func (mock *client) GetNodesByUser(userID string) (nodeIDs []string, err error) {
 	args := mock.Called(userID)
 	return args.Get(0).([]string), args.Error(1)

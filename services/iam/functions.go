@@ -26,6 +26,21 @@ func (c *client) CheckAuthenticationWithContext(ctx context.Context, token, meth
 
 }
 
+func (c *client) CheckAuthenticationByEndpoint(api, token, method string) (user iam_grpcapi.User, err error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
+	defer cancel()
+	return c.CheckAuthenticationByEndpointWithContext(ctx, token, method)
+}
+func (c *client) CheckAuthenticationByEndpointWithContext(ctx context.Context, api, token, method string) (user iam_grpcapi.User, err error) {
+	input := &iam_grpcapi.CheckAuthenticationByEndpointInput{Api: api, Token: token, MethodArn: method}
+	output, err := c.api.CheckAuthenticationByEndpoint(ctx, input)
+	if output != nil {
+		user = *output
+	}
+	return
+
+}
+
 func (c *client) GetNodesByUser(userID string) (nodeIDs []string, err error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
 	defer cancel()
