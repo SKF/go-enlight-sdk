@@ -32,6 +32,9 @@ type PointAlarmStatusClient interface {
 	GetPointAlarmStatus(input pas_api.GetPointAlarmStatusInput) (pas_api.AlarmStatus, error)
 	GetPointAlarmStatusWithContext(ctx context.Context, input pas_api.GetPointAlarmStatusInput) (pas_api.AlarmStatus, error)
 
+	GetPointAlarmStatusEventLog(seqID string) (events pas_api.GetPointAlarmStatusEventLogOutput, err error)
+	GetPointAlarmStatusEventLogWithContext(ctx context.Context, seqID string) (events pas_api.GetPointAlarmStatusEventLogOutput, err error)
+
 	GetPointAlarmStatusStream(dc chan<- pas_api.GetPointAlarmStatusStreamOutput) error
 	GetPointAlarmStatusStreamWithContext(ctx context.Context, dc chan<- pas_api.GetPointAlarmStatusStreamOutput) error
 
