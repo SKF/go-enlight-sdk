@@ -39,11 +39,17 @@ type IAMClient interface {
 	RemoveAuthorizationResource(resource common.Origin) error
 	RemoveAuthorizationResourceWithContext(ctx context.Context, resource common.Origin) error
 
+	GetAuthorizationResourcesByType(resourceType string) (resources []common.Origin, err error)
+	GetAuthorizationResourcesByTypeWithContext(ctx context.Context, resourceType string) (resources []common.Origin, err error)
+
 	AddAuthorizationResourceRelation(resource common.Origin, parent common.Origin) error
 	AddAuthorizationResourceRelationWithContext(ctx context.Context, resource common.Origin, parent common.Origin) error
 
 	RemoveAuthorizationResourceRelation(resource common.Origin, parent common.Origin) error
 	RemoveAuthorizationResourceRelationWithContext(ctx context.Context, resource common.Origin, parent common.Origin) error
+
+	GetAuthorizationResourceRelations(resource common.Origin) (resources []common.Origin, err error)
+	GetAuthorizationResourceRelationsWithContext(ctx context.Context, resource common.Origin) (resources []common.Origin, err error)
 
 	AddUserPermission(userID, role string, resource common.Origin) error
 	AddUserPermissionWithContext(ctx context.Context, userID, role string, resource common.Origin) error
