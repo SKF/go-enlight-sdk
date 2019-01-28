@@ -13,6 +13,7 @@ import (
 // ReportsClient describes the exported methods on the reports service
 type ReportsClient interface {
 	Dial(host, port string, opts ...grpc.DialOption) error
+	DialWithContext(ctx context.Context, host, port string, opts ...grpc.DialOption) error
 	Close()
 
 	DeepPing() (output *reports_grpcapi.DeepPingOutput, err error)
@@ -48,8 +49,14 @@ func CreateClient() ReportsClient {
 	return &client{}
 }
 
-func (c *client) Dial(host, port string, opts ...grpc.DialOption) (err error) {
-	conn, err := grpc.Dial(host+":"+port, opts...)
+// Dial creates a client connection to the given host with background context and no timeout
+func (c *client) Dial(host, port string, opts ...grpc.DialOption) error {
+	return c.DialWithContext(context.Background(), host, port, opts...)
+}
+
+// DialWithContext creates a client connection to the given host with context (for timeout and transaction id)
+func (c *client) DialWithContext(ctx context.Context, host, port string, opts ...grpc.DialOption) (err error) {
+	conn, err := grpc.DialContext(ctx, host+":"+port, opts...)
 	if err != nil {
 		return
 	}

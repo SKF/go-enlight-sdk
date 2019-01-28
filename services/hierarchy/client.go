@@ -62,15 +62,8 @@ func CreateClient() HierarchyClient {
 }
 
 // Dial creates a client connection to the given host with background context and no timeout
-func (c *Client) Dial(host, port string, opts ...grpc.DialOption) (err error) {
-	conn, err := grpc.Dial(host+":"+port, opts...)
-	if err != nil {
-		return
-	}
-
-	c.conn = conn
-	c.api = hierarchy_grpcapi.NewHierarchyClient(conn)
-	return
+func (c *Client) Dial(host, port string, opts ...grpc.DialOption) error {
+	return c.DialWithContext(context.Background(), host, port, opts...)
 }
 
 // DialWithContext creates a client connection to the given host with context (for timeout and transaction id)
