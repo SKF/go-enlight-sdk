@@ -27,6 +27,11 @@ func (mock *client) Dial(host, port string, opts ...grpc.DialOption) error {
 	args := mock.Called(host, port, opts)
 	return args.Error(0)
 }
+func (mock *client) DialWithContext(ctx context.Context, host, port string, opts ...grpc.DialOption) error {
+	args := mock.Called(ctx, host, port, opts)
+	return args.Error(0)
+}
+
 func (mock *client) Close() {
 	mock.Called()
 	return
