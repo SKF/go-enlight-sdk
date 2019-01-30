@@ -19,11 +19,11 @@ type IAMClient interface {
 	DeepPing() error
 	DeepPingWithContext(ctx context.Context) error
 
-	CheckAuthentication(token, arn string) (iam_grpcapi.User, error)
-	CheckAuthenticationWithContext(ctx context.Context, token, arn string) (iam_grpcapi.User, error)
+	CheckAuthentication(token, arn string) (iam_grpcapi.UserClaims, error)
+	CheckAuthenticationWithContext(ctx context.Context, token, arn string) (iam_grpcapi.UserClaims, error)
 
-	CheckAuthenticationByEndpoint(token, api, method, endpoint string) (iam_grpcapi.User, error)
-	CheckAuthenticationByEndpointWithContext(ctx context.Context, token, api, method, endpoint string) (iam_grpcapi.User, error)
+	CheckAuthenticationByEndpoint(token, api, method, endpoint string) (iam_grpcapi.UserClaims, error)
+	CheckAuthenticationByEndpointWithContext(ctx context.Context, token, api, method, endpoint string) (iam_grpcapi.UserClaims, error)
 
 	GetNodesByUser(userID string) (nodeIDs []string, err error)
 	GetNodesByUserWithContext(ctx context.Context, userID string) (nodeIDs []string, err error)
