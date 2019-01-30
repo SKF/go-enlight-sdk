@@ -46,22 +46,22 @@ func (mock *client) DeepPingWithContext(ctx context.Context) error {
 	return args.Error(0)
 }
 
-func (mock *client) CheckAuthentication(token, arn string) (iam_grpcapi.User, error) {
+func (mock *client) CheckAuthentication(token, arn string) (iam_grpcapi.UserClaims, error) {
 	args := mock.Called(token, arn)
-	return args.Get(0).(iam_grpcapi.User), args.Error(1)
+	return args.Get(0).(iam_grpcapi.UserClaims), args.Error(1)
 }
-func (mock *client) CheckAuthenticationWithContext(ctx context.Context, token, arn string) (iam_grpcapi.User, error) {
+func (mock *client) CheckAuthenticationWithContext(ctx context.Context, token, arn string) (iam_grpcapi.UserClaims, error) {
 	args := mock.Called(ctx, token, arn)
-	return args.Get(0).(iam_grpcapi.User), args.Error(1)
+	return args.Get(0).(iam_grpcapi.UserClaims), args.Error(1)
 }
 
-func (mock *client) CheckAuthenticationByEndpoint(token, api, method, endpoint string) (iam_grpcapi.User, error) {
+func (mock *client) CheckAuthenticationByEndpoint(token, api, method, endpoint string) (iam_grpcapi.UserClaims, error) {
 	args := mock.Called(token, api, method, endpoint)
-	return args.Get(0).(iam_grpcapi.User), args.Error(1)
+	return args.Get(0).(iam_grpcapi.UserClaims), args.Error(1)
 }
-func (mock *client) CheckAuthenticationByEndpointWithContext(ctx context.Context, token, api, method, endpoint string) (iam_grpcapi.User, error) {
+func (mock *client) CheckAuthenticationByEndpointWithContext(ctx context.Context, token, api, method, endpoint string) (iam_grpcapi.UserClaims, error) {
 	args := mock.Called(ctx, token, api, method, endpoint)
-	return args.Get(0).(iam_grpcapi.User), args.Error(1)
+	return args.Get(0).(iam_grpcapi.UserClaims), args.Error(1)
 }
 
 func (mock *client) GetNodesByUser(userID string) (nodeIDs []string, err error) {
