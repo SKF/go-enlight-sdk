@@ -6,15 +6,16 @@ import (
 
 	"github.com/SKF/proto/common"
 
+	"google.golang.org/grpc"
+
 	"github.com/SKF/go-eventsource/eventsource"
 	hierarchy_grpcapi "github.com/SKF/proto/hierarchy"
-	"google.golang.org/grpc"
 )
 
 // HierarchyClient provides the API operation methods for making
 // requests to Enlight Hierarchy Management Service. See this
 // package's package overview docs for details on the service.
-type HierarchyClient interface {
+type HierarchyClient interface { // nolint: golint
 	Dial(host, port string, opts ...grpc.DialOption) error
 	DialWithContext(ctx context.Context, host, port string, opts ...grpc.DialOption) error
 	Close()

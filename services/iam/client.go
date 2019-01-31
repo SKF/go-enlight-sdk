@@ -6,12 +6,13 @@ import (
 
 	"github.com/SKF/proto/common"
 
+	"google.golang.org/grpc"
+
 	"github.com/SKF/go-eventsource/eventsource"
 	iam_grpcapi "github.com/SKF/proto/iam"
-	"google.golang.org/grpc"
 )
 
-type IAMClient interface {
+type IAMClient interface { // nolint: golint
 	Dial(host, port string, opts ...grpc.DialOption) error
 	DialWithContext(ctx context.Context, host, port string, opts ...grpc.DialOption) error
 	Close()

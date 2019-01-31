@@ -38,20 +38,20 @@ func WithTransportCredentials(serverName, clientCert, clientKey, caCert string) 
 	certificate, err := tls.LoadX509KeyPair(clientCert, clientKey)
 
 	if err != nil {
-		err = fmt.Errorf("Failed to load client certs, %+v", err)
+		err = fmt.Errorf("failed to load client certs, %+v", err)
 		return
 	}
 
 	certPool := x509.NewCertPool()
 	bs, err := ioutil.ReadFile(caCert)
 	if err != nil {
-		err = fmt.Errorf("Failed to read ca cert, %+v", err)
+		err = fmt.Errorf("failed to read ca cert, %+v", err)
 		return
 	}
 
 	ok := certPool.AppendCertsFromPEM(bs)
 	if !ok {
-		err = errors.New("Failed to append certs")
+		err = errors.New("failed to append certs")
 		return
 	}
 

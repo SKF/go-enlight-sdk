@@ -3,9 +3,10 @@ package mock
 import (
 	"context"
 
-	iot_grpcapi "github.com/SKF/proto/iot"
 	"github.com/stretchr/testify/mock"
 	"google.golang.org/grpc"
+
+	iot_grpcapi "github.com/SKF/proto/iot"
 
 	"github.com/SKF/go-enlight-sdk/services/iot"
 )
@@ -14,7 +15,7 @@ type client struct {
 	mock.Mock
 }
 
-func Create() *client {
+func Create() *client { // nolint: golint
 	return new(client)
 }
 
@@ -31,7 +32,6 @@ func (mock *client) DialWithContext(ctx context.Context, host, port string, opts
 
 func (mock *client) Close() {
 	mock.Called()
-	return
 }
 func (mock *client) DeepPing() error {
 	args := mock.Called()
@@ -105,11 +105,11 @@ func (mock *client) SetTaskStatusWithContext(ctx context.Context, input iot_grpc
 	return args.Error(0)
 }
 
-func (mock *client) GetTaskStream(input iot_grpcapi.GetTaskStreamInput, dc chan<- iot_grpcapi.GetTaskStreamOutput) error {
+func (mock *client) GetTaskStream(input iot_grpcapi.GetTaskStreamInput, dc chan<- iot_grpcapi.GetTaskStreamOutput) error { // nolint: staticcheck
 	args := mock.Called(input, dc)
 	return args.Error(0)
 }
-func (mock *client) GetTaskStreamWithContext(ctx context.Context, input iot_grpcapi.GetTaskStreamInput, dc chan<- iot_grpcapi.GetTaskStreamOutput) error {
+func (mock *client) GetTaskStreamWithContext(ctx context.Context, input iot_grpcapi.GetTaskStreamInput, dc chan<- iot_grpcapi.GetTaskStreamOutput) error { // nolint: staticcheck
 	args := mock.Called(ctx, input, dc)
 	return args.Error(0)
 }
@@ -197,11 +197,11 @@ func (mock *client) GetTaskByUUIDWithContext(ctx context.Context, input string) 
 	args := mock.Called(ctx, input)
 	return args.Get(0).(*iot_grpcapi.TaskDescription), args.Error(1)
 }
-func (mock *client) GetTaskByLongId(input int64) (output *iot_grpcapi.TaskDescription, err error) {
+func (mock *client) GetTaskByLongId(input int64) (output *iot_grpcapi.TaskDescription, err error) { // nolint: golint
 	args := mock.Called(input)
 	return args.Get(0).(*iot_grpcapi.TaskDescription), args.Error(1)
 }
-func (mock *client) GetTaskByLongIdWithContext(ctx context.Context, input int64) (output *iot_grpcapi.TaskDescription, err error) {
+func (mock *client) GetTaskByLongIdWithContext(ctx context.Context, input int64) (output *iot_grpcapi.TaskDescription, err error) { // nolint: golint
 	args := mock.Called(ctx, input)
 	return args.Get(0).(*iot_grpcapi.TaskDescription), args.Error(1)
 }

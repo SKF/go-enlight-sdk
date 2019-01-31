@@ -8,9 +8,10 @@ import (
 
 	"github.com/SKF/proto/common"
 
-	iot_grpcapi "github.com/SKF/proto/iot"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+
+	iot_grpcapi "github.com/SKF/proto/iot"
 )
 
 func (c *Client) CreateTask(task iot_grpcapi.InitialTaskDescription) (taskID string, err error) {
@@ -167,12 +168,12 @@ func (c *Client) GetTaskByUUIDWithContext(ctx context.Context, input string) (ou
 	return
 }
 
-func (c *Client) GetTaskByLongId(input int64) (output *iot_grpcapi.TaskDescription, err error) {
+func (c *Client) GetTaskByLongId(input int64) (output *iot_grpcapi.TaskDescription, err error) { // nolint: golint
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
 	defer cancel()
 	return c.GetTaskByLongIdWithContext(ctx, input)
 }
-func (c *Client) GetTaskByLongIdWithContext(ctx context.Context, input int64) (output *iot_grpcapi.TaskDescription, err error) {
+func (c *Client) GetTaskByLongIdWithContext(ctx context.Context, input int64) (output *iot_grpcapi.TaskDescription, err error) { // nolint: golint
 	grpcInput := iot_grpcapi.GetTaskByLongIdInput{
 		TaskId: input,
 	}
@@ -267,19 +268,19 @@ func (c *Client) RequestPutMediaSignedURL(in *iot_grpcapi.PutMediaSignedUrlInput
 	return c.RequestPutMediaSignedURLWithContext(ctx, in)
 }
 
-func (c *Client) GetTaskStream(input iot_grpcapi.GetTaskStreamInput, dc chan<- iot_grpcapi.GetTaskStreamOutput) (err error) {
+func (c *Client) GetTaskStream(input iot_grpcapi.GetTaskStreamInput, dc chan<- iot_grpcapi.GetTaskStreamOutput) (err error) { // nolint: staticcheck
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 	return c.GetTaskStreamWithContext(ctx, input, dc)
 }
-func (c *Client) GetTaskStreamWithContext(ctx context.Context, input iot_grpcapi.GetTaskStreamInput, dc chan<- iot_grpcapi.GetTaskStreamOutput) (err error) {
+func (c *Client) GetTaskStreamWithContext(ctx context.Context, input iot_grpcapi.GetTaskStreamInput, dc chan<- iot_grpcapi.GetTaskStreamOutput) (err error) { // nolint: staticcheck
 	stream, err := c.api.GetTaskStream(ctx, &input)
 	if err != nil {
 		return
 	}
 
 	for {
-		var nodeData *iot_grpcapi.GetTaskStreamOutput
+		var nodeData *iot_grpcapi.GetTaskStreamOutput // nolint: staticcheck
 		nodeData, err = stream.Recv()
 		if err == io.EOF {
 			err = nil

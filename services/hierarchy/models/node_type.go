@@ -13,7 +13,7 @@ const (
 	NodeTypeInspectionPoint    NodeType = "inspection_point"
 )
 
-var relations = map[NodeType][]NodeType{
+var relations = map[NodeType][]NodeType{ // nolint
 	NodeTypeCompany:            {NodeTypeCompany},
 	NodeTypeSite:               {NodeTypeCompany},
 	NodeTypePlant:              {NodeTypeSite},

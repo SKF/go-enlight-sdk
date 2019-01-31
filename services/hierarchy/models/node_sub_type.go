@@ -14,7 +14,7 @@ const (
 	NodeSubTypeInspectionPoint    NodeSubType = "inspection_point"
 )
 
-var nodeTypeClasses = map[NodeType][]NodeSubType{
+var nodeTypeClasses = map[NodeType][]NodeSubType{ // nolint
 	NodeTypeCompany:            {NodeSubTypeCompany},
 	NodeTypeSite:               {NodeSubTypeSite},
 	NodeTypePlant:              {NodeSubTypePlant, NodeSubTypeShip},

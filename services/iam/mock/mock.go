@@ -5,10 +5,11 @@ import (
 
 	"github.com/SKF/proto/common"
 
-	"github.com/SKF/go-eventsource/eventsource"
-	iam_grpcapi "github.com/SKF/proto/iam"
 	"github.com/stretchr/testify/mock"
 	"google.golang.org/grpc"
+
+	"github.com/SKF/go-eventsource/eventsource"
+	iam_grpcapi "github.com/SKF/proto/iam"
 
 	"github.com/SKF/go-enlight-sdk/services/iam"
 )
@@ -17,7 +18,7 @@ type client struct {
 	mock.Mock
 }
 
-func Create() *client {
+func Create() *client { // nolint: golint
 	return new(client)
 }
 
@@ -34,7 +35,6 @@ func (mock *client) DialWithContext(ctx context.Context, host, port string, opts
 
 func (mock *client) Close() {
 	mock.Called()
-	return
 }
 
 func (mock *client) DeepPing() error {
