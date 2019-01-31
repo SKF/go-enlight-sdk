@@ -153,7 +153,7 @@ func (c *Client) GetAncestorsWithContext(ctx context.Context, nodeID string) (no
 	return
 }
 
-// GetEvents will return all events that has occured in the Hierarchy
+// GetEvents will return all events that has occurred in the Hierarchy
 // Management Service.
 func (c *Client) GetEvents(since int, limit *int32) (events []eventsource.Record, err error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
@@ -161,7 +161,7 @@ func (c *Client) GetEvents(since int, limit *int32) (events []eventsource.Record
 	return c.GetEventsWithContext(ctx, since, limit)
 }
 
-// GetEventsWithContext will return all events that has occured in the Hierarchy
+// GetEventsWithContext will return all events that has occurred in the Hierarchy
 // Management Service.
 func (c *Client) GetEventsWithContext(ctx context.Context, since int, limit *int32) (events []eventsource.Record, err error) {
 	input := hierarchy_grpcapi.GetEventsInput{Since: int64(since)}

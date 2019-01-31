@@ -68,7 +68,7 @@ func (c *Client) GetPointAlarmStatusWithContext(ctx context.Context, input pas_a
 }
 
 // GetPointAlarmStatusStream gets a stream of alarm status updates for all points
-func (c *Client) GetPointAlarmStatusStream(dc chan<- pas_api.GetPointAlarmStatusStreamOutput) error {
+func (c *Client) GetPointAlarmStatusStream(dc chan<- pas_api.GetPointAlarmStatusStreamOutput) error { // nolint: staticcheck
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 	return c.GetPointAlarmStatusStreamWithContext(ctx, dc)
@@ -76,14 +76,14 @@ func (c *Client) GetPointAlarmStatusStream(dc chan<- pas_api.GetPointAlarmStatus
 }
 
 // GetPointAlarmStatusStreamWithContext gets a stream of alarm status updates for all points
-func (c *Client) GetPointAlarmStatusStreamWithContext(ctx context.Context, dc chan<- pas_api.GetPointAlarmStatusStreamOutput) (err error) {
-	stream, err := c.api.GetPointAlarmStatusStream(ctx, &pas_api.GetPointAlarmStatusStreamInput{})
+func (c *Client) GetPointAlarmStatusStreamWithContext(ctx context.Context, dc chan<- pas_api.GetPointAlarmStatusStreamOutput) (err error) { // nolint: staticcheck
+	stream, err := c.api.GetPointAlarmStatusStream(ctx, &pas_api.GetPointAlarmStatusStreamInput{}) // nolint: staticcheck
 	if err != nil {
 		return
 	}
 
 	for {
-		var output *pas_api.GetPointAlarmStatusStreamOutput
+		var output *pas_api.GetPointAlarmStatusStreamOutput // nolint: staticcheck
 		output, err = stream.Recv()
 		if err == io.EOF {
 			err = nil

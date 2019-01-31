@@ -6,11 +6,12 @@ import (
 
 	"github.com/SKF/proto/common"
 
-	iot_grpcapi "github.com/SKF/proto/iot"
 	"google.golang.org/grpc"
+
+	iot_grpcapi "github.com/SKF/proto/iot"
 )
 
-type IoTClient interface {
+type IoTClient interface { // nolint: golint
 	Dial(host, port string, opts ...grpc.DialOption) error
 	DialWithContext(ctx context.Context, host, port string, opts ...grpc.DialOption) error
 	Close()
@@ -39,8 +40,8 @@ type IoTClient interface {
 	SetTaskStatus(input iot_grpcapi.SetTaskStatusInput) (err error)
 	SetTaskStatusWithContext(ctx context.Context, input iot_grpcapi.SetTaskStatusInput) (err error)
 
-	GetTaskStream(input iot_grpcapi.GetTaskStreamInput, dc chan<- iot_grpcapi.GetTaskStreamOutput) (err error)
-	GetTaskStreamWithContext(ctx context.Context, input iot_grpcapi.GetTaskStreamInput, dc chan<- iot_grpcapi.GetTaskStreamOutput) (err error)
+	GetTaskStream(input iot_grpcapi.GetTaskStreamInput, dc chan<- iot_grpcapi.GetTaskStreamOutput) (err error)                                 // nolint: staticcheck
+	GetTaskStreamWithContext(ctx context.Context, input iot_grpcapi.GetTaskStreamInput, dc chan<- iot_grpcapi.GetTaskStreamOutput) (err error) // nolint: staticcheck
 
 	GetTasksByStatus(input iot_grpcapi.GetTasksByStatusInput) ([]*iot_grpcapi.TaskDescription, error)
 	GetTasksByStatusWithContext(ctx context.Context, input iot_grpcapi.GetTasksByStatusInput) ([]*iot_grpcapi.TaskDescription, error)

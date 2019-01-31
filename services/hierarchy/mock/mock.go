@@ -3,9 +3,10 @@ package mock
 import (
 	"context"
 
-	"github.com/SKF/go-eventsource/eventsource"
 	"github.com/stretchr/testify/mock"
 	"google.golang.org/grpc"
+
+	"github.com/SKF/go-eventsource/eventsource"
 
 	"github.com/SKF/go-enlight-sdk/services/hierarchy"
 	"github.com/SKF/proto/common"
@@ -16,7 +17,7 @@ type client struct {
 	mock.Mock
 }
 
-func Create() *client {
+func Create() *client { // nolint: golint
 	return new(client)
 }
 
@@ -34,7 +35,6 @@ func (mock *client) DialWithContext(ctx context.Context, host, port string, opts
 
 func (mock *client) Close() {
 	mock.Called()
-	return
 }
 
 func (mock *client) DeepPing() error {

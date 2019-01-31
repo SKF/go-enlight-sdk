@@ -23,7 +23,7 @@ func (c *client) CheckAuthenticationWithContext(ctx context.Context, token, arn 
 	if output != nil {
 		claims = *output
 	} else if err == nil {
-		err = errors.New("No output")
+		err = errors.New("no output")
 	}
 	return
 }
@@ -44,7 +44,7 @@ func (c *client) CheckAuthenticationByEndpointWithContext(ctx context.Context, t
 	if output != nil {
 		claims = *output
 	} else if err == nil {
-		err = errors.New("No output")
+		err = errors.New("no output")
 	}
 	return
 }

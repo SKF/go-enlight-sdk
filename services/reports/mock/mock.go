@@ -3,9 +3,10 @@ package mock
 import (
 	"context"
 
-	reports_grpcapi "github.com/SKF/proto/reports"
 	"github.com/stretchr/testify/mock"
 	"google.golang.org/grpc"
+
+	reports_grpcapi "github.com/SKF/proto/reports"
 
 	"github.com/SKF/go-enlight-sdk/services/reports"
 )
@@ -14,7 +15,7 @@ type client struct {
 	mock.Mock
 }
 
-func Create() *client {
+func Create() *client { // nolint: golint
 	return new(client)
 }
 
@@ -31,7 +32,6 @@ func (mock *client) DialWithContext(ctx context.Context, host, port string, opts
 
 func (mock *client) Close() {
 	mock.Called()
-	return
 }
 
 func (mock *client) DeepPing() (output *reports_grpcapi.DeepPingOutput, err error) {

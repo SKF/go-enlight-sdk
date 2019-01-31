@@ -4,9 +4,10 @@ package mock
 import (
 	"context"
 
-	pas_api "github.com/SKF/proto/pas"
 	"github.com/stretchr/testify/mock"
 	"google.golang.org/grpc"
+
+	pas_api "github.com/SKF/proto/pas"
 
 	"github.com/SKF/go-enlight-sdk/services/pas"
 )
@@ -15,7 +16,7 @@ type client struct {
 	mock.Mock
 }
 
-func Create() *client {
+func Create() *client { // nolint: golint
 	return new(client)
 }
 
@@ -32,7 +33,6 @@ func (mock *client) DialWithContext(ctx context.Context, host, port string, opts
 
 func (mock *client) Close() {
 	mock.Called()
-	return
 }
 
 func (mock *client) DeepPing() error {
@@ -90,11 +90,11 @@ func (mock *client) GetPointAlarmStatusEventLogWithContext(ctx context.Context, 
 	return args.Get(0).(pas_api.GetPointAlarmStatusEventLogOutput), args.Error(1)
 }
 
-func (mock *client) GetPointAlarmStatusStream(dc chan<- pas_api.GetPointAlarmStatusStreamOutput) error {
+func (mock *client) GetPointAlarmStatusStream(dc chan<- pas_api.GetPointAlarmStatusStreamOutput) error { // nolint: staticcheck
 	args := mock.Called(dc)
 	return args.Error(0)
 }
-func (mock *client) GetPointAlarmStatusStreamWithContext(ctx context.Context, dc chan<- pas_api.GetPointAlarmStatusStreamOutput) error {
+func (mock *client) GetPointAlarmStatusStreamWithContext(ctx context.Context, dc chan<- pas_api.GetPointAlarmStatusStreamOutput) error { // nolint: staticcheck
 	args := mock.Called(ctx, dc)
 	return args.Error(0)
 }

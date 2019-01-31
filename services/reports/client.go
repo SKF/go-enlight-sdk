@@ -6,12 +6,13 @@ import (
 
 	"github.com/SKF/proto/common"
 
-	reports_grpcapi "github.com/SKF/proto/reports"
 	"google.golang.org/grpc"
+
+	reports_grpcapi "github.com/SKF/proto/reports"
 )
 
 // ReportsClient describes the exported methods on the reports service
-type ReportsClient interface {
+type ReportsClient interface { // nolint: golint
 	Dial(host, port string, opts ...grpc.DialOption) error
 	DialWithContext(ctx context.Context, host, port string, opts ...grpc.DialOption) error
 	Close()
