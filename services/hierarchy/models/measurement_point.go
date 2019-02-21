@@ -6,6 +6,7 @@ type MeasurementPoint struct {
 	MeasurementType MeasurementType `json:"measurementType"`
 	Shaft           string          `json:"shaft"`
 	ShaftSide       ShaftSide       `json:"shaftSide"`
+	FixedSpeedRPM   float64         `json:"fixedSpeedRPM"`
 }
 
 type Orientation string
