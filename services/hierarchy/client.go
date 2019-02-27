@@ -35,6 +35,9 @@ type HierarchyClient interface { // nolint: golint
 	GetChildNodes(parentID string) ([]hierarchy_grpcapi.Node, error)
 	GetChildNodesWithContext(ctx context.Context, parentID string) ([]hierarchy_grpcapi.Node, error)
 
+	GetSubTree(parentID string, depth int) ([]hierarchy_grpcapi.Node, error)
+	GetSubTreeWithContext(ctx context.Context, parentID string, depth int) ([]hierarchy_grpcapi.Node, error)
+
 	DeleteNode(request hierarchy_grpcapi.DeleteNodeInput) error
 	DeleteNodeWithContext(ctx context.Context, request hierarchy_grpcapi.DeleteNodeInput) error
 
