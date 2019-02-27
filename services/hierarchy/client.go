@@ -44,6 +44,9 @@ type HierarchyClient interface { // nolint: golint
 	GetAncestors(nodeID string) ([]hierarchy_grpcapi.AncestorNode, error)
 	GetAncestorsWithContext(ctx context.Context, nodeID string) ([]hierarchy_grpcapi.AncestorNode, error)
 
+	GetEventsByCustomer(since int, limit *int32, customerID *string) ([]eventsource.Record, error)
+	GetEventsByCustomerWithContext(ctx context.Context, since int, limit *int32, customerID *string) ([]eventsource.Record, error)
+
 	GetEvents(since int, limit *int32) ([]eventsource.Record, error)
 	GetEventsWithContext(ctx context.Context, since int, limit *int32) ([]eventsource.Record, error)
 

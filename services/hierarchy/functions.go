@@ -202,3 +202,31 @@ func (c *Client) GetEventsWithContext(ctx context.Context, since int, limit *int
 	err = json.Unmarshal(output.Events, &events)
 	return
 }
+
+// GetEventsByCustomer will return all events that has occurred in the Hierarchy under a specified company
+// Management Service.
+func (c *Client) GetEventsByCustomer(since int, limit *int32, customerID *string) (events []eventsource.Record, err error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
+	defer cancel()
+	return c.GetEventsByCustomerWithContext(ctx, since, limit, customerID)
+}
+
+// GetEventsByCustomerWithContext will return all events that has occurred in the Hierarchy under a specified company
+// Management Service.
+func (c *Client) GetEventsByCustomerWithContext(ctx context.Context, since int, limit *int32, customerID *string) (events []eventsource.Record, err error) {
+	input := hierarchy_grpcapi.GetEventsInput{Since: int64(since)}
+	if limit != nil {
+		input.Limit = &common.PrimitiveInt32{Value: *limit}
+	}
+	if customerID != nil {
+		input.CustomerId = &common.PrimitiveString{Value: *customerID}
+	}
+
+	output, err := c.api.GetEvents(ctx, &input)
+	if err != nil {
+		return
+	}
+
+	err = json.Unmarshal(output.Events, &events)
+	return
+}

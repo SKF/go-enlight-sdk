@@ -100,6 +100,15 @@ func (mock *client) GetEventsWithContext(ctx context.Context, since int, limit *
 	return args.Get(0).([]eventsource.Record), args.Error(1)
 }
 
+func (mock *client) GetEventsByCustomer(since int, limit *int32, customerID *string) ([]eventsource.Record, error) {
+	args := mock.Called(since, limit, customerID)
+	return args.Get(0).([]eventsource.Record), args.Error(1)
+}
+func (mock *client) GetEventsByCustomerWithContext(ctx context.Context, since int, limit *int32, customerID *string) ([]eventsource.Record, error) {
+	args := mock.Called(ctx, since, limit, customerID)
+	return args.Get(0).([]eventsource.Record), args.Error(1)
+}
+
 func (mock *client) GetParentNode(nodeID string) (hierarchy_grpcapi.Node, error) {
 	args := mock.Called(nodeID)
 	return args.Get(0).(hierarchy_grpcapi.Node), args.Error(1)
