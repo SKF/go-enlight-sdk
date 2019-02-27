@@ -128,10 +128,10 @@ func (mock *client) GetChildNodesWithContext(ctx context.Context, parentID strin
 }
 
 func (mock *client) GetSubTree(rootID string, depth int) ([]hierarchy_grpcapi.Node, error) {
-	args := mock.Called(parentID, depth)
+	args := mock.Called(rootID, depth)
 	return args.Get(0).([]hierarchy_grpcapi.Node), args.Error(1)
 }
 func (mock *client) GetSubTreeWithContext(ctx context.Context, rootID string, depth int) ([]hierarchy_grpcapi.Node, error) {
-	args := mock.Called(ctx, parentID, depth)
+	args := mock.Called(ctx, rootID, depth)
 	return args.Get(0).([]hierarchy_grpcapi.Node), args.Error(1)
 }
