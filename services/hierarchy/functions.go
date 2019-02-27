@@ -98,16 +98,16 @@ func (c *Client) GetChildNodesWithContext(ctx context.Context, parentID string) 
 	return
 }
 
-// GetSubTree will get all ancestor nodes for the node id it takes as
-// an argument.
+// GetSubTree will get a subtree rooted at the given node id. The resulting tree is cut off
+// at the given depth. A depth of 0 means no depth limit.
 func (c *Client) GetSubTree(rootID string, depth int) (nodes []hierarchy_grpcapi.Node, err error) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
 	defer cancel()
 	return c.GetSubTreeWithContext(ctx, rootID, depth)
 }
 
-// GetSubTreeWithContext will get all ancestor nodes for the node id it takes as
-// an argument.
+// GetSubTreeWithContext will get a subtree rooted at the given node id. The resulting tree is cut off
+// at the given depth. A depth of 0 means no depth limit.
 func (c *Client) GetSubTreeWithContext(ctx context.Context, rootID string, depth int) (nodes []hierarchy_grpcapi.Node, err error) {
 	resp, err := c.api.GetSubTree(ctx, &hierarchy_grpcapi.GetSubTreeInput{
 		RootId: rootID,
