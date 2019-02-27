@@ -18,7 +18,7 @@ func (c *Client) SaveNode(request hierarchy_grpcapi.SaveNodeInput) (string, erro
 	return c.SaveNodeWithContext(ctx, request)
 }
 
-// SaveNode will add the node if it this not exist and otherwise
+// SaveNodeWithContext will add the node if it this not exist and otherwise
 // create it.
 func (c *Client) SaveNodeWithContext(ctx context.Context, request hierarchy_grpcapi.SaveNodeInput) (string, error) {
 	resp, err := c.api.SaveNode(ctx, &request)
@@ -88,6 +88,31 @@ func (c *Client) GetChildNodes(parentID string) (nodes []hierarchy_grpcapi.Node,
 // an argument.
 func (c *Client) GetChildNodesWithContext(ctx context.Context, parentID string) (nodes []hierarchy_grpcapi.Node, err error) {
 	resp, err := c.api.GetChildNodes(ctx, &common.PrimitiveString{Value: parentID})
+	if resp != nil {
+		for _, node := range resp.Nodes {
+			if node != nil {
+				nodes = append(nodes, *node)
+			}
+		}
+	}
+	return
+}
+
+// GetSubTree will get a subtree rooted at the given node id. The resulting tree is cut off
+// at the given depth. A depth of 0 means no depth limit.
+func (c *Client) GetSubTree(rootID string, depth int) (nodes []hierarchy_grpcapi.Node, err error) {
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
+	defer cancel()
+	return c.GetSubTreeWithContext(ctx, rootID, depth)
+}
+
+// GetSubTreeWithContext will get a subtree rooted at the given node id. The resulting tree is cut off
+// at the given depth. A depth of 0 means no depth limit.
+func (c *Client) GetSubTreeWithContext(ctx context.Context, rootID string, depth int) (nodes []hierarchy_grpcapi.Node, err error) {
+	resp, err := c.api.GetSubTree(ctx, &hierarchy_grpcapi.GetSubTreeInput{
+		RootId: rootID,
+		Depth:  int32(depth),
+	})
 	if resp != nil {
 		for _, node := range resp.Nodes {
 			if node != nil {
