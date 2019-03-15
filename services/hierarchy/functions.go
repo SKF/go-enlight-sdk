@@ -102,7 +102,7 @@ func (c *Client) GetChildNodesWithContext(ctx context.Context, parentID string) 
 // at the given depth. A depth of 0 means no depth limit.
 // Subtree returned will be filtered on node types if specified. If node types are left out
 // no filter is applied
-func (c *Client) GetSubTree(rootID string, depth int, nodeTypes ...string) (nodes []hierarchy_grpcapi.Node, err error) {
+func (c *Client) GetSubTree(rootID string, depth int, nodeTypes []string) (nodes []hierarchy_grpcapi.Node, err error) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
 	defer cancel()
 	return c.GetSubTreeWithContext(ctx, rootID, depth, nodeTypes)
@@ -112,7 +112,7 @@ func (c *Client) GetSubTree(rootID string, depth int, nodeTypes ...string) (node
 // at the given depth. A depth of 0 means no depth limit.
 // Subtree returned will be filtered on node types if specified. If node types are left out
 // no filter is applied
-func (c *Client) GetSubTreeWithContext(ctx context.Context, rootID string, depth int, nodeTypes ...string) (nodes []hierarchy_grpcapi.Node, err error) {
+func (c *Client) GetSubTreeWithContext(ctx context.Context, rootID string, depth int, nodeTypes []string) (nodes []hierarchy_grpcapi.Node, err error) {
 	resp, err := c.api.GetSubTree(ctx, &hierarchy_grpcapi.GetSubTreeInput{
 		RootId:    rootID,
 		Depth:     int32(depth),
