@@ -12,6 +12,20 @@ import (
 	iam_grpcapi "github.com/SKF/proto/iam"
 )
 
+func (c *client) GetUsers() ([]iam_grpcapi.User, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
+	defer cancel()
+	return c.GetUsersWithContext(ctx)
+}
+func (c *client) GetUsersWithContext(ctx context.Context) (users []iam_grpcapi.User, err error) {
+	users = []iam_grpcapi.User{}
+	output, err := c.api.CheckAuthentication(ctx, &iam_grpcapi.Void{})
+	if output != nil {
+		users = output.Users
+	}
+	return
+}
+
 func (c *client) CheckAuthentication(token, arn string) (claims iam_grpcapi.UserClaims, err error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
 	defer cancel()

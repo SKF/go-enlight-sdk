@@ -20,6 +20,9 @@ type IAMClient interface { // nolint: golint
 	DeepPing() error
 	DeepPingWithContext(ctx context.Context) error
 
+	GetUsers() ([]iam_grpcapi.User, error)
+	GetUsersWithContext(ctx context.Context) ([]iam_grpcapi.User, error)
+
 	CheckAuthentication(token, arn string) (iam_grpcapi.UserClaims, error)
 	CheckAuthenticationWithContext(ctx context.Context, token, arn string) (iam_grpcapi.UserClaims, error)
 
