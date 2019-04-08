@@ -3,6 +3,7 @@ package models
 type NodeSubType string
 
 const (
+	NodeSubTypeRoot               NodeSubType = "root"
 	NodeSubTypeCompany            NodeSubType = "company"
 	NodeSubTypeSite               NodeSubType = "site"
 	NodeSubTypePlant              NodeSubType = "plant"
@@ -15,6 +16,7 @@ const (
 )
 
 var nodeTypeClasses = map[NodeType][]NodeSubType{ // nolint
+	NodeTypeRoot:               {NodeSubTypeRoot},
 	NodeTypeCompany:            {NodeSubTypeCompany},
 	NodeTypeSite:               {NodeSubTypeSite},
 	NodeTypePlant:              {NodeSubTypePlant, NodeSubTypeShip},
