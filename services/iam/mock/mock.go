@@ -162,3 +162,21 @@ func (mock *client) RemoveUserPermissionWithContext(ctx context.Context, userID,
 	args := mock.Called(ctx, userID, role, resource)
 	return args.Error(0)
 }
+
+func (mock *client) GetResourcesByOriginAndType(originID string, resourceType string) (resources []common.Origin, err error) {
+	args := mock.Called(originID, resourceType)
+	return args.Get(0).([]common.Origin), args.Error(1)
+}
+func (mock *client) GetResourcesByOriginAndTypeWithContext(ctx context.Context, originID string, resourceType string) (resources []common.Origin, err error) {
+	args := mock.Called(ctx, originID, resourceType)
+	return args.Get(0).([]common.Origin), args.Error(1)
+}
+
+func (mock *client) GetUserIDsWithAccessToResource(originID string) (resources []string, err error) {
+	args := mock.Called(originID)
+	return args.Get(0).([]string), args.Error(1)
+}
+func (mock *client) GetUserIDsWithAccessToResourceContext(ctx context.Context, originID string) (resources []string, err error) {
+	args := mock.Called(ctx, originID)
+	return args.Get(0).([]string), args.Error(1)
+}

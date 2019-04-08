@@ -221,3 +221,45 @@ func (c *client) RemoveUserPermissionWithContext(ctx context.Context, userID, ro
 	})
 	return err
 }
+
+func (c *client) GetResourcesByOriginAndType(originID string, resourceType string) (resources []common.Origin, err error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
+	defer cancel()
+	return c.GetResourcesByOriginAndTypeWithContext(ctx, originID, resourceType)
+}
+func (c *client) GetResourcesByOriginAndTypeWithContext(ctx context.Context, originID string, resourceType string) (resources []common.Origin, err error) {
+	input := iam_grpcapi.GetResourcesByOriginAndTypeInput{ResourceType: resourceType, OriginId: originID}
+	output, err := c.api.GetResourcesByOriginAndType(ctx, &input)
+	if err != nil {
+		return
+	}
+	if output != nil {
+		for _, resource := range output.Resources {
+			if resource != nil {
+				resources = append(resources, *resource)
+			}
+		}
+	}
+	return
+}
+
+func (c *client) GetUserIDsWithAccessToResource(originID string) (resources []string, err error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
+	defer cancel()
+	return c.GetUserIDsWithAccessToResourceWithContext(ctx, originID)
+}
+func (c *client) GetUserIDsWithAccessToResourceWithContext(ctx context.Context, originID string) (userIds []string, err error) {
+	input := iam_grpcapi.GetUserIDsWithAccessToResourceInput{UserId: originID}
+	output, err := c.api.GetUserIDsWithAccessToResource(ctx, &input)
+	if err != nil {
+		return
+	}
+	if output != nil {
+		for _, userID := range output.UserIds {
+			if userID != "" {
+				userIds = append(userIds, userID)
+			}
+		}
+	}
+	return
+}
