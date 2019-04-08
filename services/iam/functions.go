@@ -249,7 +249,7 @@ func (c *client) GetUserIDsWithAccessToResource(originID string) (resources []st
 	return c.GetUserIDsWithAccessToResourceWithContext(ctx, originID)
 }
 func (c *client) GetUserIDsWithAccessToResourceWithContext(ctx context.Context, originID string) (userIds []string, err error) {
-	input := iam_grpcapi.GetUserIDsWithAccessToResourceInput{UserId: originID}
+	input := iam_grpcapi.GetUserIDsWithAccessToResourceInput{OriginId: originID}
 	output, err := c.api.GetUserIDsWithAccessToResource(ctx, &input)
 	if err != nil {
 		return
