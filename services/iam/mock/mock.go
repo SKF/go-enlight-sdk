@@ -176,7 +176,7 @@ func (mock *client) GetUserIDsWithAccessToResource(originID string) (resources [
 	args := mock.Called(originID)
 	return args.Get(0).([]string), args.Error(1)
 }
-func (mock *client) GetUserIDsWithAccessToResourceContext(ctx context.Context, originID string) (resources []string, err error) {
+func (mock *client) GetUserIDsWithAccessToResourceWithContext(ctx context.Context, originID string) (resources []string, err error) {
 	args := mock.Called(ctx, originID)
 	return args.Get(0).([]string), args.Error(1)
 }
