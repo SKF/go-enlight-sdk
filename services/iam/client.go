@@ -44,6 +44,12 @@ type IAMClient interface { // nolint: golint
 	GetAuthorizationResourcesByType(resourceType string) (resources []common.Origin, err error)
 	GetAuthorizationResourcesByTypeWithContext(ctx context.Context, resourceType string) (resources []common.Origin, err error)
 
+	GetResourcesByOriginAndType(originID string, resourceType string) (resources []common.Origin, err error)
+	GetResourcesByOriginAndTypeWithContext(ctx context.Context, originID string, resourceType string) (resources []common.Origin, err error)
+
+	GetUserIDsWithAccessToResource(originID string) (resources []string, err error)
+	GetUserIDsWithAccessToResourceWithContext(ctx context.Context, originID string) (resources []string, err error)
+
 	AddAuthorizationResourceRelation(resource common.Origin, parent common.Origin) error
 	AddAuthorizationResourceRelationWithContext(ctx context.Context, resource common.Origin, parent common.Origin) error
 
