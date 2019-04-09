@@ -3,6 +3,7 @@ package models
 type NodeType string
 
 const (
+	NodeTypeRoot               NodeType = "root"
 	NodeTypeCompany            NodeType = "company"
 	NodeTypeSite               NodeType = "site"
 	NodeTypePlant              NodeType = "plant"
@@ -14,7 +15,7 @@ const (
 )
 
 var relations = map[NodeType][]NodeType{ // nolint
-	NodeTypeCompany:            {NodeTypeCompany},
+	NodeTypeCompany:            {NodeTypeRoot},
 	NodeTypeSite:               {NodeTypeCompany},
 	NodeTypePlant:              {NodeTypeSite},
 	NodeTypeSystem:             {NodeTypeSite, NodeTypePlant, NodeTypeSystem},
