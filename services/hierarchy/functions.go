@@ -183,6 +183,24 @@ func (c *Client) GetAncestorsWithContext(ctx context.Context, nodeID string) (no
 	return
 }
 
+// GetCompany will return the company ancestor of the node id it takes as
+// an argument.
+func (c *Client) GetCompany(nodeID string) (node hierarchy_grpcapi.Node, err error) {
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
+	defer cancel()
+	return c.GetCompanyWithContext(ctx, nodeID)
+}
+
+// GetCompanyWithContext will return the company ancestor of the node id it takes as
+// an argument.
+func (c *Client) GetCompanyWithContext(ctx context.Context, nodeID string) (node hierarchy_grpcapi.Node, err error) {
+	resp, err := c.api.GetCompany(ctx, &common.PrimitiveString{Value: nodeID})
+	if resp != nil {
+		node = *resp
+	}
+	return
+}
+
 // GetEvents will return all events that has occurred in the Hierarchy
 // Management Service.
 func (c *Client) GetEvents(since int, limit *int32) (events []eventsource.Record, err error) {

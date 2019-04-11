@@ -127,6 +127,15 @@ func (mock *client) GetAncestorsWithContext(ctx context.Context, nodeID string) 
 	return args.Get(0).([]hierarchy_grpcapi.AncestorNode), args.Error(1)
 }
 
+func (mock *client) GetCompany(nodeID string) (hierarchy_grpcapi.Node, error) {
+	args := mock.Called(nodeID)
+	return args.Get(0).(hierarchy_grpcapi.Node), args.Error(1)
+}
+func (mock *client) GetCompanyWithContext(ctx context.Context, nodeID string) (hierarchy_grpcapi.Node, error) {
+	args := mock.Called(ctx, nodeID)
+	return args.Get(0).(hierarchy_grpcapi.Node), args.Error(1)
+}
+
 func (mock *client) GetChildNodes(parentID string) ([]hierarchy_grpcapi.Node, error) {
 	args := mock.Called(parentID)
 	return args.Get(0).([]hierarchy_grpcapi.Node), args.Error(1)
