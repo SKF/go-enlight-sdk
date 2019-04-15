@@ -27,6 +27,26 @@ func (c *client) IsAuthorizedWithContext(ctx context.Context, userID, action str
 	return result.Ok, err
 }
 
+func (c *client) IsAuthorizedByEndpoint(api, method, endpoint, userID string, resource *common.Origin) (bool, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
+	defer cancel()
+	return c.IsAuthorizedByEndpointWithContext(ctx, api, method, endpoint, userID, resource)
+}
+func (c *client) IsAuthorizedByEndpointWithContext(ctx context.Context, api, method, endpoint, userID string, resource *common.Origin) (bool, error) {
+	result, err := c.api.IsAuthorizedByEndpoint(ctx, &authorize_grpcapi.IsAuthorizedInput{
+		API:      api,
+		Method:   method,
+		Endpoint: endpoint,
+		UserId:   userID,
+		Resource: resource,
+	})
+	if err != nil {
+		return false, err
+	}
+
+	return result.Ok, err
+}
+
 func (c *client) AddResource(resource common.Origin) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
 	defer cancel()
