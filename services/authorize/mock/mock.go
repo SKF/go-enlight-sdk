@@ -57,7 +57,7 @@ func (mock *client) IsAuthorizedByEndpoint(api, method, endpoint, userID string,
 	return args.Bool(0), args.Error(1)
 }
 func (mock *client) IsAuthorizedByEndpointWithContext(ctx context.Context, api, method, endpoint, userID string, resource *common.Origin) (bool, error) {
-	args := mock.Called(ctx, api, method, endpoint, userID, action, resource)
+	args := mock.Called(ctx, api, method, endpoint, userID, resource)
 	return args.Bool(0), args.Error(1)
 }
 
