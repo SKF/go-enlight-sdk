@@ -22,14 +22,14 @@ type AuthorizeClient interface { // nolint: golint
 	IsAuthorized(userID, action string, resource *common.Origin) (bool, error)
 	IsAuthorizedWithContext(ctx context.Context, userID, action string, resource *common.Origin) (bool, error)
 
-	AddAuthorizationResource(resource common.Origin) error
-	AddAuthorizationResourceWithContext(ctx context.Context, resource common.Origin) error
+	AddResource(resource common.Origin) error
+	AddResourceWithContext(ctx context.Context, resource common.Origin) error
 
-	RemoveAuthorizationResource(resource common.Origin) error
-	RemoveAuthorizationResourceWithContext(ctx context.Context, resource common.Origin) error
+	RemoveResource(resource common.Origin) error
+	RemoveResourceWithContext(ctx context.Context, resource common.Origin) error
 
-	GetAuthorizationResourcesByType(resourceType string) (resources []common.Origin, err error)
-	GetAuthorizationResourcesByTypeWithContext(ctx context.Context, resourceType string) (resources []common.Origin, err error)
+	GetResourcesByType(resourceType string) (resources []common.Origin, err error)
+	GetResourcesByTypeWithContext(ctx context.Context, resourceType string) (resources []common.Origin, err error)
 
 	GetResourcesByOriginAndType(originID string, resourceType string) (resources []common.Origin, err error)
 	GetResourcesByOriginAndTypeWithContext(ctx context.Context, originID string, resourceType string) (resources []common.Origin, err error)
@@ -37,20 +37,20 @@ type AuthorizeClient interface { // nolint: golint
 	GetUserIDsWithAccessToResource(originID string) (resources []string, err error)
 	GetUserIDsWithAccessToResourceWithContext(ctx context.Context, originID string) (resources []string, err error)
 
-	AddAuthorizationResourceRelation(resource common.Origin, parent common.Origin) error
-	AddAuthorizationResourceRelationWithContext(ctx context.Context, resource common.Origin, parent common.Origin) error
+	AddResourceRelation(resource common.Origin, parent common.Origin) error
+	AddResourceRelationWithContext(ctx context.Context, resource common.Origin, parent common.Origin) error
 
-	RemoveAuthorizationResourceRelation(resource common.Origin, parent common.Origin) error
-	RemoveAuthorizationResourceRelationWithContext(ctx context.Context, resource common.Origin, parent common.Origin) error
+	RemoveResourceRelation(resource common.Origin, parent common.Origin) error
+	RemoveResourceRelationWithContext(ctx context.Context, resource common.Origin, parent common.Origin) error
 
-	GetAuthorizationResourceRelations(resource common.Origin) (resources []common.Origin, err error)
-	GetAuthorizationResourceRelationsWithContext(ctx context.Context, resource common.Origin) (resources []common.Origin, err error)
+	GetResourceRelations(resource common.Origin) (resources []common.Origin, err error)
+	GetResourceRelationsWithContext(ctx context.Context, resource common.Origin) (resources []common.Origin, err error)
 
-	AddUserPermission(userID, role string, resource common.Origin) error
-	AddUserPermissionWithContext(ctx context.Context, userID, role string, resource common.Origin) error
+	AddUserPermission(userID, role string, resource *common.Origin) error
+	AddUserPermissionWithContext(ctx context.Context, userID, role string, resource *common.Origin) error
 
-	RemoveUserPermission(userID, role string, resource common.Origin) error
-	RemoveUserPermissionWithContext(ctx context.Context, userID, role string, resource common.Origin) error
+	RemoveUserPermission(userID, role string, resource *common.Origin) error
+	RemoveUserPermissionWithContext(ctx context.Context, userID, role string, resource *common.Origin) error
 }
 
 type client struct {
