@@ -5,5 +5,4 @@ const (
 	RouteType string = "route"
 	GroupType string = "group"
 	NodeType  string = "node"
-	RouteType string = "route"
 )
