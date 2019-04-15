@@ -33,8 +33,8 @@ func (c *client) IsAuthorizedByEndpoint(api, method, endpoint, userID string, re
 	return c.IsAuthorizedByEndpointWithContext(ctx, api, method, endpoint, userID, resource)
 }
 func (c *client) IsAuthorizedByEndpointWithContext(ctx context.Context, api, method, endpoint, userID string, resource *common.Origin) (bool, error) {
-	result, err := c.api.IsAuthorizedByEndpoint(ctx, &authorize_grpcapi.IsAuthorizedInput{
-		API:      api,
+	result, err := c.api.IsAuthorizedByEndpoint(ctx, &authorize_grpcapi.IsAuthorizedByEndpointInput{
+		Api:      api,
 		Method:   method,
 		Endpoint: endpoint,
 		UserId:   userID,
