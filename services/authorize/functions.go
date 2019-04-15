@@ -27,38 +27,38 @@ func (c *client) IsAuthorizedWithContext(ctx context.Context, userID, action str
 	return result.Ok, err
 }
 
-func (c *client) AddAuthorizationResource(resource common.Origin) error {
+func (c *client) AddResource(resource common.Origin) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
 	defer cancel()
-	return c.AddAuthorizationResourceWithContext(ctx, resource)
+	return c.AddResourceWithContext(ctx, resource)
 }
-func (c *client) AddAuthorizationResourceWithContext(ctx context.Context, resource common.Origin) error {
-	_, err := c.api.AddAuthorizationResource(ctx, &authorize_grpcapi.AddAuthorizationResourceInput{
+func (c *client) AddResourceWithContext(ctx context.Context, resource common.Origin) error {
+	_, err := c.api.AddResource(ctx, &authorize_grpcapi.AddResourceInput{
 		Resource: &resource,
 	})
 	return err
 }
 
-func (c *client) RemoveAuthorizationResource(resource common.Origin) error {
+func (c *client) RemoveResource(resource common.Origin) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
 	defer cancel()
-	return c.RemoveAuthorizationResourceWithContext(ctx, resource)
+	return c.RemoveResourceWithContext(ctx, resource)
 }
-func (c *client) RemoveAuthorizationResourceWithContext(ctx context.Context, resource common.Origin) error {
-	_, err := c.api.RemoveAuthorizationResource(ctx, &authorize_grpcapi.RemoveAuthorizationResourceInput{
+func (c *client) RemoveResourceWithContext(ctx context.Context, resource common.Origin) error {
+	_, err := c.api.RemoveResource(ctx, &authorize_grpcapi.RemoveResourceInput{
 		Resource: &resource,
 	})
 	return err
 }
 
-func (c *client) GetAuthorizationResourcesByType(resourceType string) (resources []common.Origin, err error) {
+func (c *client) GetResourcesByType(resourceType string) (resources []common.Origin, err error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
 	defer cancel()
-	return c.GetAuthorizationResourcesByTypeWithContext(ctx, resourceType)
+	return c.GetResourcesByTypeWithContext(ctx, resourceType)
 }
-func (c *client) GetAuthorizationResourcesByTypeWithContext(ctx context.Context, resourceType string) (resources []common.Origin, err error) {
-	input := authorize_grpcapi.GetAuthorizationResourcesByTypeInput{ResourceType: resourceType}
-	output, err := c.api.GetAuthorizationResourcesByType(ctx, &input)
+func (c *client) GetResourcesByTypeWithContext(ctx context.Context, resourceType string) (resources []common.Origin, err error) {
+	input := authorize_grpcapi.GetResourcesByTypeInput{ResourceType: resourceType}
+	output, err := c.api.GetResourcesByType(ctx, &input)
 	if err != nil {
 		return
 	}
@@ -72,40 +72,40 @@ func (c *client) GetAuthorizationResourcesByTypeWithContext(ctx context.Context,
 	return
 }
 
-func (c *client) AddAuthorizationResourceRelation(resource common.Origin, parent common.Origin) error {
+func (c *client) AddResourceRelation(resource common.Origin, parent common.Origin) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
 	defer cancel()
-	return c.AddAuthorizationResourceRelationWithContext(ctx, resource, parent)
+	return c.AddResourceRelationWithContext(ctx, resource, parent)
 }
-func (c *client) AddAuthorizationResourceRelationWithContext(ctx context.Context, resource common.Origin, parent common.Origin) error {
-	_, err := c.api.AddAuthorizationResourceRelation(ctx, &authorize_grpcapi.AddAuthorizationResourceRelationInput{
+func (c *client) AddResourceRelationWithContext(ctx context.Context, resource common.Origin, parent common.Origin) error {
+	_, err := c.api.AddResourceRelation(ctx, &authorize_grpcapi.AddResourceRelationInput{
 		Resource: &resource,
 		Parent:   &parent,
 	})
 	return err
 }
 
-func (c *client) RemoveAuthorizationResourceRelation(resource common.Origin, parent common.Origin) error {
+func (c *client) RemoveResourceRelation(resource common.Origin, parent common.Origin) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
 	defer cancel()
-	return c.RemoveAuthorizationResourceRelationWithContext(ctx, resource, parent)
+	return c.RemoveResourceRelationWithContext(ctx, resource, parent)
 }
-func (c *client) RemoveAuthorizationResourceRelationWithContext(ctx context.Context, resource common.Origin, parent common.Origin) error {
-	_, err := c.api.RemoveAuthorizationResourceRelation(ctx, &authorize_grpcapi.RemoveAuthorizationResourceRelationInput{
+func (c *client) RemoveResourceRelationWithContext(ctx context.Context, resource common.Origin, parent common.Origin) error {
+	_, err := c.api.RemoveResourceRelation(ctx, &authorize_grpcapi.RemoveResourceRelationInput{
 		Resource: &resource,
 		Parent:   &parent,
 	})
 	return err
 }
 
-func (c *client) GetAuthorizationResourceRelations(resource common.Origin) (resources []common.Origin, err error) {
+func (c *client) GetResourceRelations(resource common.Origin) (resources []common.Origin, err error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
 	defer cancel()
-	return c.GetAuthorizationResourceRelationsWithContext(ctx, resource)
+	return c.GetResourceRelationsWithContext(ctx, resource)
 }
-func (c *client) GetAuthorizationResourceRelationsWithContext(ctx context.Context, resource common.Origin) (resources []common.Origin, err error) {
-	input := authorize_grpcapi.GetAuthorizationResourceRelationsInput{}
-	output, err := c.api.GetAuthorizationResourceRelations(ctx, &input)
+func (c *client) GetResourceRelationsWithContext(ctx context.Context, resource common.Origin) (resources []common.Origin, err error) {
+	input := authorize_grpcapi.GetResourceRelationsInput{}
+	output, err := c.api.GetResourceRelations(ctx, &input)
 	if err != nil {
 		return
 	}
@@ -119,30 +119,30 @@ func (c *client) GetAuthorizationResourceRelationsWithContext(ctx context.Contex
 	return
 }
 
-func (c *client) AddUserPermission(userID, role string, resource common.Origin) error {
+func (c *client) AddUserPermission(userID, role string, resource *common.Origin) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
 	defer cancel()
 	return c.AddUserPermissionWithContext(ctx, userID, role, resource)
 }
-func (c *client) AddUserPermissionWithContext(ctx context.Context, userID, role string, resource common.Origin) error {
+func (c *client) AddUserPermissionWithContext(ctx context.Context, userID, role string, resource *common.Origin) error {
 	_, err := c.api.AddUserPermission(ctx, &authorize_grpcapi.AddUserPermissionInput{
 		UserId:   userID,
 		Role:     role,
-		Resource: &resource,
+		Resource: resource,
 	})
 	return err
 }
 
-func (c *client) RemoveUserPermission(userID, role string, resource common.Origin) error {
+func (c *client) RemoveUserPermission(userID, role string, resource *common.Origin) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
 	defer cancel()
 	return c.RemoveUserPermissionWithContext(ctx, userID, role, resource)
 }
-func (c *client) RemoveUserPermissionWithContext(ctx context.Context, userID, role string, resource common.Origin) error {
+func (c *client) RemoveUserPermissionWithContext(ctx context.Context, userID, role string, resource *common.Origin) error {
 	_, err := c.api.RemoveUserPermission(ctx, &authorize_grpcapi.RemoveUserPermissionInput{
 		UserId:   userID,
 		Role:     role,
-		Resource: &resource,
+		Resource: resource,
 	})
 	return err
 }
