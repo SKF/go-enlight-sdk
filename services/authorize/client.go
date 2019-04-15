@@ -22,7 +22,7 @@ type AuthorizeClient interface { // nolint: golint
 	IsAuthorized(userID, action string, resource *common.Origin) (bool, error)
 	IsAuthorizedWithContext(ctx context.Context, userID, action string, resource *common.Origin) (bool, error)
 	IsAuthorizedByEndpoint(api, method, endpoint, userID string, resource *common.Origin) (bool, error)
-	IsAuthorizedByEndpointWithContext(ctx context.Context, api, method, endpoint, userID string, resource *common.Origin) (bool, error)
+	IsAuthorizedByEndpointWithContext(ctx context.Context, api, method, endpoint, userID string) (bool, error)
 
 	AddResource(resource common.Origin) error
 	AddResourceWithContext(ctx context.Context, resource common.Origin) error
