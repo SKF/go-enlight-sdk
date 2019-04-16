@@ -68,8 +68,8 @@ func (c *client) AddResources(resources []common.Origin) error {
 
 func (c *client) AddResourcesWithContext(ctx context.Context, resources []common.Origin) error {
 	var resourcesInput []*common.Origin
-	for _, resource := range resources {
-		resourcesInput = append(resourcesInput, &resource)
+	for i := 0; i < len(resources); i++ {
+		resourcesInput = append(resourcesInput, &resources[i])
 	}
 
 	_, err := c.api.AddResources(ctx, &authorize_grpcapi.AddResourcesInput{
@@ -98,8 +98,8 @@ func (c *client) RemoveResources(resources []common.Origin) error {
 
 func (c *client) RemoveResourcesWithContext(ctx context.Context, resources []common.Origin) error {
 	var resourcesInput []*common.Origin
-	for _, resource := range resources {
-		resourcesInput = append(resourcesInput, &resource)
+	for i := 0; i < len(resources); i++ {
+		resourcesInput = append(resourcesInput, &resources[i])
 	}
 
 	_, err := c.api.RemoveResources(ctx, &authorize_grpcapi.RemoveResourcesInput{
