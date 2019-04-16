@@ -52,12 +52,12 @@ func (mock *client) IsAuthorizedWithContext(ctx context.Context, userID, action 
 	return args.Bool(0), args.Error(1)
 }
 
-func (mock *client) IsAuthorizedByEndpoint(api, method, endpoint, userID string, resource *common.Origin) (bool, error) {
-	args := mock.Called(api, method, endpoint, userID, resource)
+func (mock *client) IsAuthorizedByEndpoint(api, method, endpoint, userID string) (bool, error) {
+	args := mock.Called(api, method, endpoint, userID)
 	return args.Bool(0), args.Error(1)
 }
-func (mock *client) IsAuthorizedByEndpointWithContext(ctx context.Context, api, method, endpoint, userID string, resource *common.Origin) (bool, error) {
-	args := mock.Called(ctx, api, method, endpoint, userID, resource)
+func (mock *client) IsAuthorizedByEndpointWithContext(ctx context.Context, api, method, endpoint, userID string) (bool, error) {
+	args := mock.Called(ctx, api, method, endpoint, userID)
 	return args.Bool(0), args.Error(1)
 }
 
