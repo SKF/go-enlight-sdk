@@ -34,7 +34,7 @@ type AuthorizeClient interface { // nolint: golint
 	RemoveResourceWithContext(ctx context.Context, resource common.Origin) error
 
 	RemoveResources(resources []common.Origin) error
-	RemoveResourcesWithContext(ctx context.Context, resourcess []common.Origin) error
+	RemoveResourcesWithContext(ctx context.Context, resources []common.Origin) error
 
 	GetResourcesByType(resourceType string) (resources []common.Origin, err error)
 	GetResourcesByTypeWithContext(ctx context.Context, resourceType string) (resources []common.Origin, err error)
@@ -55,7 +55,7 @@ type AuthorizeClient interface { // nolint: golint
 	RemoveResourceRelationWithContext(ctx context.Context, resource common.Origin, parent common.Origin) error
 
 	RemoveResourceRelations(resources authorize_grpcapi.RemoveResourceRelationsInput) error
-	RemoveResourceRelationsWithContext(ctx context.Context, resources  authorize_grpcapi.RemoveResourceRelationsInput) error
+	RemoveResourceRelationsWithContext(ctx context.Context, resources authorize_grpcapi.RemoveResourceRelationsInput) error
 
 	GetResourceRelations(resource common.Origin) (resources []common.Origin, err error)
 	GetResourceRelationsWithContext(ctx context.Context, resource common.Origin) (resources []common.Origin, err error)

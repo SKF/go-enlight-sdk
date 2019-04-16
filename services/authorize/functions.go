@@ -67,7 +67,7 @@ func (c *client) AddResources(resources []common.Origin) error {
 }
 
 func (c *client) AddResourcesWithContext(ctx context.Context, resources []common.Origin) error {
-	var resourcesInput []*common.Origin;
+	var resourcesInput []*common.Origin
 	for _, resource := range resources {
 		resourcesInput = append(resourcesInput, &resource)
 	}
@@ -97,7 +97,7 @@ func (c *client) RemoveResources(resources []common.Origin) error {
 }
 
 func (c *client) RemoveResourcesWithContext(ctx context.Context, resources []common.Origin) error {
-	var resourcesInput []*common.Origin;
+	var resourcesInput []*common.Origin
 	for _, resource := range resources {
 		resourcesInput = append(resourcesInput, &resource)
 	}
@@ -152,7 +152,6 @@ func (c *client) AddResourceRelationsWithContext(ctx context.Context, resources 
 	_, err := c.api.AddResourceRelations(ctx, &resources)
 	return err
 }
-
 
 func (c *client) RemoveResourceRelation(resource common.Origin, parent common.Origin) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
