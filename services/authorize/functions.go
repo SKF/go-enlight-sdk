@@ -51,9 +51,28 @@ func (c *client) AddResource(resource common.Origin) error {
 	defer cancel()
 	return c.AddResourceWithContext(ctx, resource)
 }
+
 func (c *client) AddResourceWithContext(ctx context.Context, resource common.Origin) error {
 	_, err := c.api.AddResource(ctx, &authorize_grpcapi.AddResourceInput{
 		Resource: &resource,
+	})
+	return err
+}
+
+func (c *client) AddResources(resources []common.Origin) error {
+	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
+	defer cancel()
+	return c.AddResourcesWithContext(ctx, resources)
+}
+
+func (c *client) AddResourcesWithContext(ctx context.Context, resources []common.Origin) error {
+	var resourcesInput []*common.Origin
+	for i := 0; i < len(resources); i++ {
+		resourcesInput = append(resourcesInput, &resources[i])
+	}
+
+	_, err := c.api.AddResources(ctx, &authorize_grpcapi.AddResourcesInput{
+		Resource: resourcesInput,
 	})
 	return err
 }
@@ -66,6 +85,24 @@ func (c *client) RemoveResource(resource common.Origin) error {
 func (c *client) RemoveResourceWithContext(ctx context.Context, resource common.Origin) error {
 	_, err := c.api.RemoveResource(ctx, &authorize_grpcapi.RemoveResourceInput{
 		Resource: &resource,
+	})
+	return err
+}
+
+func (c *client) RemoveResources(resources []common.Origin) error {
+	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
+	defer cancel()
+	return c.RemoveResourcesWithContext(ctx, resources)
+}
+
+func (c *client) RemoveResourcesWithContext(ctx context.Context, resources []common.Origin) error {
+	var resourcesInput []*common.Origin
+	for i := 0; i < len(resources); i++ {
+		resourcesInput = append(resourcesInput, &resources[i])
+	}
+
+	_, err := c.api.RemoveResources(ctx, &authorize_grpcapi.RemoveResourcesInput{
+		Resource: resourcesInput,
 	})
 	return err
 }
@@ -104,6 +141,17 @@ func (c *client) AddResourceRelationWithContext(ctx context.Context, resource co
 	return err
 }
 
+func (c *client) AddResourceRelations(resources authorize_grpcapi.AddResourceRelationsInput) error {
+	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
+	defer cancel()
+	return c.AddResourceRelationsWithContext(ctx, resources)
+}
+
+func (c *client) AddResourceRelationsWithContext(ctx context.Context, resources authorize_grpcapi.AddResourceRelationsInput) error {
+	_, err := c.api.AddResourceRelations(ctx, &resources)
+	return err
+}
+
 func (c *client) RemoveResourceRelation(resource common.Origin, parent common.Origin) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
 	defer cancel()
@@ -114,6 +162,17 @@ func (c *client) RemoveResourceRelationWithContext(ctx context.Context, resource
 		Resource: &resource,
 		Parent:   &parent,
 	})
+	return err
+}
+
+func (c *client) RemoveResourceRelations(resources authorize_grpcapi.RemoveResourceRelationsInput) error {
+	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
+	defer cancel()
+	return c.RemoveResourceRelationsWithContext(ctx, resources)
+}
+
+func (c *client) RemoveResourceRelationsWithContext(ctx context.Context, resources authorize_grpcapi.RemoveResourceRelationsInput) error {
+	_, err := c.api.RemoveResourceRelations(ctx, &resources)
 	return err
 }
 
