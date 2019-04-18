@@ -289,13 +289,13 @@ func (c *client) GetActionsByUserRoleWithContext(ctx context.Context, userRole s
 	return
 }
 
-func (c *client) GetResourcesAndActionsByUser(userId string) ([]authorize_grpcapi.ActionResource, error) {
+func (c *client) GetResourcesAndActionsByUser(userID string) ([]authorize_grpcapi.ActionResource, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
 	defer cancel()
-	return c.GetResourcesAndActionsByUserWithContext(ctx, userId)
+	return c.GetResourcesAndActionsByUserWithContext(ctx, userID)
 }
-func (c *client) GetResourcesAndActionsByUserWithContext(ctx context.Context, userId string) (actionResources []authorize_grpcapi.ActionResource, err error) {
-	input := authorize_grpcapi.GetResourcesAndActionsByUserInput{UserId: userId}
+func (c *client) GetResourcesAndActionsByUserWithContext(ctx context.Context, userID string) (actionResources []authorize_grpcapi.ActionResource, err error) {
+	input := authorize_grpcapi.GetResourcesAndActionsByUserInput{UserId: userID}
 	output, err := c.api.GetResourcesAndActionsByUser(ctx, &input)
 	if err != nil {
 		return

@@ -69,8 +69,8 @@ type AuthorizeClient interface { // nolint: golint
 	GetActionsByUserRole(userRole string) ([]authorize_grpcapi.Action, error)
 	GetActionsByUserRoleWithContext(ctx context.Context, userRole string) ([]authorize_grpcapi.Action, error)
 
-	GetResourcesAndActionsByUser(userId string) ([]authorize_grpcapi.ActionResource, error)
-	GetResourcesAndActionsByUserWithContext(ctx context.Context, userId string) ([]authorize_grpcapi.ActionResource, error)
+	GetResourcesAndActionsByUser(userID string) ([]authorize_grpcapi.ActionResource, error)
+	GetResourcesAndActionsByUserWithContext(ctx context.Context, userID string) ([]authorize_grpcapi.ActionResource, error)
 }
 
 type client struct {

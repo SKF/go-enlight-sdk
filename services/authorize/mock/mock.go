@@ -204,11 +204,11 @@ func (mock *client) GetActionsByUserRoleWithContext(ctx context.Context, userRol
 	return args.Get(0).([]grpcapi.Action), args.Error(1)
 }
 
-func (mock *client) GetResourcesAndActionsByUser(userId string) ([]grpcapi.ActionResource, error) {
-	args := mock.Called(userId)
+func (mock *client) GetResourcesAndActionsByUser(userID string) ([]grpcapi.ActionResource, error) {
+	args := mock.Called(userID)
 	return args.Get(0).([]grpcapi.ActionResource), args.Error(1)
 }
-func (mock *client) GetResourcesAndActionsByUserWithContext(ctx context.Context, userId string) ([]grpcapi.ActionResource, error) {
-	args := mock.Called(ctx, userId)
+func (mock *client) GetResourcesAndActionsByUserWithContext(ctx context.Context, userID string) ([]grpcapi.ActionResource, error) {
+	args := mock.Called(ctx, userID)
 	return args.Get(0).([]grpcapi.ActionResource), args.Error(1)
 }
