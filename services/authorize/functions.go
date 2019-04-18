@@ -4,9 +4,8 @@ import (
 	"context"
 	"time"
 
-	"github.com/SKF/proto/common"
-
 	authorize_grpcapi "github.com/SKF/proto/authorize"
+	"github.com/SKF/proto/common"
 )
 
 func (c *client) IsAuthorized(userID, action string, resource *common.Origin) (bool, error) {
@@ -264,5 +263,51 @@ func (c *client) GetUserIDsWithAccessToResourceWithContext(ctx context.Context, 
 			}
 		}
 	}
+	return
+}
+
+func (c *client) GetActionsByUserRole(userRole string) ([]authorize_grpcapi.Action, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
+	defer cancel()
+	return c.GetActionsByUserRoleWithContext(ctx, userRole)
+}
+func (c *client) GetActionsByUserRoleWithContext(ctx context.Context, userRole string) (actions []authorize_grpcapi.Action, err error) {
+	input := authorize_grpcapi.GetActionsByUserRoleInput{UserRole: userRole}
+	output, err := c.api.GetActionsByUserRole(ctx, &input)
+	if err != nil {
+		return
+	}
+
+	if output != nil {
+		for _, action := range output.Actions {
+			if action != nil {
+				actions = append(actions, *action)
+			}
+		}
+	}
+
+	return
+}
+
+func (c *client) GetResourcesAndActionsByUser(userID string) ([]authorize_grpcapi.ActionResource, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
+	defer cancel()
+	return c.GetResourcesAndActionsByUserWithContext(ctx, userID)
+}
+func (c *client) GetResourcesAndActionsByUserWithContext(ctx context.Context, userID string) (actionResources []authorize_grpcapi.ActionResource, err error) {
+	input := authorize_grpcapi.GetResourcesAndActionsByUserInput{UserId: userID}
+	output, err := c.api.GetResourcesAndActionsByUser(ctx, &input)
+	if err != nil {
+		return
+	}
+
+	if output != nil {
+		for _, elem := range output.Data {
+			if elem != nil {
+				actionResources = append(actionResources, *elem)
+			}
+		}
+	}
+
 	return
 }

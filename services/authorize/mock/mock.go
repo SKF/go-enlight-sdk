@@ -194,3 +194,21 @@ func (mock *client) RemoveResourceRelationsWithContext(ctx context.Context, reso
 	args := mock.Called(ctx, resources)
 	return args.Error(0)
 }
+
+func (mock *client) GetActionsByUserRole(userRole string) ([]grpcapi.Action, error) {
+	args := mock.Called(userRole)
+	return args.Get(0).([]grpcapi.Action), args.Error(1)
+}
+func (mock *client) GetActionsByUserRoleWithContext(ctx context.Context, userRole string) ([]grpcapi.Action, error) {
+	args := mock.Called(ctx, userRole)
+	return args.Get(0).([]grpcapi.Action), args.Error(1)
+}
+
+func (mock *client) GetResourcesAndActionsByUser(userID string) ([]grpcapi.ActionResource, error) {
+	args := mock.Called(userID)
+	return args.Get(0).([]grpcapi.ActionResource), args.Error(1)
+}
+func (mock *client) GetResourcesAndActionsByUserWithContext(ctx context.Context, userID string) ([]grpcapi.ActionResource, error) {
+	args := mock.Called(ctx, userID)
+	return args.Get(0).([]grpcapi.ActionResource), args.Error(1)
+}
