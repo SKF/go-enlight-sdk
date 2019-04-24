@@ -26,8 +26,8 @@ type HierarchyClient interface { // nolint: golint
 	SaveNode(request hierarchy_grpcapi.SaveNodeInput) (string, error)
 	SaveNodeWithContext(ctx context.Context, request hierarchy_grpcapi.SaveNodeInput) (string, error)
 
-	CopyNode(request hierarchy_grpcapi.CopyNodeInput) (string, error)
-	CopyNodeWithContext(ctx context.Context, request hierarchy_grpcapi.CopyNodeInput) (string, error)
+	CopyNode(userID, srcNodeID, dstParentNodeID string) (string, error)
+	CopyNodeWithContext(ctx context.Context, userID, srcNodeID, dstParentNodeID string) (string, error)
 
 	GetNode(nodeID string) (hierarchy_grpcapi.Node, error)
 	GetNodeWithContext(ctx context.Context, nodeID string) (hierarchy_grpcapi.Node, error)

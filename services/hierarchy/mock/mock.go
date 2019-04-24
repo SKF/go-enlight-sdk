@@ -55,12 +55,12 @@ func (mock *client) SaveNodeWithContext(ctx context.Context, request hierarchy_g
 	return args.String(0), args.Error(1)
 }
 
-func (mock *client) CopyNode(request hierarchy_grpcapi.CopyNodeInput) (string, error) {
-	args := mock.Called(request)
+func (mock *client) CopyNode(userID, srcNodeID, dstParentNodeID string) (string, error) {
+	args := mock.Called(userID, srcNodeID, dstParentNodeID)
 	return args.String(0), args.Error(1)
 }
-func (mock *client) CopyNodeWithContext(ctx context.Context, request hierarchy_grpcapi.CopyNodeInput) (string, error) {
-	args := mock.Called(ctx, request)
+func (mock *client) CopyNodeWithContext(ctx context.Context, userID, srcNodeID, dstParentNodeID string) (string, error) {
+	args := mock.Called(userID, srcNodeID, dstParentNodeID)
 	return args.String(0), args.Error(1)
 }
 
