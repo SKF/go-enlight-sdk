@@ -26,14 +26,19 @@ func (c *Client) SaveNodeWithContext(ctx context.Context, request hierarchy_grpc
 }
 
 // CopyNode copies the given node, recursively, returning the copied root node's ID.
-func (c *Client) CopyNode(request hierarchy_grpcapi.CopyNodeInput) (string, error) {
+func (c *Client) CopyNode(userID, srcNodeID, dstParentNodeID string) (string, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
 	defer cancel()
-	return c.CopyNodeWithContext(ctx, request)
+	return c.CopyNodeWithContext(ctx, userID, srcNodeID, dstParentNodeID)
 }
 
 // CopyNodeWithContext copies the given node, recursively, returning the copied root node's ID.
-func (c *Client) CopyNodeWithContext(ctx context.Context, request hierarchy_grpcapi.CopyNodeInput) (string, error) {
+func (c *Client) CopyNodeWithContext(ctx context.Context, userID, srcNodeID, dstParentNodeID string) (string, error) {
+	request := hierarchy_grpcapi.CopyNodeInput{
+		UserId:          userID,
+		SrcNodeId:       srcNodeID,
+		DstParentNodeId: dstParentNodeID,
+	}
 	resp, err := c.api.CopyNode(ctx, &request)
 	return resp.GetValue(), err
 }
