@@ -11,9 +11,9 @@ import (
 
 const REQUEST_LENGTH_LIMIT = 1000
 
-func requestLengthLimit(requestLenght int) error {
-	if requestLenght > REQUEST_LENGTH_LIMIT {
-		return fmt.Errorf("request length limit exceeded. max: %d actual: %d", REQUEST_LENGTH_LIMIT, requestLenght)
+func requestLengthLimit(requestLength int) error {
+	if requestLength > REQUEST_LENGTH_LIMIT {
+		return fmt.Errorf("request length limit exceeded. max: %d actual: %d", REQUEST_LENGTH_LIMIT, requestLength)
 	}
 	return nil
 }
