@@ -183,7 +183,7 @@ func (c *client) AddUserPermission(userID, action string, resource *common.Origi
 func (c *client) AddUserPermissionWithContext(ctx context.Context, userID, action string, resource *common.Origin) error {
 	_, err := c.api.AddUserPermission(ctx, &authorize_grpcapi.AddUserPermissionInput{
 		UserId:   userID,
-		Action:     action,
+		Action:   action,
 		Resource: resource,
 	})
 	return err
@@ -197,7 +197,7 @@ func (c *client) RemoveUserPermission(userID, action string, resource *common.Or
 func (c *client) RemoveUserPermissionWithContext(ctx context.Context, userID, action string, resource *common.Origin) error {
 	_, err := c.api.RemoveUserPermission(ctx, &authorize_grpcapi.RemoveUserPermissionInput{
 		UserId:   userID,
-		Action:     action,
+		Action:   action,
 		Resource: resource,
 	})
 	return err
