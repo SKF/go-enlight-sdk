@@ -2,11 +2,21 @@ package authorize
 
 import (
 	"context"
+	"fmt"
 	"time"
 
 	authorize_grpcapi "github.com/SKF/proto/authorize"
 	"github.com/SKF/proto/common"
 )
+
+const REQUEST_LENGTH_LIMIT = 1000
+
+func requestLengthLimit(requestLength int) error {
+	if requestLength > REQUEST_LENGTH_LIMIT {
+		return fmt.Errorf("request length limit exceeded. max: %d actual: %d", REQUEST_LENGTH_LIMIT, requestLength)
+	}
+	return nil
+}
 
 func (c *client) IsAuthorized(userID, action string, resource *common.Origin) (bool, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
@@ -59,12 +69,20 @@ func (c *client) AddResourceWithContext(ctx context.Context, resource common.Ori
 }
 
 func (c *client) AddResources(resources []common.Origin) error {
+	if err := requestLengthLimit(len(resources)); err != nil {
+		return err
+	}
+
 	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
 	defer cancel()
 	return c.AddResourcesWithContext(ctx, resources)
 }
 
 func (c *client) AddResourcesWithContext(ctx context.Context, resources []common.Origin) error {
+	if err := requestLengthLimit(len(resources)); err != nil {
+		return err
+	}
+
 	var resourcesInput []*common.Origin
 	for i := 0; i < len(resources); i++ {
 		resourcesInput = append(resourcesInput, &resources[i])
@@ -89,12 +107,20 @@ func (c *client) RemoveResourceWithContext(ctx context.Context, resource common.
 }
 
 func (c *client) RemoveResources(resources []common.Origin) error {
+	if err := requestLengthLimit(len(resources)); err != nil {
+		return err
+	}
+
 	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
 	defer cancel()
 	return c.RemoveResourcesWithContext(ctx, resources)
 }
 
 func (c *client) RemoveResourcesWithContext(ctx context.Context, resources []common.Origin) error {
+	if err := requestLengthLimit(len(resources)); err != nil {
+		return err
+	}
+
 	var resourcesInput []*common.Origin
 	for i := 0; i < len(resources); i++ {
 		resourcesInput = append(resourcesInput, &resources[i])
@@ -141,12 +167,20 @@ func (c *client) AddResourceRelationWithContext(ctx context.Context, resource co
 }
 
 func (c *client) AddResourceRelations(resources authorize_grpcapi.AddResourceRelationsInput) error {
+	if err := requestLengthLimit(len(resources.Relation)); err != nil {
+		return err
+	}
+
 	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
 	defer cancel()
 	return c.AddResourceRelationsWithContext(ctx, resources)
 }
 
 func (c *client) AddResourceRelationsWithContext(ctx context.Context, resources authorize_grpcapi.AddResourceRelationsInput) error {
+	if err := requestLengthLimit(len(resources.Relation)); err != nil {
+		return err
+	}
+
 	_, err := c.api.AddResourceRelations(ctx, &resources)
 	return err
 }
@@ -165,12 +199,20 @@ func (c *client) RemoveResourceRelationWithContext(ctx context.Context, resource
 }
 
 func (c *client) RemoveResourceRelations(resources authorize_grpcapi.RemoveResourceRelationsInput) error {
+	if err := requestLengthLimit(len(resources.Relation)); err != nil {
+		return err
+	}
+
 	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
 	defer cancel()
 	return c.RemoveResourceRelationsWithContext(ctx, resources)
 }
 
 func (c *client) RemoveResourceRelationsWithContext(ctx context.Context, resources authorize_grpcapi.RemoveResourceRelationsInput) error {
+	if err := requestLengthLimit(len(resources.Relation)); err != nil {
+		return err
+	}
+
 	_, err := c.api.RemoveResourceRelations(ctx, &resources)
 	return err
 }
