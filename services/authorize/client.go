@@ -57,14 +57,11 @@ type AuthorizeClient interface { // nolint: golint
 	RemoveResourceRelations(resources authorize_grpcapi.RemoveResourceRelationsInput) error
 	RemoveResourceRelationsWithContext(ctx context.Context, resources authorize_grpcapi.RemoveResourceRelationsInput) error
 
-	GetResourceRelations(resource common.Origin) (resources []common.Origin, err error)
-	GetResourceRelationsWithContext(ctx context.Context, resource common.Origin) (resources []common.Origin, err error)
+	AddUserPermission(userID, action string, resource *common.Origin) error
+	AddUserPermissionWithContext(ctx context.Context, userID, action string, resource *common.Origin) error
 
-	AddUserPermission(userID, role string, resource *common.Origin) error
-	AddUserPermissionWithContext(ctx context.Context, userID, role string, resource *common.Origin) error
-
-	RemoveUserPermission(userID, role string, resource *common.Origin) error
-	RemoveUserPermissionWithContext(ctx context.Context, userID, role string, resource *common.Origin) error
+	RemoveUserPermission(userID, action string, resource *common.Origin) error
+	RemoveUserPermissionWithContext(ctx context.Context, userID, action string, resource *common.Origin) error
 
 	GetActionsByUserRole(userRole string) ([]authorize_grpcapi.Action, error)
 	GetActionsByUserRoleWithContext(ctx context.Context, userRole string) ([]authorize_grpcapi.Action, error)
