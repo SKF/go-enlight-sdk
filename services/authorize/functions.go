@@ -2,7 +2,6 @@ package authorize
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"time"
 
@@ -14,7 +13,7 @@ const REQUEST_LENGTH_LIMIT = 1000
 
 func requestLengthLimit(requestLenght int) error {
 	if requestLenght > REQUEST_LENGTH_LIMIT {
-		return errors.New(fmt.Sprintf("Request length limit exceeded. Max: %d Actual: %d", REQUEST_LENGTH_LIMIT, requestLenght))
+		return fmt.Errorf("Request length limit exceeded. Max: %d Actual: %d", REQUEST_LENGTH_LIMIT, requestLenght)
 	}
 	return nil
 }
