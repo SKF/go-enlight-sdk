@@ -43,16 +43,33 @@ func (c *client) IsAuthorizedBulk(userID, action string, resources []common.Orig
 }
 
 func (c *client) IsAuthorizedBulkWithContext(ctx context.Context, userID, action string, resources []common.Origin) ([]string, []bool, error) {
-	ids, results, err := c.api.IsAuthorizedBulk(ctx, &authorize_grpcapi.IsAuthorizedBulkInput{
+	if err := requestLengthLimit(len(resources)); err != nil {
+		return nil, nil, err
+	}
+
+	var resourcesInput []*common.Origin
+	for i := 0; i < len(resources); i++ {
+		resourcesInput = append(resourcesInput, &resources[i])
+	}
+
+	results, err := c.api.IsAuthorizedBulk(ctx, &authorize_grpcapi.IsAuthorizedBulkInput{
 		UserId:    userID,
 		Action:    action,
-		Resources: resources,
+		Resources: resourcesInput,
 	})
 	if err != nil {
 		return nil, nil, err
 	}
 
-	return ids, results, err
+	items := results.Responses
+	var ids []string
+	var oks []bool
+	for _, item := range items {
+		ids = append(ids, item.ResourceId)
+		oks = append(oks, item.Ok)
+	}
+
+	return ids, oks, err
 }
 
 func (c *client) IsAuthorizedByEndpoint(api, method, endpoint, userID string) (bool, error) {
