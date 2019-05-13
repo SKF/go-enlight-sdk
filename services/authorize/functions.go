@@ -36,6 +36,42 @@ func (c *client) IsAuthorizedWithContext(ctx context.Context, userID, action str
 	return result.Ok, err
 }
 
+func (c *client) IsAuthorizedBulk(userID, action string, resources []common.Origin) ([]string, []bool, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
+	defer cancel()
+	return c.IsAuthorizedBulkWithContext(ctx, userID, action, resources)
+}
+
+func (c *client) IsAuthorizedBulkWithContext(ctx context.Context, userID, action string, resources []common.Origin) ([]string, []bool, error) {
+	if err := requestLengthLimit(len(resources)); err != nil {
+		return nil, nil, err
+	}
+
+	var resourcesInput []*common.Origin
+	for i := 0; i < len(resources); i++ {
+		resourcesInput = append(resourcesInput, &resources[i])
+	}
+
+	results, err := c.api.IsAuthorizedBulk(ctx, &authorize_grpcapi.IsAuthorizedBulkInput{
+		UserId:    userID,
+		Action:    action,
+		Resources: resourcesInput,
+	})
+	if err != nil {
+		return nil, nil, err
+	}
+
+	items := results.Responses
+	var ids []string
+	var oks []bool
+	for _, item := range items {
+		ids = append(ids, item.ResourceId)
+		oks = append(oks, item.Ok)
+	}
+
+	return ids, oks, err
+}
+
 func (c *client) IsAuthorizedByEndpoint(api, method, endpoint, userID string) (bool, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
 	defer cancel()
