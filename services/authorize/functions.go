@@ -245,6 +245,34 @@ func (c *client) RemoveUserPermissionWithContext(ctx context.Context, userID, ac
 	return err
 }
 
+func (c *client) AddResourcePermission(parent *common.Origin, action string, resource *common.Origin) error {
+	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
+	defer cancel()
+	return c.AddResourcePermissionWithContext(ctx, parent, action, resource)
+}
+func (c *client) AddResourcePermissionWithContext(ctx context.Context, userID, action string, resource *common.Origin) error {
+	_, err := c.api.AddResourcePermission(ctx, &authorize_grpcapi.AddResourcePermissionInput{
+		Parent:   parent,
+		Action:   action,
+		Resource: resource,
+	})
+	return err
+}
+
+func (c *client) RemoveResourcePermission(parent *common.Origin, action string, resource *common.Origin) error {
+	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
+	defer cancel()
+	return c.RemoveResourcePermissionWithContext(ctx, parent, action, resource)
+}
+func (c *client) RemoveResourcePermissionWithContext(ctx context.Context, parent *common.Origin, action string, resource *common.Origin) error {
+	_, err := c.api.RemoveResourcePermission(ctx, &authorize_grpcapi.RemoveResourcePermissionInput{
+		Parent:   parent,
+		Action:   action,
+		Resource: resource,
+	})
+	return err
+}
+
 func (c *client) GetResourcesByOriginAndType(originID string, resourceType string) (resources []common.Origin, err error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
 	defer cancel()
