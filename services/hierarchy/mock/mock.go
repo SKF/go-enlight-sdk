@@ -153,3 +153,13 @@ func (mock *client) GetSubTreeWithContext(ctx context.Context, rootID string, de
 	args := mock.Called(ctx, rootID, depth, nodeTypes)
 	return args.Get(0).([]hierarchy_grpcapi.Node), args.Error(1)
 }
+
+func (mock *client) GetAssetTaxonomy() (hierarchy_grpcapi.AssetTypes, error) {
+	args := mock.Called()
+	return args.Get(0).(hierarchy_grpcapi.AssetTypes), args.Error(1)
+}
+
+func (mock *client) GetAssetTaxonomyWithContext(ctx context.Context) (hierarchy_grpcapi.AssetTypes, error) {
+	args := mock.Called(ctx)
+	return args.Get(0).(hierarchy_grpcapi.AssetTypes), args.Error(1)
+}

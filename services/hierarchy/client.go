@@ -58,6 +58,8 @@ type HierarchyClient interface { // nolint: golint
 
 	GetNodeIDByOrigin(origin common.Origin) (string, error)
 	GetNodeIDByOriginWithContext(ctx context.Context, origin common.Origin) (string, error)
+
+	GetAssetTaxonomy() (hierarchy_grpcapi.AssetTypes, error)
 }
 
 // Client implements the HierarchyClient and holds the connection.
