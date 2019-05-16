@@ -253,3 +253,14 @@ func (c *Client) GetEventsByCustomerWithContext(ctx context.Context, since int, 
 	err = json.Unmarshal(output.Events, &events)
 	return
 }
+
+func (c *Client) GetAssetTaxonomy() (hierarchy_grpcapi.AssetTypes, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
+	defer cancel()
+	return c.GetAssetTaxonomyWithContext(ctx)
+}
+
+func (c *Client) GetAssetTaxonomyWithContext(ctx context.Context) (hierarchy_grpcapi.AssetTypes, error) {
+	assetTypes, err := c.api.GetAssetTaxonomy(ctx, &common.Void{})
+	return *assetTypes, err
+}
