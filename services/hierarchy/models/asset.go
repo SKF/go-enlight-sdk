@@ -41,11 +41,12 @@ func ParseCriticality(dbCriticality string) Criticality {
 
 func (asset AssetNode) Validate() error {
 	if asset.Criticality == "" {
-		return fmt.Errorf("Criticality field on asset cannot be empty")
+		return fmt.Errorf("criticality field on asset cannot be empty")
+	}
+	if asset.Type != "" && asset.Class == "" {
+		return fmt.Errorf("cannot set asset type without specifying class")
 	} else if asset.Sequence != "" && (asset.Type == "" || asset.Class == "") {
-		return fmt.Errorf("Cannot set asset sequnce without specifying class and type")
-	} else if asset.Type != "" && asset.Class == "" {
-		return fmt.Errorf("Cannot set asset type without specifying class")
+		return fmt.Errorf("cannot set asset sequnce without specifying class and type")
 	}
 	return nil
 }
