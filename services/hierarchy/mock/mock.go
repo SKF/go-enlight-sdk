@@ -163,3 +163,12 @@ func (mock *client) GetAssetTaxonomyWithContext(ctx context.Context) (hierarchy_
 	args := mock.Called(ctx)
 	return args.Get(0).(hierarchy_grpcapi.AssetTypes), args.Error(1)
 }
+
+func (mock *client) GetCompany(uuid string) (hierarchy_grpcapi.Node, error) {
+	args := mock.Called(uuid)
+	return args.Get(0).(hierarchy_grpcapi.Node), args.Error(1)
+}
+func (mock *client) GetCompanyWithContext(ctx context.Context, uuid string) (hierarchy_grpcapi.Node, error) {
+	args := mock.Called(ctx, uuid)
+	return args.Get(0).(hierarchy_grpcapi.Node), args.Error(1)
+}
