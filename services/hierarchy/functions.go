@@ -271,7 +271,7 @@ func (c *Client) GetCompany(nodeID string) (hierarchy_grpcapi.Node, error) {
 	return c.GetCompanyWithContext(ctx, nodeID)
 }
 
-func (c *Client) GetCompanyWithContext(ctx context.Context, nodeID string) (resp hierarchy_grpcapi.Node, err error) {
+func (c *Client) GetCompanyWithContext(ctx context.Context, nodeID string) (node hierarchy_grpcapi.Node, err error) {
 	resp, err := c.api.GetCompany(ctx, &common.PrimitiveString{Value: nodeID})
 	if resp != nil {
 		node = *resp
