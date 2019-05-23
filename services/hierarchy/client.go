@@ -61,6 +61,9 @@ type HierarchyClient interface { // nolint: golint
 
 	GetAssetTaxonomy() (hierarchy_grpcapi.AssetTypes, error)
 	GetAssetTaxonomyWithContext(ctx context.Context) (hierarchy_grpcapi.AssetTypes, error)
+
+	GetCompany(nodeID string) (hierarchy_grpcapi.Node, error)
+	GetCompanyWithContext(ctx context.Context, nodeID string) (hierarchy_grpcapi.Node, error)
 }
 
 // Client implements the HierarchyClient and holds the connection.
