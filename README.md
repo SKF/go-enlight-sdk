@@ -5,9 +5,9 @@ SDK for accessing Enlight using protocol buffers
 See protocol buffer message [types](https://github.com/SKF/proto/README.md)
 
 # services
+- Authorize: Resource-based authorization
 - HM: Hierarchy management
 - IAM: Identity and Access Management
 - IoT: Internet of Things
-- MHub: Microlog Hub
 - [PAS: Point Alarm Status](services/pas/README.md)
 - [Reports: Reports](services/reports/README.md)
