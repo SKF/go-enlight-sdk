@@ -110,7 +110,7 @@ func (c *client) GetResource(id string) (common.Origin, error) {
 	return c.GetResourceWithContext(ctx, id)
 }
 func (c *client) GetResourceWithContext(ctx context.Context, id string) (common.Origin, error) {
-	resource, err c.api.GetResource(ctx, authorize_grpcapi.GetResourceInput{
+	resource, err := c.api.GetResource(ctx, authorize_grpcapi.GetResourceInput{
 		Id: id,
 	})
 	
