@@ -33,7 +33,7 @@ issues:
     - don't use ALL_CAPS in Go names; use CamelCase
 
 linters:
-  enable-all: true
+  enable-all: false
   disable:
     - depguard
     - gochecknoinits
