@@ -104,6 +104,24 @@ func (c *client) AddResourceWithContext(ctx context.Context, resource common.Ori
 	return err
 }
 
+func (c *client) GetResource(id string) (common.Origin, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
+	defer cancel()
+	return c.GetResourceWithContext(ctx, id)
+}
+func (c *client) GetResourceWithContext(ctx context.Context, id string) (common.Origin, error) {
+	resource, err c.api.GetResource(ctx, authorize_grpcapi.GetResourceInput{
+		Id: id,
+	})
+	
+	if err != nil {
+		return nil, err
+	}
+	
+	return resource.Resource, err
+}
+
+
 func (c *client) AddResources(resources []common.Origin) error {
 	if err := requestLengthLimit(len(resources)); err != nil {
 		return err
