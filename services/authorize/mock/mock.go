@@ -128,20 +128,20 @@ func (mock *client) RemoveResourceWithContext(ctx context.Context, resource comm
 	return args.Error(0)
 }
 
-func (mock *client) AddUserPermission(userID, action string, resource *common.Origin) error {
+func (mock *client) ApplyUserAction(userID, action string, resource *common.Origin) error {
 	args := mock.Called(userID, action, resource)
 	return args.Error(0)
 }
-func (mock *client) AddUserPermissionWithContext(ctx context.Context, userID, action string, resource *common.Origin) error {
+func (mock *client) ApplyUserActionWithContext(ctx context.Context, userID, action string, resource *common.Origin) error {
 	args := mock.Called(ctx, userID, action, resource)
 	return args.Error(0)
 }
 
-func (mock *client) RemoveUserPermission(userID, action string, resource *common.Origin) error {
+func (mock *client) RemoveUserAction(userID, action string, resource *common.Origin) error {
 	args := mock.Called(userID, action, resource)
 	return args.Error(0)
 }
-func (mock *client) RemoveUserPermissionWithContext(ctx context.Context, userID, action string, resource *common.Origin) error {
+func (mock *client) RemoveUserActionWithContext(ctx context.Context, userID, action string, resource *common.Origin) error {
 	args := mock.Called(ctx, userID, action, resource)
 	return args.Error(0)
 }

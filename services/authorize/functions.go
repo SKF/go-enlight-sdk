@@ -270,13 +270,13 @@ func (c *client) RemoveResourceRelationsWithContext(ctx context.Context, resourc
 	return err
 }
 
-func (c *client) AddUserPermission(userID, action string, resource *common.Origin) error {
+func (c *client) ApplyUserAction(userID, action string, resource *common.Origin) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
 	defer cancel()
-	return c.AddUserPermissionWithContext(ctx, userID, action, resource)
+	return c.ApplyUserActionWithContext(ctx, userID, action, resource)
 }
-func (c *client) AddUserPermissionWithContext(ctx context.Context, userID, action string, resource *common.Origin) error {
-	_, err := c.api.AddUserPermission(ctx, &authorize_grpcapi.AddUserPermissionInput{
+func (c *client) ApplyUserActionWithContext(ctx context.Context, userID, action string, resource *common.Origin) error {
+	_, err := c.api.ApplyUserAction(ctx, &authorize_grpcapi.ApplyUserActionInput{
 		UserId:   userID,
 		Action:   action,
 		Resource: resource,
@@ -284,13 +284,13 @@ func (c *client) AddUserPermissionWithContext(ctx context.Context, userID, actio
 	return err
 }
 
-func (c *client) RemoveUserPermission(userID, action string, resource *common.Origin) error {
+func (c *client) RemoveUserAction(userID, action string, resource *common.Origin) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
 	defer cancel()
-	return c.RemoveUserPermissionWithContext(ctx, userID, action, resource)
+	return c.RemoveUserActionWithContext(ctx, userID, action, resource)
 }
-func (c *client) RemoveUserPermissionWithContext(ctx context.Context, userID, action string, resource *common.Origin) error {
-	_, err := c.api.RemoveUserPermission(ctx, &authorize_grpcapi.RemoveUserPermissionInput{
+func (c *client) RemoveUserActionWithContext(ctx context.Context, userID, action string, resource *common.Origin) error {
+	_, err := c.api.RemoveUserAction(ctx, &authorize_grpcapi.RemoveUserActionInput{
 		UserId:   userID,
 		Action:   action,
 		Resource: resource,
