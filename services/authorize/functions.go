@@ -115,7 +115,7 @@ func (c *client) GetResourceWithContext(ctx context.Context, id string) (common.
 	})
 	
 	if err != nil {
-		return nil, err
+		return authorize_grpcapi.GetResourceInput{}, err
 	}
 	
 	return resource.Resource, err
