@@ -40,3 +40,4 @@ linters:
     - gochecknoglobals
     - lll
     - prealloc
+    - goimports
