@@ -28,6 +28,9 @@ type AuthorizeClient interface { // nolint: golint
 
 	AddResource(resource common.Origin) error
 	AddResourceWithContext(ctx context.Context, resource common.Origin) error
+	
+	GetResource(id string) (common.Origin, error)
+	GetResourceWithContext(ctx context.Context, id string) (common.Origin, error)
 
 	AddResources(resources []common.Origin) error
 	AddResourcesWithContext(ctx context.Context, resources []common.Origin) error
