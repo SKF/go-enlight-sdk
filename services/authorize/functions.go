@@ -104,13 +104,16 @@ func (c *client) AddResourceWithContext(ctx context.Context, resource common.Ori
 	return err
 }
 
-func (c *client) GetResource(id string) (common.Origin, error) {
+func (c *client) GetResource(id string, originType string) (common.Origin, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
 	defer cancel()
-	return c.GetResourceWithContext(ctx, id)
+	return c.GetResourceWithContext(ctx, id, originType)
 }
-func (c *client) GetResourceWithContext(ctx context.Context, id string) (common.Origin, error) {
-	input := authorize_grpcapi.GetResourceInput{Id: id}
+func (c *client) GetResourceWithContext(ctx context.Context, id string, originType string) (common.Origin, error) {
+	input := authorize_grpcapi.GetResourceInput{
+	   Id: id, 
+	   OriginType: originType,
+	}
 	resource, err := c.api.GetResource(ctx, &input)
 
 	if err != nil {
