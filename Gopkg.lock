@@ -2,22 +2,6 @@
 
 
 [[projects]]
-  digest = "1:783b072ef30e413faaf6d2c95af2c2f4c32d5283c01fce335e0a89c501564abc"
-  name = "github.com/SKF/go-enlight-sdk"
-  packages = [
-    "grpc",
-    "services/authorize",
-    "services/hierarchy",
-    "services/iam",
-    "services/iot",
-    "services/pas",
-    "services/reports",
-  ]
-  pruneopts = "UT"
-  revision = "a743688aa8a2180b09ab31b47d36847ac3ffd17c"
-  version = "v1.14.2"
-
-[[projects]]
   digest = "1:769b04faeaec4069b22493a117b0b4f7799ebc8cfd2f0f4ddb7643cac7f21e00"
   name = "github.com/SKF/go-eventsource"
   packages = ["eventsource"]
@@ -34,11 +18,11 @@
     "uuid",
   ]
   pruneopts = "UT"
-  revision = "c00058e3b8380ef4a6c0090aa6cb396598456076"
-  version = "v1.5.1"
+  revision = "d4a3c36a5d6879868583d730e56fec634b406a83"
+  version = "v1.6.0"
 
 [[projects]]
-  digest = "1:94265c85df4273a33255ab50eaf1d3135c8c78e2055d1fbf9d7ea8a070656f6d"
+  digest = "1:8ed1f5bbc0f31147853636d4b4b0a3b3759d8121f24ffe2fe17950f4bdd6e9eb"
   name = "github.com/SKF/proto"
   packages = [
     "authorize",
@@ -50,8 +34,8 @@
     "reports",
   ]
   pruneopts = "UT"
-  revision = "cefb251150248320cbc74a131c4963a49913e9a0"
-  version = "v1.19.0-go"
+  revision = "4652c61b98d9bdcee74fb7288a5ea03db8e8ba30"
+  version = "v1.21.0-go"
 
 [[projects]]
   digest = "1:ffe9824d294da03b391f44e1ae8281281b4afc1bdaa9588c9097785e3af10cec"
@@ -159,7 +143,7 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:aa51a5bed0c7c26aadfcc5bf5b2b62c0f43032af5d786a02247f87dfce23cb06"
+  digest = "1:b5936d38011189ba9b2e5890a38c7ffe0ac7f157eef2ddc0fe752117c50d394d"
   name = "golang.org/x/net"
   packages = [
     "context",
@@ -171,15 +155,15 @@
     "trace",
   ]
   pruneopts = "UT"
-  revision = "018c4d40a106a7ae83689758294fcd8d23850745"
+  revision = "da137c7871d730100384dbcf36e6f8fa493aef5b"
 
 [[projects]]
   branch = "master"
-  digest = "1:6ed9319f79a63e30779042ef237f81770df4091866e43f84a643257384b0aefc"
+  digest = "1:730ba27cd66db3b98ec8f51a6f20d45ec277d490cca36b1f54e31d3fcaf4840e"
   name = "golang.org/x/sys"
   packages = ["unix"]
   pruneopts = "UT"
-  revision = "8097e1b27ff5e40620836729a9584e91b094b062"
+  revision = "04f50cda93cbb67f2afa353c52f342100e80e625"
 
 [[projects]]
   digest = "1:8d8faad6b12a3a4c819a3f9618cb6ee1fa1cfc33253abeeea8b55336721e3405"
@@ -212,10 +196,10 @@
   name = "google.golang.org/genproto"
   packages = ["googleapis/rpc/status"]
   pruneopts = "UT"
-  revision = "bb713bdc0e5239f2b68e560efbe1c701a6fe78f9"
+  revision = "710ae3a149df3775bfc2e9efb7f4fb97b186b233"
 
 [[projects]]
-  digest = "1:707c3a5d10ed430ea767d73df122d9eb3dfb6312bbacc9f2e39204390686d1d0"
+  digest = "1:e8800ddadd6bce3bc0c5ffd7bc55dbdddc6e750956c10cc10271cade542fccbe"
   name = "google.golang.org/grpc"
   packages = [
     ".",
@@ -252,20 +236,13 @@
     "tap",
   ]
   pruneopts = "UT"
-  revision = "25c4f928eaa6d96443009bd842389fb4fa48664e"
-  version = "v1.20.1"
+  revision = "501c41df7f472c740d0674ff27122f3f48c80ce7"
+  version = "v1.21.1"
 
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
   input-imports = [
-    "github.com/SKF/go-enlight-sdk/grpc",
-    "github.com/SKF/go-enlight-sdk/services/authorize",
-    "github.com/SKF/go-enlight-sdk/services/hierarchy",
-    "github.com/SKF/go-enlight-sdk/services/iam",
-    "github.com/SKF/go-enlight-sdk/services/iot",
-    "github.com/SKF/go-enlight-sdk/services/pas",
-    "github.com/SKF/go-enlight-sdk/services/reports",
     "github.com/SKF/go-eventsource/eventsource",
     "github.com/SKF/go-utility/env",
     "github.com/SKF/go-utility/log",
