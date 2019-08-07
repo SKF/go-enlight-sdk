@@ -1,16 +1,26 @@
 package models
 
 import (
+	"encoding/json"
 	"fmt"
 
+	"github.com/SKF/go-utility/uuid"
 	grpcapi "github.com/SKF/proto/hierarchy"
 )
+
+type Component struct {
+	Id            uuid.UUID       `json:"id"`
+	Type          string          `json:"type"`
+	Props         json.RawMessage `json:"props,omitempty"`
+	SubComponents []Component     `json:"subComponents,omitempty"`
+}
 
 type AssetNode struct {
 	Criticality Criticality `json:"criticality"`
 	Type        string      `json:"type,omitempty"`
 	Class       string      `json:"class,omitempty"`
 	Sequence    string      `json:"sequence,omitempty"`
+	Components  []Component `json:"components,omitempty"`
 }
 
 type Criticality string
@@ -61,11 +71,17 @@ func (cr Criticality) ValidateCriticaltiy() error {
 }
 
 func (asset AssetNode) ToGRPC() *grpcapi.AssetNode {
+	components := make([]*grpcapi.Component, 0)
+	for _, c := range asset.Components {
+		components = append(components, c.ToGRPC())
+	}
+
 	return &grpcapi.AssetNode{
 		Criticality: string(asset.Criticality),
 		Class:       asset.Class,
 		Type:        asset.Type,
 		Sequence:    asset.Sequence,
+		Components:  components,
 	}
 }
 
@@ -74,4 +90,40 @@ func (asset *AssetNode) FromGRPC(assetNode grpcapi.AssetNode) {
 	asset.Class = assetNode.Class
 	asset.Type = assetNode.Type
 	asset.Sequence = assetNode.Sequence
+	asset.Components = make([]Component, 0)
+	if assetNode.Components != nil {
+		for _, gc := range assetNode.Components {
+			c := &Component{}
+			c.FromGRPC(gc)
+			asset.Components = append(asset.Components, *c)
+		}
+	}
+}
+
+func (component Component) ToGRPC() *grpcapi.Component {
+	subComponents := make([]*grpcapi.Component, 0)
+	if component.SubComponents != nil {
+		for _, sc := range component.SubComponents {
+			subComponents = append(subComponents, sc.ToGRPC())
+		}
+	}
+	return &grpcapi.Component{
+		Id:            component.Id.String(),
+		Type:          component.Type,
+		Props:         string(component.Props),
+		SubComponents: subComponents,
+	}
+}
+
+func (component *Component) FromGRPC(c *grpcapi.Component) {
+	component.Id = uuid.UUID(c.Id)
+	component.Type = c.Type
+	component.SubComponents = make([]Component, 0)
+	if c.SubComponents != nil {
+		for _, gsc := range c.SubComponents {
+			sc := &Component{}
+			sc.FromGRPC(gsc)
+			component.SubComponents = append(component.SubComponents, *sc)
+		}
+	}
 }
