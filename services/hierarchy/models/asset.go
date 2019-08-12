@@ -127,7 +127,7 @@ func (component *Component) FromGRPC(c *grpcapi.Component) {
 	component.Id = uuid.UUID(c.Id)
 	component.Type = c.Type
 	component.SubComponents = make([]Component, 0)
-	component.Props.UnmarshalJSON([]byte(c.Props))
+	component.Props.UnmarshalJSON([]byte(c.Props)) // nolint
 	if c.SubComponents != nil {
 		for _, gsc := range c.SubComponents {
 			sc := &Component{}
