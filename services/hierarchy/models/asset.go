@@ -107,18 +107,27 @@ func (component Component) ToGRPC() *grpcapi.Component {
 			subComponents = append(subComponents, sc.ToGRPC())
 		}
 	}
-	return &grpcapi.Component{
+
+	ret := &grpcapi.Component{
 		Id:            component.Id.String(),
 		Type:          component.Type,
-		Props:         string(component.Props),
 		SubComponents: subComponents,
 	}
+
+	if component.Props != nil {
+		if buf, err := component.Props.MarshalJSON(); err == nil {
+			ret.Props = string(buf)
+		}
+	}
+
+	return ret
 }
 
 func (component *Component) FromGRPC(c *grpcapi.Component) {
 	component.Id = uuid.UUID(c.Id)
 	component.Type = c.Type
 	component.SubComponents = make([]Component, 0)
+	component.Props.UnmarshalJSON([]byte(c.Props)) // nolint
 	if c.SubComponents != nil {
 		for _, gsc := range c.SubComponents {
 			sc := &Component{}

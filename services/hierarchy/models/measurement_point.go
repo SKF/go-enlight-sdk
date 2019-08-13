@@ -1,5 +1,9 @@
 package models
 
+import (
+	"github.com/SKF/go-utility/uuid"
+)
+
 type MeasurementPoint struct {
 	Bearing         int32           `json:"bearing"`
 	Angular         Orientation     `json:"orientation"`
@@ -7,6 +11,8 @@ type MeasurementPoint struct {
 	Shaft           string          `json:"shaft"`
 	ShaftSide       ShaftSide       `json:"shaftSide"`
 	FixedSpeedRPM   float64         `json:"fixedSpeedRPM"`
+	LocationId      uuid.UUID       `json:"locationId"`
+	DADType         string          `json:"dadType"`
 }
 
 type Orientation string
