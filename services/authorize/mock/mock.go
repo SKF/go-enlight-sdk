@@ -99,7 +99,6 @@ func (mock *client) GetResourceWithContext(ctx context.Context, id string, origi
 	return args.Get(0).(common.Origin), args.Error(1)
 }
 
-
 func (mock *client) AddResourceRelation(resource common.Origin, parent common.Origin) error {
 	args := mock.Called(resource, parent)
 	return args.Error(0)
@@ -146,22 +145,22 @@ func (mock *client) RemoveUserActionWithContext(ctx context.Context, userID, act
 	return args.Error(0)
 }
 
-func (mock *client) GetResourcesByOriginAndType(originID string, resourceType string) (resources []common.Origin, err error) {
-	args := mock.Called(originID, resourceType)
+func (mock *client) GetResourcesByOriginAndType(resource common.Origin, resourceType string) (resources []common.Origin, err error) {
+	args := mock.Called(resource, resourceType)
 	return args.Get(0).([]common.Origin), args.Error(1)
 }
-func (mock *client) GetResourcesByOriginAndTypeWithContext(ctx context.Context, originID string, resourceType string) (resources []common.Origin, err error) {
-	args := mock.Called(ctx, originID, resourceType)
+func (mock *client) GetResourcesByOriginAndTypeWithContext(ctx context.Context, resource common.Origin, resourceType string) (resources []common.Origin, err error) {
+	args := mock.Called(ctx, resource, resourceType)
 	return args.Get(0).([]common.Origin), args.Error(1)
 }
 
-func (mock *client) GetUserIDsWithAccessToResource(originID string) (resources []string, err error) {
-	args := mock.Called(originID)
+func (mock *client) GetUserIDsWithAccessToResource(resource common.Origin) (resources []string, err error) {
+	args := mock.Called(resource)
 	return args.Get(0).([]string), args.Error(1)
 }
 
-func (mock *client) GetUserIDsWithAccessToResourceWithContext(ctx context.Context, originID string) (resources []string, err error) {
-	args := mock.Called(ctx, originID)
+func (mock *client) GetUserIDsWithAccessToResourceWithContext(ctx context.Context, resource common.Origin) (resources []string, err error) {
+	args := mock.Called(ctx, resource)
 	return args.Get(0).([]string), args.Error(1)
 }
 
