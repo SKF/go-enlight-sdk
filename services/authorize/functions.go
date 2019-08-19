@@ -111,8 +111,8 @@ func (c *client) GetResource(id string, originType string) (common.Origin, error
 }
 func (c *client) GetResourceWithContext(ctx context.Context, id string, originType string) (common.Origin, error) {
 	input := authorize_grpcapi.GetResourceInput{
-	   Id: id, 
-	   OriginType: originType,
+		Id:         id,
+		OriginType: originType,
 	}
 	resource, err := c.api.GetResource(ctx, &input)
 
@@ -122,7 +122,6 @@ func (c *client) GetResourceWithContext(ctx context.Context, id string, originTy
 
 	return *resource.Resource, err
 }
-
 
 func (c *client) AddResources(resources []common.Origin) error {
 	if err := requestLengthLimit(len(resources)); err != nil {
@@ -301,13 +300,13 @@ func (c *client) RemoveUserActionWithContext(ctx context.Context, userID, action
 	return err
 }
 
-func (c *client) GetResourcesByOriginAndType(originID string, resourceType string) (resources []common.Origin, err error) {
+func (c *client) GetResourcesByOriginAndType(resource common.Origin, resourceType string) (resources []common.Origin, err error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
 	defer cancel()
-	return c.GetResourcesByOriginAndTypeWithContext(ctx, originID, resourceType)
+	return c.GetResourcesByOriginAndTypeWithContext(ctx, resource, resourceType)
 }
-func (c *client) GetResourcesByOriginAndTypeWithContext(ctx context.Context, originID string, resourceType string) (resources []common.Origin, err error) {
-	input := authorize_grpcapi.GetResourcesByOriginAndTypeInput{ResourceType: resourceType, OriginId: originID}
+func (c *client) GetResourcesByOriginAndTypeWithContext(ctx context.Context, resource common.Origin, resourceType string) (resources []common.Origin, err error) {
+	input := authorize_grpcapi.GetResourcesByOriginAndTypeInput{ResourceType: resourceType, Resource: &resource}
 	output, err := c.api.GetResourcesByOriginAndType(ctx, &input)
 	if err != nil {
 		return
@@ -322,13 +321,13 @@ func (c *client) GetResourcesByOriginAndTypeWithContext(ctx context.Context, ori
 	return
 }
 
-func (c *client) GetUserIDsWithAccessToResource(originID string) (resources []string, err error) {
+func (c *client) GetUserIDsWithAccessToResource(resource common.Origin) (resources []string, err error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
 	defer cancel()
-	return c.GetUserIDsWithAccessToResourceWithContext(ctx, originID)
+	return c.GetUserIDsWithAccessToResourceWithContext(ctx, resource)
 }
-func (c *client) GetUserIDsWithAccessToResourceWithContext(ctx context.Context, originID string) (userIds []string, err error) {
-	input := authorize_grpcapi.GetUserIDsWithAccessToResourceInput{OriginId: originID}
+func (c *client) GetUserIDsWithAccessToResourceWithContext(ctx context.Context, resource common.Origin) (userIds []string, err error) {
+	input := authorize_grpcapi.GetUserIDsWithAccessToResourceInput{Resource: &resource}
 	output, err := c.api.GetUserIDsWithAccessToResource(ctx, &input)
 	if err != nil {
 		return

@@ -28,9 +28,9 @@ type AuthorizeClient interface { // nolint: golint
 
 	AddResource(resource common.Origin) error
 	AddResourceWithContext(ctx context.Context, resource common.Origin) error
-	
-	GetResource(id string, originType string) (common.Origin, error)
-	GetResourceWithContext(ctx context.Context, id string, originType string) (common.Origin, error)
+
+	GetResource(id, originType string) (common.Origin, error)
+	GetResourceWithContext(ctx context.Context, id, originType string) (common.Origin, error)
 
 	AddResources(resources []common.Origin) error
 	AddResourcesWithContext(ctx context.Context, resources []common.Origin) error
@@ -44,11 +44,11 @@ type AuthorizeClient interface { // nolint: golint
 	GetResourcesByType(resourceType string) (resources []common.Origin, err error)
 	GetResourcesByTypeWithContext(ctx context.Context, resourceType string) (resources []common.Origin, err error)
 
-	GetResourcesByOriginAndType(originID string, resourceType string) (resources []common.Origin, err error)
-	GetResourcesByOriginAndTypeWithContext(ctx context.Context, originID string, resourceType string) (resources []common.Origin, err error)
+	GetResourcesByOriginAndType(resource common.Origin, resourceType string) (resources []common.Origin, err error)
+	GetResourcesByOriginAndTypeWithContext(ctx context.Context, resource common.Origin, resourceType string) (resources []common.Origin, err error)
 
-	GetUserIDsWithAccessToResource(originID string) (resources []string, err error)
-	GetUserIDsWithAccessToResourceWithContext(ctx context.Context, originID string) (resources []string, err error)
+	GetUserIDsWithAccessToResource(resource common.Origin) (resources []string, err error)
+	GetUserIDsWithAccessToResourceWithContext(ctx context.Context, resource common.Origin) (resources []string, err error)
 
 	AddResourceRelation(resource common.Origin, parent common.Origin) error
 	AddResourceRelationWithContext(ctx context.Context, resource common.Origin, parent common.Origin) error
