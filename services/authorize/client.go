@@ -15,6 +15,7 @@ type AuthorizeClient interface { // nolint: golint
 	Dial(host, port string, opts ...grpc.DialOption) error
 	DialWithContext(ctx context.Context, host, port string, opts ...grpc.DialOption) error
 	Close()
+	SetRequestTimeout(d time.Duration)
 
 	DeepPing() error
 	DeepPingWithContext(ctx context.Context) error
@@ -76,17 +77,22 @@ type AuthorizeClient interface { // nolint: golint
 }
 
 type client struct {
-	conn *grpc.ClientConn
-	api  authorize_grpcapi.AuthorizeClient
+	conn           *grpc.ClientConn
+	api            authorize_grpcapi.AuthorizeClient
+	requestTimeout time.Duration
 }
 
 func CreateClient() AuthorizeClient {
-	return &client{}
+	return &client{
+		requestTimeout: 60 * time.Second,
+	}
 }
 
 // Dial creates a client connection to the given host with background context and no timeout
 func (c *client) Dial(host, port string, opts ...grpc.DialOption) error {
-	return c.DialWithContext(context.Background(), host, port, opts...)
+	ctx, cancel := context.WithTimeout(context.Background(), c.requestTimeout)
+	defer cancel()
+	return c.DialWithContext(ctx, host, port, opts...)
 }
 
 // DialWithContext creates a client connection to the given host with context (for timeout and transaction id)
@@ -106,7 +112,7 @@ func (c *client) Close() {
 }
 
 func (c *client) DeepPing() error {
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), c.requestTimeout)
 	defer cancel()
 	return c.DeepPingWithContext(ctx)
 }

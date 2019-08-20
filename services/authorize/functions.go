@@ -18,8 +18,12 @@ func requestLengthLimit(requestLength int) error {
 	return nil
 }
 
+func (c *client) SetRequestTimeout(d time.Duration) {
+	c.requestTimeout = d
+}
+
 func (c *client) IsAuthorized(userID, action string, resource *common.Origin) (bool, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), c.requestTimeout)
 	defer cancel()
 	return c.IsAuthorizedWithContext(ctx, userID, action, resource)
 }
@@ -37,7 +41,7 @@ func (c *client) IsAuthorizedWithContext(ctx context.Context, userID, action str
 }
 
 func (c *client) IsAuthorizedBulk(userID, action string, resources []common.Origin) ([]string, []bool, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), c.requestTimeout)
 	defer cancel()
 	return c.IsAuthorizedBulkWithContext(ctx, userID, action, resources)
 }
@@ -73,7 +77,7 @@ func (c *client) IsAuthorizedBulkWithContext(ctx context.Context, userID, action
 }
 
 func (c *client) IsAuthorizedByEndpoint(api, method, endpoint, userID string) (bool, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), c.requestTimeout)
 	defer cancel()
 	return c.IsAuthorizedByEndpointWithContext(ctx, api, method, endpoint, userID)
 }
@@ -92,7 +96,7 @@ func (c *client) IsAuthorizedByEndpointWithContext(ctx context.Context, api, met
 }
 
 func (c *client) AddResource(resource common.Origin) error {
-	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), c.requestTimeout)
 	defer cancel()
 	return c.AddResourceWithContext(ctx, resource)
 }
@@ -105,7 +109,7 @@ func (c *client) AddResourceWithContext(ctx context.Context, resource common.Ori
 }
 
 func (c *client) GetResource(id string, originType string) (common.Origin, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), c.requestTimeout)
 	defer cancel()
 	return c.GetResourceWithContext(ctx, id, originType)
 }
@@ -128,7 +132,7 @@ func (c *client) AddResources(resources []common.Origin) error {
 		return err
 	}
 
-	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), c.requestTimeout)
 	defer cancel()
 	return c.AddResourcesWithContext(ctx, resources)
 }
@@ -150,7 +154,7 @@ func (c *client) AddResourcesWithContext(ctx context.Context, resources []common
 }
 
 func (c *client) RemoveResource(resource common.Origin) error {
-	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), c.requestTimeout)
 	defer cancel()
 	return c.RemoveResourceWithContext(ctx, resource)
 }
@@ -166,7 +170,7 @@ func (c *client) RemoveResources(resources []common.Origin) error {
 		return err
 	}
 
-	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), c.requestTimeout)
 	defer cancel()
 	return c.RemoveResourcesWithContext(ctx, resources)
 }
@@ -188,7 +192,7 @@ func (c *client) RemoveResourcesWithContext(ctx context.Context, resources []com
 }
 
 func (c *client) GetResourcesByType(resourceType string) (resources []common.Origin, err error) {
-	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), c.requestTimeout)
 	defer cancel()
 	return c.GetResourcesByTypeWithContext(ctx, resourceType)
 }
@@ -209,7 +213,7 @@ func (c *client) GetResourcesByTypeWithContext(ctx context.Context, resourceType
 }
 
 func (c *client) AddResourceRelation(resource common.Origin, parent common.Origin) error {
-	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), c.requestTimeout)
 	defer cancel()
 	return c.AddResourceRelationWithContext(ctx, resource, parent)
 }
@@ -226,7 +230,7 @@ func (c *client) AddResourceRelations(resources authorize_grpcapi.AddResourceRel
 		return err
 	}
 
-	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), c.requestTimeout)
 	defer cancel()
 	return c.AddResourceRelationsWithContext(ctx, resources)
 }
@@ -241,7 +245,7 @@ func (c *client) AddResourceRelationsWithContext(ctx context.Context, resources 
 }
 
 func (c *client) RemoveResourceRelation(resource common.Origin, parent common.Origin) error {
-	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), c.requestTimeout)
 	defer cancel()
 	return c.RemoveResourceRelationWithContext(ctx, resource, parent)
 }
@@ -258,7 +262,7 @@ func (c *client) RemoveResourceRelations(resources authorize_grpcapi.RemoveResou
 		return err
 	}
 
-	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), c.requestTimeout)
 	defer cancel()
 	return c.RemoveResourceRelationsWithContext(ctx, resources)
 }
@@ -273,7 +277,7 @@ func (c *client) RemoveResourceRelationsWithContext(ctx context.Context, resourc
 }
 
 func (c *client) ApplyUserAction(userID, action string, resource *common.Origin) error {
-	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), c.requestTimeout)
 	defer cancel()
 	return c.ApplyUserActionWithContext(ctx, userID, action, resource)
 }
@@ -287,7 +291,7 @@ func (c *client) ApplyUserActionWithContext(ctx context.Context, userID, action 
 }
 
 func (c *client) RemoveUserAction(userID, action string, resource *common.Origin) error {
-	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), c.requestTimeout)
 	defer cancel()
 	return c.RemoveUserActionWithContext(ctx, userID, action, resource)
 }
@@ -301,7 +305,7 @@ func (c *client) RemoveUserActionWithContext(ctx context.Context, userID, action
 }
 
 func (c *client) GetResourcesByOriginAndType(resource common.Origin, resourceType string) (resources []common.Origin, err error) {
-	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), c.requestTimeout)
 	defer cancel()
 	return c.GetResourcesByOriginAndTypeWithContext(ctx, resource, resourceType)
 }
@@ -322,7 +326,7 @@ func (c *client) GetResourcesByOriginAndTypeWithContext(ctx context.Context, res
 }
 
 func (c *client) GetUserIDsWithAccessToResource(resource common.Origin) (resources []string, err error) {
-	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), c.requestTimeout)
 	defer cancel()
 	return c.GetUserIDsWithAccessToResourceWithContext(ctx, resource)
 }
@@ -343,7 +347,7 @@ func (c *client) GetUserIDsWithAccessToResourceWithContext(ctx context.Context, 
 }
 
 func (c *client) GetActionsByUserRole(userRole string) ([]authorize_grpcapi.Action, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), c.requestTimeout)
 	defer cancel()
 	return c.GetActionsByUserRoleWithContext(ctx, userRole)
 }
@@ -366,7 +370,7 @@ func (c *client) GetActionsByUserRoleWithContext(ctx context.Context, userRole s
 }
 
 func (c *client) GetResourcesAndActionsByUser(userID string) ([]authorize_grpcapi.ActionResource, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), c.requestTimeout)
 	defer cancel()
 	return c.GetResourcesAndActionsByUserWithContext(ctx, userID)
 }

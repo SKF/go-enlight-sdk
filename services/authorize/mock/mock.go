@@ -2,6 +2,7 @@ package mock
 
 import (
 	"context"
+	"time"
 
 	grpcapi "github.com/SKF/proto/authorize"
 
@@ -22,6 +23,10 @@ func Create() *client { // nolint: golint
 }
 
 var _ authorize.AuthorizeClient = &client{}
+
+func (mock *client) SetRequestTimeout(d time.Duration) {
+	mock.Called(d)
+}
 
 func (mock *client) Dial(host, port string, opts ...grpc.DialOption) error {
 	args := mock.Called(host, port, opts)
