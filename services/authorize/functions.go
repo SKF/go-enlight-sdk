@@ -391,3 +391,62 @@ func (c *client) GetResourcesAndActionsByUserWithContext(ctx context.Context, us
 
 	return
 }
+
+func (c *client) AddAction(action authorize_grpcapi.Action) error {
+	ctx, cancel := context.WithTimeout(context.Background(), c.requestTimeout)
+	defer cancel()
+	return c.AddActionWithContext(ctx, action)
+}
+
+func (c *client) AddActionWithContext(ctx context.Context, action authorize_grpcapi.Action) error {
+	_, err := c.api.AddAction(ctx, &authorize_grpcapi.AddActionInput{Action: &action})
+	return err
+}
+
+func (c *client) RemoveAction(name string) error {
+	ctx, cancel := context.WithTimeout(context.Background(), c.requestTimeout)
+	defer cancel()
+	return c.RemoveActionWithContext(ctx, name)
+}
+
+func (c *client) RemoveActionWithContext(ctx context.Context, name string) error {
+	_, err := c.api.RemoveAction(ctx, &authorize_grpcapi.RemoveActionInput{Name: name})
+	return err
+}
+
+func (c *client) GetAction(name string) (authorize_grpcapi.Action, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), c.requestTimeout)
+	defer cancel()
+	return c.GetActionWithContext(ctx, name)
+}
+
+func (c *client) GetActionWithContext(ctx context.Context, name string) (actions authorize_grpcapi.Action, err error) {
+	input := authorize_grpcapi.GetActionInput{Name: name}
+	action, err := c.api.GetAction(ctx, &input)
+	if err != nil {
+		return
+	}
+	return *action.Action, err
+}
+
+func (c *client) GetAllActions() ([]authorize_grpcapi.Action, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), c.requestTimeout)
+	defer cancel()
+	return c.GetAllActionsWithContext(ctx)
+}
+
+func (c *client) GetAllActionsWithContext(ctx context.Context) (actions []authorize_grpcapi.Action, err error) {
+	allActions, err := c.api.GetAllActions(ctx, &common.Void{})
+	if err != nil {
+		return
+	}
+	if allActions != nil {
+		for _, action := range allActions.Actions {
+			if action != nil {
+				actions = append(actions, *action)
+			}
+		}
+	}
+
+	return
+}
