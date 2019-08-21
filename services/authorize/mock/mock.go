@@ -226,3 +226,35 @@ func (mock *client) GetResourcesAndActionsByUserWithContext(ctx context.Context,
 	args := mock.Called(ctx, userID)
 	return args.Get(0).([]grpcapi.ActionResource), args.Error(1)
 }
+func (mock *client) AddAction(action grpcapi.Action) error {
+	args := mock.Called(action)
+	return args.Error(0)
+}
+func (mock *client) AddActionWithContext(ctx context.Context, action grpcapi.Action) error {
+	args := mock.Called(ctx, action)
+	return args.Error(0)
+}
+func (mock *client) RemoveAction(name string) error {
+	args := mock.Called(name)
+	return args.Error(0)
+}
+func (mock *client) RemoveActionWithContext(ctx context.Context, name string) error {
+	args := mock.Called(ctx, name)
+	return args.Error(0)
+}
+func (mock *client) GetAction(name string) (grpcapi.Action, error) {
+	args := mock.Called(name)
+	return args.Get(0).(grpcapi.Action), args.Error(1)
+}
+func (mock *client) GetActionWithContext(ctx context.Context, name string) (grpcapi.Action, error) {
+	args := mock.Called(ctx, name)
+	return args.Get(0).(grpcapi.Action), args.Error(1)
+}
+func (mock *client) GetAllActions() ([]grpcapi.Action, error) {
+	args := mock.Called()
+	return args.Get(0).([]grpcapi.Action), args.Error(1)
+}
+func (mock *client) GetAllActionsWithContext(ctx context.Context) ([]grpcapi.Action, error) {
+	args := mock.Called(ctx)
+	return args.Get(0).([]grpcapi.Action), args.Error(1)
+}
