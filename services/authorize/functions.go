@@ -2,6 +2,7 @@ package authorize
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"time"
 
@@ -500,7 +501,11 @@ func (c *client) GetUserRoleWithContext(ctx context.Context, roleName string) (r
 		return
 	}
 
-	role = *result
+	if result != nil {
+		role = *result
+	} else {
+		err = errors.New("No result")
+	}
 	return
 }
 
