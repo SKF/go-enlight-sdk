@@ -450,3 +450,69 @@ func (c *client) GetAllActionsWithContext(ctx context.Context) (actions []author
 
 	return
 }
+
+func (c *client) GetUserActions(userID string) ([]authorize_grpcapi.Action, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), c.requestTimeout)
+	defer cancel()
+	return c.GetUserActionsWithContext(ctx, userID)
+}
+
+func (c *client) GetUserActionsWithContext(ctx context.Context, userID string) (actions []authorize_grpcapi.Action, err error) {
+	result, err := c.api.GetUserActions(ctx, &authorize_grpcapi.GetUserActionsInput{
+		UserId: userID,
+	})
+	if err != nil {
+		return
+	}
+	if result != nil {
+		for _, action := range result.Actions {
+			if action != nil {
+				actions = append(actions, *action)
+			}
+		}
+	}
+
+	return
+}
+
+func (c *client) AddUserRole(role authorize_grpcapi.UserRole) error {
+	ctx, cancel := context.WithTimeout(context.Background(), c.requestTimeout)
+	defer cancel()
+	return c.AddUserRoleWithContext(ctx, role)
+}
+
+func (c *client) AddUserRoleWithContext(ctx context.Context, role authorize_grpcapi.UserRole) error {
+	_, err := c.api.AddUserRole(ctx, &role)
+	return err
+}
+
+func (c *client) GetUserRole(roleName string) (authorize_grpcapi.UserRole, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), c.requestTimeout)
+	defer cancel()
+	return c.GetUserRoleWithContext(ctx, roleName)
+}
+
+func (c *client) GetUserRoleWithContext(ctx context.Context, roleName string) (role authorize_grpcapi.UserRole, err error) {
+	result, err := c.api.GetUserRole(ctx, &authorize_grpcapi.GetUserRoleInput{
+		RoleName: roleName,
+	})
+	if err != nil {
+		return
+	}
+
+	role = *result
+	return
+}
+
+func (c *client) RemoveUserRole(roleName string) error {
+	ctx, cancel := context.WithTimeout(context.Background(), c.requestTimeout)
+	defer cancel()
+	return c.RemoveUserRoleWithContext(ctx, roleName)
+}
+
+func (c *client) RemoveUserRoleWithContext(ctx context.Context, roleName string) error {
+	_, err := c.api.RemoveUserRole(ctx, &authorize_grpcapi.RemoveUserRoleInput{
+		RoleName: roleName,
+	})
+	return err
+}
