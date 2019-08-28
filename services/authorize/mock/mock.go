@@ -258,3 +258,40 @@ func (mock *client) GetAllActionsWithContext(ctx context.Context) ([]grpcapi.Act
 	args := mock.Called(ctx)
 	return args.Get(0).([]grpcapi.Action), args.Error(1)
 }
+
+func (mock *client) GetUserActions(userID string) ([]grpcapi.Action, error) {
+	args := mock.Called(userID)
+	return args.Get(0).([]grpcapi.Action), args.Error(1)
+}
+func (mock *client) GetUserActionsWithContext(ctx context.Context, userID string) ([]grpcapi.Action, error) {
+	args := mock.Called(ctx, userID)
+	return args.Get(0).([]grpcapi.Action), args.Error(1)
+}
+
+func (mock *client) AddUserRole(role grpcapi.UserRole) error {
+	args := mock.Called(role)
+	return args.Error(0)
+}
+func (mock *client) AddUserRoleWithContext(ctx context.Context, role grpcapi.UserRole) error {
+	args := mock.Called(ctx, role)
+	return args.Error(0)
+}
+
+func (mock *client) GetUserRole(roleName string) (grpcapi.UserRole, error) {
+	args := mock.Called(roleName)
+	return args.Get(0).(grpcapi.UserRole), args.Error(1)
+}
+func (mock *client) GetUserRoleWithContext(ctx context.Context, roleName string) (grpcapi.UserRole, error) {
+	args := mock.Called(ctx, roleName)
+	return args.Get(0).(grpcapi.UserRole), args.Error(1)
+}
+
+func (mock *client) RemoveUserRole(roleName string) error {
+	args := mock.Called(roleName)
+	return args.Error(0)
+}
+
+func (mock *client) RemoveUserRoleWithContext(ctx context.Context, roleName string) error {
+	args := mock.Called(ctx, roleName)
+	return args.Error(0)
+}
