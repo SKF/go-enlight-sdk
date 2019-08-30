@@ -7,4 +7,5 @@ const (
 	NodeType           string = "node"
 	UserGroupType      string = "usergroup"
 	UserAdminGroupType string = "useradmingroup"
+	FileType           string = "fileid"
 )
