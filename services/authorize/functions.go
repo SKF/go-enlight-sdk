@@ -195,11 +195,11 @@ func (c *client) RemoveResourcesWithContext(ctx context.Context, resources []com
 func (c *client) GetResourcesByUserAction(userID, actionName, resourceType string) ([]common.Origin, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), c.requestTimeout)
 	defer cancel()
-	return c.GetResourcesByUserAction(ctx, userID, actionName, resourceType)
+	return c.GetResourcesByUserActionWithContext(ctx, userID, actionName, resourceType)
 }
 func (c *client) GetResourcesByUserActionWithContext(ctx context.Context, userID, actionName, resourceType string) (resources []common.Origin, err error) {
 	input := authorize_grpcapi.GetResourcesByUserActionInput{
-		UserID:       userID,
+		UserId:       userID,
 		Action:       actionName,
 		ResourceType: resourceType,
 	}
