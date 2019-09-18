@@ -77,6 +77,15 @@ func (mock *client) IsAuthorizedByEndpointWithContext(ctx context.Context, api, 
 	return args.Bool(0), args.Error(1)
 }
 
+func (mock *client) GetResourcesByUserAction(userID, actionName, resourceType string) ([]common.Origin, error) {
+	args := mock.Called(userID, actionName, resourceType)
+	return args.Get(0).([]common.Origin), args.Error(1)
+}
+func (mock *client) GetResourcesByUserActionWithContext(ctx context.Context, userID, actionName, resourceType string) ([]common.Origin, error) {
+	args := mock.Called(ctx, userID, actionName, resourceType)
+	return args.Get(0).([]common.Origin), args.Error(1)
+}
+
 func (mock *client) GetResourcesByType(resourceType string) (resources []common.Origin, err error) {
 	args := mock.Called(resourceType)
 	return args.Get(0).([]common.Origin), args.Error(1)
