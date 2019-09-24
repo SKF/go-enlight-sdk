@@ -217,6 +217,27 @@ func (c *client) GetResourcesByUserActionWithContext(ctx context.Context, userID
 	return
 }
 
+func (c *client) GetResourcesWithActionsAccess(actions []string, resourceType string, resource *common.Origin) (resources []common.Origin, err error) {
+	ctx, cancel := context.WithTimeout(context.Background(), c.requestTimeout)
+	defer cancel()
+	return c.GetResourcesWithActionsAccessWithContext(ctx, actions, resourceType, resource)
+}
+func (c *client) GetResourcesWithActionsAccessWithContext(ctx context.Context, actions []string, resourceType string, resource *common.Origin) (resources []common.Origin, err error) {
+	input := authorize_grpcapi.GetResourcesWithActionsAccessInput{ResourceType: resourceType}
+	output, err := c.api.GetResourcesWithActionsAccess(ctx, &input)
+	if err != nil {
+		return
+	}
+	if output != nil {
+		for _, resource := range output.Resources {
+			if resource != nil {
+				resources = append(resources, *resource)
+			}
+		}
+	}
+	return
+}
+
 func (c *client) GetResourcesByType(resourceType string) (resources []common.Origin, err error) {
 	ctx, cancel := context.WithTimeout(context.Background(), c.requestTimeout)
 	defer cancel()
