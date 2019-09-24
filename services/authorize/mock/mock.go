@@ -159,12 +159,12 @@ func (mock *client) RemoveUserActionWithContext(ctx context.Context, userID, act
 	return args.Error(0)
 }
 
-func (mock *client) GetResourcesByOriginAndType(resource common.Origin, resourceType string) (resources []common.Origin, err error) {
-	args := mock.Called(resource, resourceType)
+func (mock *client) GetResourcesByOriginAndType(resource common.Origin, resourceType string, depth int32) (resources []common.Origin, err error) {
+	args := mock.Called(resource, resourceType, depth)
 	return args.Get(0).([]common.Origin), args.Error(1)
 }
-func (mock *client) GetResourcesByOriginAndTypeWithContext(ctx context.Context, resource common.Origin, resourceType string) (resources []common.Origin, err error) {
-	args := mock.Called(ctx, resource, resourceType)
+func (mock *client) GetResourcesByOriginAndTypeWithContext(ctx context.Context, resource common.Origin, resourceType string, depth int32) (resources []common.Origin, err error) {
+	args := mock.Called(ctx, resource, resourceType, depth)
 	return args.Get(0).([]common.Origin), args.Error(1)
 }
 

@@ -330,13 +330,13 @@ func (c *client) RemoveUserActionWithContext(ctx context.Context, userID, action
 	return err
 }
 
-func (c *client) GetResourcesByOriginAndType(resource common.Origin, resourceType string) (resources []common.Origin, err error) {
+func (c *client) GetResourcesByOriginAndType(resource common.Origin, resourceType string, depth int32) (resources []common.Origin, err error) {
 	ctx, cancel := context.WithTimeout(context.Background(), c.requestTimeout)
 	defer cancel()
-	return c.GetResourcesByOriginAndTypeWithContext(ctx, resource, resourceType)
+	return c.GetResourcesByOriginAndTypeWithContext(ctx, resource, resourceType, depth)
 }
-func (c *client) GetResourcesByOriginAndTypeWithContext(ctx context.Context, resource common.Origin, resourceType string) (resources []common.Origin, err error) {
-	input := authorize_grpcapi.GetResourcesByOriginAndTypeInput{ResourceType: resourceType, Resource: &resource}
+func (c *client) GetResourcesByOriginAndTypeWithContext(ctx context.Context, resource common.Origin, resourceType string, depth int32) (resources []common.Origin, err error) {
+	input := authorize_grpcapi.GetResourcesByOriginAndTypeInput{ResourceType: resourceType, Resource: &resource, Depth: depth}
 	output, err := c.api.GetResourcesByOriginAndType(ctx, &input)
 	if err != nil {
 		return
