@@ -42,6 +42,9 @@ type AuthorizeClient interface { // nolint: golint
 	RemoveResources(resources []common.Origin) error
 	RemoveResourcesWithContext(ctx context.Context, resources []common.Origin) error
 
+	GetResourcesWithActionsAccess(actions []string, resourceType string, resource *common.Origin) ([]common.Origin, error)
+	GetResourcesWithActionsAccessWithContext(ctx context.Context, actions []string, resourceType string, resource *common.Origin) ([]common.Origin, error)
+
 	GetResourcesByUserAction(userID, actionName, resourceType string) ([]common.Origin, error)
 	GetResourcesByUserActionWithContext(ctx context.Context, userID, actionName, resourceType string) ([]common.Origin, error)
 

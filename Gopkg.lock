@@ -22,7 +22,7 @@
   version = "v1.8.0"
 
 [[projects]]
-  digest = "1:3f1674f1c4b05a31cc43ba831418b14ebe3902dbb5085f77e86519ed9f0c2cf4"
+  digest = "1:dfbb9be7806e66949e1030c4e3a4fe87807880b6a605eb1575679dd1fabc003e"
   name = "github.com/SKF/proto"
   packages = [
     "authorize",
@@ -34,8 +34,8 @@
     "reports",
   ]
   pruneopts = "UT"
-  revision = "3d2169a861567720bdb939ef2b23e620c3e854e6"
-  version = "v1.25.2-go"
+  revision = "42947f00e886449c36110757e0487a39b5e279ae"
+  version = "v1.25.3-go"
 
 [[projects]]
   digest = "1:ffe9824d294da03b391f44e1ae8281281b4afc1bdaa9588c9097785e3af10cec"
