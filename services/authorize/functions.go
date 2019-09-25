@@ -223,7 +223,11 @@ func (c *client) GetResourcesWithActionsAccess(actions []string, resourceType st
 	return c.GetResourcesWithActionsAccessWithContext(ctx, actions, resourceType, resource)
 }
 func (c *client) GetResourcesWithActionsAccessWithContext(ctx context.Context, actions []string, resourceType string, resource *common.Origin) (resources []common.Origin, err error) {
-	input := authorize_grpcapi.GetResourcesWithActionsAccessInput{ResourceType: resourceType}
+	input := authorize_grpcapi.GetResourcesWithActionsAccessInput{
+		Actions:      actions,
+		ResourceType: resourceType,
+		Resource:     resource,
+	}
 	output, err := c.api.GetResourcesWithActionsAccess(ctx, &input)
 	if err != nil {
 		return
