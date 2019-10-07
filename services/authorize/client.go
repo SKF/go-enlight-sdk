@@ -135,14 +135,14 @@ func (c *client) DialWithContext(ctx context.Context, host, port string, opts ..
 
 	c.conn = conn
 	c.api = authorize_grpcapi.NewAuthorizeClient(conn)
-	_ = c.logClientState(ctx, "opening connection")
+	err = c.logClientState(ctx, "opening connection")
 	return
 }
 
-func (c *client) Close() error {
+func (c *client) Close() (err error) {
 	ctx, cancel := context.WithTimeout(context.Background(), c.requestTimeout)
 	defer cancel()
-	_ = c.logClientState(ctx, "closing connection")
+	err = c.logClientState(ctx, "closing connection")
 	return c.conn.Close()
 }
 
