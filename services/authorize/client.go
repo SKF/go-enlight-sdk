@@ -2,6 +2,7 @@ package authorize
 
 import (
 	"context"
+	"os"
 	"time"
 
 	"github.com/SKF/proto/common"
@@ -14,7 +15,7 @@ import (
 type AuthorizeClient interface { // nolint: golint
 	Dial(host, port string, opts ...grpc.DialOption) error
 	DialWithContext(ctx context.Context, host, port string, opts ...grpc.DialOption) error
-	Close()
+	Close() error
 	SetRequestTimeout(d time.Duration)
 
 	DeepPing() error
@@ -134,11 +135,15 @@ func (c *client) DialWithContext(ctx context.Context, host, port string, opts ..
 
 	c.conn = conn
 	c.api = authorize_grpcapi.NewAuthorizeClient(conn)
+	err = c.logClientState(ctx, "opening connection")
 	return
 }
 
-func (c *client) Close() {
-	c.conn.Close()
+func (c *client) Close() (err error) {
+	ctx, cancel := context.WithTimeout(context.Background(), c.requestTimeout)
+	defer cancel()
+	err = c.logClientState(ctx, "closing connection")
+	return c.conn.Close()
 }
 
 func (c *client) DeepPing() error {
@@ -149,5 +154,17 @@ func (c *client) DeepPing() error {
 
 func (c *client) DeepPingWithContext(ctx context.Context) error {
 	_, err := c.api.DeepPing(ctx, &common.Void{})
+	return err
+}
+
+func (c *client) logClientState(ctx context.Context, state string) error {
+	hostname, err := os.Hostname()
+	if err != nil {
+		hostname = ""
+	}
+	_, err = c.api.LogClientState(ctx, &authorize_grpcapi.LogClientStateInput{
+		State:    state,
+		Hostname: hostname,
+	})
 	return err
 }

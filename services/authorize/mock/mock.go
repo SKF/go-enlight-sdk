@@ -37,8 +37,9 @@ func (mock *client) DialWithContext(ctx context.Context, host, port string, opts
 	return args.Error(0)
 }
 
-func (mock *client) Close() {
-	mock.Called()
+func (mock *client) Close() error {
+	args := mock.Called()
+	return args.Error(0)
 }
 
 func (mock *client) DeepPing() error {
