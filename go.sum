@@ -4,8 +4,8 @@ github.com/SKF/go-eventsource v1.3.5 h1:devBOcXgajEkl6QWF6T2zZ116PeO7iNA7jH4wxDd
 github.com/SKF/go-eventsource v1.3.5/go.mod h1:abJr3JUWqqtYUNhvEdcbYyUYLVUcZlJ0S/3XYnVWLoE=
 github.com/SKF/go-utility v1.8.0 h1:XIZFDRVd6CA6BJOPizR1I4i6CCTtrQOMAFJxaYX2nmY=
 github.com/SKF/go-utility v1.8.0/go.mod h1:KBpu0OTQ9CHKmZ01/SWNOXOWbNowu1+7dT+E8599bxA=
-github.com/SKF/proto v1.25.6-go h1:qXDEyrajAE+cxixwwVUHVq7H0KHv+gB/jyayBSzUzvs=
-github.com/SKF/proto v1.25.6-go/go.mod h1:fLZMzpComrKyD9V74fS1lT4ryHZX9LlYYjM1TmBZw+s=
+github.com/SKF/proto v1.25.7-go h1:YZ6oxl71mRMJ2afNolPGrKrGnFxdWAYfdfMd4O8qrIY=
+github.com/SKF/proto v1.25.7-go/go.mod h1:fLZMzpComrKyD9V74fS1lT4ryHZX9LlYYjM1TmBZw+s=
 github.com/client9/misspell v0.3.4/go.mod h1:qj6jICC3Q7zFZvVWo7KLAzC3yx5G7kyvSDkc90ppPyw=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=

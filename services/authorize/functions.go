@@ -376,6 +376,51 @@ func (c *client) GetResourcesByOriginAndTypeWithContext(ctx context.Context, res
 	return
 }
 
+func (c *client) GetResourceParents(resource common.Origin, parentOriginType string) (resources []common.Origin, err error) {
+	ctx, cancel := context.WithTimeout(context.Background(), c.requestTimeout)
+	defer cancel()
+	return c.GetResourceParentsWithContext(ctx, resource, parentOriginType)
+}
+func (c *client) GetResourceParentsWithContext(ctx context.Context, resource common.Origin, parentOriginType string) (resources []common.Origin, err error) {	
+	input := authorize_grpcapi.GetResourceParentsInput{ParentOriginType: parentOriginType, Resource: &resource}
+	output, err := c.api.GetResourceParents(ctx, &input)
+	if err != nil {
+		return
+	}
+	if output != nil {
+		for _, resource := range output.Resources {
+			if resource != nil {
+				resources = append(resources, *resource)
+			}
+		}
+	}
+	return
+}
+
+func (c *client) GetResourceChildren(resource common.Origin, childOriginType string) (resources []common.Origin, err error) {
+	ctx, cancel := context.WithTimeout(context.Background(), c.requestTimeout)
+	defer cancel()
+	return c.GetResourceChildrenWithContext(ctx, resource, childOriginType)
+}
+func (c *client) GetResourceChildrenWithContext(ctx context.Context, resource common.Origin, childOriginType string) (resources []common.Origin, err error) {	
+	input := authorize_grpcapi.GetResourceChildrenInput{ChildOriginType: childOriginType, Resource: &resource}
+	output, err := c.api.GetResourceChildren(ctx, &input)
+	if err != nil {
+		return
+	}
+	if output != nil {
+		for _, resource := range output.Resources {
+			if resource != nil {
+				resources = append(resources, *resource)
+			}
+		}
+	}
+	return
+}
+
+
+
+
 func (c *client) GetUserIDsWithAccessToResource(resource common.Origin) (resources []string, err error) {
 	ctx, cancel := context.WithTimeout(context.Background(), c.requestTimeout)
 	defer cancel()

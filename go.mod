@@ -5,7 +5,7 @@ go 1.13
 require (
 	github.com/SKF/go-eventsource v1.3.5
 	github.com/SKF/go-utility v1.8.0
-	github.com/SKF/proto v1.25.6-go
+	github.com/SKF/proto v1.25.7-go
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/google/uuid v0.0.0-20161128191214-064e2069ce9c // indirect
 	github.com/hashicorp/golang-lru v0.5.3 // indirect
