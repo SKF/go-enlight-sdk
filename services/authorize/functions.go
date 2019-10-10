@@ -382,7 +382,7 @@ func (c *client) GetResourceParents(resource common.Origin, parentOriginType str
 	return c.GetResourceParentsWithContext(ctx, resource, parentOriginType)
 }
 func (c *client) GetResourceParentsWithContext(ctx context.Context, resource common.Origin, parentOriginType string) (resources []common.Origin, err error) {	
-	input := authorize_grpcapi.GetResourceParentsInput{ParentResourceType: parentOriginType, Resource: &resource}
+	input := authorize_grpcapi.GetResourceParentsInput{ParentOriginType: parentOriginType, Resource: &resource}
 	output, err := c.api.GetResourceParents(ctx, &input)
 	if err != nil {
 		return
@@ -403,7 +403,7 @@ func (c *client) GetResourceChildren(resource common.Origin, childOriginType str
 	return c.GetResourceChildrenWithContext(ctx, resource, childOriginType)
 }
 func (c *client) GetResourceChildrenWithContext(ctx context.Context, resource common.Origin, childOriginType string) (resources []common.Origin, err error) {	
-	input := authorize_grpcapi.GetResourceChildrenInput{ChildResourceType: childOriginType, Resource: &resource}
+	input := authorize_grpcapi.GetResourceChildrenInput{ChildOriginType: childOriginType, Resource: &resource}
 	output, err := c.api.GetResourceChildren(ctx, &input)
 	if err != nil {
 		return
