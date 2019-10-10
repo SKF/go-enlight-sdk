@@ -105,21 +105,21 @@ func (mock *client) GetResourcesByTypeWithContext(ctx context.Context, resourceT
 	return args.Get(0).([]common.Origin), args.Error(1)
 }
 
-func (mock *client) GetResourceParents(ctx context.Context, resource common.Origin, parentResourceType string) (resources []common.Origin, err error) {
-	args := mock.Called(resource, parentResourceType)
+func (mock *client) GetResourceParents(ctx context.Context, resource common.Origin, parentOriginType string) (resources []common.Origin, err error) {
+	args := mock.Called(resource, parentOriginType)
 	return args.Get(0).([]common.Origin), args.Error(1)
 }
-func (mock *client) GetResourceParentsWithContext(ctx context.Context, resource common.Origin, parentResourceType string) (resources []common.Origin, err error) {
-	args := mock.Called(ctx, resource, parentResourceType)
+func (mock *client) GetResourceParentsWithContext(ctx context.Context, resource common.Origin, parentOriginType string) (resources []common.Origin, err error) {
+	args := mock.Called(ctx, resource, parentOriginType)
 	return args.Get(0).([]common.Origin), args.Error(1)
 }
 
-func (mock *client) GetResourceChildren(ctx context.Context, resource common.Origin, childResourceType string) (resources []common.Origin, err error) {
-	args := mock.Called(ctx, resource, childResourceType)
+func (mock *client) GetResourceChildren(resource common.Origin, childOriginType string) (resources []common.Origin, err error) {
+	args := mock.Called(ctx, resource, childOriginType)
 	return args.Get(0).([]common.Origin), args.Error(1)
 }
-func (mock *client) GetResourceChildrenWithContext(ctx context.Context, resource common.Origin, childResourceType string) (resources []common.Origin, err error) {
-	args := mock.Called(ctx, resource, childResourceType)
+func (mock *client) GetResourceChildrenWithContext(ctx context.Context, resource common.Origin, childOriginType string) (resources []common.Origin, err error) {
+	args := mock.Called(ctx, resource, childOriginType)
 	return args.Get(0).([]common.Origin), args.Error(1)
 }
 
