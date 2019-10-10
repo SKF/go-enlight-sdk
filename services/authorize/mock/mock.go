@@ -105,6 +105,25 @@ func (mock *client) GetResourcesByTypeWithContext(ctx context.Context, resourceT
 	return args.Get(0).([]common.Origin), args.Error(1)
 }
 
+func (mock *client) GetResourceParents(ctx context.Context, resource common.Origin, parentResourceType string) (resources []common.Origin, err error) {
+	args := mock.Called(resource, parentResourceType)
+	return args.Get(0).([]common.Origin), args.Error(1)
+}
+func (mock *client) GetResourceParentsWithContext(ctx context.Context, resource common.Origin, parentResourceType string) (resources []common.Origin, err error) {
+	args := mock.Called(ctx, resource, parentResourceType)
+	return args.Get(0).([]common.Origin), args.Error(1)
+}
+
+func (mock *client) GetResourceChildren(ctx context.Context, resource common.Origin, childResourceType string) (resources []common.Origin, err error) {
+	args := mock.Called(ctx, resource, childResourceType)
+	return args.Get(0).([]common.Origin), args.Error(1)
+}
+func (mock *client) GetResourceChildrenWithContext(ctx context.Context, resource common.Origin, childResourceType string) (resources []common.Origin, err error) {
+	args := mock.Called(ctx, resource, childResourceType)
+	return args.Get(0).([]common.Origin), args.Error(1)
+}
+
+
 func (mock *client) AddResource(resource common.Origin) error {
 	args := mock.Called(resource)
 	return args.Error(0)
