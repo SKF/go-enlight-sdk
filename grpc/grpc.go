@@ -32,9 +32,9 @@ func FailOnNonTempDialError(f bool) grpc.DialOption {
 	return grpc.FailOnNonTempDialError(f)
 }
 
-// WithTransportCredentialsPem returns a DialOption which configures
+// WithTransportCredentialsPEM returns a DialOption which configures
 // a connection level security credentials (e.g., TLS/SSL).
-func WithTransportCredentialsPem(serverName string, certPEMBlock, keyPEMBlock, caPEMBlock []byte) (opt grpc.DialOption, err error) {
+func WithTransportCredentialsPEM(serverName string, certPEMBlock, keyPEMBlock, caPEMBlock []byte) (opt grpc.DialOption, err error) {
 	certificate, err := tls.X509KeyPair(certPEMBlock, keyPEMBlock)
 	if err != nil {
 		err = fmt.Errorf("failed to load client certs, %+v", err)
