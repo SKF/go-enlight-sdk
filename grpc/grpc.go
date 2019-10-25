@@ -74,5 +74,5 @@ func WithTransportCredentials(serverName, certFile, keyFile, caFile string) (opt
 		return nil, err
 	}
 
-	return WithTransportCredentialsPem(serverName, certPEMBlock, keyPEMBlock, caPEMBlock)
+	return WithTransportCredentialsPEM(serverName, certPEMBlock, keyPEMBlock, caPEMBlock)
 }
