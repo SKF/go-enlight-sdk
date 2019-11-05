@@ -6,11 +6,12 @@ require (
 	github.com/SKF/go-eventsource v1.3.5
 	github.com/SKF/go-utility v1.8.0
 	github.com/SKF/proto v1.25.7-go
+	github.com/aws/aws-sdk-go v1.25.26
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/google/uuid v0.0.0-20161128191214-064e2069ce9c // indirect
 	github.com/hashicorp/golang-lru v0.5.3 // indirect
 	github.com/oklog/ulid v1.3.1 // indirect
-	github.com/pkg/errors v0.8.1 // indirect
+	github.com/pkg/errors v0.8.1
 	github.com/stretchr/objx v0.1.1 // indirect
 	github.com/stretchr/testify v1.3.0
 	go.opencensus.io v0.22.0 // indirect
