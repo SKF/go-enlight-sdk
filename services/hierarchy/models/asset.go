@@ -146,7 +146,9 @@ func (cmp *Component) ToGRPC() *grpcapi.Component {
 func (cmp *Component) FromGRPC(c *grpcapi.Component) {
 	cmp.Id = uuid.UUID(c.Id)
 	cmp.Type = c.Type
-	cmp.Props.UnmarshalJSON([]byte(c.Props))
+	if err := cmp.Props.UnmarshalJSON([]byte(c.Props)); err != nil {
+		return
+	}
 
 	for _, sc := range c.SubComponents {
 		x := &Component{}
