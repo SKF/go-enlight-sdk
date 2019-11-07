@@ -1,16 +1,69 @@
 package models
 
 import (
+	"fmt"
+
 	"github.com/SKF/go-utility/uuid"
 )
 
 // Node represent a hierarchy node
 type BaseNode struct {
-	ID          uuid.UUID   `json:"id"`
-	Type        NodeType    `json:"nodeType"`
-	SubType     NodeSubType `json:"nodeSubType"`
-	Origin      *Origin     `json:"origin,omitempty"`
-	Label       string      `json:"label"`
-	Description string      `json:"description"`
-	Tags        string      `json:"tags"`
+	// ID of node, as a UUID
+	ID uuid.UUID `json:"id" example:"7bcd1711-21bd-4eb7-8349-b053d6d5226f"`
+	// ID of parent node, as a UUID
+	ParentID uuid.UUID `json:"parentId" example:"8f7551c5-3357-406d-ab82-bcb138d0b13f"`
+	// Type of node
+	Type NodeType `json:"nodeType" example:"asset" enums:"root,company,site,plant,system,functional_location,asset,measurement_point,inspection_point,lubrication_point,unknown"`
+	// Type of node
+	SubType NodeSubType `json:"nodeSubType" example:"asset" enums:"root,company,site,plant,ship,system,functional_location,asset,measurement_point,inspection_point,lubrication_point"`
+	// Industry segment of this node
+	Industry *IndustrySegment `json:"industrySegment,omitempty" example:"metal" enums:"agriculture,construction,food_and_beverage,hydrocarbon_processing,machine_tool,marine,metal,mining,power_generation,pulp_and_paper,renewable,undefined"`
+	// Origin of node, if imported from another system
+	Origin *Origin `json:"origin,omitempty"`
+	// Descriptive name of the node
+	Label string `json:"label" example:"01AA DE"`
+	// Description of the node
+	Description string `json:"description" example:"First bearing, driven end"`
+	// Relative position of node in the Enlight Centre UI
+	Position *int64 `json:"position"`
+	// Comma separated list of free form tags on this node
+	Tags *string `json:"tags"`
+}
+
+// EnlightRootNodeUUID is the base/root node that all other nodes attach to, must not be deleted or updated
+const EnlightRootNodeUUID uuid.UUID = uuid.UUID("df3214a6-2db7-11e8-b467-0ed5f89f718b")
+
+func (node BaseNode) Validate() error {
+	if !node.ID.IsValid() {
+		return fmt.Errorf("Required field 'id' contains an invalid UUID")
+	}
+	if node.ParentID != "" && !node.ParentID.IsValid() {
+		return fmt.Errorf("Required field 'parentId' contains an invalid UUID")
+	}
+	if node.Label == "" {
+		return fmt.Errorf("Required field 'label' cannot be empty")
+	}
+	if node.Position != nil && *node.Position < 0 {
+		return fmt.Errorf("Field 'position' cannot be negative")
+	}
+
+	if err := node.Type.Validate(); err != nil {
+		return fmt.Errorf("Required field 'nodeType' is invalid: %+v", err)
+	}
+
+	if err := node.SubType.Validate(); err != nil {
+		return fmt.Errorf("Required field 'nodeSubType' is invalid: %+v", err)
+	}
+
+	if !node.SubType.IsTypeOf(node.Type) {
+		return fmt.Errorf("'%s' doesn't have a subtype '%s'", node.Type, node.SubType)
+	}
+
+	if node.Origin != nil {
+		if err := node.Origin.Validate(); err != nil {
+			return fmt.Errorf("Required field 'origin' is invalid: %+v", err)
+		}
+	}
+
+	return nil
 }

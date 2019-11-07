@@ -11,16 +11,19 @@ import (
 type Component struct {
 	Id            uuid.UUID       `json:"id"`
 	Type          string          `json:"type"`
-	Props         json.RawMessage `json:"props,omitempty"`
-	SubComponents []Component     `json:"subComponents,omitempty"`
+	Props         json.RawMessage `json:"props"`
+	SubComponents []*Component    `json:"subComponents"`
 }
 
 type AssetNode struct {
-	Criticality Criticality `json:"criticality"`
-	Type        string      `json:"type,omitempty"`
-	Class       string      `json:"class,omitempty"`
-	Sequence    string      `json:"sequence,omitempty"`
-	Components  []Component `json:"components,omitempty"`
+	Criticality   Criticality  `json:"criticality" example:"criticality_a"`
+	AssetType     string       `json:"assetType,omitempty" example:"CO"`
+	AssetClass    string       `json:"assetClass,omitempty" example:"AX"`
+	AssetSequence string       `json:"assetSequence,omitempty" example:"02"`
+	Manufacturer  string       `json:"manufacturer,omitempty" example:"Atlas Copco"`
+	Model         string       `json:"model,omitempty" example:"SF"`
+	SerialNumber  string       `json:"serialNumber,omitempty"`
+	Components    []*Component `json:"components,omitempty"`
 }
 
 type Criticality string
@@ -53,10 +56,15 @@ func (asset AssetNode) Validate() error {
 	if asset.Criticality == "" {
 		return fmt.Errorf("criticality field on asset cannot be empty")
 	}
-	if asset.Type != "" && asset.Class == "" {
+	if asset.AssetType != "" && asset.AssetClass == "" {
 		return fmt.Errorf("cannot set asset type without specifying class")
-	} else if asset.Sequence != "" && (asset.Type == "" || asset.Class == "") {
+	} else if asset.AssetSequence != "" && (asset.AssetType == "" || asset.AssetClass == "") {
 		return fmt.Errorf("cannot set asset sequnce without specifying class and type")
+	}
+	for _, c := range asset.Components {
+		if err := c.Validate(); err != nil {
+			return err
+		}
 	}
 	return nil
 }
@@ -70,69 +78,81 @@ func (cr Criticality) ValidateCriticaltiy() error {
 	return fmt.Errorf("'%s' is not a valid asset criticality", cr)
 }
 
-func (asset AssetNode) ToGRPC() *grpcapi.AssetNode {
-	components := make([]*grpcapi.Component, 0)
-	for _, c := range asset.Components {
-		components = append(components, c.ToGRPC())
+func (c *Component) Validate() error {
+	if err := c.Id.Validate(); err != nil {
+		return err
 	}
+	if c.Type == "" {
+		return fmt.Errorf("Component type cannot be empty")
+	}
+	for _, sc := range c.SubComponents {
+		if err := sc.Validate(); err != nil {
+			return err
+		}
+	}
+	return nil
+}
 
-	return &grpcapi.AssetNode{
-		Criticality: string(asset.Criticality),
-		Class:       asset.Class,
-		Type:        asset.Type,
-		Sequence:    asset.Sequence,
-		Components:  components,
+func (asset AssetNode) ToGRPC() *grpcapi.AssetNode {
+	ret := grpcapi.AssetNode{
+		Criticality:  string(asset.Criticality),
+		Class:        asset.AssetClass,
+		Type:         asset.AssetType,
+		Sequence:     asset.AssetSequence,
+		Manufacturer: asset.Manufacturer,
+		Model:        asset.Model,
+		SerialNumber: asset.SerialNumber,
 	}
+	for _, cmp := range asset.Components {
+		ret.Components = append(ret.Components, cmp.ToGRPC())
+	}
+	return &ret
 }
 
 func (asset *AssetNode) FromGRPC(assetNode grpcapi.AssetNode) {
 	asset.Criticality = Criticality(assetNode.Criticality)
-	asset.Class = assetNode.Class
-	asset.Type = assetNode.Type
-	asset.Sequence = assetNode.Sequence
-	asset.Components = make([]Component, 0)
-	if assetNode.Components != nil {
-		for _, gc := range assetNode.Components {
-			c := &Component{}
-			c.FromGRPC(gc)
-			asset.Components = append(asset.Components, *c)
-		}
+	asset.AssetClass = assetNode.Class
+	asset.AssetType = assetNode.Type
+	asset.AssetSequence = assetNode.Sequence
+	asset.Manufacturer = assetNode.Manufacturer
+	asset.Model = assetNode.Model
+	asset.SerialNumber = assetNode.SerialNumber
+	for _, cmp := range assetNode.Components {
+		c := &Component{}
+		c.FromGRPC(cmp)
+		asset.Components = append(asset.Components, c)
 	}
 }
 
-func (component Component) ToGRPC() *grpcapi.Component {
-	subComponents := make([]*grpcapi.Component, 0)
-	if component.SubComponents != nil {
-		for _, sc := range component.SubComponents {
-			subComponents = append(subComponents, sc.ToGRPC())
-		}
-	}
-
+func (cmp *Component) ToGRPC() *grpcapi.Component {
 	ret := &grpcapi.Component{
-		Id:            component.Id.String(),
-		Type:          component.Type,
-		SubComponents: subComponents,
+		Id:   cmp.Id.String(),
+		Type: cmp.Type,
 	}
 
-	if component.Props != nil {
-		if buf, err := component.Props.MarshalJSON(); err == nil {
+	if cmp.Props != nil {
+		if buf, err := cmp.Props.MarshalJSON(); err == nil {
 			ret.Props = string(buf)
 		}
+	}
+
+	for _, c := range cmp.SubComponents {
+		ret.SubComponents = append(ret.SubComponents, c.ToGRPC())
 	}
 
 	return ret
 }
 
-func (component *Component) FromGRPC(c *grpcapi.Component) {
-	component.Id = uuid.UUID(c.Id)
-	component.Type = c.Type
-	component.SubComponents = make([]Component, 0)
-	component.Props.UnmarshalJSON([]byte(c.Props)) // nolint
-	if c.SubComponents != nil {
-		for _, gsc := range c.SubComponents {
-			sc := &Component{}
-			sc.FromGRPC(gsc)
-			component.SubComponents = append(component.SubComponents, *sc)
-		}
+func (cmp *Component) FromGRPC(c *grpcapi.Component) {
+	cmp.Id = uuid.UUID(c.Id)
+	cmp.Type = c.Type
+	if err := cmp.Props.UnmarshalJSON([]byte(c.Props)); err != nil {
+		return
+	}
+
+	for _, sc := range c.SubComponents {
+		x := &Component{}
+		x.FromGRPC(sc)
+		cmp.SubComponents = append(cmp.SubComponents, x)
 	}
 }
