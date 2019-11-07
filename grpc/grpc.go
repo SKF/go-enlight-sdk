@@ -32,24 +32,17 @@ func FailOnNonTempDialError(f bool) grpc.DialOption {
 	return grpc.FailOnNonTempDialError(f)
 }
 
-// WithTransportCredentials returns a DialOption which configures
+// WithTransportCredentialsPEM returns a DialOption which configures
 // a connection level security credentials (e.g., TLS/SSL).
-func WithTransportCredentials(serverName, clientCert, clientKey, caCert string) (opt grpc.DialOption, err error) {
-	certificate, err := tls.LoadX509KeyPair(clientCert, clientKey)
-
+func WithTransportCredentialsPEM(serverName string, certPEMBlock, keyPEMBlock, caPEMBlock []byte) (opt grpc.DialOption, err error) {
+	certificate, err := tls.X509KeyPair(certPEMBlock, keyPEMBlock)
 	if err != nil {
 		err = fmt.Errorf("failed to load client certs, %+v", err)
 		return
 	}
 
 	certPool := x509.NewCertPool()
-	bs, err := ioutil.ReadFile(caCert)
-	if err != nil {
-		err = fmt.Errorf("failed to read ca cert, %+v", err)
-		return
-	}
-
-	ok := certPool.AppendCertsFromPEM(bs)
+	ok := certPool.AppendCertsFromPEM(caPEMBlock)
 	if !ok {
 		err = errors.New("failed to append certs")
 		return
@@ -63,4 +56,23 @@ func WithTransportCredentials(serverName, clientCert, clientKey, caCert string) 
 
 	opt = grpc.WithTransportCredentials(transportCreds)
 	return
+}
+
+// WithTransportCredentials returns a DialOption which configures
+// a connection level security credentials (e.g., TLS/SSL).
+func WithTransportCredentials(serverName, certFile, keyFile, caFile string) (opt grpc.DialOption, err error) {
+	certPEMBlock, err := ioutil.ReadFile(certFile)
+	if err != nil {
+		return nil, err
+	}
+	keyPEMBlock, err := ioutil.ReadFile(keyFile)
+	if err != nil {
+		return nil, err
+	}
+	caPEMBlock, err := ioutil.ReadFile(caFile)
+	if err != nil {
+		return nil, err
+	}
+
+	return WithTransportCredentialsPEM(serverName, certPEMBlock, keyPEMBlock, caPEMBlock)
 }
