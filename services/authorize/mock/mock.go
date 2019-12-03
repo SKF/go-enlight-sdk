@@ -28,6 +28,11 @@ func (mock *client) SetRequestTimeout(d time.Duration) {
 	mock.Called(d)
 }
 
+func (mock *client) Connection() *grpc.ClientConn {
+	args := mock.Called()
+	return args.Get(0).(*grpc.ClientConn)
+}
+
 func (mock *client) Dial(host, port string, opts ...grpc.DialOption) error {
 	args := mock.Called(host, port, opts)
 	return args.Error(0)
@@ -122,7 +127,6 @@ func (mock *client) GetResourceChildrenWithContext(ctx context.Context, resource
 	args := mock.Called(ctx, resource, childOriginType)
 	return args.Get(0).([]common.Origin), args.Error(1)
 }
-
 
 func (mock *client) AddResource(resource common.Origin) error {
 	args := mock.Called(resource)

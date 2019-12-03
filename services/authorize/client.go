@@ -13,6 +13,7 @@ import (
 )
 
 type AuthorizeClient interface { // nolint: golint
+	Connection() *grpc.ClientConn
 	Dial(host, port string, opts ...grpc.DialOption) error
 	DialWithContext(ctx context.Context, host, port string, opts ...grpc.DialOption) error
 	Close() error
