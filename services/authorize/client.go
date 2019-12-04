@@ -3,6 +3,7 @@ package authorize
 import (
 	"context"
 	"github.com/SKF/go-enlight-sdk/interceptors/reconnect"
+	"github.com/SKF/go-utility/log"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"google.golang.org/grpc/codes"
 	"os"
@@ -140,12 +141,16 @@ func (c *client) DialWithContext(ctx context.Context, sess *session.Session, hos
 		reconnect.WithCodes(codes.DeadlineExceeded),
 		reconnect.WithNewConnection(
 			func(invokerCtx context.Context, invokerConn *grpc.ClientConn, invokerOptions ...grpc.CallOption) (context.Context, *grpc.ClientConn, []grpc.CallOption, error) {
+				log.WithTracing(invokerCtx).Debug("Retrying with new connection")
 				opt, err := getCredentialOption(ctx, sess, host, secretKey)
 				if err != nil {
+					log.WithTracing(invokerCtx).WithError(err).Error("Failed to get credential options")
 					return invokerCtx, invokerConn, invokerOptions, err
 				}
-				c.conn, err = grpc.DialContext(invokerCtx, host+":"+port, append(opts, opt)...)
+				_ = c.conn.Close()
+				c.conn, err = grpc.DialContext(invokerCtx, host+":"+port, append(opts, opt, grpc.WithBlock())...)
 				if err != nil {
+					log.WithTracing(invokerCtx).WithError(err).Error("Failed to dial context")
 					return invokerCtx, invokerConn, invokerOptions, err
 				}
 				c.api = authorize_grpcapi.NewAuthorizeClient(c.conn)
