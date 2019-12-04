@@ -2,19 +2,29 @@ package authorize
 
 import (
 	"context"
+	"encoding/json"
+	"fmt"
+	"github.com/SKF/go-enlight-sdk/grpc"
+	"github.com/SKF/go-enlight-sdk/interceptors/reconnect"
+	"github.com/SKF/go-utility/log"
+	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/aws/session"
+	"github.com/aws/aws-sdk-go/service/secretsmanager"
+	"github.com/pkg/errors"
+	"google.golang.org/grpc/codes"
 	"os"
 	"time"
 
 	"github.com/SKF/proto/common"
 
-	"google.golang.org/grpc"
+	googleGrpc "google.golang.org/grpc"
 
 	authorize_grpcapi "github.com/SKF/proto/authorize"
 )
 
 type AuthorizeClient interface { // nolint: golint
-	Dial(host, port string, opts ...grpc.DialOption) error
-	DialWithContext(ctx context.Context, host, port string, opts ...grpc.DialOption) error
+	Dial(sess *session.Session, host, port, secretKey string, opts ...googleGrpc.DialOption) error
+	DialWithContext(ctx context.Context, sess *session.Session, host, port, secretKey string, opts ...googleGrpc.DialOption) error
 	Close() error
 	SetRequestTimeout(d time.Duration)
 
@@ -113,8 +123,52 @@ type AuthorizeClient interface { // nolint: golint
 	RemoveUserRoleWithContext(ctx context.Context, roleName string) error
 }
 
+func getSecret(sess *session.Session, secretsName string, out interface{}) (err error) {
+	// credentials - default
+	svc := secretsmanager.New(sess)
+	input := &secretsmanager.GetSecretValueInput{
+		SecretId: aws.String(secretsName),
+	}
+
+	result, err := svc.GetSecretValue(input)
+	if err != nil {
+		log.WithError(err).
+			WithField("secretsName", secretsName).
+			Error("failed to get secrets")
+		err = errors.Wrapf(err, "failed to get secret value from '%s'", secretsName)
+		return
+	}
+
+	if err = json.Unmarshal([]byte(*result.SecretString), out); err != nil {
+		log.WithError(err).
+			WithField("secretsName", secretsName).
+			Error("failed to unmarshal secret")
+		err = errors.Wrapf(err, "failed to unmarshal secret from '%s'", secretsName)
+	}
+
+	return err
+}
+
+type dataStore struct {
+	CA  []byte `json:"ca"`
+	Key []byte `json:"key"`
+	Crt []byte `json:"crt"`
+}
+
+func getCredentialOption(sess *session.Session, host, secretKeyName string) (googleGrpc.DialOption, error) {
+	var clientCert dataStore
+	if err := getSecret(sess, secretKeyName, &clientCert); err != nil {
+		panic(err)
+	}
+
+	return grpc.WithTransportCredentialsPEM(
+		host,
+		clientCert.Crt, clientCert.Key, clientCert.CA,
+	)
+}
+
 type client struct {
-	conn           *grpc.ClientConn
+	conn           *googleGrpc.ClientConn
 	api            authorize_grpcapi.AuthorizeClient
 	requestTimeout time.Duration
 }
@@ -125,24 +179,57 @@ func CreateClient() AuthorizeClient {
 	}
 }
 
+func GetSecretKeyName(service, stage string) string {
+	return fmt.Sprintf("authorize/%s/grpc/client/%s", stage, service)
+}
+
+func GetSecretKeyArn(accountId, region, service, stage string) string {
+	return fmt.Sprintf("arn:aws:secretsmanager:%s:%s:secret:%s", region, accountId, GetSecretKeyName(service, stage))
+}
+
 // Dial creates a client connection to the given host with background context and no timeout
-func (c *client) Dial(host, port string, opts ...grpc.DialOption) error {
+func (c *client) Dial(sess *session.Session, host, port, secretKey string, opts ...googleGrpc.DialOption) error {
 	ctx, cancel := context.WithTimeout(context.Background(), c.requestTimeout)
 	defer cancel()
-	return c.DialWithContext(ctx, host, port, opts...)
+	return c.DialWithContext(ctx, sess, host, port, secretKey, opts...)
 }
 
 // DialWithContext creates a client connection to the given host with context (for timeout and transaction id)
-func (c *client) DialWithContext(ctx context.Context, host, port string, opts ...grpc.DialOption) (err error) {
-	conn, err := grpc.DialContext(ctx, host+":"+port, opts...)
+func (c *client) DialWithContext(ctx context.Context, sess *session.Session, host, port, secretKey string, opts ...googleGrpc.DialOption) error {
+	reconnectOpts := googleGrpc.WithUnaryInterceptor(reconnect.UnaryInterceptor(
+		reconnect.WithCodes(codes.DeadlineExceeded),
+		reconnect.WithNewConnection(
+			func(_ context.Context, invokerConn *googleGrpc.ClientConn, invokerOptions ...googleGrpc.CallOption) (context.Context, *googleGrpc.ClientConn, []googleGrpc.CallOption, error) {
+				opt, err := getCredentialOption(sess, host, secretKey)
+				if err != nil {
+					return context.Background(), invokerConn, invokerOptions, err
+				}
+				c.conn, err = googleGrpc.DialContext(context.Background(), host+":"+port, append(opts, opt)...)
+				if err != nil {
+					return context.Background(), invokerConn, invokerOptions, err
+				}
+				c.api = authorize_grpcapi.NewAuthorizeClient(c.conn)
+				return context.Background(), c.conn, invokerOptions, err
+			}),
+	),
+	)
+
+	opt, err := getCredentialOption(sess, host, secretKey)
 	if err != nil {
-		return
+		return err
+	}
+	newOpts := append(opts, opt, reconnectOpts)
+
+	conn, err := googleGrpc.DialContext(ctx, host+":"+port, newOpts...)
+	if err != nil {
+		return err
 	}
 
 	c.conn = conn
-	c.api = authorize_grpcapi.NewAuthorizeClient(conn)
+	c.api = authorize_grpcapi.NewAuthorizeClient(c.conn)
+
 	err = c.logClientState(ctx, "opening connection")
-	return
+	return err
 }
 
 func (c *client) Close() (err error) {
