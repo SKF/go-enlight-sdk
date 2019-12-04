@@ -181,7 +181,10 @@ func (c *client) Close() (err error) {
 	ctx, cancel := context.WithTimeout(context.Background(), c.requestTimeout)
 	defer cancel()
 	err = c.logClientState(ctx, "closing connection")
-	return c.conn.Close()
+	if c.conn != nil {
+		return c.conn.Close()
+	}
+	return nil
 }
 
 func (c *client) DeepPing() error {
