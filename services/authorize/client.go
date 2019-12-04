@@ -142,13 +142,16 @@ func (c *client) DialWithContext(ctx context.Context, sess *session.Session, hos
 		reconnect.WithNewConnection(
 			func(invokerCtx context.Context, invokerConn *grpc.ClientConn, invokerOptions ...grpc.CallOption) (context.Context, *grpc.ClientConn, []grpc.CallOption, error) {
 				log.WithTracing(invokerCtx).Debug("Retrying with new connection")
-				opt, err := getCredentialOption(ctx, sess, host, secretKey)
+				if invokerCtx.Err() != nil {
+					return invokerCtx, invokerConn, invokerOptions, nil
+				}
+				opt, err := getCredentialOption(invokerCtx, sess, host, secretKey)
 				if err != nil {
 					log.WithTracing(invokerCtx).WithError(err).Error("Failed to get credential options")
 					return invokerCtx, invokerConn, invokerOptions, err
 				}
 				_ = c.conn.Close()
-				c.conn, err = grpc.DialContext(invokerCtx, host+":"+port, append(opts, opt, grpc.WithBlock())...)
+				c.conn, err = grpc.Dial(host+":"+port, append(opts, opt, grpc.WithBlock())...)
 				if err != nil {
 					log.WithTracing(invokerCtx).WithError(err).Error("Failed to dial context")
 					return invokerCtx, invokerConn, invokerOptions, err
