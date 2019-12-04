@@ -31,7 +31,7 @@ func (s *server) SayHello(ctx context.Context, in *pb.HelloRequest) (*pb.HelloRe
 	return &pb.HelloReply{Message: "Hello " + in.Name}, nil
 }
 
-func newServerDialer(t *testing.T, bufSize int) func(string, time.Duration) (net.Conn, error) {
+func newServerDialer(t *testing.T, bufSize int) func(context.Context, string) (net.Conn, error) {
 	lis := bufconn.Listen(bufSize)
 	s := grpc.NewServer()
 	pb.RegisterGreeterServer(s, &server{
@@ -42,7 +42,7 @@ func newServerDialer(t *testing.T, bufSize int) func(string, time.Duration) (net
 		require.NoError(t, err, "server exited")
 	}()
 
-	return func(string, time.Duration) (net.Conn, error) {
+	return func(context.Context, string) (net.Conn, error) {
 		return lis.Dial()
 	}
 }
@@ -54,7 +54,7 @@ func Test_ReconnectInterceptor_HappyCase(t *testing.T) {
 			reconnect.WithCodes(codes.Unavailable),
 			reconnect.WithNewConnection(func(ctx context.Context, cc *grpc.ClientConn, opts ...grpc.CallOption) (*grpc.ClientConn, []grpc.CallOption) {
 				conn, err := grpc.DialContext(ctx, "bufnet",
-					grpc.WithDialer(newServerDialer(t, bufSize)),
+					grpc.WithContextDialer(newServerDialer(t, bufSize)),
 					grpc.WithInsecure(),
 				)
 
@@ -65,7 +65,7 @@ func Test_ReconnectInterceptor_HappyCase(t *testing.T) {
 				return conn, opts
 			}),
 		)),
-		grpc.WithDialer(newServerDialer(t, bufSize)),
+		grpc.WithContextDialer(newServerDialer(t, bufSize)),
 		grpc.WithInsecure(),
 	)
 	require.NoError(t, err, "failed to dial bufnet")
@@ -90,7 +90,7 @@ func Test_ReconnectInterceptor_ConnectionClosed(t *testing.T) {
 		grpc.WithUnaryInterceptor(reconnect.ReconnectUnaryInterceptor(
 			reconnect.WithCodes(codes.Unavailable),
 		)),
-		grpc.WithDialer(newServerDialer(t, bufSize)),
+		grpc.WithContextDialer(newServerDialer(t, bufSize)),
 		grpc.WithInsecure(),
 	)
 	require.NoError(t, err, "failed to dial bufnet")
