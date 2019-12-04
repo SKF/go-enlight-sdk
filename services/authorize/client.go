@@ -13,7 +13,6 @@ import (
 )
 
 type AuthorizeClient interface { // nolint: golint
-	Connection() *grpc.ClientConn
 	Dial(host, port string, opts ...grpc.DialOption) error
 	DialWithContext(ctx context.Context, host, port string, opts ...grpc.DialOption) error
 	Close() error
@@ -124,10 +123,6 @@ func CreateClient() AuthorizeClient {
 	return &client{
 		requestTimeout: 60 * time.Second,
 	}
-}
-
-func (c *client) Connection() *grpc.ClientConn {
-	return c.conn
 }
 
 // Dial creates a client connection to the given host with background context and no timeout
