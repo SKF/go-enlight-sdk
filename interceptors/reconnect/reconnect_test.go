@@ -50,9 +50,9 @@ func newServerDialer(t *testing.T, bufSize int) func(context.Context, string) (n
 func Test_ReconnectInterceptor_HappyCase(t *testing.T) {
 	ctx := context.Background()
 	conn, err := grpc.DialContext(ctx, "bufnet",
-		grpc.WithUnaryInterceptor(reconnect.ReconnectUnaryInterceptor(
+		grpc.WithUnaryInterceptor(reconnect.UnaryInterceptor(
 			reconnect.WithCodes(codes.Unavailable),
-			reconnect.WithNewConnection(func(ctx context.Context, cc *grpc.ClientConn, opts ...grpc.CallOption) (*grpc.ClientConn, []grpc.CallOption) {
+			reconnect.WithNewConnection(func(ctx context.Context, cc *grpc.ClientConn, opts ...grpc.CallOption) (*grpc.ClientConn, []grpc.CallOption, error) {
 				conn, err := grpc.DialContext(ctx, "bufnet",
 					grpc.WithContextDialer(newServerDialer(t, bufSize)),
 					grpc.WithInsecure(),
@@ -60,9 +60,9 @@ func Test_ReconnectInterceptor_HappyCase(t *testing.T) {
 
 				if err != nil {
 					log.Printf("Failed to dial bufnet: %v", err)
-					return cc, opts
+					return cc, opts, err
 				}
-				return conn, opts
+				return conn, opts, nil
 			}),
 		)),
 		grpc.WithContextDialer(newServerDialer(t, bufSize)),
@@ -87,7 +87,7 @@ func Test_ReconnectInterceptor_HappyCase(t *testing.T) {
 func Test_ReconnectInterceptor_ConnectionClosed(t *testing.T) {
 	ctx := context.Background()
 	conn, err := grpc.DialContext(ctx, "bufnet",
-		grpc.WithUnaryInterceptor(reconnect.ReconnectUnaryInterceptor(
+		grpc.WithUnaryInterceptor(reconnect.UnaryInterceptor(
 			reconnect.WithCodes(codes.Unavailable),
 		)),
 		grpc.WithContextDialer(newServerDialer(t, bufSize)),

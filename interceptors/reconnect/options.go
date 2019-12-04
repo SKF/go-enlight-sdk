@@ -10,8 +10,8 @@ import (
 var (
 	defaultOptions = &options{
 		codes: []codes.Code{codes.Unavailable},
-		newClientConn: func(ctx context.Context, cc *grpc.ClientConn, opts ...grpc.CallOption) (*grpc.ClientConn, []grpc.CallOption) {
-			return cc, opts
+		newClientConn: func(ctx context.Context, cc *grpc.ClientConn, opts ...grpc.CallOption) (*grpc.ClientConn, []grpc.CallOption, error) {
+			return cc, opts, nil
 		},
 	}
 )
@@ -21,7 +21,7 @@ type options struct {
 	newClientConn NewConnectionFunc
 }
 
-type NewConnectionFunc func(context.Context, *grpc.ClientConn, ...grpc.CallOption) (*grpc.ClientConn, []grpc.CallOption)
+type NewConnectionFunc func(context.Context, *grpc.ClientConn, ...grpc.CallOption) (*grpc.ClientConn, []grpc.CallOption, error)
 type CallOption func(opt *options)
 
 func WithCodes(errorCodes ...codes.Code) CallOption {
