@@ -8,6 +8,7 @@ require (
 	github.com/SKF/proto v1.25.7-go
 	github.com/aws/aws-sdk-go v1.25.26
 	github.com/davecgh/go-spew v1.1.1 // indirect
+	github.com/golang/protobuf v1.3.2
 	github.com/google/uuid v0.0.0-20161128191214-064e2069ce9c // indirect
 	github.com/hashicorp/golang-lru v0.5.3 // indirect
 	github.com/oklog/ulid v1.3.1 // indirect

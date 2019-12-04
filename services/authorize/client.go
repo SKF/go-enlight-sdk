@@ -57,10 +57,10 @@ type AuthorizeClient interface { // nolint: golint
 
 	GetResourceParents(resource common.Origin, parentOriginType string) (resources []common.Origin, err error)
 	GetResourceParentsWithContext(ctx context.Context, resource common.Origin, parentOriginType string) (resources []common.Origin, err error)
-    
+
 	GetResourceChildren(resource common.Origin, childOriginType string) (resources []common.Origin, err error)
 	GetResourceChildrenWithContext(ctx context.Context, resource common.Origin, childOriginType string) (resources []common.Origin, err error)
-	
+
 	GetUserIDsWithAccessToResource(resource common.Origin) (resources []string, err error)
 	GetUserIDsWithAccessToResourceWithContext(ctx context.Context, resource common.Origin) (resources []string, err error)
 

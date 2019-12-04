@@ -123,7 +123,6 @@ func (mock *client) GetResourceChildrenWithContext(ctx context.Context, resource
 	return args.Get(0).([]common.Origin), args.Error(1)
 }
 
-
 func (mock *client) AddResource(resource common.Origin) error {
 	args := mock.Called(resource)
 	return args.Error(0)
