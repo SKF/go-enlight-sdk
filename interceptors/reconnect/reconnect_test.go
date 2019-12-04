@@ -47,14 +47,14 @@ func newServerDialer(t *testing.T, bufSize int) func(string, time.Duration) (net
 	}
 }
 
-func TestSayHello(t *testing.T) {
+func Test_ReconnectInterceptor_HappyCase(t *testing.T) {
 	ctx := context.Background()
 	conn, err := grpc.DialContext(ctx, "bufnet",
 		grpc.WithUnaryInterceptor(reconnect.ReconnectUnaryInterceptor(
 			reconnect.WithCodes(codes.Unavailable),
 			reconnect.WithNewConnection(func(ctx context.Context, cc *grpc.ClientConn, opts ...grpc.CallOption) (*grpc.ClientConn, []grpc.CallOption) {
 				conn, err := grpc.DialContext(ctx, "bufnet",
-					grpc.WithDialer(newServerDialer(bufSize)),
+					grpc.WithDialer(newServerDialer(t, bufSize)),
 					grpc.WithInsecure(),
 				)
 
@@ -65,7 +65,7 @@ func TestSayHello(t *testing.T) {
 				return conn, opts
 			}),
 		)),
-		grpc.WithDialer(newServerDialer(bufSize)),
+		grpc.WithDialer(newServerDialer(t, bufSize)),
 		grpc.WithInsecure(),
 	)
 	require.NoError(t, err, "failed to dial bufnet")
@@ -78,4 +78,29 @@ func TestSayHello(t *testing.T) {
 	time.Sleep(time.Millisecond * 1000)
 	_, err = client.SayHello(ctx, &pb.HelloRequest{Name: "Kalle Anka"})
 	assert.NoError(t, err, "failed to call last SayHello")
+
+	time.Sleep(time.Millisecond * 1000)
+	_, err = client.SayHello(ctx, &pb.HelloRequest{Name: "Kalle Anka"})
+	assert.NoError(t, err, "failed to call last SayHello")
+}
+
+func Test_ReconnectInterceptor_ConnectionClosed(t *testing.T) {
+	ctx := context.Background()
+	conn, err := grpc.DialContext(ctx, "bufnet",
+		grpc.WithUnaryInterceptor(reconnect.ReconnectUnaryInterceptor(
+			reconnect.WithCodes(codes.Unavailable),
+		)),
+		grpc.WithDialer(newServerDialer(t, bufSize)),
+		grpc.WithInsecure(),
+	)
+	require.NoError(t, err, "failed to dial bufnet")
+	defer conn.Close()
+
+	client := pb.NewGreeterClient(conn)
+	_, err = client.SayHello(ctx, &pb.HelloRequest{Name: "Lasse Kongo"})
+	assert.NoError(t, err, "failed to call first SayHello")
+
+	time.Sleep(time.Millisecond * 1000)
+	_, err = client.SayHello(ctx, &pb.HelloRequest{Name: "Kalle Anka"})
+	assert.EqualError(t, err, `rpc error: code = Unavailable desc = all SubConns are in TransientFailure, latest connection error: connection error: desc = "transport: Error while dialing closed"`)
 }
