@@ -2,19 +2,27 @@ package authorize
 
 import (
 	"context"
+	"github.com/SKF/go-enlight-sdk/interceptors/reconnect"
+	"github.com/aws/aws-sdk-go/aws/session"
+	"google.golang.org/grpc/codes"
 	"os"
 	"time"
 
 	"github.com/SKF/proto/common"
-
 	"google.golang.org/grpc"
 
 	authorize_grpcapi "github.com/SKF/proto/authorize"
 )
 
+type client struct {
+	conn           *grpc.ClientConn
+	api            authorize_grpcapi.AuthorizeClient
+	requestTimeout time.Duration
+}
+
 type AuthorizeClient interface { // nolint: golint
-	Dial(host, port string, opts ...grpc.DialOption) error
-	DialWithContext(ctx context.Context, host, port string, opts ...grpc.DialOption) error
+	Dial(sess *session.Session, host, port, secretKey string, opts ...grpc.DialOption) error
+	DialWithContext(ctx context.Context, sess *session.Session, host, port, secretKey string, opts ...grpc.DialOption) error
 	Close() error
 	SetRequestTimeout(d time.Duration)
 
@@ -113,12 +121,6 @@ type AuthorizeClient interface { // nolint: golint
 	RemoveUserRoleWithContext(ctx context.Context, roleName string) error
 }
 
-type client struct {
-	conn           *grpc.ClientConn
-	api            authorize_grpcapi.AuthorizeClient
-	requestTimeout time.Duration
-}
-
 func CreateClient() AuthorizeClient {
 	return &client{
 		requestTimeout: 60 * time.Second,
@@ -126,23 +128,48 @@ func CreateClient() AuthorizeClient {
 }
 
 // Dial creates a client connection to the given host with background context and no timeout
-func (c *client) Dial(host, port string, opts ...grpc.DialOption) error {
+func (c *client) Dial(sess *session.Session, host, port, secretKey string, opts ...grpc.DialOption) error {
 	ctx, cancel := context.WithTimeout(context.Background(), c.requestTimeout)
 	defer cancel()
-	return c.DialWithContext(ctx, host, port, opts...)
+	return c.DialWithContext(ctx, sess, host, port, secretKey, opts...)
 }
 
 // DialWithContext creates a client connection to the given host with context (for timeout and transaction id)
-func (c *client) DialWithContext(ctx context.Context, host, port string, opts ...grpc.DialOption) (err error) {
-	conn, err := grpc.DialContext(ctx, host+":"+port, opts...)
+func (c *client) DialWithContext(ctx context.Context, sess *session.Session, host, port, secretKey string, opts ...grpc.DialOption) error {
+	reconnectOpts := grpc.WithUnaryInterceptor(reconnect.UnaryInterceptor(
+		reconnect.WithCodes(codes.DeadlineExceeded),
+		reconnect.WithNewConnection(
+			func(invokerCtx context.Context, invokerConn *grpc.ClientConn, invokerOptions ...grpc.CallOption) (context.Context, *grpc.ClientConn, []grpc.CallOption, error) {
+				opt, err := getCredentialOption(ctx, sess, host, secretKey)
+				if err != nil {
+					return invokerCtx, invokerConn, invokerOptions, err
+				}
+				c.conn, err = grpc.DialContext(invokerCtx, host+":"+port, append(opts, opt)...)
+				if err != nil {
+					return invokerCtx, invokerConn, invokerOptions, err
+				}
+				c.api = authorize_grpcapi.NewAuthorizeClient(c.conn)
+				return invokerCtx, c.conn, invokerOptions, err
+			}),
+	),
+	)
+
+	opt, err := getCredentialOption(ctx, sess, host, secretKey)
 	if err != nil {
-		return
+		return err
+	}
+	newOpts := append(opts, opt, reconnectOpts)
+
+	conn, err := grpc.DialContext(ctx, host+":"+port, newOpts...)
+	if err != nil {
+		return err
 	}
 
 	c.conn = conn
-	c.api = authorize_grpcapi.NewAuthorizeClient(conn)
+	c.api = authorize_grpcapi.NewAuthorizeClient(c.conn)
+
 	err = c.logClientState(ctx, "opening connection")
-	return
+	return err
 }
 
 func (c *client) Close() (err error) {
