@@ -15,13 +15,13 @@ func UnaryInterceptor(opts ...CallOption) func(ctx context.Context, method strin
 		if err != nil {
 			for _, code := range options.codes {
 				if code == status.Code(err) {
-					newCC, newOpts, errConn := options.newClientConn(ctx, cc, opts...)
+					newCtx, newCC, newOpts, errConn := options.newClientConn(ctx, cc, opts...)
 					if errConn != nil {
 						err = errors.Wrap(err, errConn.Error())
 						return err
 					}
 
-					return invoker(ctx, method, req, reply, newCC, newOpts...)
+					return invoker(newCtx, method, req, reply, newCC, newOpts...)
 				}
 			}
 		}
