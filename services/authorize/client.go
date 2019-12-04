@@ -9,21 +9,20 @@ import (
 	"time"
 
 	"github.com/SKF/proto/common"
-
-	googleGrpc "google.golang.org/grpc"
+	"google.golang.org/grpc"
 
 	authorize_grpcapi "github.com/SKF/proto/authorize"
 )
 
 type client struct {
-	conn           *googleGrpc.ClientConn
+	conn           *grpc.ClientConn
 	api            authorize_grpcapi.AuthorizeClient
 	requestTimeout time.Duration
 }
 
 type AuthorizeClient interface { // nolint: golint
-	Dial(sess *session.Session, host, port, secretKey string, opts ...googleGrpc.DialOption) error
-	DialWithContext(ctx context.Context, sess *session.Session, host, port, secretKey string, opts ...googleGrpc.DialOption) error
+	Dial(sess *session.Session, host, port, secretKey string, opts ...grpc.DialOption) error
+	DialWithContext(ctx context.Context, sess *session.Session, host, port, secretKey string, opts ...grpc.DialOption) error
 	Close() error
 	SetRequestTimeout(d time.Duration)
 
@@ -129,23 +128,23 @@ func CreateClient() AuthorizeClient {
 }
 
 // Dial creates a client connection to the given host with background context and no timeout
-func (c *client) Dial(sess *session.Session, host, port, secretKey string, opts ...googleGrpc.DialOption) error {
+func (c *client) Dial(sess *session.Session, host, port, secretKey string, opts ...grpc.DialOption) error {
 	ctx, cancel := context.WithTimeout(context.Background(), c.requestTimeout)
 	defer cancel()
 	return c.DialWithContext(ctx, sess, host, port, secretKey, opts...)
 }
 
 // DialWithContext creates a client connection to the given host with context (for timeout and transaction id)
-func (c *client) DialWithContext(ctx context.Context, sess *session.Session, host, port, secretKey string, opts ...googleGrpc.DialOption) error {
-	reconnectOpts := googleGrpc.WithUnaryInterceptor(reconnect.UnaryInterceptor(
+func (c *client) DialWithContext(ctx context.Context, sess *session.Session, host, port, secretKey string, opts ...grpc.DialOption) error {
+	reconnectOpts := grpc.WithUnaryInterceptor(reconnect.UnaryInterceptor(
 		reconnect.WithCodes(codes.DeadlineExceeded),
 		reconnect.WithNewConnection(
-			func(invokerCtx context.Context, invokerConn *googleGrpc.ClientConn, invokerOptions ...googleGrpc.CallOption) (context.Context, *googleGrpc.ClientConn, []googleGrpc.CallOption, error) {
+			func(invokerCtx context.Context, invokerConn *grpc.ClientConn, invokerOptions ...grpc.CallOption) (context.Context, *grpc.ClientConn, []grpc.CallOption, error) {
 				opt, err := getCredentialOption(ctx, sess, host, secretKey)
 				if err != nil {
 					return invokerCtx, invokerConn, invokerOptions, err
 				}
-				c.conn, err = googleGrpc.DialContext(invokerCtx, host+":"+port, append(opts, opt)...)
+				c.conn, err = grpc.DialContext(invokerCtx, host+":"+port, append(opts, opt)...)
 				if err != nil {
 					return invokerCtx, invokerConn, invokerOptions, err
 				}
@@ -161,7 +160,7 @@ func (c *client) DialWithContext(ctx context.Context, sess *session.Session, hos
 	}
 	newOpts := append(opts, opt, reconnectOpts)
 
-	conn, err := googleGrpc.DialContext(ctx, host+":"+port, newOpts...)
+	conn, err := grpc.DialContext(ctx, host+":"+port, newOpts...)
 	if err != nil {
 		return err
 	}
