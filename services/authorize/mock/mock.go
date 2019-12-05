@@ -29,11 +29,22 @@ func (mock *client) SetRequestTimeout(d time.Duration) {
 	mock.Called(d)
 }
 
-func (mock *client) Dial(sess *session.Session, host, port, secretKey string, opts ...grpc.DialOption) error {
+func (mock *client) Dial(host, port string, opts ...grpc.DialOption) error {
+	args := mock.Called(host, port, opts)
+	return args.Error(0)
+}
+
+func (mock *client) DialWithContext(ctx context.Context, host, port string, opts ...grpc.DialOption) error {
+	args := mock.Called(ctx, host, port, opts)
+	return args.Error(0)
+}
+
+func (mock *client) DialUsingCredentials(sess *session.Session, host, port, secretKey string, opts ...grpc.DialOption) error {
 	args := mock.Called(sess, host, port, secretKey, opts)
 	return args.Error(0)
 }
-func (mock *client) DialWithContext(ctx context.Context, sess *session.Session, host, port, secretKey string, opts ...grpc.DialOption) error {
+
+func (mock *client) DialUsingCredentialsWithContext(ctx context.Context, sess *session.Session, host, port, secretKey string, opts ...grpc.DialOption) error {
 	args := mock.Called(ctx, sess, host, port, secretKey, opts)
 	return args.Error(0)
 }
