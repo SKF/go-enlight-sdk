@@ -381,7 +381,7 @@ func (c *client) GetResourceParents(resource common.Origin, parentOriginType str
 	defer cancel()
 	return c.GetResourceParentsWithContext(ctx, resource, parentOriginType)
 }
-func (c *client) GetResourceParentsWithContext(ctx context.Context, resource common.Origin, parentOriginType string) (resources []common.Origin, err error) {	
+func (c *client) GetResourceParentsWithContext(ctx context.Context, resource common.Origin, parentOriginType string) (resources []common.Origin, err error) {
 	input := authorize_grpcapi.GetResourceParentsInput{ParentOriginType: parentOriginType, Resource: &resource}
 	output, err := c.api.GetResourceParents(ctx, &input)
 	if err != nil {
@@ -402,7 +402,7 @@ func (c *client) GetResourceChildren(resource common.Origin, childOriginType str
 	defer cancel()
 	return c.GetResourceChildrenWithContext(ctx, resource, childOriginType)
 }
-func (c *client) GetResourceChildrenWithContext(ctx context.Context, resource common.Origin, childOriginType string) (resources []common.Origin, err error) {	
+func (c *client) GetResourceChildrenWithContext(ctx context.Context, resource common.Origin, childOriginType string) (resources []common.Origin, err error) {
 	input := authorize_grpcapi.GetResourceChildrenInput{ChildOriginType: childOriginType, Resource: &resource}
 	output, err := c.api.GetResourceChildren(ctx, &input)
 	if err != nil {
@@ -417,9 +417,6 @@ func (c *client) GetResourceChildrenWithContext(ctx context.Context, resource co
 	}
 	return
 }
-
-
-
 
 func (c *client) GetUserIDsWithAccessToResource(resource common.Origin) (resources []string, err error) {
 	ctx, cancel := context.WithTimeout(context.Background(), c.requestTimeout)
