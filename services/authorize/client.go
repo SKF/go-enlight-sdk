@@ -3,6 +3,7 @@ package authorize
 import (
 	"context"
 	"github.com/SKF/go-enlight-sdk/interceptors/reconnect"
+	"github.com/SKF/go-utility/log"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"google.golang.org/grpc/codes"
 	"os"
@@ -21,8 +22,10 @@ type client struct {
 }
 
 type AuthorizeClient interface { // nolint: golint
-	Dial(sess *session.Session, host, port, secretKey string, opts ...grpc.DialOption) error
-	DialWithContext(ctx context.Context, sess *session.Session, host, port, secretKey string, opts ...grpc.DialOption) error
+	Dial(host, port string, opts ...grpc.DialOption) error
+	DialWithContext(ctx context.Context, host, port string, opts ...grpc.DialOption) error
+	DialUsingCredentials(sess *session.Session, host, port, secretKey string, opts ...grpc.DialOption) error
+	DialUsingCredentialsWithContext(ctx context.Context, sess *session.Session, host, port, secretKey string, opts ...grpc.DialOption) error
 	Close() error
 	SetRequestTimeout(d time.Duration)
 
@@ -128,24 +131,51 @@ func CreateClient() AuthorizeClient {
 }
 
 // Dial creates a client connection to the given host with background context and no timeout
-func (c *client) Dial(sess *session.Session, host, port, secretKey string, opts ...grpc.DialOption) error {
+func (c *client) Dial(host, port string, opts ...grpc.DialOption) error {
 	ctx, cancel := context.WithTimeout(context.Background(), c.requestTimeout)
 	defer cancel()
-	return c.DialWithContext(ctx, sess, host, port, secretKey, opts...)
+	return c.DialWithContext(ctx, host, port, opts...)
 }
 
 // DialWithContext creates a client connection to the given host with context (for timeout and transaction id)
-func (c *client) DialWithContext(ctx context.Context, sess *session.Session, host, port, secretKey string, opts ...grpc.DialOption) error {
+func (c *client) DialWithContext(ctx context.Context, host, port string, opts ...grpc.DialOption) (err error) {
+	conn, err := grpc.DialContext(ctx, host+":"+port, opts...)
+	if err != nil {
+		return
+	}
+
+	c.conn = conn
+	c.api = authorize_grpcapi.NewAuthorizeClient(conn)
+	err = c.logClientState(ctx, "opening connection")
+	return
+}
+
+// DialUsingCredentials creates a client connection to the given host with background context and no timeout
+func (c *client) DialUsingCredentials(sess *session.Session, host, port, secretKey string, opts ...grpc.DialOption) error {
+	ctx, cancel := context.WithTimeout(context.Background(), c.requestTimeout)
+	defer cancel()
+	return c.DialUsingCredentialsWithContext(ctx, sess, host, port, secretKey, opts...)
+}
+
+// DialUsingCredentialsWithContext creates a client connection to the given host with context (for timeout and transaction id)
+func (c *client) DialUsingCredentialsWithContext(ctx context.Context, sess *session.Session, host, port, secretKey string, opts ...grpc.DialOption) error {
 	reconnectOpts := grpc.WithUnaryInterceptor(reconnect.UnaryInterceptor(
 		reconnect.WithCodes(codes.DeadlineExceeded),
 		reconnect.WithNewConnection(
 			func(invokerCtx context.Context, invokerConn *grpc.ClientConn, invokerOptions ...grpc.CallOption) (context.Context, *grpc.ClientConn, []grpc.CallOption, error) {
-				opt, err := getCredentialOption(ctx, sess, host, secretKey)
+				log.WithTracing(invokerCtx).Debug("Retrying with new connection")
+				if invokerCtx.Err() != nil {
+					return invokerCtx, invokerConn, invokerOptions, nil
+				}
+				opt, err := getCredentialOption(invokerCtx, sess, host, secretKey)
 				if err != nil {
+					log.WithTracing(invokerCtx).WithError(err).Error("Failed to get credential options")
 					return invokerCtx, invokerConn, invokerOptions, err
 				}
-				c.conn, err = grpc.DialContext(invokerCtx, host+":"+port, append(opts, opt)...)
+				_ = c.conn.Close()
+				c.conn, err = grpc.Dial(host+":"+port, append(opts, opt, grpc.WithBlock())...)
 				if err != nil {
+					log.WithTracing(invokerCtx).WithError(err).Error("Failed to dial context")
 					return invokerCtx, invokerConn, invokerOptions, err
 				}
 				c.api = authorize_grpcapi.NewAuthorizeClient(c.conn)
@@ -176,7 +206,10 @@ func (c *client) Close() (err error) {
 	ctx, cancel := context.WithTimeout(context.Background(), c.requestTimeout)
 	defer cancel()
 	err = c.logClientState(ctx, "closing connection")
-	return c.conn.Close()
+	if c.conn != nil {
+		return c.conn.Close()
+	}
+	return nil
 }
 
 func (c *client) DeepPing() error {
