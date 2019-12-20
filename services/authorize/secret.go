@@ -32,7 +32,7 @@ func getSecret(ctx context.Context, sess *session.Session, secretsName string, o
 			WithField("secretsName", secretsName).
 			Error("failed to get secrets")
 		err = errors.Wrapf(err, "failed to get secret value from '%s'", secretsName)
-		return
+		return err
 	}
 
 	if err = json.Unmarshal([]byte(*result.SecretString), out); err != nil {
