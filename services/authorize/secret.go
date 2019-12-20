@@ -19,7 +19,7 @@ type dataStore struct {
 	Crt []byte `json:"crt"`
 }
 
-func getSecret(ctx context.Context, sess *session.Session, secretsName string, out interface{}) (err error) {
+func getSecret(ctx context.Context, sess *session.Session, secretsName string, out interface{}) error {
 	// credentials - default
 	svc := secretsmanager.New(sess)
 	input := &secretsmanager.GetSecretValueInput{
