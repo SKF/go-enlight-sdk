@@ -90,12 +90,12 @@ func (mock *client) GetUserPreferencesWithContext(ctx context.Context, userID st
 	return args.Get(0).([]proto.UserPreference), args.Error(1)
 }
 
-func (mock *client) GetUserNotifications(userID string, limit int) ([]proto.NotificationMessage, error) {
+func (mock *client) GetUserNotifications(userID string, limit int32) ([]proto.NotificationMessage, error) {
 	args := mock.Called(userID, limit)
 	return args.Get(0).([]proto.NotificationMessage), args.Error(1)
 }
 
-func (mock *client) GetUserNotificationsWithContext(ctx context.Context, userID string, limit int) ([]proto.NotificationMessage, error) {
+func (mock *client) GetUserNotificationsWithContext(ctx context.Context, userID string, limit int32) ([]proto.NotificationMessage, error) {
 	args := mock.Called(ctx, userID, limit)
 	return args.Get(0).([]proto.NotificationMessage), args.Error(1)
 }

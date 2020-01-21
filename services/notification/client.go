@@ -39,8 +39,8 @@ type NotificationClient interface {
 	GetUserPreferences(userID string) ([]proto.UserPreference, error)
 	GetUserPreferencesWithContext(ctx context.Context, userID string) ([]proto.UserPreference, error)
 
-	GetUserNotifications(userID string, limit int) ([]proto.NotificationMessage, error)
-	GetUserNotificationsWithContext(ctx context.Context, userID string, limit int) ([]proto.NotificationMessage, error)
+	GetUserNotifications(userID string, limit int32) ([]proto.NotificationMessage, error)
+	GetUserNotificationsWithContext(ctx context.Context, userID string, limit int32) ([]proto.NotificationMessage, error)
 }
 
 func CreateClient() NotificationClient {

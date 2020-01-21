@@ -68,16 +68,16 @@ func (c *client) GetUserPreferencesWithContext(ctx context.Context, userID strin
 	return result, nil
 }
 
-func (c *client) GetUserNotifications(userID string, limit int) ([]proto.NotificationMessage, error) {
+func (c *client) GetUserNotifications(userID string, limit int32) ([]proto.NotificationMessage, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), c.requestTimeout)
 	defer cancel()
 	return c.GetUserNotificationsWithContext(ctx, userID, limit)
 }
 
-func (c *client) GetUserNotificationsWithContext(ctx context.Context, userID string, limit int) ([]proto.NotificationMessage, error) {
+func (c *client) GetUserNotificationsWithContext(ctx context.Context, userID string, limit int32) ([]proto.NotificationMessage, error) {
 	input := proto.GetUserNotificationsInput{
 		UserId: userID,
-		Limit:  "limit",
+		Limit:  limit,
 	}
 
 	result := []proto.NotificationMessage{}
