@@ -30,8 +30,14 @@ type NotificationClient interface {
 	DeepPing() error
 	DeepPingWithContext(ctx context.Context) error
 
-	SendNotification(notificationType proto.NotificationType, resource common.Origin, header, body, createdBy string) (string, error)
-	SendNotificationWithContext(ctx context.Context, notificationType proto.NotificationType, resource common.Origin, header, body, createdBy string) (string, error)
+	SetNotificationType(notificationType proto.NotificationType) error
+	SetNotificationTypeWithContext(ctx context.Context, notificationType proto.NotificationType) error
+
+	GetNotificationType(name string) (proto.NotificationType, error)
+	GetNotificationTypeWithContext(ctx context.Context, name string) (proto.NotificationType, error)
+
+	InitiateNotification(notificationType proto.NotificationType, resource common.Origin, header, body, createdBy string) (string, error)
+	InitiateNotificationWithContext(ctx context.Context, notificationType proto.NotificationType, resource common.Origin, header, body, createdBy string) (string, error)
 
 	SetUserPreferences(prefs []proto.UserPreference) error
 	SetUserPreferencesWithContext(ctx context.Context, prefs []proto.UserPreference) error
@@ -39,8 +45,8 @@ type NotificationClient interface {
 	GetUserPreferences(userID string) ([]proto.UserPreference, error)
 	GetUserPreferencesWithContext(ctx context.Context, userID string) ([]proto.UserPreference, error)
 
-	GetUserNotifications(userID string, limit int32) ([]proto.NotificationMessage, error)
-	GetUserNotificationsWithContext(ctx context.Context, userID string, limit int32) ([]proto.NotificationMessage, error)
+	GetUserNotifications(userID string, limit int32) ([]proto.UserNotification, error)
+	GetUserNotificationsWithContext(ctx context.Context, userID string, limit int32) ([]proto.UserNotification, error)
 }
 
 func CreateClient() NotificationClient {
