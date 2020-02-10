@@ -36,6 +36,20 @@ func (c *client) GetNotificationTypeWithContext(ctx context.Context, name string
 	return *out.NotificationType, err
 }
 
+func (c *client) RemoveNotificationType(name string) error {
+	ctx, cancel := context.WithTimeout(context.Background(), c.requestTimeout)
+	defer cancel()
+	return c.RemoveNotificationTypeWithContext(ctx, name)
+}
+func (c *client) RemoveNotificationTypeWithContext(ctx context.Context, name string) error {
+	input := proto.RemoveNotificationTypeInput{
+		Name: name,
+	}
+	_, err := c.api.RemoveNotificationType(ctx, &input)
+
+	return err
+}
+
 
 func (c *client) InitiateNotification(notificationType proto.NotificationType, resource common.Origin, header, body, createdBy string) (string, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), c.requestTimeout)
@@ -57,6 +71,38 @@ func (c *client) InitiateNotificationWithContext(ctx context.Context, notificati
 
 	return output.ExternalId, nil
 }
+
+func (c *client) GetInitiatedNotification(externalId string) (proto.InitiatedNotification, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), c.requestTimeout)
+	defer cancel()
+	return c.GetInitiatedNotificationWithContext(ctx, externalId)
+}
+func (c *client) GetInitiatedNotificationWithContext(ctx context.Context, externalId string) (proto.InitiatedNotification, error) {
+	input := proto.GetInitiatedNotificationInput{
+		ExternalId: externalId,
+	}
+	output, err := c.api.GetInitiatedNotification(ctx, &input)
+	if err != nil {
+		return proto.InitiatedNotification{}, err
+	}
+
+	return *output.InitiatedNotification, nil
+}
+
+func (c *client) RemoveInitiatedNotification(externalId string) error {
+	ctx, cancel := context.WithTimeout(context.Background(), c.requestTimeout)
+	defer cancel()
+	return c.RemoveInitiatedNotificationWithContext(ctx, externalId)
+}
+func (c *client) RemoveInitiatedNotificationWithContext(ctx context.Context, externalId string) error {
+	input := proto.RemoveInitiatedNotificationInput{
+		ExternalId: externalId,
+	}
+	_, err := c.api.RemoveInitiatedNotification(ctx, &input)
+
+	return err
+}
+
 
 func (c *client) SetUserPreferences(prefs []proto.UserPreference) error {
 	ctx, cancel := context.WithTimeout(context.Background(), c.requestTimeout)
@@ -95,6 +141,22 @@ func (c *client) GetUserPreferencesWithContext(ctx context.Context, userID strin
 	return result, nil
 }
 
+func (c *client) RemoveUserPreferences(userID, notificationTypeExtId string) error {
+	ctx, cancel := context.WithTimeout(context.Background(), c.requestTimeout)
+	defer cancel()
+	return c.RemoveUserPreferencesWithContext(ctx, userID, notificationTypeExtId)
+}
+func (c *client) RemoveUserPreferencesWithContext(ctx context.Context, userID, notificationTypeExtId string) error {
+	input := proto.RemoveUserPreferencesInput{
+		UserId: userID,
+		NotificationTypeExtId:notificationTypeExtId,
+	}
+	_, err := c.api.RemoveUserPreferences(ctx, &input)
+
+	return err
+}
+
+
 func (c *client) GetUserNotifications(userID string, limit int32) ([]proto.UserNotification, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), c.requestTimeout)
 	defer cancel()
@@ -117,4 +179,19 @@ func (c *client) GetUserNotificationsWithContext(ctx context.Context, userID str
 	}
 
 	return result, nil
+}
+
+func (c *client) RemoveUserNotifications(userID, initiatedNotificationExternalId string) error {
+	ctx, cancel := context.WithTimeout(context.Background(), c.requestTimeout)
+	defer cancel()
+	return c.RemoveUserNotificationsWithContext(ctx, userID, initiatedNotificationExternalId)
+}
+func (c *client) RemoveUserNotificationsWithContext(ctx context.Context, userID, initiatedNotificationExternalId string) error {
+	input := proto.RemoveUserNotificationsInput{
+		UserId:                          userID,
+		InitiatedNotificationExternalId: initiatedNotificationExternalId,
+	}
+	_, err := c.api.RemoveUserNotifications(ctx, &input)
+
+	return err
 }
