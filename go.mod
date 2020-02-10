@@ -5,7 +5,7 @@ go 1.13
 require (
 	github.com/SKF/go-eventsource v1.3.5
 	github.com/SKF/go-utility v1.8.0
-	github.com/SKF/proto v1.27.0-go
+	github.com/SKF/proto v1.27.1-go
 	github.com/aws/aws-sdk-go v1.25.26
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/golang/protobuf v1.3.2

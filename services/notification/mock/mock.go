@@ -78,6 +78,16 @@ func (mock *client) GetNotificationTypeWithContext(ctx context.Context, name str
 	return args.Get(0).(proto.NotificationType), args.Error(1)
 }
 
+func (mock *client) RemoveNotificationType(name string) error {
+	args := mock.Called(name)
+	return args.Error(0)
+}
+func (mock *client) RemoveNotificationTypeWithContext(ctx context.Context, name string) error {
+	args := mock.Called(ctx, name)
+	return args.Error(0)
+}
+
+
 func (mock *client) InitiateNotification(notificationType proto.NotificationType, resource common.Origin, header, body, createdBy string) (string, error) {
 	args := mock.Called(notificationType, resource, header, body, createdBy)
 	return args.String(0), args.Error(1)
@@ -86,6 +96,25 @@ func (mock *client) InitiateNotificationWithContext(ctx context.Context, notific
 	args := mock.Called(ctx, notificationType, resource, header, body, createdBy)
 	return args.String(0), args.Error(1)
 }
+
+func (mock *client) GetInitiatedNotification(externalId string) (proto.InitiatedNotification, error) {
+	args := mock.Called(externalId)
+	return args.Get(0).(proto.InitiatedNotification), args.Error(1)
+}
+func (mock *client) GetInitiatedNotificationWithContext(ctx context.Context, externalId string) (proto.InitiatedNotification, error) {
+	args := mock.Called(ctx, externalId)
+	return args.Get(0).(proto.InitiatedNotification), args.Error(1)
+}
+
+func (mock *client) RemoveInitiatedNotification(externalId string) error {
+	args := mock.Called(externalId)
+	return args.Error(0)
+}
+func (mock *client) RemoveInitiatedNotificationWithContext(ctx context.Context, externalId string) error {
+	args := mock.Called(ctx, externalId)
+	return args.Error(0)
+}
+
 
 func (mock *client) SetUserPreferences(prefs []proto.UserPreference) error {
 	args := mock.Called(prefs)
@@ -105,12 +134,31 @@ func (mock *client) GetUserPreferencesWithContext(ctx context.Context, userID st
 	return args.Get(0).([]proto.UserPreference), args.Error(1)
 }
 
+func (mock *client) RemoveUserPreferences(userID string, notificationTypeExtId string) error {
+	args := mock.Called(userID, notificationTypeExtId)
+	return args.Error(0)
+}
+func (mock *client) RemoveUserPreferencesWithContext(ctx context.Context, userID string, notificationTypeExtId string) error {
+	args := mock.Called(ctx, userID, notificationTypeExtId)
+	return args.Error(0)
+}
+
+
 func (mock *client) GetUserNotifications(userID string, limit int32) ([]proto.UserNotification, error) {
 	args := mock.Called(userID, limit)
 	return args.Get(0).([]proto.UserNotification), args.Error(1)
 }
-
 func (mock *client) GetUserNotificationsWithContext(ctx context.Context, userID string, limit int32) ([]proto.UserNotification, error) {
 	args := mock.Called(ctx, userID, limit)
 	return args.Get(0).([]proto.UserNotification), args.Error(1)
+}
+
+
+func (mock *client) RemoveUserNotifications(userID string, initiatedNotificationExtId string) error {
+	args := mock.Called(userID, initiatedNotificationExtId)
+	return args.Error(0)
+}
+func (mock *client) RemoveUserNotificationsWithContext(ctx context.Context, userID string, initiatedNotificationExtId string) error {
+	args := mock.Called(ctx, userID, initiatedNotificationExtId)
+	return args.Error(0)
 }
