@@ -72,21 +72,21 @@ func (c *client) InitiateNotificationWithContext(ctx context.Context, notificati
 	return output.ExternalId, nil
 }
 
-func (c *client) GetInitiatedNotification(externalId string) (proto.GetInitiatedNotificationOutput, error) {
+func (c *client) GetInitiatedNotification(externalId string) (proto.InitiatedNotification, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), c.requestTimeout)
 	defer cancel()
 	return c.GetInitiatedNotificationWithContext(ctx, externalId)
 }
-func (c *client) GetInitiatedNotificationWithContext(ctx context.Context, externalId string) (proto.GetInitiatedNotificationOutput, error) {
+func (c *client) GetInitiatedNotificationWithContext(ctx context.Context, externalId string) (proto.InitiatedNotification, error) {
 	input := proto.GetInitiatedNotificationInput{
 		ExternalId: externalId,
 	}
 	output, err := c.api.GetInitiatedNotification(ctx, &input)
 	if err != nil {
-		return proto.GetInitiatedNotificationOutput{}, err
+		return proto.InitiatedNotification{}, err
 	}
 
-	return *output, nil
+	return *output.InitiatedNotification, nil
 }
 
 func (c *client) RemoveInitiatedNotification(externalId string) error {
