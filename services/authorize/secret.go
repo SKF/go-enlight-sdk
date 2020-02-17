@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+
 	"github.com/SKF/go-enlight-sdk/grpc"
 	"github.com/SKF/go-utility/log"
 	"github.com/aws/aws-sdk-go/aws"
@@ -23,7 +24,8 @@ func getSecret(ctx context.Context, sess *session.Session, secretsName string, o
 	// credentials - default
 	svc := secretsmanager.New(sess)
 	input := &secretsmanager.GetSecretValueInput{
-		SecretId: aws.String(secretsName),
+		SecretId:     aws.String(secretsName),
+		VersionStage: aws.String("AWSCURRENT"),
 	}
 
 	result, err := svc.GetSecretValue(input)
