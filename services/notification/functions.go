@@ -2,6 +2,7 @@ package notification
 
 import (
 	"context"
+	"github.com/SKF/go-utility/log"
 
 	"github.com/SKF/proto/common"
 	proto "github.com/SKF/proto/notification"
@@ -32,6 +33,10 @@ func (c *client) GetNotificationTypeWithContext(ctx context.Context, name string
 		Name: name,
 	}
 	out, err := c.api.GetNotificationType(ctx, &input)
+	log.WithField("NotificationType", out).WithField("name", name).Info("GetNotificationTypeWithContext")
+	if err != nil {
+		log.WithError(err).Errorf("Error GetNotificationTypeWithContext for: %s", name)
+	}
 
 	return *out.NotificationType, err
 }
@@ -45,7 +50,12 @@ func (c *client) RemoveNotificationTypeWithContext(ctx context.Context, name str
 	input := proto.RemoveNotificationTypeInput{
 		Name: name,
 	}
+
+	log.WithField("name", name).Info("RemoveNotificationTypeWithContext")
 	_, err := c.api.RemoveNotificationType(ctx, &input)
+	if err != nil {
+		log.WithError(err).Errorf("Error RemoveNotificationTypeWithContext for: %s", name)
+	}
 
 	return err
 }
