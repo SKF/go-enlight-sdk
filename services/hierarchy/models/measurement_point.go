@@ -2,8 +2,9 @@ package models
 
 import (
 	"fmt"
+	"strings"
 
-	"github.com/SKF/go-utility/uuid"
+	"github.com/SKF/go-utility/v2/uuid"
 	grpcapi "github.com/SKF/proto/hierarchy"
 )
 
@@ -12,17 +13,17 @@ type MeasurementPoint struct {
 	// Bearing number on this asset
 	Bearing int32 `json:"bearing" example:"1"`
 	// Orientation of measurement
-	Angular Orientation `json:"orientation" example:"vertical" enums:"axial,radial,horizontal,vertical,unknown"`
+	Angular Orientation `json:"orientation" swaggertype:"string" example:"vertical" enums:"axial,radial,radial90,horizontal,vertical,unknown"`
 	// Type of measurement
-	MeasurementType MeasurementType `json:"measurementType" example:"acceleration" enums:"displacement,acceleration,velocity,temperature,dc_gap,ampl_phase,box,speed,envelope_2,envelope_3,unknown"`
+	MeasurementType MeasurementType `json:"measurementType" swaggertype:"string" example:"acceleration" enums:"displacement,acceleration,velocity,temperature,dc_gap,ampl_phase,box,speed,envelope_2,envelope_3,unknown"`
 	// Identifier of shaft that this measurement point belongs to
 	Shaft string `json:"shaft" example:"C"`
 	// Which side of the given shaft this measurement point belongs to
-	ShaftSide ShaftSide `json:"shaftSide" example:"nde" enums:"de,nde"`
+	ShaftSide ShaftSide `json:"shaftSide" swaggertype:"string" example:"nde" enums:"de,nde"`
 	// Speed in RPM if this shaft has a fixed speed
 	FixedSpeedRPM float64 `json:"fixedSpeedRpm,omitempty" example:"150"`
 	// ID of measurement point location
-	LocationId *uuid.UUID `json:"locationId,omitempty"`
+	LocationId *uuid.UUID `json:"locationId,omitempty" swaggertype:"string" format:"uuid"`
 	// Type of device used to take measurements on this point
 	DADType string `json:"dadType,omitempty"`
 }
@@ -33,14 +34,15 @@ type Orientation string
 // Valid values of measurement points orientations
 const (
 	Axial              Orientation = "axial"
-	Radial             Orientation = "radial"
 	Horizontal         Orientation = "horizontal"
 	Vertical           Orientation = "vertical"
+	Radial             Orientation = "radial"
+	Radial90           Orientation = "radial90"
 	UnknownOrientation Orientation = "unknown"
 )
 
 var orientations = []Orientation{
-	Axial, Radial, Horizontal, Vertical, UnknownOrientation,
+	Axial, Horizontal, Vertical, Radial, Radial90, UnknownOrientation,
 }
 
 // MeasurementType is measurement type unit
@@ -96,12 +98,14 @@ func ParseOrientation(orientation string) Orientation {
 	switch orientation {
 	case "axial":
 		return Axial
-	case "radial":
-		return Radial
 	case "horizontal":
 		return Horizontal
 	case "vertical":
 		return Vertical
+	case "radial":
+		return Radial
+	case "radial90":
+		return Radial90
 	default:
 		return UnknownOrientation
 	}
@@ -132,6 +136,24 @@ func ParseMeasurementType(measurementType string) MeasurementType {
 		return Envelope3
 	default:
 		return UnknownMeasurementType
+	}
+}
+
+// ParseMeasurementType takes a string and makes it a valid measurement type value
+func (m MeasurementType) ToShort() string {
+	switch m {
+	case Displacement, Acceleration, Velocity, Temperature, Speed, BOV:
+		return strings.ToUpper(m.String()[0:1])
+	case DCGAP:
+		return "G"
+	case AMPLPHASE:
+		return "P"
+	case Envelope2:
+		return "E2"
+	case Envelope3:
+		return "E3"
+	default:
+		return ""
 	}
 }
 

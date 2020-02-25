@@ -1,5 +1,7 @@
 package models
 
+import "fmt"
+
 type IndustrySegment string
 
 const (
@@ -16,6 +18,11 @@ const (
 	Renewable             IndustrySegment = "renewable"
 	Undefined             IndustrySegment = "undefined"
 )
+
+var allSegments = []IndustrySegment{
+	Agriculture, Construction, FoodAndBeverage, HydrocarbonProcessing, MachineTool,
+	Marine, Metal, Mining, PowerGeneration, PulpAndPaper, Renewable, Undefined,
+}
 
 func (seg IndustrySegment) String() string {
 	return string(seg)
@@ -49,4 +56,13 @@ func (seg IndustrySegment) Title() string {
 		return "Undefined"
 	}
 	return "Invalid"
+}
+
+func (seg IndustrySegment) Validate() error {
+	for _, segment := range allSegments {
+		if seg == segment {
+			return nil
+		}
+	}
+	return fmt.Errorf("'%s' is not a valid industry segment", seg)
 }

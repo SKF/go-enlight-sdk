@@ -1,6 +1,6 @@
 package models
 
-import "github.com/SKF/go-utility/uuid"
+import "github.com/SKF/go-utility/v2/uuid"
 
 // Relation represents a relation between two nodes
 type Relation struct {

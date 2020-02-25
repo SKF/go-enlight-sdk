@@ -3,7 +3,7 @@ package models
 import (
 	"errors"
 
-	"github.com/SKF/go-utility/uuid"
+	"github.com/SKF/go-utility/v2/uuid"
 	common_proto "github.com/SKF/proto/common"
 	hierarchy_proto "github.com/SKF/proto/hierarchy"
 )
@@ -18,7 +18,7 @@ type Node struct {
 
 func (node Node) Validate() (err error) {
 
-	if err = node.BaseNode.Validate(); err != nil {
+	if err := node.BaseNode.Validate(); err != nil {
 		return err
 	}
 

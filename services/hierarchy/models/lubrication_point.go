@@ -14,7 +14,7 @@ type LubricationPoint struct {
 	// Volume of lubricant, in the given unit
 	Volume int32 `json:"lubricantVolume" example:"10"`
 	// Unit that the volume is specified in
-	Unit LubricantUnit `json:"lubricantUnit" example:"cm3" enums:"gram,ounce,cm3,unknown"`
+	Unit LubricantUnit `json:"lubricantUnit" swaggertype:"string" example:"cm3" enums:"gram,ounce,cm3,unknown"`
 	// Interval between lubrication in days
 	Interval int32 `json:"lubricateInterval" example:"5"`
 }

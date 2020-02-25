@@ -3,21 +3,23 @@ package models
 import (
 	"fmt"
 
-	"github.com/SKF/go-utility/uuid"
+	"github.com/SKF/go-utility/v2/uuid"
+	"github.com/pkg/errors"
+	"golang.org/x/text/language"
 )
 
 // Node represent a hierarchy node
 type BaseNode struct {
 	// ID of node, as a UUID
-	ID uuid.UUID `json:"id" example:"7bcd1711-21bd-4eb7-8349-b053d6d5226f"`
+	ID uuid.UUID `json:"id" swaggertype:"string" format:"uuid" example:"7bcd1711-21bd-4eb7-8349-b053d6d5226f"`
 	// ID of parent node, as a UUID
-	ParentID uuid.UUID `json:"parentId" example:"8f7551c5-3357-406d-ab82-bcb138d0b13f"`
+	ParentID uuid.UUID `json:"parentId" swaggertype:"string" format:"uuid" example:"8f7551c5-3357-406d-ab82-bcb138d0b13f"`
 	// Type of node
-	Type NodeType `json:"nodeType" example:"asset" enums:"root,company,site,plant,system,functional_location,asset,measurement_point,inspection_point,lubrication_point,unknown"`
+	Type NodeType `json:"nodeType" swaggertype:"string" example:"asset" enums:"root,company,site,plant,system,functional_location,asset,measurement_point,inspection_point,lubrication_point,unknown"`
 	// Type of node
-	SubType NodeSubType `json:"nodeSubType" example:"asset" enums:"root,company,site,plant,ship,system,functional_location,asset,measurement_point,inspection_point,lubrication_point"`
+	SubType NodeSubType `json:"nodeSubType" swaggertype:"string" example:"asset" enums:"root,company,site,plant,ship,system,functional_location,asset,measurement_point,inspection_point,lubrication_point"`
 	// Industry segment of this node
-	Industry *IndustrySegment `json:"industrySegment,omitempty" example:"metal" enums:"agriculture,construction,food_and_beverage,hydrocarbon_processing,machine_tool,marine,metal,mining,power_generation,pulp_and_paper,renewable,undefined"`
+	Industry *IndustrySegment `json:"industrySegment,omitempty" swaggertype:"string" example:"metal" enums:"agriculture,construction,food_and_beverage,hydrocarbon_processing,machine_tool,marine,metal,mining,power_generation,pulp_and_paper,renewable,undefined"`
 	// Origin of node, if imported from another system
 	Origin *Origin `json:"origin,omitempty"`
 	// Descriptive name of the node
@@ -28,6 +30,8 @@ type BaseNode struct {
 	Position *int64 `json:"position"`
 	// Comma separated list of free form tags on this node
 	Tags *string `json:"tags"`
+	// Which country the node is in
+	Country *string `json:"country,omitempty" example:"SWE"`
 }
 
 // EnlightRootNodeUUID is the base/root node that all other nodes attach to, must not be deleted or updated
@@ -46,22 +50,32 @@ func (node BaseNode) Validate() error {
 	if node.Position != nil && *node.Position < 0 {
 		return fmt.Errorf("Field 'position' cannot be negative")
 	}
+	if node.Country != nil {
+		_, err := language.ParseRegion(*node.Country)
+		return errors.Wrapf(err, "Field 'country' contains illegal value %s", *node.Country)
+	}
+
+	if node.Industry != nil {
+		if err := node.Industry.Validate(); err != nil {
+			return errors.Wrap(err, "Optional field 'industrySegment' is invalid")
+		}
+	}
 
 	if err := node.Type.Validate(); err != nil {
-		return fmt.Errorf("Required field 'nodeType' is invalid: %+v", err)
+		return errors.Wrap(err, "Required field 'nodeType' is invalid")
 	}
 
 	if err := node.SubType.Validate(); err != nil {
-		return fmt.Errorf("Required field 'nodeSubType' is invalid: %+v", err)
+		return errors.Wrap(err, "Required field 'nodeSubType' is invalid")
 	}
 
 	if !node.SubType.IsTypeOf(node.Type) {
-		return fmt.Errorf("'%s' doesn't have a subtype '%s'", node.Type, node.SubType)
+		return fmt.Errorf("Node type '%s' doesn't have a subtype '%s'", node.Type, node.SubType)
 	}
 
 	if node.Origin != nil {
 		if err := node.Origin.Validate(); err != nil {
-			return fmt.Errorf("Required field 'origin' is invalid: %+v", err)
+			return errors.Wrap(err, "Optional field 'origin' is invalid")
 		}
 	}
 
