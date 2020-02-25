@@ -18,7 +18,7 @@ type Node struct {
 
 func (node Node) Validate() (err error) {
 
-	if err := node.BaseNode.Validate(); err != nil {
+	if err = node.BaseNode.Validate(); err != nil {
 		return err
 	}
 
