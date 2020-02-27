@@ -3,7 +3,7 @@ package models
 import (
 	"errors"
 
-	"github.com/SKF/go-utility/uuid"
+	"github.com/SKF/go-utility/v2/uuid"
 	common_proto "github.com/SKF/proto/common"
 	hierarchy_proto "github.com/SKF/proto/hierarchy"
 )

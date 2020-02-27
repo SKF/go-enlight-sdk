@@ -10,14 +10,14 @@ import (
 // InspectionPoint - holds parameters for inspection point
 type InspectionPoint struct {
 	// Type of value to record
-	ValueType ValueType `json:"valueType" example:"numeric" enums:"numeric,single_choice,multi_choice,unknown"`
+	ValueType ValueType `json:"valueType" example:"numeric" swaggertype:"string" enums:"numeric,single_choice,multi_choice,unknown"`
 	// Unit of the value recorded, in case of numeric inspection
 	NumericUnit string `json:"unit" example:"bar"`
 	// Possible answers for single_choice and multi_choice inspections
-	Answers Answers `json:"answers" example:"[\"first\", \"second\"]"`
+	Answers Answers `json:"answers" swaggertype:"array,string" example:"first,second"`
 
 	// Type of visualization in Enlight Centre
-	VisualizationType     VisualizationType `json:"visualizationType" example:"visualization_circular_gauge" enums:"visualization_none,visualization_circular_gauge,visualization_level_gauge"`
+	VisualizationType     VisualizationType `json:"visualizationType" swaggertype:"string" example:"visualization_circular_gauge" enums:"visualization_none,visualization_circular_gauge,visualization_level_gauge"`
 	VisualizationMinValue string            `json:"visualizationMinValue" example:"3"`
 	VisualizationMaxValue string            `json:"visualizationMaxValue" example:"13"`
 }

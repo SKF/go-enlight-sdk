@@ -2,8 +2,9 @@ package events
 
 import (
 	"github.com/SKF/go-enlight-sdk/services/hierarchy/models"
+
 	"github.com/SKF/go-eventsource/eventsource"
-	"github.com/SKF/go-utility/uuid"
+	"github.com/SKF/go-utility/v2/uuid"
 )
 
 // CreateNodeEvent ...
@@ -16,7 +17,6 @@ type CreateNodeEvent struct {
 	*models.LubricationPoint
 }
 
-// UpdateNodeEvent ...
 type UpdateNodeEvent struct {
 	*eventsource.BaseEvent
 	models.BaseNode
@@ -24,6 +24,10 @@ type UpdateNodeEvent struct {
 	*models.MeasurementPoint
 	*models.InspectionPoint
 	*models.LubricationPoint
+}
+
+type DeleteOriginEvent struct {
+	*eventsource.BaseEvent
 }
 
 // CopyNodeEvent ...
@@ -37,7 +41,6 @@ type CopyNodeEvent struct {
 	SrcNodeID uuid.UUID `json:"srcNodeId"`
 }
 
-// DeleteNodeEvent ...
 type DeleteNodeEvent struct {
 	*eventsource.BaseEvent
 }

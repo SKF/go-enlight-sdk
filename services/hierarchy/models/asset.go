@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/SKF/go-utility/uuid"
+	"github.com/SKF/go-utility/v2/uuid"
 	grpcapi "github.com/SKF/proto/hierarchy"
 )
 
@@ -55,6 +55,9 @@ func ParseCriticality(dbCriticality string) Criticality {
 func (asset AssetNode) Validate() error {
 	if asset.Criticality == "" {
 		return fmt.Errorf("criticality field on asset cannot be empty")
+	}
+	if err := asset.Criticality.ValidateCriticaltiy(); err != nil {
+		return err
 	}
 	if asset.AssetType != "" && asset.AssetClass == "" {
 		return fmt.Errorf("cannot set asset type without specifying class")
@@ -146,9 +149,7 @@ func (cmp *Component) ToGRPC() *grpcapi.Component {
 func (cmp *Component) FromGRPC(c *grpcapi.Component) {
 	cmp.Id = uuid.UUID(c.Id)
 	cmp.Type = c.Type
-	if err := cmp.Props.UnmarshalJSON([]byte(c.Props)); err != nil {
-		return
-	}
+	cmp.Props.UnmarshalJSON([]byte(c.Props)) // nolint: errcheck
 
 	for _, sc := range c.SubComponents {
 		x := &Component{}
