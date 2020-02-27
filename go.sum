@@ -13,6 +13,8 @@ github.com/SKF/go-utility/v2 v2.1.5/go.mod h1:PweUWJgg67c9AYV/OInVGRdVh5gmLc0hZX
 github.com/SKF/proto v1.21.0-go/go.mod h1:fLZMzpComrKyD9V74fS1lT4ryHZX9LlYYjM1TmBZw+s=
 github.com/SKF/proto v1.27.1-go h1:Ov6gswtOOr/EaBss5Ju/F0canc5CIGvQDYItBfhu3Fg=
 github.com/SKF/proto v1.27.1-go/go.mod h1:fLZMzpComrKyD9V74fS1lT4ryHZX9LlYYjM1TmBZw+s=
+github.com/SKF/proto v2.0.0-go+incompatible h1:UXXPV9+1LrQa9l8PZs+VsWF9Dpcb4gNrZG/ORkyduT8=
+github.com/SKF/proto v2.0.0-go+incompatible/go.mod h1:fLZMzpComrKyD9V74fS1lT4ryHZX9LlYYjM1TmBZw+s=
 github.com/aws/aws-lambda-go v1.12.0/go.mod h1:050MeYvnG0NozqUw+ljHH9x0SwxeBnbxHVhcjn9nJFA=
 github.com/aws/aws-sdk-go v1.25.26 h1:hMrxW3feteaGcP32oKaFdCQsCEWYf9zF12g73C0AcbI=
 github.com/aws/aws-sdk-go v1.25.26/go.mod h1:KmX6BPdI08NWTb3/sm4ZGu5ShLoqVDhKgpiN924inxo=
