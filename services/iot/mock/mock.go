@@ -105,15 +105,6 @@ func (mock *client) SetTaskStatusWithContext(ctx context.Context, input iot_grpc
 	return args.Error(0)
 }
 
-func (mock *client) GetTaskStream(input iot_grpcapi.GetTaskStreamInput, dc chan<- iot_grpcapi.GetTaskStreamOutput) error { // nolint: staticcheck
-	args := mock.Called(input, dc)
-	return args.Error(0)
-}
-func (mock *client) GetTaskStreamWithContext(ctx context.Context, input iot_grpcapi.GetTaskStreamInput, dc chan<- iot_grpcapi.GetTaskStreamOutput) error { // nolint: staticcheck
-	args := mock.Called(ctx, input, dc)
-	return args.Error(0)
-}
-
 func (mock *client) IngestNodeData(input iot_grpcapi.IngestNodeDataInput) error {
 	args := mock.Called(input)
 	return args.Error(0)

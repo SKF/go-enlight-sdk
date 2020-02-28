@@ -6,8 +6,6 @@ Services for accessing Enlight's point alarm status
 - GetPointAlarmStatusWithContext
 - SetPointAlarmStatus
 - SetPointAlarmStatusWithContext
-- GetPointAlarmStatusStream
-- GetPointAlarmStatusStreamWithContext
 - GetPointAlarmThreshold
 - GetPointAlarmThresholdWithContext
 - SetPointAlarmThreshold

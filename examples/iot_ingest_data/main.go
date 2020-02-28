@@ -140,12 +140,6 @@ func createExampleData() (out []*api.NodeData) {
 	})
 
 	out = append(out, &api.NodeData{
-		CreatedAt:   time.Now().UnixNano(),
-		ContentType: api.NodeDataContentType_MEDIA,
-		Media:       []byte("<media>"),
-	})
-
-	out = append(out, &api.NodeData{
 		CreatedAt:       time.Now().UnixNano(),
 		ContentType:     api.NodeDataContentType_QUESTION_ANSWERS,
 		QuestionAnswers: []string{"<answer>"},
