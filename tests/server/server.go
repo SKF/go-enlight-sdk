@@ -13,7 +13,6 @@ import (
 
 type server struct {
 	bufSize  int
-	stop     bool
 	listener *bufconn.Listener
 	opts     []grpc.ServerOption
 
@@ -36,7 +35,7 @@ func (s *server) Start() {
 	pb.RegisterGreeterServer(s.Server, s.TestService)
 	go func() {
 		s.listener = bufconn.Listen(s.bufSize)
-		s.Server.Serve(s.listener)
+		s.Server.Serve(s.listener) //nolint:errcheck
 	}()
 }
 
