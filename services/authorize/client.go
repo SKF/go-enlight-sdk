@@ -2,6 +2,7 @@ package authorize
 
 import (
 	"context"
+	"net"
 	"os"
 	"time"
 
@@ -164,7 +165,6 @@ func (c *client) DialUsingCredentialsWithContext(ctx context.Context, sess *sess
 		reconnect.WithCodes(codes.DeadlineExceeded, codes.Unavailable),
 		reconnect.WithNewConnection(
 			func(invokerCtx context.Context, invokerConn *grpc.ClientConn, invokerOptions ...grpc.CallOption) (context.Context, *grpc.ClientConn, []grpc.CallOption, error) {
-				log.WithTracing(invokerCtx).Debug("Retrying with new connection")
 				if invokerCtx.Err() != nil {
 					return invokerCtx, invokerConn, invokerOptions, nil
 				}
@@ -174,7 +174,7 @@ func (c *client) DialUsingCredentialsWithContext(ctx context.Context, sess *sess
 					return invokerCtx, invokerConn, invokerOptions, err
 				}
 				_ = c.conn.Close()
-				c.conn, err = grpc.Dial(host+":"+port, append(opts, opt, grpc.WithBlock())...)
+				c.conn, err = grpc.DialContext(invokerCtx, net.JoinHostPort(host, port), append(opts, opt, grpc.WithBlock())...)
 				if err != nil {
 					log.WithTracing(invokerCtx).WithError(err).Error("Failed to dial context")
 					return invokerCtx, invokerConn, invokerOptions, err
