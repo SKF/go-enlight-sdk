@@ -112,7 +112,7 @@ func (s *server) Close() {
 // }
 
 func Test_ReconnectInterceptor_HappyCase(t *testing.T) {
-	ctx, _ := context.WithTimeout(context.Background(), time.Second)
+	ctx, _ := context.WithTimeout(context.Background(), time.Second*10)
 	s := newServer(t, bufSize)
 	defer s.Close()
 
@@ -144,6 +144,7 @@ func Test_ReconnectInterceptor_HappyCase(t *testing.T) {
 	assert.NoError(t, err, "failed to call first SayHello")
 
 	s.RestartWithBlocking(time.Millisecond * 0)
+	time.Sleep(time.Millisecond * 100)
 
 	_, err = client.SayHello(ctx, &pb.HelloRequest{Name: "Kalle Anka"})
 	assert.NoError(t, err, "failed to call last SayHello")
