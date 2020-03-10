@@ -2,14 +2,12 @@ package authorize
 
 import (
 	"context"
-	"net"
-	"os"
-	"time"
-
 	"github.com/SKF/go-enlight-sdk/interceptors/reconnect"
 	"github.com/SKF/go-utility/log"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"google.golang.org/grpc/codes"
+	"os"
+	"time"
 
 	"github.com/SKF/proto/common"
 	"google.golang.org/grpc"
@@ -162,9 +160,10 @@ func (c *client) DialUsingCredentials(sess *session.Session, host, port, secretK
 // DialUsingCredentialsWithContext creates a client connection to the given host with context (for timeout and transaction id)
 func (c *client) DialUsingCredentialsWithContext(ctx context.Context, sess *session.Session, host, port, secretKey string, opts ...grpc.DialOption) error {
 	reconnectOpts := grpc.WithUnaryInterceptor(reconnect.UnaryInterceptor(
-		reconnect.WithCodes(codes.DeadlineExceeded, codes.Unavailable),
+		reconnect.WithCodes(codes.DeadlineExceeded),
 		reconnect.WithNewConnection(
 			func(invokerCtx context.Context, invokerConn *grpc.ClientConn, invokerOptions ...grpc.CallOption) (context.Context, *grpc.ClientConn, []grpc.CallOption, error) {
+				log.WithTracing(invokerCtx).Debug("Retrying with new connection")
 				if invokerCtx.Err() != nil {
 					return invokerCtx, invokerConn, invokerOptions, nil
 				}
@@ -174,7 +173,7 @@ func (c *client) DialUsingCredentialsWithContext(ctx context.Context, sess *sess
 					return invokerCtx, invokerConn, invokerOptions, err
 				}
 				_ = c.conn.Close()
-				c.conn, err = grpc.DialContext(invokerCtx, net.JoinHostPort(host, port), append(opts, opt, grpc.WithBlock())...)
+				c.conn, err = grpc.Dial(host+":"+port, append(opts, opt, grpc.WithBlock())...)
 				if err != nil {
 					log.WithTracing(invokerCtx).WithError(err).Error("Failed to dial context")
 					return invokerCtx, invokerConn, invokerOptions, err
