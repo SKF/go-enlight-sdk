@@ -14,12 +14,12 @@ import (
 	"github.com/SKF/proto/common"
 	"google.golang.org/grpc"
 
-	authorize_grpcapi "github.com/SKF/proto/authorize"
+	authorizeApi "github.com/SKF/proto/authorize"
 )
 
 type client struct {
 	conn           *grpc.ClientConn
-	api            authorize_grpcapi.AuthorizeClient
+	api            authorizeApi.AuthorizeClient
 	requestTimeout time.Duration
 }
 
@@ -80,14 +80,14 @@ type AuthorizeClient interface { // nolint: golint
 	AddResourceRelation(resource common.Origin, parent common.Origin) error
 	AddResourceRelationWithContext(ctx context.Context, resource common.Origin, parent common.Origin) error
 
-	AddResourceRelations(resources authorize_grpcapi.AddResourceRelationsInput) error
-	AddResourceRelationsWithContext(ctx context.Context, resources authorize_grpcapi.AddResourceRelationsInput) error
+	AddResourceRelations(resources authorizeApi.AddResourceRelationsInput) error
+	AddResourceRelationsWithContext(ctx context.Context, resources authorizeApi.AddResourceRelationsInput) error
 
 	RemoveResourceRelation(resource common.Origin, parent common.Origin) error
 	RemoveResourceRelationWithContext(ctx context.Context, resource common.Origin, parent common.Origin) error
 
-	RemoveResourceRelations(resources authorize_grpcapi.RemoveResourceRelationsInput) error
-	RemoveResourceRelationsWithContext(ctx context.Context, resources authorize_grpcapi.RemoveResourceRelationsInput) error
+	RemoveResourceRelations(resources authorizeApi.RemoveResourceRelationsInput) error
+	RemoveResourceRelationsWithContext(ctx context.Context, resources authorizeApi.RemoveResourceRelationsInput) error
 
 	ApplyUserAction(userID, action string, resource *common.Origin) error
 	ApplyUserActionWithContext(ctx context.Context, userID, action string, resource *common.Origin) error
@@ -95,32 +95,35 @@ type AuthorizeClient interface { // nolint: golint
 	RemoveUserAction(userID, action string, resource *common.Origin) error
 	RemoveUserActionWithContext(ctx context.Context, userID, action string, resource *common.Origin) error
 
-	GetActionsByUserRole(userRole string) ([]authorize_grpcapi.Action, error)
-	GetActionsByUserRoleWithContext(ctx context.Context, userRole string) ([]authorize_grpcapi.Action, error)
+	GetActionsByUserRole(userRole string) ([]authorizeApi.Action, error)
+	GetActionsByUserRoleWithContext(ctx context.Context, userRole string) ([]authorizeApi.Action, error)
 
-	GetResourcesAndActionsByUser(userID string) ([]authorize_grpcapi.ActionResource, error)
-	GetResourcesAndActionsByUserWithContext(ctx context.Context, userID string) ([]authorize_grpcapi.ActionResource, error)
+	GetResourcesAndActionsByUser(userID string) ([]authorizeApi.ActionResource, error)
+	GetResourcesAndActionsByUserWithContext(ctx context.Context, userID string) ([]authorizeApi.ActionResource, error)
 
-	AddAction(action authorize_grpcapi.Action) error
-	AddActionWithContext(ctx context.Context, action authorize_grpcapi.Action) error
+	GetResourcesAndActionsByUserAndResource(userID string, resource *common.Origin) ([]authorizeApi.ActionResource, error)
+	GetResourcesAndActionsByUserAndResourceWithContext(ctx context.Context, userID string, resource *common.Origin) ([]authorizeApi.ActionResource, error)
+
+	AddAction(action authorizeApi.Action) error
+	AddActionWithContext(ctx context.Context, action authorizeApi.Action) error
 
 	RemoveAction(name string) error
 	RemoveActionWithContext(ctx context.Context, name string) error
 
-	GetAction(name string) (authorize_grpcapi.Action, error)
-	GetActionWithContext(ctx context.Context, name string) (authorize_grpcapi.Action, error)
+	GetAction(name string) (authorizeApi.Action, error)
+	GetActionWithContext(ctx context.Context, name string) (authorizeApi.Action, error)
 
-	GetAllActions() ([]authorize_grpcapi.Action, error)
-	GetAllActionsWithContext(ctx context.Context) ([]authorize_grpcapi.Action, error)
+	GetAllActions() ([]authorizeApi.Action, error)
+	GetAllActionsWithContext(ctx context.Context) ([]authorizeApi.Action, error)
 
-	GetUserActions(userID string) ([]authorize_grpcapi.Action, error)
-	GetUserActionsWithContext(ctx context.Context, userID string) ([]authorize_grpcapi.Action, error)
+	GetUserActions(userID string) ([]authorizeApi.Action, error)
+	GetUserActionsWithContext(ctx context.Context, userID string) ([]authorizeApi.Action, error)
 
-	AddUserRole(role authorize_grpcapi.UserRole) error
-	AddUserRoleWithContext(ctx context.Context, role authorize_grpcapi.UserRole) error
+	AddUserRole(role authorizeApi.UserRole) error
+	AddUserRoleWithContext(ctx context.Context, role authorizeApi.UserRole) error
 
-	GetUserRole(roleName string) (authorize_grpcapi.UserRole, error)
-	GetUserRoleWithContext(ctx context.Context, roleName string) (authorize_grpcapi.UserRole, error)
+	GetUserRole(roleName string) (authorizeApi.UserRole, error)
+	GetUserRoleWithContext(ctx context.Context, roleName string) (authorizeApi.UserRole, error)
 
 	RemoveUserRole(roleName string) error
 	RemoveUserRoleWithContext(ctx context.Context, roleName string) error
@@ -147,7 +150,7 @@ func (c *client) DialWithContext(ctx context.Context, host, port string, opts ..
 	}
 
 	c.conn = conn
-	c.api = authorize_grpcapi.NewAuthorizeClient(conn)
+	c.api = authorizeApi.NewAuthorizeClient(conn)
 	err = c.logClientState(ctx, "opening connection")
 	return
 }
@@ -179,7 +182,7 @@ func (c *client) DialUsingCredentialsWithContext(ctx context.Context, sess *sess
 					log.WithTracing(invokerCtx).WithError(err).Error("Failed to dial context")
 					return invokerCtx, invokerConn, invokerOptions, err
 				}
-				c.api = authorize_grpcapi.NewAuthorizeClient(c.conn)
+				c.api = authorizeApi.NewAuthorizeClient(c.conn)
 				return invokerCtx, c.conn, invokerOptions, err
 			}),
 	),
@@ -197,7 +200,7 @@ func (c *client) DialUsingCredentialsWithContext(ctx context.Context, sess *sess
 	}
 
 	c.conn = conn
-	c.api = authorize_grpcapi.NewAuthorizeClient(c.conn)
+	c.api = authorizeApi.NewAuthorizeClient(c.conn)
 
 	err = c.logClientState(ctx, "opening connection")
 	return err
@@ -229,7 +232,7 @@ func (c *client) logClientState(ctx context.Context, state string) error {
 	if err != nil {
 		hostname = ""
 	}
-	_, err = c.api.LogClientState(ctx, &authorize_grpcapi.LogClientStateInput{
+	_, err = c.api.LogClientState(ctx, &authorizeApi.LogClientStateInput{
 		State:    state,
 		Hostname: hostname,
 	})
