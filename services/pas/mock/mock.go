@@ -90,6 +90,15 @@ func (mock *client) GetPointAlarmStatusEventLogWithContext(ctx context.Context, 
 	return args.Get(0).(pas_api.GetPointAlarmStatusEventLogOutput), args.Error(1)
 }
 
+func (mock *client) GetPointAlarmStatusStream(dc chan<- pas_api.GetPointAlarmStatusStreamOutput) error { // nolint: staticcheck
+	args := mock.Called(dc)
+	return args.Error(0)
+}
+func (mock *client) GetPointAlarmStatusStreamWithContext(ctx context.Context, dc chan<- pas_api.GetPointAlarmStatusStreamOutput) error { // nolint: staticcheck
+	args := mock.Called(ctx, dc)
+	return args.Error(0)
+}
+
 // CalculateAndSetPointAlarmStatus calculates and sets new PAS based on input data
 func (mock *client) CalculateAndSetPointAlarmStatus(input pas_api.CalculateAndSetPointAlarmStatusInput) error {
 	args := mock.Called(input)
