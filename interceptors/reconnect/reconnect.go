@@ -6,8 +6,6 @@ import (
 	"github.com/pkg/errors"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/status"
-
-	"github.com/SKF/go-utility/v2/log"
 )
 
 func UnaryInterceptor(opts ...CallOption) func(ctx context.Context, method string, req, reply interface{}, cc *grpc.ClientConn, invoker grpc.UnaryInvoker, opts ...grpc.CallOption) error {
@@ -17,10 +15,10 @@ func UnaryInterceptor(opts ...CallOption) func(ctx context.Context, method strin
 		if err != nil {
 			for _, code := range options.codes {
 				if code == status.Code(err) {
-					log.WithTracing(ctx).WithError(err).WithField("code", code).Debug("Calling reconnect function")
 					newCtx, newCC, newOpts, errConn := options.newClientConn(ctx, cc, opts...)
 					if errConn != nil {
-						return errors.Wrapf(err, "failed to re-connect: %s", errConn.Error())
+						err = errors.Wrap(err, errConn.Error())
+						return err
 					}
 
 					return invoker(newCtx, method, req, reply, newCC, newOpts...)

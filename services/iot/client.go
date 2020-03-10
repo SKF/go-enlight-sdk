@@ -25,6 +25,9 @@ type IoTClient interface { // nolint: golint
 	DeleteTask(userID, taskID string) error
 	DeleteTaskWithContext(ctx context.Context, userID, taskID string) error
 
+	SetTaskCompleted(userID, taskID string) error
+	SetTaskCompletedWithContext(ctx context.Context, userID, taskID string) error
+
 	GetAllTasks(userID string) ([]iot_grpcapi.TaskDescription, error)
 	GetAllTasksWithContext(ctx context.Context, userID string) ([]iot_grpcapi.TaskDescription, error)
 
@@ -36,6 +39,9 @@ type IoTClient interface { // nolint: golint
 
 	SetTaskStatus(input iot_grpcapi.SetTaskStatusInput) (err error)
 	SetTaskStatusWithContext(ctx context.Context, input iot_grpcapi.SetTaskStatusInput) (err error)
+
+	GetTaskStream(input iot_grpcapi.GetTaskStreamInput, dc chan<- iot_grpcapi.GetTaskStreamOutput) (err error)                                 // nolint: staticcheck
+	GetTaskStreamWithContext(ctx context.Context, input iot_grpcapi.GetTaskStreamInput, dc chan<- iot_grpcapi.GetTaskStreamOutput) (err error) // nolint: staticcheck
 
 	GetTasksByStatus(input iot_grpcapi.GetTasksByStatusInput) ([]*iot_grpcapi.TaskDescription, error)
 	GetTasksByStatusWithContext(ctx context.Context, input iot_grpcapi.GetTasksByStatusInput) ([]*iot_grpcapi.TaskDescription, error)

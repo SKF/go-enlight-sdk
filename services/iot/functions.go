@@ -3,6 +3,7 @@ package iot
 import (
 	"context"
 	"fmt"
+	"io"
 	"time"
 
 	"github.com/SKF/proto/common"
@@ -35,6 +36,17 @@ func (c *Client) DeleteTask(userID, taskID string) (err error) {
 func (c *Client) DeleteTaskWithContext(ctx context.Context, userID, taskID string) (err error) {
 	input := iot_grpcapi.TaskUser{UserId: userID, TaskId: taskID}
 	_, err = c.api.DeleteTask(ctx, &input)
+	return
+}
+
+func (c *Client) SetTaskCompleted(userID, taskID string) (err error) {
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
+	defer cancel()
+	return c.SetTaskCompletedWithContext(ctx, userID, taskID)
+}
+func (c *Client) SetTaskCompletedWithContext(ctx context.Context, userID, taskID string) (err error) {
+	input := iot_grpcapi.TaskUser{UserId: userID, TaskId: taskID}
+	_, err = c.api.SetTaskCompleted(ctx, &input)
 	return
 }
 
@@ -254,6 +266,31 @@ func (c *Client) RequestPutMediaSignedURL(in *iot_grpcapi.PutMediaSignedUrlInput
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
 	defer cancel()
 	return c.RequestPutMediaSignedURLWithContext(ctx, in)
+}
+
+func (c *Client) GetTaskStream(input iot_grpcapi.GetTaskStreamInput, dc chan<- iot_grpcapi.GetTaskStreamOutput) (err error) { // nolint: staticcheck
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+	return c.GetTaskStreamWithContext(ctx, input, dc)
+}
+func (c *Client) GetTaskStreamWithContext(ctx context.Context, input iot_grpcapi.GetTaskStreamInput, dc chan<- iot_grpcapi.GetTaskStreamOutput) (err error) { // nolint: staticcheck
+	stream, err := c.api.GetTaskStream(ctx, &input)
+	if err != nil {
+		return
+	}
+
+	for {
+		var nodeData *iot_grpcapi.GetTaskStreamOutput // nolint: staticcheck
+		nodeData, err = stream.Recv()
+		if err == io.EOF {
+			err = nil
+			return
+		}
+		if err != nil {
+			return
+		}
+		dc <- *nodeData
+	}
 }
 
 func (c *Client) GetTasksByStatus(input iot_grpcapi.GetTasksByStatusInput) ([]*iot_grpcapi.TaskDescription, error) {

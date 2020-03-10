@@ -120,7 +120,17 @@ func main() {
 			WithError(err).
 			WithField("userId", userID).
 			WithField("taskId", taskID).
-			Error("client.SetTaskStatus")
+			Error("client.SetTaskCompleted")
+		return
+	}
+
+	log.Info("Set Task Completed")
+	if err = client.SetTaskCompleted(userID, taskID); err != nil {
+		log.
+			WithError(err).
+			WithField("userId", userID).
+			WithField("taskId", taskID).
+			Error("client.SetTaskCompleted")
 		return
 	}
 
