@@ -11,8 +11,8 @@ github.com/SKF/go-utility v1.8.0/go.mod h1:KBpu0OTQ9CHKmZ01/SWNOXOWbNowu1+7dT+E8
 github.com/SKF/go-utility/v2 v2.1.5 h1:DHzGyV84iDoCTGDZbX4ml4/n0cB2uzGxpjRbU8dKIQA=
 github.com/SKF/go-utility/v2 v2.1.5/go.mod h1:PweUWJgg67c9AYV/OInVGRdVh5gmLc0hZX/fXWCp1YI=
 github.com/SKF/proto v1.21.0-go/go.mod h1:fLZMzpComrKyD9V74fS1lT4ryHZX9LlYYjM1TmBZw+s=
-github.com/SKF/proto v2.0.1-go+incompatible h1:Bt6gpJ2sMlcwkZIP0wFGsMBWFej9y/hMvozMEzvvg4Q=
-github.com/SKF/proto v2.0.1-go+incompatible/go.mod h1:fLZMzpComrKyD9V74fS1lT4ryHZX9LlYYjM1TmBZw+s=
+github.com/SKF/proto v1.27.1-go h1:Ov6gswtOOr/EaBss5Ju/F0canc5CIGvQDYItBfhu3Fg=
+github.com/SKF/proto v1.27.1-go/go.mod h1:fLZMzpComrKyD9V74fS1lT4ryHZX9LlYYjM1TmBZw+s=
 github.com/aws/aws-lambda-go v1.12.0/go.mod h1:050MeYvnG0NozqUw+ljHH9x0SwxeBnbxHVhcjn9nJFA=
 github.com/aws/aws-sdk-go v1.25.49 h1:j5R2Ey+g8qaiy2NJ9iH+KWzDWS4SjXRCjhc22EeQVE4=
 github.com/aws/aws-sdk-go v1.25.49/go.mod h1:KmX6BPdI08NWTb3/sm4ZGu5ShLoqVDhKgpiN924inxo=
