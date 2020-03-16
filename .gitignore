@@ -13,8 +13,5 @@
 
 cert
 
-glide.lock
-vendor
-
 .DS_Store
 .idea/
