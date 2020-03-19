@@ -176,12 +176,13 @@ func (c *client) DialUsingCredentialsWithContext(ctx context.Context, sess *sess
 					log.WithTracing(invokerCtx).WithError(err).Error("Failed to get credential options")
 					return invokerCtx, invokerConn, invokerOptions, err
 				}
-				_ = c.conn.Close()
-				c.conn, err = grpc.DialContext(invokerCtx, net.JoinHostPort(host, port), append(opts, opt, grpc.WithBlock())...)
+				newConn, err = grpc.DialContext(invokerCtx, net.JoinHostPort(host, port), append(opts, opt, grpc.WithBlock())...)
 				if err != nil {
 					log.WithTracing(invokerCtx).WithError(err).Error("Failed to dial context")
 					return invokerCtx, invokerConn, invokerOptions, err
 				}
+
+				c.conn = newConn
 				c.api = authorizeApi.NewAuthorizeClient(c.conn)
 				return invokerCtx, c.conn, invokerOptions, err
 			}),
@@ -194,12 +195,11 @@ func (c *client) DialUsingCredentialsWithContext(ctx context.Context, sess *sess
 	}
 	newOpts := append(opts, opt, reconnectOpts)
 
-	conn, err := grpc.DialContext(ctx, host+":"+port, newOpts...)
+	c.conn, err := grpc.DialContext(ctx, host+":"+port, newOpts...)
 	if err != nil {
 		return err
 	}
 
-	c.conn = conn
 	c.api = authorizeApi.NewAuthorizeClient(c.conn)
 
 	err = c.logClientState(ctx, "opening connection")
