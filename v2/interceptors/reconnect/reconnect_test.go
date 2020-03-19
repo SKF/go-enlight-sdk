@@ -95,6 +95,10 @@ func Test_ReconnectInterceptor_RepeatedReconnects(t *testing.T) {
 		grpc.WithUnaryInterceptor(reconnect.UnaryInterceptor(
 			reconnect.WithCodes(codes.Unavailable),
 			reconnect.WithNewConnection(func(ctx context.Context, cc *grpc.ClientConn, opts ...grpc.CallOption) (context.Context, *grpc.ClientConn, []grpc.CallOption, error) {
+				if ctx.Err() != nil {
+					return ctx, cc, opts, nil
+				}
+
 				conn, err := grpc.DialContext(ctx, "bufnet",
 					grpc.WithContextDialer(s.Dialer()),
 					grpc.WithInsecure(),
@@ -153,6 +157,10 @@ func Test_ReconnectInterceptor_RepeatedReconnectsWithClose(t *testing.T) {
 		grpc.WithUnaryInterceptor(reconnect.UnaryInterceptor(
 			reconnect.WithCodes(codes.Unavailable),
 			reconnect.WithNewConnection(func(ctx context.Context, cc *grpc.ClientConn, opts ...grpc.CallOption) (context.Context, *grpc.ClientConn, []grpc.CallOption, error) {
+				if ctx.Err() != nil {
+					return ctx, cc, opts, nil
+				}
+
 				conn, err := grpc.DialContext(ctx, "bufnet",
 					grpc.WithContextDialer(s.Dialer()),
 					grpc.WithInsecure(),
@@ -245,6 +253,10 @@ func Test_ReconnectInterceptor_RepeatedReconnectsWithFirstClose(t *testing.T) {
 		grpc.WithUnaryInterceptor(reconnect.UnaryInterceptor(
 			reconnect.WithCodes(codes.Unavailable),
 			reconnect.WithNewConnection(func(ctx context.Context, cc *grpc.ClientConn, opts ...grpc.CallOption) (context.Context, *grpc.ClientConn, []grpc.CallOption, error) {
+				if ctx.Err() != nil {
+					return ctx, cc, opts, nil
+				}
+
 				_ = cc.Close()
 
 				conn, err := grpc.DialContext(ctx, "bufnet",
