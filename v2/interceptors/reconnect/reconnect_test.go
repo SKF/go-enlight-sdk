@@ -19,7 +19,11 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-const bufSize = 1024 * 1024
+const (
+	bufSize     = 1024 * 1024
+	timeout     = time.Millisecond * 100
+	timeoutWait = time.Millisecond * 150
+)
 
 func Test_ReconnectInterceptor_HappyCase(t *testing.T) {
 	ctx := context.Background()
@@ -122,7 +126,7 @@ func Test_ReconnectInterceptor_RepeatedReconnects(t *testing.T) {
 
 	client := pb.NewGreeterClient(conn)
 
-	childCtx, _ := context.WithTimeout(ctx, time.Millisecond*500)
+	childCtx, _ := context.WithTimeout(ctx, timeout)
 	_, err = client.SayHello(childCtx, &pb.HelloRequest{Name: "Lasse Kongo"})
 	assert.NoError(t, err, "failed to call first SayHello")
 
@@ -130,19 +134,19 @@ func Test_ReconnectInterceptor_RepeatedReconnects(t *testing.T) {
 		msg := fmt.Sprintf("Loop no %d", i)
 		s.Stop()
 
-		childCtx, _ = context.WithTimeout(ctx, time.Millisecond*500)
+		childCtx, _ = context.WithTimeout(ctx, timeout)
 		_, err = client.SayHello(childCtx, &pb.HelloRequest{Name: "Kalle Anka"})
 		assert.True(t, strings.HasPrefix(err.Error(), `failed to re-connect: inside: context deadline exceeded: rpc error: code = Unavailable desc = all SubConns are in TransientFailure, latest connection error:`), msg)
 
-		time.Sleep(time.Second)
+		time.Sleep(timeoutWait)
 
-		childCtx, _ = context.WithTimeout(ctx, time.Millisecond*500)
+		childCtx, _ = context.WithTimeout(ctx, timeout)
 		_, err = client.SayHello(childCtx, &pb.HelloRequest{Name: "Kalle Anka"})
 		assert.EqualError(t, err, `failed to re-connect: inside: context deadline exceeded: rpc error: code = Unavailable desc = all SubConns are in TransientFailure, latest connection error: connection error: desc = "transport: Error while dialing closed"`, msg)
 
 		s.Start()
 
-		childCtx, _ = context.WithTimeout(ctx, time.Millisecond*500)
+		childCtx, _ = context.WithTimeout(ctx, timeout)
 		_, err = client.SayHello(childCtx, &pb.HelloRequest{Name: "Kalle Anka"})
 		assert.NoError(t, err, "failed to call last SayHello", msg)
 	}
@@ -185,61 +189,61 @@ func Test_ReconnectInterceptor_RepeatedReconnectsWithClose(t *testing.T) {
 
 	client := pb.NewGreeterClient(conn)
 
-	childCtx, _ := context.WithTimeout(ctx, time.Millisecond*500)
+	childCtx, _ := context.WithTimeout(ctx, timeout)
 	_, err = client.SayHello(childCtx, &pb.HelloRequest{Name: "Lasse Kongo"})
 	assert.NoError(t, err, "failed to call first SayHello")
 
 	s.Stop()
 
-	childCtx, _ = context.WithTimeout(ctx, time.Millisecond*500)
+	childCtx, _ = context.WithTimeout(ctx, timeout)
 	_, err = client.SayHello(childCtx, &pb.HelloRequest{Name: "Kalle Anka"})
 	assert.True(t, strings.HasPrefix(err.Error(), `failed to re-connect: inside: context deadline exceeded: rpc error: code = Unavailable desc = all SubConns are in TransientFailure, latest connection error:`), err.Error())
 
-	time.Sleep(time.Second)
+	time.Sleep(timeoutWait)
 
-	childCtx, _ = context.WithTimeout(ctx, time.Millisecond*500)
+	childCtx, _ = context.WithTimeout(ctx, timeout)
 	_, err = client.SayHello(childCtx, &pb.HelloRequest{Name: "Kalle Anka"})
 	assert.EqualError(t, err, `failed to re-connect: inside: context deadline exceeded: rpc error: code = Unavailable desc = all SubConns are in TransientFailure, latest connection error: connection error: desc = "transport: Error while dialing closed"`)
 
 	s.Start()
 
-	childCtx, _ = context.WithTimeout(ctx, time.Millisecond*500)
+	childCtx, _ = context.WithTimeout(ctx, timeout)
 	_, err = client.SayHello(childCtx, &pb.HelloRequest{Name: "Kalle Anka"})
 	assert.NoError(t, err)
 
 	s.Stop()
 
-	childCtx, _ = context.WithTimeout(ctx, time.Millisecond*500)
+	childCtx, _ = context.WithTimeout(ctx, timeout)
 	_, err = client.SayHello(childCtx, &pb.HelloRequest{Name: "Kalle Anka"})
 	assert.EqualError(t, err, `rpc error: code = Canceled desc = grpc: the client connection is closing`)
 
-	time.Sleep(time.Second)
+	time.Sleep(timeoutWait)
 
-	childCtx, _ = context.WithTimeout(ctx, time.Millisecond*500)
+	childCtx, _ = context.WithTimeout(ctx, timeout)
 	_, err = client.SayHello(childCtx, &pb.HelloRequest{Name: "Kalle Anka"})
 	assert.EqualError(t, err, `rpc error: code = Canceled desc = grpc: the client connection is closing`)
 
 	s.Start()
 
-	childCtx, _ = context.WithTimeout(ctx, time.Millisecond*500)
+	childCtx, _ = context.WithTimeout(ctx, timeout)
 	_, err = client.SayHello(childCtx, &pb.HelloRequest{Name: "Kalle Anka"})
 	assert.EqualError(t, err, `rpc error: code = Canceled desc = grpc: the client connection is closing`)
 
 	s.Stop()
 
-	childCtx, _ = context.WithTimeout(ctx, time.Millisecond*500)
+	childCtx, _ = context.WithTimeout(ctx, timeout)
 	_, err = client.SayHello(childCtx, &pb.HelloRequest{Name: "Kalle Anka"})
 	assert.EqualError(t, err, `rpc error: code = Canceled desc = grpc: the client connection is closing`)
 
-	time.Sleep(time.Second)
+	time.Sleep(timeoutWait)
 
-	childCtx, _ = context.WithTimeout(ctx, time.Millisecond*500)
+	childCtx, _ = context.WithTimeout(ctx, timeout)
 	_, err = client.SayHello(childCtx, &pb.HelloRequest{Name: "Kalle Anka"})
 	assert.EqualError(t, err, `rpc error: code = Canceled desc = grpc: the client connection is closing`)
 
 	s.Start()
 
-	childCtx, _ = context.WithTimeout(ctx, time.Millisecond*500)
+	childCtx, _ = context.WithTimeout(ctx, timeout)
 	_, err = client.SayHello(childCtx, &pb.HelloRequest{Name: "Kalle Anka"})
 	assert.EqualError(t, err, `rpc error: code = Canceled desc = grpc: the client connection is closing`)
 }
@@ -282,43 +286,43 @@ func Test_ReconnectInterceptor_RepeatedReconnectsWithFirstClose(t *testing.T) {
 
 	client := pb.NewGreeterClient(conn)
 
-	childCtx, _ := context.WithTimeout(ctx, time.Millisecond*500)
+	childCtx, _ := context.WithTimeout(ctx, timeout)
 	_, err = client.SayHello(childCtx, &pb.HelloRequest{Name: "Lasse Kongo"})
 	assert.NoError(t, err, "failed to call first SayHello")
 
 	s.Stop()
 
-	childCtx, _ = context.WithTimeout(ctx, time.Millisecond*500)
+	childCtx, _ = context.WithTimeout(ctx, timeout)
 	_, err = client.SayHello(childCtx, &pb.HelloRequest{Name: "Kalle Anka"})
 	assert.True(t, strings.HasPrefix(err.Error(), `failed to re-connect: inside: context deadline exceeded: rpc error: code = Unavailable desc = all SubConns are in TransientFailure, latest connection error: connection error:`), err.Error())
 
-	time.Sleep(time.Second)
+	time.Sleep(timeoutWait)
 
-	childCtx, _ = context.WithTimeout(ctx, time.Millisecond*500)
+	childCtx, _ = context.WithTimeout(ctx, timeout)
 	_, err = client.SayHello(childCtx, &pb.HelloRequest{Name: "Kalle Anka"})
 	assert.EqualError(t, err, `rpc error: code = Canceled desc = grpc: the client connection is closing`)
 
 	s.Start()
 
-	childCtx, _ = context.WithTimeout(ctx, time.Millisecond*500)
+	childCtx, _ = context.WithTimeout(ctx, timeout)
 	_, err = client.SayHello(childCtx, &pb.HelloRequest{Name: "Kalle Anka"})
 	assert.EqualError(t, err, `rpc error: code = Canceled desc = grpc: the client connection is closing`)
 
 	s.Stop()
 
-	childCtx, _ = context.WithTimeout(ctx, time.Millisecond*500)
+	childCtx, _ = context.WithTimeout(ctx, timeout)
 	_, err = client.SayHello(childCtx, &pb.HelloRequest{Name: "Kalle Anka"})
 	assert.EqualError(t, err, `rpc error: code = Canceled desc = grpc: the client connection is closing`)
 
-	time.Sleep(time.Second)
+	time.Sleep(timeoutWait)
 
-	childCtx, _ = context.WithTimeout(ctx, time.Millisecond*500)
+	childCtx, _ = context.WithTimeout(ctx, timeout)
 	_, err = client.SayHello(childCtx, &pb.HelloRequest{Name: "Kalle Anka"})
 	assert.EqualError(t, err, `rpc error: code = Canceled desc = grpc: the client connection is closing`)
 
 	s.Start()
 
-	childCtx, _ = context.WithTimeout(ctx, time.Millisecond*500)
+	childCtx, _ = context.WithTimeout(ctx, timeout)
 	_, err = client.SayHello(childCtx, &pb.HelloRequest{Name: "Kalle Anka"})
 	assert.EqualError(t, err, `rpc error: code = Canceled desc = grpc: the client connection is closing`)
 }
