@@ -195,11 +195,12 @@ func (c *client) DialUsingCredentialsWithContext(ctx context.Context, sess *sess
 	}
 	newOpts := append(opts, opt, reconnectOpts)
 
-	c.conn, err := grpc.DialContext(ctx, host+":"+port, newOpts...)
+	conn, err := grpc.DialContext(ctx, host+":"+port, newOpts...)
 	if err != nil {
 		return err
 	}
 
+	c.conn = conn
 	c.api = authorizeApi.NewAuthorizeClient(c.conn)
 
 	err = c.logClientState(ctx, "opening connection")
