@@ -9,7 +9,6 @@ import (
 	"github.com/SKF/go-enlight-sdk/v2/interceptors/reconnect"
 	"github.com/SKF/go-utility/log"
 	"github.com/aws/aws-sdk-go/aws/session"
-	"google.golang.org/grpc/codes"
 
 	"github.com/SKF/proto/common"
 	"google.golang.org/grpc"
@@ -174,7 +173,7 @@ func (c *client) DialUsingCredentialsWithContext(ctx context.Context, sess *sess
 
 		reconnectOpts := grpc.WithUnaryInterceptor(reconnect.UnaryInterceptor(
 			reconnect.WithNewConnection(newClientConn),
-		)
+		))
 
 		dialOpts := append(opts, credOpt, reconnectOpts, grpc.WithBlock())
 		newConn, err := grpc.DialContext(invokerCtx, net.JoinHostPort(host, port), dialOpts...)
@@ -196,7 +195,7 @@ func (c *client) DialUsingCredentialsWithContext(ctx context.Context, sess *sess
 
 	reconnectOpts := grpc.WithUnaryInterceptor(reconnect.UnaryInterceptor(
 		reconnect.WithNewConnection(newClientConn),
-	)
+	))
 	newOpts := append(opts, opt, reconnectOpts)
 
 	conn, err := grpc.DialContext(ctx, host+":"+port, newOpts...)
