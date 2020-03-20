@@ -9,7 +9,7 @@ import (
 
 var (
 	defaultOptions = &options{
-		codes: []codes.Code{codes.Unavailable},
+		codes: []codes.Code{},
 		newClientConn: func(ctx context.Context, cc *grpc.ClientConn, opts ...grpc.CallOption) (context.Context, *grpc.ClientConn, []grpc.CallOption, error) {
 			return ctx, cc, opts, nil
 		},
