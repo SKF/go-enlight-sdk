@@ -128,7 +128,7 @@ func Test_ReconnectInterceptor_RepeatedReconnects(t *testing.T) {
 	client = pb.NewGreeterClient(conn)
 
 	// State: READY
-	childCtx, _ := context.WithTimeout(ctx, timeout)
+	childCtx, _ := context.WithTimeout(ctx, timeout) // nolint:govet
 	_, err = client.SayHello(childCtx, &pb.HelloRequest{Name: "Call: 0"})
 	assert.NoError(t, err, "failed to call first SayHello")
 
@@ -138,14 +138,14 @@ func Test_ReconnectInterceptor_RepeatedReconnects(t *testing.T) {
 		s.Stop()
 
 		// State: TRANSIENT_FAILURE
-		childCtx, _ = context.WithTimeout(ctx, timeout)
+		childCtx, _ = context.WithTimeout(ctx, timeout) // nolint:govet
 		_, err = client.SayHello(childCtx, &pb.HelloRequest{Name: fmt.Sprintf("Loop: %d, Call: 1", i)})
 		assert.EqualError(t, err, "failed to reconnect: inside: context deadline exceeded", msg)
 
 		s.Start()
 
 		// State: TRANSIENT_FAILURE
-		childCtx, _ = context.WithTimeout(ctx, timeout)
+		childCtx, _ = context.WithTimeout(ctx, timeout) // nolint:govet
 		_, err = client.SayHello(childCtx, &pb.HelloRequest{Name: fmt.Sprintf("Loop: %d, Call: 2", i)})
 		assert.NoError(t, err, "failed to call last SayHello", msg)
 
