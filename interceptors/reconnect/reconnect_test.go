@@ -127,7 +127,7 @@ func Test_ReconnectInterceptor_RepeatedReconnects(t *testing.T) {
 
 	client = pb.NewGreeterClient(conn)
 
-	// State: READY
+	// State:  READY
 	childCtx, _ := context.WithTimeout(ctx, timeout) // nolint:govet
 	_, err = client.SayHello(childCtx, &pb.HelloRequest{Name: "Call: 0"})
 	assert.NoError(t, err, "failed to call first SayHello")
