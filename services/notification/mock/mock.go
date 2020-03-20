@@ -61,8 +61,8 @@ func (mock *client) DeepPingWithContext(ctx context.Context) error {
 }
 
 func (mock *client) SetNotificationType(notificationType proto.NotificationType) error {
-	args := mock.Called(notificationType)
-	return args.Error(0)
+args := mock.Called(notificationType)
+return args.Error(0)
 }
 func (mock *client) SetNotificationTypeWithContext(ctx context.Context, notificationType proto.NotificationType) error {
 	args := mock.Called(ctx, notificationType)
@@ -86,6 +86,7 @@ func (mock *client) RemoveNotificationTypeWithContext(ctx context.Context, name 
 	args := mock.Called(ctx, name)
 	return args.Error(0)
 }
+
 
 func (mock *client) InitiateNotification(notificationType proto.NotificationType, resource common.Origin, header, body, createdBy string) (string, error) {
 	args := mock.Called(notificationType, resource, header, body, createdBy)
@@ -114,6 +115,7 @@ func (mock *client) RemoveInitiatedNotificationWithContext(ctx context.Context, 
 	return args.Error(0)
 }
 
+
 func (mock *client) SetUserPreferences(prefs []proto.UserPreference) error {
 	args := mock.Called(prefs)
 	return args.Error(0)
@@ -141,6 +143,7 @@ func (mock *client) RemoveUserPreferencesWithContext(ctx context.Context, userID
 	return args.Error(0)
 }
 
+
 func (mock *client) GetUserNotifications(userID string, limit int32) ([]proto.UserNotification, error) {
 	args := mock.Called(userID, limit)
 	return args.Get(0).([]proto.UserNotification), args.Error(1)
@@ -149,6 +152,7 @@ func (mock *client) GetUserNotificationsWithContext(ctx context.Context, userID 
 	args := mock.Called(ctx, userID, limit)
 	return args.Get(0).([]proto.UserNotification), args.Error(1)
 }
+
 
 func (mock *client) RemoveUserNotifications(userID string, initiatedNotificationExtId string) error {
 	args := mock.Called(userID, initiatedNotificationExtId)

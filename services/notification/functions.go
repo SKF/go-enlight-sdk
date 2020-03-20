@@ -8,6 +8,7 @@ import (
 	proto "github.com/SKF/proto/notification"
 )
 
+
 func (c *client) SetNotificationType(notificationType proto.NotificationType) error {
 	ctx, cancel := context.WithTimeout(context.Background(), c.requestTimeout)
 	defer cancel()
@@ -58,6 +59,7 @@ func (c *client) RemoveNotificationTypeWithContext(ctx context.Context, name str
 
 	return err
 }
+
 
 func (c *client) InitiateNotification(notificationType proto.NotificationType, resource common.Origin, header, body, createdBy string) (string, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), c.requestTimeout)
@@ -111,6 +113,7 @@ func (c *client) RemoveInitiatedNotificationWithContext(ctx context.Context, ext
 	return err
 }
 
+
 func (c *client) SetUserPreferences(prefs []proto.UserPreference) error {
 	ctx, cancel := context.WithTimeout(context.Background(), c.requestTimeout)
 	defer cancel()
@@ -155,13 +158,14 @@ func (c *client) RemoveUserPreferences(userID, notificationTypeExtId string) err
 }
 func (c *client) RemoveUserPreferencesWithContext(ctx context.Context, userID, notificationTypeExtId string) error {
 	input := proto.RemoveUserPreferencesInput{
-		UserId:                userID,
-		NotificationTypeExtId: notificationTypeExtId,
+		UserId: userID,
+		NotificationTypeExtId:notificationTypeExtId,
 	}
 	_, err := c.api.RemoveUserPreferences(ctx, &input)
 
 	return err
 }
+
 
 func (c *client) GetUserNotifications(userID string, limit int32) ([]proto.UserNotification, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), c.requestTimeout)
