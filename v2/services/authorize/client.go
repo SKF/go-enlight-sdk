@@ -164,35 +164,39 @@ func (c *client) DialUsingCredentials(sess *session.Session, host, port, secretK
 
 // DialUsingCredentialsWithContext creates a client connection to the given host with context (for timeout and transaction id)
 func (c *client) DialUsingCredentialsWithContext(ctx context.Context, sess *session.Session, host, port, secretKey string, opts ...grpc.DialOption) error {
-	reconnectOpts := grpc.WithUnaryInterceptor(reconnect.UnaryInterceptor(
-		reconnect.WithCodes(codes.DeadlineExceeded, codes.Unavailable),
-		reconnect.WithNewConnection(
-			func(invokerCtx context.Context, invokerConn *grpc.ClientConn, invokerOptions ...grpc.CallOption) (context.Context, *grpc.ClientConn, []grpc.CallOption, error) {
-				if invokerCtx.Err() != nil {
-					return invokerCtx, invokerConn, invokerOptions, nil
-				}
-				opt, err := getCredentialOption(invokerCtx, sess, host, secretKey)
-				if err != nil {
-					log.WithTracing(invokerCtx).WithError(err).Error("Failed to get credential options")
-					return invokerCtx, invokerConn, invokerOptions, err
-				}
-				newConn, err = grpc.DialContext(invokerCtx, net.JoinHostPort(host, port), append(opts, opt, grpc.WithBlock())...)
-				if err != nil {
-					log.WithTracing(invokerCtx).WithError(err).Error("Failed to dial context")
-					return invokerCtx, invokerConn, invokerOptions, err
-				}
+	var newClientConn reconnect.NewConnectionFunc
+	newClientConn = func(invokerCtx context.Context, invokerConn *grpc.ClientConn, invokerOptions ...grpc.CallOption) (context.Context, *grpc.ClientConn, []grpc.CallOption, error) {
+		credOpt, err := getCredentialOption(invokerCtx, sess, host, secretKey)
+		if err != nil {
+			log.WithTracing(invokerCtx).WithError(err).Error("Failed to get credential options")
+			return invokerCtx, invokerConn, invokerOptions, err
+		}
 
-				c.conn = newConn
-				c.api = authorizeApi.NewAuthorizeClient(c.conn)
-				return invokerCtx, c.conn, invokerOptions, err
-			}),
-	),
-	)
+		reconnectOpts := grpc.WithUnaryInterceptor(reconnect.UnaryInterceptor(
+			reconnect.WithNewConnection(newClientConn),
+		)
+
+		dialOpts := append(opts, credOpt, reconnectOpts, grpc.WithBlock())
+		newConn, err := grpc.DialContext(invokerCtx, net.JoinHostPort(host, port), dialOpts...)
+		if err != nil {
+			log.WithTracing(invokerCtx).WithError(err).Error("Failed to dial context")
+			return invokerCtx, invokerConn, invokerOptions, err
+		}
+		_ = invokerConn.Close()
+
+		c.conn = newConn
+		c.api = authorizeApi.NewAuthorizeClient(c.conn)
+		return invokerCtx, c.conn, invokerOptions, err
+	}
 
 	opt, err := getCredentialOption(ctx, sess, host, secretKey)
 	if err != nil {
 		return err
 	}
+
+	reconnectOpts := grpc.WithUnaryInterceptor(reconnect.UnaryInterceptor(
+		reconnect.WithNewConnection(newClientConn),
+	)
 	newOpts := append(opts, opt, reconnectOpts)
 
 	conn, err := grpc.DialContext(ctx, host+":"+port, newOpts...)

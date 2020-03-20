@@ -3,20 +3,17 @@ package reconnect_test
 import (
 	"context"
 	"fmt"
-	"strings"
 	"testing"
 	"time"
-
-	"github.com/SKF/go-utility/v2/log"
-	"github.com/pkg/errors"
-	"google.golang.org/grpc"
-	"google.golang.org/grpc/codes"
 
 	"github.com/SKF/go-enlight-sdk/v2/interceptors/reconnect"
 	"github.com/SKF/go-enlight-sdk/v2/tests/server"
 	pb "github.com/SKF/go-enlight-sdk/v2/tests/server/helloworld"
+	"github.com/SKF/go-utility/v2/log"
+	"github.com/pkg/errors"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	"google.golang.org/grpc"
 )
 
 const (
@@ -32,7 +29,6 @@ func Test_ReconnectInterceptor_HappyCase(t *testing.T) {
 
 	conn, err := grpc.DialContext(ctx, "bufnet",
 		grpc.WithUnaryInterceptor(reconnect.UnaryInterceptor(
-			reconnect.WithCodes(codes.Unavailable),
 			reconnect.WithNewConnection(func(ctx context.Context, cc *grpc.ClientConn, opts ...grpc.CallOption) (context.Context, *grpc.ClientConn, []grpc.CallOption, error) {
 				conn, err := grpc.DialContext(ctx, "bufnet",
 					grpc.WithContextDialer(s.Dialer()),
@@ -74,9 +70,7 @@ func Test_ReconnectInterceptor_ConnectionClosed(t *testing.T) {
 	defer s.Stop()
 
 	conn, err := grpc.DialContext(ctx, "bufnet",
-		grpc.WithUnaryInterceptor(reconnect.UnaryInterceptor(
-			reconnect.WithCodes(codes.Unavailable),
-		)),
+		grpc.WithUnaryInterceptor(reconnect.UnaryInterceptor()),
 		grpc.WithContextDialer(s.Dialer()),
 		grpc.WithInsecure(),
 	)
@@ -96,24 +90,33 @@ func Test_ReconnectInterceptor_RepeatedReconnects(t *testing.T) {
 	defer s.Stop()
 
 	interceptorCalled := 0
+
+	var client pb.GreeterClient
+	var newClientConn reconnect.NewConnectionFunc
+	newClientConn = func(ctx context.Context, cc *grpc.ClientConn, opts ...grpc.CallOption) (context.Context, *grpc.ClientConn, []grpc.CallOption, error) {
+		interceptorCalled++
+
+		conn, err := grpc.DialContext(ctx, "bufnet",
+			grpc.WithUnaryInterceptor(reconnect.UnaryInterceptor(
+				reconnect.WithNewConnection(newClientConn),
+			)),
+			grpc.WithContextDialer(s.Dialer()),
+			grpc.WithInsecure(),
+			grpc.WithBlock(),
+		)
+
+		if err != nil {
+			err = errors.Wrap(err, "inside")
+			return ctx, cc, opts, err
+		}
+		_ = cc.Close()
+
+		client = pb.NewGreeterClient(conn)
+		return ctx, conn, opts, nil
+	}
 	conn, err := grpc.DialContext(ctx, "bufnet",
 		grpc.WithUnaryInterceptor(reconnect.UnaryInterceptor(
-			reconnect.WithNewConnection(func(ctx context.Context, cc *grpc.ClientConn, opts ...grpc.CallOption) (context.Context, *grpc.ClientConn, []grpc.CallOption, error) {
-				interceptorCalled++
-
-				conn, err := grpc.DialContext(ctx, "bufnet",
-					grpc.WithContextDialer(s.Dialer()),
-					grpc.WithInsecure(),
-					grpc.WithBlock(),
-				)
-
-				if err != nil {
-					err = errors.Wrap(err, "inside")
-					return ctx, cc, opts, err
-				}
-
-				return ctx, conn, opts, nil
-			}),
+			reconnect.WithNewConnection(newClientConn),
 		)),
 		grpc.WithContextDialer(s.Dialer()),
 		grpc.WithInsecure(),
@@ -122,211 +125,36 @@ func Test_ReconnectInterceptor_RepeatedReconnects(t *testing.T) {
 	require.NoError(t, err, "failed to dial bufnet")
 	defer conn.Close()
 
-	client := pb.NewGreeterClient(conn)
+	client = pb.NewGreeterClient(conn)
 
+	// State: READY
 	childCtx, _ := context.WithTimeout(ctx, timeout)
-	_, err = client.SayHello(childCtx, &pb.HelloRequest{Name: "Lasse Kongo"})
+	_, err = client.SayHello(childCtx, &pb.HelloRequest{Name: "Call: 0"})
 	assert.NoError(t, err, "failed to call first SayHello")
 
-	for i := 0; i < 5; i++ {
+	loops := 5
+	for i := 0; i < loops; i++ {
 		msg := fmt.Sprintf("Loop no %d", i)
 		s.Stop()
 
+		// State: TRANSIENT_FAILURE
 		childCtx, _ = context.WithTimeout(ctx, timeout)
-		_, err = client.SayHello(childCtx, &pb.HelloRequest{Name: "Kalle Anka"})
-		assert.True(t, strings.HasPrefix(err.Error(), `failed to reconnect: inside: context deadline exceeded: rpc error: code = Unavailable desc = all SubConns are in TransientFailure, latest connection error:`), msg, err.Error())
-
-		time.Sleep(timeoutWait)
-
-		childCtx, _ = context.WithTimeout(ctx, timeout)
-		_, err = client.SayHello(childCtx, &pb.HelloRequest{Name: "Kalle Anka"})
-		assert.EqualError(t, err, `failed to reconnect: inside: context deadline exceeded: rpc error: code = Unavailable desc = all SubConns are in TransientFailure, latest connection error: connection error: desc = "transport: Error while dialing closed"`, msg)
+		_, err = client.SayHello(childCtx, &pb.HelloRequest{Name: fmt.Sprintf("Loop: %d, Call: 1", i)})
+		assert.EqualError(t, err, "failed to reconnect: inside: context deadline exceeded", msg)
 
 		s.Start()
 
+		// State: TRANSIENT_FAILURE
 		childCtx, _ = context.WithTimeout(ctx, timeout)
-		_, err = client.SayHello(childCtx, &pb.HelloRequest{Name: "Kalle Anka"})
+		_, err = client.SayHello(childCtx, &pb.HelloRequest{Name: fmt.Sprintf("Loop: %d, Call: 2", i)})
 		assert.NoError(t, err, "failed to call last SayHello", msg)
+
+		time.Sleep(timeoutWait)
+
+		// State: READY
+		_, err = client.SayHello(childCtx, &pb.HelloRequest{Name: fmt.Sprintf("Loop: %d, Call: 3", i)})
+		assert.Error(t, err, "context deadline exceeded", msg)
 	}
 
-	assert.Equal(t, 15, interceptorCalled)
-}
-
-func Test_ReconnectInterceptor_RepeatedReconnectsWithClose(t *testing.T) {
-	ctx := context.Background()
-	s := server.New(bufSize)
-	defer s.Stop()
-
-	interceptorCalled := 0
-	conn, err := grpc.DialContext(ctx, "bufnet",
-		grpc.WithUnaryInterceptor(reconnect.UnaryInterceptor(
-			reconnect.WithNewConnection(func(ctx context.Context, cc *grpc.ClientConn, opts ...grpc.CallOption) (context.Context, *grpc.ClientConn, []grpc.CallOption, error) {
-				interceptorCalled++
-
-				conn, err := grpc.DialContext(ctx, "bufnet",
-					grpc.WithContextDialer(s.Dialer()),
-					grpc.WithInsecure(),
-					grpc.WithBlock(),
-				)
-
-				if err != nil {
-					err = errors.Wrap(err, "inside")
-					return ctx, cc, opts, err
-				}
-
-				_ = cc.Close()
-				return ctx, conn, opts, nil
-			}),
-		)),
-		grpc.WithContextDialer(s.Dialer()),
-		grpc.WithInsecure(),
-		grpc.WithBlock(),
-	)
-	require.NoError(t, err, "failed to dial bufnet")
-	defer conn.Close()
-
-	client := pb.NewGreeterClient(conn)
-
-	childCtx, _ := context.WithTimeout(ctx, timeout)
-	_, err = client.SayHello(childCtx, &pb.HelloRequest{Name: "Lasse Kongo"})
-	assert.NoError(t, err, "failed to call first SayHello")
-
-	s.Stop()
-
-	childCtx, _ = context.WithTimeout(ctx, timeout)
-	_, err = client.SayHello(childCtx, &pb.HelloRequest{Name: "Kalle Anka"})
-	assert.True(t, strings.HasPrefix(err.Error(), `failed to reconnect: inside: context deadline exceeded: rpc error: code = Unavailable desc = all SubConns are in TransientFailure, latest connection error:`), err.Error())
-
-	time.Sleep(timeoutWait)
-
-	childCtx, _ = context.WithTimeout(ctx, timeout)
-	_, err = client.SayHello(childCtx, &pb.HelloRequest{Name: "Kalle Anka"})
-	assert.EqualError(t, err, `failed to reconnect: inside: context deadline exceeded: rpc error: code = Unavailable desc = all SubConns are in TransientFailure, latest connection error: connection error: desc = "transport: Error while dialing closed"`)
-
-	s.Start()
-
-	childCtx, _ = context.WithTimeout(ctx, timeout)
-	_, err = client.SayHello(childCtx, &pb.HelloRequest{Name: "Kalle Anka"})
-	assert.NoError(t, err)
-
-	s.Stop()
-
-	childCtx, _ = context.WithTimeout(ctx, timeout)
-	_, err = client.SayHello(childCtx, &pb.HelloRequest{Name: "Kalle Anka"})
-	assert.EqualError(t, err, `failed to reconnect: inside: context deadline exceeded: rpc error: code = Canceled desc = grpc: the client connection is closing`)
-
-	time.Sleep(timeoutWait)
-
-	childCtx, _ = context.WithTimeout(ctx, timeout)
-	_, err = client.SayHello(childCtx, &pb.HelloRequest{Name: "Kalle Anka"})
-	assert.EqualError(t, err, `failed to reconnect: inside: context deadline exceeded: rpc error: code = Canceled desc = grpc: the client connection is closing`)
-
-	s.Start()
-
-	childCtx, _ = context.WithTimeout(ctx, timeout)
-	_, err = client.SayHello(childCtx, &pb.HelloRequest{Name: "Kalle Anka"})
-	assert.NoError(t, err)
-
-	s.Stop()
-
-	childCtx, _ = context.WithTimeout(ctx, timeout)
-	_, err = client.SayHello(childCtx, &pb.HelloRequest{Name: "Kalle Anka"})
-	assert.EqualError(t, err, `failed to reconnect: inside: context deadline exceeded: rpc error: code = Canceled desc = grpc: the client connection is closing`)
-
-	time.Sleep(timeoutWait)
-
-	childCtx, _ = context.WithTimeout(ctx, timeout)
-	_, err = client.SayHello(childCtx, &pb.HelloRequest{Name: "Kalle Anka"})
-	assert.EqualError(t, err, `failed to reconnect: inside: context deadline exceeded: rpc error: code = Canceled desc = grpc: the client connection is closing`)
-
-	s.Start()
-
-	childCtx, _ = context.WithTimeout(ctx, timeout)
-	_, err = client.SayHello(childCtx, &pb.HelloRequest{Name: "Kalle Anka"})
-	assert.NoError(t, err)
-
-	time.Sleep(timeoutWait)
-	_, err = client.SayHello(childCtx, &pb.HelloRequest{Name: "Kalle Anka"})
-	assert.EqualError(t, err, `rpc error: code = DeadlineExceeded desc = context deadline exceeded`)
-
-	assert.Equal(t, 9, interceptorCalled)
-}
-
-func Test_ReconnectInterceptor_RepeatedReconnectsWithFirstClose(t *testing.T) {
-	ctx := context.Background()
-	s := server.New(bufSize)
-	defer s.Stop()
-
-	interceptorCalled := 0
-	conn, err := grpc.DialContext(ctx, "bufnet",
-		grpc.WithUnaryInterceptor(reconnect.UnaryInterceptor(
-			reconnect.WithCodes(codes.Unavailable, codes.Canceled),
-			reconnect.WithNewConnection(func(ctx context.Context, cc *grpc.ClientConn, opts ...grpc.CallOption) (context.Context, *grpc.ClientConn, []grpc.CallOption, error) {
-				interceptorCalled++
-				_ = cc.Close()
-
-				conn, err := grpc.DialContext(ctx, "bufnet",
-					grpc.WithContextDialer(s.Dialer()),
-					grpc.WithInsecure(),
-					grpc.WithBlock(),
-				)
-
-				if err != nil {
-					err = errors.Wrap(err, "inside")
-					return ctx, cc, opts, err
-				}
-
-				return ctx, conn, opts, nil
-			}),
-		)),
-		grpc.WithContextDialer(s.Dialer()),
-		grpc.WithInsecure(),
-		grpc.WithBlock(),
-	)
-	require.NoError(t, err, "failed to dial bufnet")
-	defer conn.Close()
-
-	client := pb.NewGreeterClient(conn)
-
-	childCtx, _ := context.WithTimeout(ctx, timeout)
-	_, err = client.SayHello(childCtx, &pb.HelloRequest{Name: "Lasse Kongo"})
-	assert.NoError(t, err, "failed to call first SayHello")
-
-	s.Stop()
-
-	childCtx, _ = context.WithTimeout(ctx, timeout)
-	_, err = client.SayHello(childCtx, &pb.HelloRequest{Name: "Kalle Anka"})
-	assert.True(t, strings.HasPrefix(err.Error(), `failed to reconnect: inside: context deadline exceeded: rpc error: code = Unavailable desc = all SubConns are in TransientFailure, latest connection error: connection error:`), err.Error())
-
-	time.Sleep(timeoutWait)
-
-	childCtx, _ = context.WithTimeout(ctx, timeout)
-	_, err = client.SayHello(childCtx, &pb.HelloRequest{Name: "Kalle Anka"})
-	assert.EqualError(t, err, `failed to reconnect: inside: context deadline exceeded: rpc error: code = Canceled desc = grpc: the client connection is closing`)
-
-	s.Start()
-
-	childCtx, _ = context.WithTimeout(ctx, timeout)
-	_, err = client.SayHello(childCtx, &pb.HelloRequest{Name: "Kalle Anka"})
-	assert.NoError(t, err)
-
-	s.Stop()
-
-	childCtx, _ = context.WithTimeout(ctx, timeout)
-	_, err = client.SayHello(childCtx, &pb.HelloRequest{Name: "Kalle Anka"})
-	assert.EqualError(t, err, `failed to reconnect: inside: context deadline exceeded: rpc error: code = Canceled desc = grpc: the client connection is closing`)
-
-	time.Sleep(timeoutWait)
-
-	childCtx, _ = context.WithTimeout(ctx, timeout)
-	_, err = client.SayHello(childCtx, &pb.HelloRequest{Name: "Kalle Anka"})
-	assert.EqualError(t, err, `failed to reconnect: inside: context deadline exceeded: rpc error: code = Canceled desc = grpc: the client connection is closing`)
-
-	s.Start()
-
-	childCtx, _ = context.WithTimeout(ctx, timeout)
-	_, err = client.SayHello(childCtx, &pb.HelloRequest{Name: "Kalle Anka"})
-	assert.NoError(t, err)
-
-	assert.Equal(t, 6, interceptorCalled)
+	assert.Equal(t, loops*2, interceptorCalled)
 }

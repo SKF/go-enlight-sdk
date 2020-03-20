@@ -75,5 +75,6 @@ func (s *server) RestartWithWaiting(d time.Duration) {
 }
 
 func (s *server) Stop() {
-	s.Server.Stop()
+	s.Server.GracefulStop()
+	time.Sleep(time.Millisecond * 100)
 }
