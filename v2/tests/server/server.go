@@ -33,10 +33,16 @@ func (s *server) Start() {
 	s.Server = grpc.NewServer(s.opts...)
 	s.TestService = &service{}
 	pb.RegisterGreeterServer(s.Server, s.TestService)
+
+	listening := make(chan int)
+
 	go func() {
 		s.listener = bufconn.Listen(s.bufSize)
+		close(listening)
 		s.Server.Serve(s.listener) //nolint:errcheck
 	}()
+
+	<-listening
 }
 
 func New(bufferSize int, opts ...grpc.ServerOption) *server {
