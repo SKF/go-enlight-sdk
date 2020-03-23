@@ -7,13 +7,11 @@ import (
 	"time"
 
 	"github.com/SKF/go-enlight-sdk/v2/interceptors/reconnect"
-	"github.com/SKF/go-utility/log"
-	"github.com/aws/aws-sdk-go/aws/session"
-
-	"github.com/SKF/proto/common"
-	"google.golang.org/grpc"
-
+	"github.com/SKF/go-utility/v2/log"
 	authorizeApi "github.com/SKF/proto/authorize"
+	"github.com/SKF/proto/common"
+	"github.com/aws/aws-sdk-go/aws/session"
+	"google.golang.org/grpc"
 )
 
 type client struct {

@@ -6,7 +6,7 @@ import (
 	"fmt"
 
 	"github.com/SKF/go-enlight-sdk/v2/grpc"
-	"github.com/SKF/go-utility/log"
+	"github.com/SKF/go-utility/v2/log"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/secretsmanager"

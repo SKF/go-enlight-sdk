@@ -2,15 +2,15 @@ package notification
 
 import (
 	"context"
+	"net"
 	"time"
 
 	"github.com/SKF/go-enlight-sdk/v2/interceptors/reconnect"
-	"github.com/SKF/go-utility/log"
+	"github.com/SKF/go-utility/v2/log"
 	"github.com/SKF/proto/common"
 	proto "github.com/SKF/proto/notification"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"google.golang.org/grpc"
-	"google.golang.org/grpc/codes"
 )
 
 type client struct {
@@ -102,35 +102,39 @@ func (c *client) DialUsingCredentials(sess *session.Session, host, port, secretK
 
 // DialUsingCredentialsWithContext creates a client connection to the given host with context (for timeout and transaction id)
 func (c *client) DialUsingCredentialsWithContext(ctx context.Context, sess *session.Session, host, port, secretKey string, opts ...grpc.DialOption) error {
-	reconnectOpts := grpc.WithUnaryInterceptor(reconnect.UnaryInterceptor(
-		reconnect.WithCodes(codes.DeadlineExceeded),
-		reconnect.WithNewConnection(
-			func(invokerCtx context.Context, invokerConn *grpc.ClientConn, invokerOptions ...grpc.CallOption) (context.Context, *grpc.ClientConn, []grpc.CallOption, error) {
-				log.WithTracing(invokerCtx).Debug("Retrying with new connection")
-				if invokerCtx.Err() != nil {
-					return invokerCtx, invokerConn, invokerOptions, nil
-				}
-				opt, err := getCredentialOption(invokerCtx, sess, host, secretKey)
-				if err != nil {
-					log.WithTracing(invokerCtx).WithError(err).Error("Failed to get credential options")
-					return invokerCtx, invokerConn, invokerOptions, err
-				}
-				_ = c.conn.Close()
-				c.conn, err = grpc.Dial(host+":"+port, append(opts, opt, grpc.WithBlock())...)
-				if err != nil {
-					log.WithTracing(invokerCtx).WithError(err).Error("Failed to dial context")
-					return invokerCtx, invokerConn, invokerOptions, err
-				}
-				c.api = proto.NewNotificationClient(c.conn)
-				return invokerCtx, c.conn, invokerOptions, err
-			}),
-	),
-	)
+	var newClientConn reconnect.NewConnectionFunc
+	newClientConn = func(invokerCtx context.Context, invokerConn *grpc.ClientConn, invokerOptions ...grpc.CallOption) (context.Context, *grpc.ClientConn, []grpc.CallOption, error) {
+		credOpt, err := getCredentialOption(invokerCtx, sess, host, secretKey)
+		if err != nil {
+			log.WithTracing(invokerCtx).WithError(err).Error("Failed to get credential options")
+			return invokerCtx, invokerConn, invokerOptions, err
+		}
+
+		reconnectOpts := grpc.WithUnaryInterceptor(reconnect.UnaryInterceptor(
+			reconnect.WithNewConnection(newClientConn),
+		))
+
+		dialOpts := append(opts, credOpt, reconnectOpts, grpc.WithBlock())
+		newConn, err := grpc.DialContext(invokerCtx, net.JoinHostPort(host, port), dialOpts...)
+		if err != nil {
+			log.WithTracing(invokerCtx).WithError(err).Error("Failed to dial context")
+			return invokerCtx, invokerConn, invokerOptions, err
+		}
+		_ = invokerConn.Close()
+
+		c.conn = newConn
+		c.api = proto.NewNotificationClient(c.conn)
+		return invokerCtx, c.conn, invokerOptions, err
+	}
 
 	opt, err := getCredentialOption(ctx, sess, host, secretKey)
 	if err != nil {
 		return err
 	}
+
+	reconnectOpts := grpc.WithUnaryInterceptor(reconnect.UnaryInterceptor(
+		reconnect.WithNewConnection(newClientConn),
+	))
 	newOpts := append(opts, opt, reconnectOpts)
 
 	conn, err := grpc.DialContext(ctx, host+":"+port, newOpts...)

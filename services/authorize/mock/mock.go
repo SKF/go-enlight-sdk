@@ -2,8 +2,9 @@ package mock
 
 import (
 	"context"
-	"github.com/aws/aws-sdk-go/aws/session"
 	"time"
+
+	"github.com/aws/aws-sdk-go/aws/session"
 
 	grpcapi "github.com/SKF/proto/authorize"
 
