@@ -48,16 +48,38 @@ func (c *client) IsAuthorizedBulk(userID, action string, resources []common.Orig
 }
 
 func (c *client) IsAuthorizedBulkWithContext(ctx context.Context, userID, action string, resources []common.Origin) ([]string, []bool, error) {
+	origins, oks, err := c.IsAuthorizedBulkWithOriginWithContext(ctx, userID, action, resources)
+
+	if err != nil {
+		return nil, nil, err
+	}
+
+	resourceIDs := make([]string, len(origins))
+
+	for i := range origins {
+		resourceIDs[i] = origins[i].GetId()
+	}
+
+	return resourceIDs, oks, err
+}
+
+func (c *client) IsAuthorizedBulkWithOrigin(userID, action string, resources []common.Origin) ([]common.Origin, []bool, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), c.requestTimeout)
+	defer cancel()
+	return c.IsAuthorizedBulkWithOriginWithContext(ctx, userID, action, resources)
+}
+
+func (c *client) IsAuthorizedBulkWithOriginWithContext(ctx context.Context, userID, action string, resources []common.Origin) ([]common.Origin, []bool, error) {
 	if err := requestLengthLimit(len(resources)); err != nil {
 		return nil, nil, err
 	}
 
-	var resourcesInput []*common.Origin
-	for i := 0; i < len(resources); i++ {
-		resourcesInput = append(resourcesInput, &resources[i])
+	resourcesInput := make([]*common.Origin, len(resources))
+	for i := range resources {
+		resourcesInput[i] = &resources[i]
 	}
 
-	results, err := c.api.IsAuthorizedBulk(ctx, &authorizeApi.IsAuthorizedBulkInput{
+	results, err := c.api.IsAuthorizedBulkWithOrigin(ctx, &authorizeApi.IsAuthorizedBulkWithOriginInput{
 		UserId:    userID,
 		Action:    action,
 		Resources: resourcesInput,
@@ -66,15 +88,16 @@ func (c *client) IsAuthorizedBulkWithContext(ctx context.Context, userID, action
 		return nil, nil, err
 	}
 
-	items := results.Responses
-	var ids []string
-	var oks []bool
-	for _, item := range items {
-		ids = append(ids, item.ResourceId)
-		oks = append(oks, item.Ok)
+	responses := results.GetResponses()
+	origins := make([]common.Origin, len(responses))
+	oks := make([]bool, len(responses))
+
+	for i := range responses {
+		origins[i] = *responses[i].GetResource()
+		oks[i] = responses[i].GetOk()
 	}
 
-	return ids, oks, err
+	return origins, oks, err
 }
 
 func (c *client) IsAuthorizedByEndpoint(api, method, endpoint, userID string) (bool, error) {
