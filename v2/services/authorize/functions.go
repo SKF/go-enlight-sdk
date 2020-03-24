@@ -41,35 +41,13 @@ func (c *client) IsAuthorizedWithContext(ctx context.Context, userID, action str
 	return result.Ok, err
 }
 
-func (c *client) IsAuthorizedBulk(userID, action string, resources []common.Origin) ([]string, []bool, error) {
+func (c *client) IsAuthorizedBulk(userID, action string, resources []common.Origin) ([]common.Origin, []bool, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), c.requestTimeout)
 	defer cancel()
 	return c.IsAuthorizedBulkWithContext(ctx, userID, action, resources)
 }
 
-func (c *client) IsAuthorizedBulkWithContext(ctx context.Context, userID, action string, resources []common.Origin) ([]string, []bool, error) {
-	origins, oks, err := c.IsAuthorizedBulkWithOriginWithContext(ctx, userID, action, resources)
-
-	if err != nil {
-		return nil, nil, err
-	}
-
-	resourceIDs := make([]string, len(origins))
-
-	for i := range origins {
-		resourceIDs[i] = origins[i].GetId()
-	}
-
-	return resourceIDs, oks, err
-}
-
-func (c *client) IsAuthorizedBulkWithOrigin(userID, action string, resources []common.Origin) ([]common.Origin, []bool, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), c.requestTimeout)
-	defer cancel()
-	return c.IsAuthorizedBulkWithOriginWithContext(ctx, userID, action, resources)
-}
-
-func (c *client) IsAuthorizedBulkWithOriginWithContext(ctx context.Context, userID, action string, resources []common.Origin) ([]common.Origin, []bool, error) {
+func (c *client) IsAuthorizedBulkWithContext(ctx context.Context, userID, action string, resources []common.Origin) ([]common.Origin, []bool, error) {
 	if err := requestLengthLimit(len(resources)); err != nil {
 		return nil, nil, err
 	}
@@ -79,7 +57,7 @@ func (c *client) IsAuthorizedBulkWithOriginWithContext(ctx context.Context, user
 		resourcesInput[i] = &resources[i]
 	}
 
-	results, err := c.api.IsAuthorizedBulkWithOrigin(ctx, &authorizeApi.IsAuthorizedBulkWithOriginInput{
+	results, err := c.api.IsAuthorizedBulk(ctx, &authorizeApi.IsAuthorizedBulkInput{
 		UserId:    userID,
 		Action:    action,
 		Resources: resourcesInput,
