@@ -41,13 +41,29 @@ func (c *client) IsAuthorizedWithContext(ctx context.Context, userID, action str
 	return result.Ok, err
 }
 
-func (c *client) IsAuthorizedBulk(userID, action string, resources []common.Origin) ([]common.Origin, []bool, error) {
+func (c *client) IsAuthorizedBulk(userID, action string, resources []common.Origin) ([]string, []bool, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), c.requestTimeout)
 	defer cancel()
 	return c.IsAuthorizedBulkWithContext(ctx, userID, action, resources)
 }
 
-func (c *client) IsAuthorizedBulkWithContext(ctx context.Context, userID, action string, resources []common.Origin) ([]common.Origin, []bool, error) {
+func (c *client) IsAuthorizedBulkWithContext(ctx context.Context, userID, action string, resources []common.Origin) ([]string, []bool, error) {
+	origins, oks, err := c.IsAuthorizedBulkWithResources(ctx, userID, action, resources)
+
+	if err != nil {
+		return nil, nil, err
+	}
+
+	ids := make([]string, len(origins))
+
+	for i := range origins {
+		ids[i] = origins[i].GetId()
+	}
+
+	return ids, oks, nil
+}
+
+func (c *client) IsAuthorizedBulkWithResources(ctx context.Context, userID, action string, resources []common.Origin) ([]common.Origin, []bool, error) {
 	if err := requestLengthLimit(len(resources)); err != nil {
 		return nil, nil, err
 	}

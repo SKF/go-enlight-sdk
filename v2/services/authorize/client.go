@@ -33,8 +33,9 @@ type AuthorizeClient interface { // nolint: golint
 
 	IsAuthorized(userID, action string, resource *common.Origin) (bool, error)
 	IsAuthorizedWithContext(ctx context.Context, userID, action string, resource *common.Origin) (bool, error)
-	IsAuthorizedBulk(userID, action string, resource []common.Origin) ([]common.Origin, []bool, error)
-	IsAuthorizedBulkWithContext(ctx context.Context, userID, action string, resource []common.Origin) ([]common.Origin, []bool, error)
+	IsAuthorizedBulk(userID, action string, resource []common.Origin) ([]string, []bool, error)
+	IsAuthorizedBulkWithContext(ctx context.Context, userID, action string, resource []common.Origin) ([]string, []bool, error)
+	IsAuthorizedBulkWithResources(ctx context.Context, userID, action string, resource []common.Origin) ([]common.Origin, []bool, error)
 	IsAuthorizedByEndpoint(api, method, endpoint, userID string) (bool, error)
 	IsAuthorizedByEndpointWithContext(ctx context.Context, api, method, endpoint, userID string) (bool, error)
 
