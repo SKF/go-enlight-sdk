@@ -41,20 +41,36 @@ func (c *client) IsAuthorizedWithContext(ctx context.Context, userID, action str
 	return result.Ok, err
 }
 
-func (c *client) IsAuthorizedBulk(userID, action string, resources []common.Origin) ([]string, []bool, error) {
+func (c *client) IsAuthorizedBulk(userID, action string, reqResources []common.Origin) ([]string, []bool, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), c.requestTimeout)
 	defer cancel()
-	return c.IsAuthorizedBulkWithContext(ctx, userID, action, resources)
+	return c.IsAuthorizedBulkWithContext(ctx, userID, action, reqResources)
 }
 
-func (c *client) IsAuthorizedBulkWithContext(ctx context.Context, userID, action string, resources []common.Origin) ([]string, []bool, error) {
-	if err := requestLengthLimit(len(resources)); err != nil {
+func (c *client) IsAuthorizedBulkWithContext(ctx context.Context, userID, action string, reqResources []common.Origin) ([]string, []bool, error) {
+	resources, oks, err := c.IsAuthorizedBulkWithResources(ctx, userID, action, reqResources)
+
+	if err != nil {
 		return nil, nil, err
 	}
 
-	var resourcesInput []*common.Origin
-	for i := 0; i < len(resources); i++ {
-		resourcesInput = append(resourcesInput, &resources[i])
+	ids := make([]string, len(resources))
+
+	for i := range resources {
+		ids[i] = resources[i].GetId()
+	}
+
+	return ids, oks, nil
+}
+
+func (c *client) IsAuthorizedBulkWithResources(ctx context.Context, userID, action string, reqResources []common.Origin) ([]common.Origin, []bool, error) {
+	if err := requestLengthLimit(len(reqResources)); err != nil {
+		return nil, nil, err
+	}
+
+	resourcesInput := make([]*common.Origin, len(reqResources))
+	for i := range reqResources {
+		resourcesInput[i] = &reqResources[i]
 	}
 
 	results, err := c.api.IsAuthorizedBulk(ctx, &authorizeApi.IsAuthorizedBulkInput{
@@ -66,15 +82,16 @@ func (c *client) IsAuthorizedBulkWithContext(ctx context.Context, userID, action
 		return nil, nil, err
 	}
 
-	items := results.Responses
-	var ids []string
-	var oks []bool
-	for _, item := range items {
-		ids = append(ids, item.ResourceId)
-		oks = append(oks, item.Ok)
+	responses := results.GetResponses()
+	resources := make([]common.Origin, len(responses))
+	oks := make([]bool, len(responses))
+
+	for i := range responses {
+		resources[i] = *responses[i].GetResource()
+		oks[i] = responses[i].GetOk()
 	}
 
-	return ids, oks, err
+	return resources, oks, err
 }
 
 func (c *client) IsAuthorizedByEndpoint(api, method, endpoint, userID string) (bool, error) {
