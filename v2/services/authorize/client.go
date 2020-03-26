@@ -154,6 +154,9 @@ func (c *client) DialWithContext(ctx context.Context, host, port string, opts ..
 	return
 }
 
+// Mainly intended to make it possible to dial Unix domain sockets. This makes
+// it possible to dial any target as defined in
+// https://github.com/grpc/grpc/blob/master/doc/naming.md
 func (c *client) DialTarget(ctx context.Context, target string, opts ...grpc.DialOption) error {
 	conn, err := grpc.DialContext(ctx, target, opts...)
 
