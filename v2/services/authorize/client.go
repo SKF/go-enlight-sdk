@@ -23,6 +23,7 @@ type client struct {
 type AuthorizeClient interface { // nolint: golint
 	Dial(host, port string, opts ...grpc.DialOption) error
 	DialWithContext(ctx context.Context, host, port string, opts ...grpc.DialOption) error
+	DialTarget(ctx context.Context, target string, opts ...grpc.DialOption) error
 	DialUsingCredentials(sess *session.Session, host, port, secretKey string, opts ...grpc.DialOption) error
 	DialUsingCredentialsWithContext(ctx context.Context, sess *session.Session, host, port, secretKey string, opts ...grpc.DialOption) error
 	Close() error
@@ -151,6 +152,19 @@ func (c *client) DialWithContext(ctx context.Context, host, port string, opts ..
 	c.api = authorizeApi.NewAuthorizeClient(conn)
 	err = c.logClientState(ctx, "opening connection")
 	return
+}
+
+func (c *client) DialTarget(ctx context.Context, target string, opts ...grpc.DialOption) error {
+	conn, err := grpc.DialContext(ctx, target, opts...)
+
+	if err != nil {
+		return err
+	}
+
+	c.conn = conn
+	c.api = authorizeApi.NewAuthorizeClient(conn)
+
+	return nil
 }
 
 // DialUsingCredentials creates a client connection to the given host with background context and no timeout
