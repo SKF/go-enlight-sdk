@@ -20,12 +20,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-type socket struct {
-	net.Listener
-	*os.File
-}
-
-func newSocket(t *testing.T) *socket {
+func newSocket(t *testing.T) (net.Listener, *os.File) {
 	file, err := ioutil.TempFile("", "grpc-server-*.sock")
 
 	require.NoError(t, err)
@@ -38,14 +33,11 @@ func newSocket(t *testing.T) *socket {
 
 	require.NoError(t, err)
 
-	return &socket{
-		Listener: lis,
-		File:     file,
-	}
+	return lis, file
 }
 
 func createServer(t *testing.T) (*authMock.MockAuthorizeServer, *grpc.Server, string, <-chan error) {
-	sock := newSocket(t)
+	listener, sock := newSocket(t)
 
 	mockServer := authMock.NewMockServer()
 	grpcServer := mockServer.MakeGRPCServer()
@@ -53,10 +45,10 @@ func createServer(t *testing.T) (*authMock.MockAuthorizeServer, *grpc.Server, st
 	done := make(chan error)
 
 	go func() {
-		done <- grpcServer.Serve(sock.Listener)
+		done <- grpcServer.Serve(listener)
 	}()
 
-	return mockServer, grpcServer, fmt.Sprintf("unix://%s", sock.File.Name()), done
+	return mockServer, grpcServer, fmt.Sprintf("unix://%s", sock.Name()), done
 }
 
 func Test_DeepPing(t *testing.T) {
