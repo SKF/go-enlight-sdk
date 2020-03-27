@@ -40,11 +40,6 @@ func (mock *client) DialWithContext(ctx context.Context, host, port string, opts
 	return args.Error(0)
 }
 
-func (mock *client) DialTarget(ctx context.Context, target string, opts ...grpc.DialOption) error {
-	args := mock.Called(ctx, target, opts)
-	return args.Error(0)
-}
-
 func (mock *client) DialUsingCredentials(sess *session.Session, host, port, secretKey string, opts ...grpc.DialOption) error {
 	args := mock.Called(sess, host, port, secretKey, opts)
 	return args.Error(0)

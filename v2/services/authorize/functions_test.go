@@ -2,95 +2,58 @@ package authorize_test
 
 import (
 	"context"
-	"fmt"
-	"io/ioutil"
-	"net"
-	"os"
 	"testing"
 	"time"
 
 	"github.com/SKF/go-enlight-sdk/v2/services/authorize"
 	authMock "github.com/SKF/go-enlight-sdk/v2/services/authorize/mock"
-	authAPI "github.com/SKF/proto/authorize"
+	grpcapi "github.com/SKF/proto/authorize"
 	"github.com/SKF/proto/common"
-	"google.golang.org/grpc"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
+	"google.golang.org/grpc"
 )
 
-func newSocket(t *testing.T) (net.Listener, *os.File) {
-	file, err := ioutil.TempFile("", "grpc-server-*.sock")
+func clientFor(t *testing.T, server *authMock.AuthorizeServer) authorize.AuthorizeClient {
+	host, port := server.HostPort()
 
-	require.NoError(t, err)
+	client := authorize.CreateClient()
+	server.On("LogClientState", mock.Anything, mock.Anything).Return(&common.Void{}, nil)
 
-	err = os.RemoveAll(file.Name())
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Millisecond)
+	defer cancel()
 
-	require.NoError(t, err)
+	require.NoError(t, client.DialWithContext(ctx, host, port, grpc.WithInsecure()))
 
-	lis, err := net.Listen("unix", file.Name())
-
-	require.NoError(t, err)
-
-	return lis, file
-}
-
-func createServer(t *testing.T) (*authMock.MockAuthorizeServer, *grpc.Server, string, <-chan error) {
-	listener, sock := newSocket(t)
-
-	mockServer := authMock.NewMockServer()
-	grpcServer := mockServer.MakeGRPCServer()
-
-	done := make(chan error)
-
-	go func() {
-		done <- grpcServer.Serve(listener)
-	}()
-
-	return mockServer, grpcServer, fmt.Sprintf("unix://%s", sock.Name()), done
+	return client
 }
 
 func Test_DeepPing(t *testing.T) {
-	mockServer, grpcServer, host, done := createServer(t)
-
-	ctx, cancel := context.WithTimeout(context.Background(), 1*time.Second)
-
-	defer cancel()
-
-	client := authorize.CreateClient()
-
-	err := client.DialTarget(ctx, host, grpc.WithInsecure())
-
+	server, err := authMock.New()
 	require.NoError(t, err)
 
-	mockServer.On("DeepPing", mock.Anything, mock.Anything).Return(&common.PrimitiveString{Value: ""}, nil)
+	client := clientFor(t, server)
+
+	server.On("DeepPing", mock.Anything, mock.Anything).Return(&common.PrimitiveString{Value: ""}, nil)
+
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Millisecond)
+	defer cancel()
 
 	err = client.DeepPingWithContext(ctx)
-
 	assert.NoError(t, err)
 
-	grpcServer.Stop()
-
-	assert.NoError(t, <-done)
-
-	mockServer.AssertExpectations(t)
+	server.AssertExpectations(t)
 }
 
 func Test_IsAuthorizedBulkWithResources(t *testing.T) {
-	mockServer, grpcServer, host, done := createServer(t)
-
-	ctx, cancel := context.WithTimeout(context.Background(), 1*time.Second)
-
-	defer cancel()
-
-	client := authorize.CreateClient()
-
-	err := client.DialTarget(ctx, host, grpc.WithInsecure())
-
+	server, err := authMock.New()
 	require.NoError(t, err)
 
-	mockServer.On("IsAuthorizedBulk", mock.Anything, &authAPI.IsAuthorizedBulkInput{
+	client := clientFor(t, server)
+
+	server.On("IsAuthorizedBulk", mock.Anything, &grpcapi.IsAuthorizedBulkInput{
 		UserId: "testUser",
 		Action: "testAction",
 		Resources: []*common.Origin{
@@ -101,9 +64,9 @@ func Test_IsAuthorizedBulkWithResources(t *testing.T) {
 			},
 		},
 	}).
-		Return(&authAPI.IsAuthorizedBulkOutput{
-			Responses: []*authAPI.IsAuthorizedOutItem{
-				&authAPI.IsAuthorizedOutItem{
+		Return(&grpcapi.IsAuthorizedBulkOutput{
+			Responses: []*grpcapi.IsAuthorizedOutItem{
+				&grpcapi.IsAuthorizedOutItem{
 					ResourceId: "0",
 					Ok:         true,
 					Resource: &common.Origin{
@@ -115,7 +78,10 @@ func Test_IsAuthorizedBulkWithResources(t *testing.T) {
 			},
 		}, nil)
 
-	res, oks, err := client.IsAuthorizedBulkWithResources(context.Background(), "testUser", "testAction", []common.Origin{
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Millisecond)
+	defer cancel()
+
+	res, oks, err := client.IsAuthorizedBulkWithResources(ctx, "testUser", "testAction", []common.Origin{
 		{
 			Id:       "0",
 			Type:     "node",
@@ -132,29 +98,18 @@ func Test_IsAuthorizedBulkWithResources(t *testing.T) {
 	assert.Equal(t, "1", res[0].GetProvider())
 	assert.True(t, oks[0])
 
-	grpcServer.Stop()
-
-	assert.NoError(t, <-done)
-
-	mockServer.AssertExpectations(t)
+	server.AssertExpectations(t)
 }
 
 // Test that if the server does *not* include the resource in the reply the
 // client doesn't crash
 func Test_IsAuthorizedBulkWithResourcesNoResourceInResonse(t *testing.T) {
-	mockServer, grpcServer, host, done := createServer(t)
-
-	ctx, cancel := context.WithTimeout(context.Background(), 1*time.Second)
-
-	defer cancel()
-
-	client := authorize.CreateClient()
-
-	err := client.DialTarget(ctx, host, grpc.WithInsecure())
-
+	server, err := authMock.New()
 	require.NoError(t, err)
 
-	mockServer.On("IsAuthorizedBulk", mock.Anything, &authAPI.IsAuthorizedBulkInput{
+	client := clientFor(t, server)
+
+	server.On("IsAuthorizedBulk", mock.Anything, &grpcapi.IsAuthorizedBulkInput{
 		UserId: "testUser",
 		Action: "testAction",
 		Resources: []*common.Origin{
@@ -165,16 +120,19 @@ func Test_IsAuthorizedBulkWithResourcesNoResourceInResonse(t *testing.T) {
 			},
 		},
 	}).
-		Return(&authAPI.IsAuthorizedBulkOutput{
-			Responses: []*authAPI.IsAuthorizedOutItem{
-				&authAPI.IsAuthorizedOutItem{
+		Return(&grpcapi.IsAuthorizedBulkOutput{
+			Responses: []*grpcapi.IsAuthorizedOutItem{
+				&grpcapi.IsAuthorizedOutItem{
 					ResourceId: "0",
 					Ok:         true,
 				},
 			},
 		}, nil)
 
-	res, oks, err := client.IsAuthorizedBulkWithResources(context.Background(), "testUser", "testAction", []common.Origin{
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Millisecond)
+	defer cancel()
+
+	res, oks, err := client.IsAuthorizedBulkWithResources(ctx, "testUser", "testAction", []common.Origin{
 		{
 			Id:       "0",
 			Type:     "node",
@@ -191,9 +149,5 @@ func Test_IsAuthorizedBulkWithResourcesNoResourceInResonse(t *testing.T) {
 	assert.Equal(t, "", res[0].GetProvider())
 	assert.True(t, oks[0])
 
-	grpcServer.Stop()
-
-	assert.NoError(t, <-done)
-
-	mockServer.AssertExpectations(t)
+	server.AssertExpectations(t)
 }
