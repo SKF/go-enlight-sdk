@@ -34,7 +34,7 @@ func createSockFile() (file *os.File, err error) {
 	return
 }
 
-func New() (server *AuthorizeServer, err error) {
+func NewServer() (server *AuthorizeServer, err error) {
 	server = &AuthorizeServer{
 		grpc: grpc.NewServer(),
 	}

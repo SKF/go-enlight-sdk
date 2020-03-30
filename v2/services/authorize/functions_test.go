@@ -31,7 +31,7 @@ func clientFor(t *testing.T, server *authMock.AuthorizeServer) authorize.Authori
 }
 
 func Test_DeepPing(t *testing.T) {
-	server, err := authMock.New()
+	server, err := authMock.NewServer()
 	require.NoError(t, err)
 
 	client := clientFor(t, server)
@@ -48,7 +48,7 @@ func Test_DeepPing(t *testing.T) {
 }
 
 func Test_IsAuthorizedBulkWithResources(t *testing.T) {
-	server, err := authMock.New()
+	server, err := authMock.NewServer()
 	require.NoError(t, err)
 
 	client := clientFor(t, server)
@@ -104,7 +104,7 @@ func Test_IsAuthorizedBulkWithResources(t *testing.T) {
 // Test that if the server does *not* include the resource in the reply the
 // client doesn't crash
 func Test_IsAuthorizedBulkWithResourcesNoResourceInResonse(t *testing.T) {
-	server, err := authMock.New()
+	server, err := authMock.NewServer()
 	require.NoError(t, err)
 
 	client := clientFor(t, server)
