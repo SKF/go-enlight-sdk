@@ -41,12 +41,18 @@ func (c *client) IsAuthorizedWithContext(ctx context.Context, userID, action str
 	return result.Ok, err
 }
 
+// Deprecated: This functions is deprecated in favor of
+// IsAuthorizedBulkWithResources as this variant returns a list of resource IDs
+// which aren't unique.
 func (c *client) IsAuthorizedBulk(userID, action string, reqResources []common.Origin) ([]string, []bool, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), c.requestTimeout)
 	defer cancel()
 	return c.IsAuthorizedBulkWithContext(ctx, userID, action, reqResources)
 }
 
+// Deprecated: This functions is deprecated in favor of
+// IsAuthorizedBulkWithResources as this variant returns a list of resource IDs
+// which aren't unique.
 func (c *client) IsAuthorizedBulkWithContext(ctx context.Context, userID, action string, reqResources []common.Origin) ([]string, []bool, error) {
 	resources, oks, err := c.IsAuthorizedBulkWithResources(ctx, userID, action, reqResources)
 
@@ -87,7 +93,16 @@ func (c *client) IsAuthorizedBulkWithResources(ctx context.Context, userID, acti
 	oks := make([]bool, len(responses))
 
 	for i := range responses {
-		resources[i] = *responses[i].GetResource()
+		resource := responses[i].GetResource()
+		// If running against an old server which doesn't set the resource
+		if resource == nil {
+			resource = &common.Origin{
+				Id:       responses[i].GetResourceId(),
+				Type:     "",
+				Provider: "",
+			}
+		}
+		resources[i] = *resource
 		oks[i] = responses[i].GetOk()
 	}
 
