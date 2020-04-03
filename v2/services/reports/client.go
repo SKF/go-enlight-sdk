@@ -4,11 +4,11 @@ import (
 	"context"
 	"time"
 
-	"github.com/SKF/proto/common"
+	"github.com/SKF/proto/v2/common"
 
 	"google.golang.org/grpc"
 
-	reports_grpcapi "github.com/SKF/proto/reports"
+	reports_grpcapi "github.com/SKF/proto/v2/reports"
 )
 
 // ReportsClient describes the exported methods on the reports service

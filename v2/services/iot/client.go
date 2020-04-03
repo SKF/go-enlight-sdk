@@ -4,11 +4,11 @@ import (
 	"context"
 	"time"
 
-	"github.com/SKF/proto/common"
+	"github.com/SKF/proto/v2/common"
 
 	"google.golang.org/grpc"
 
-	iot_grpcapi "github.com/SKF/proto/iot"
+	iot_grpcapi "github.com/SKF/proto/v2/iot"
 )
 
 type IoTClient interface { // nolint: golint

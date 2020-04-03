@@ -8,8 +8,8 @@ import (
 	"os"
 	"testing"
 
-	authorize "github.com/SKF/proto/authorize"
-	"github.com/SKF/proto/common"
+	authorize "github.com/SKF/proto/v2/authorize"
+	"github.com/SKF/proto/v2/common"
 
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"

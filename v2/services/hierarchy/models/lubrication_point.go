@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"strings"
 
-	hierarchy_proto "github.com/SKF/proto/hierarchy"
+	hierarchy_proto "github.com/SKF/proto/v2/hierarchy"
 )
 
 type LubricationPoint struct {

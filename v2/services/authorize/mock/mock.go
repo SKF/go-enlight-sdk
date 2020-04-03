@@ -6,9 +6,9 @@ import (
 
 	"github.com/aws/aws-sdk-go/aws/session"
 
-	grpcapi "github.com/SKF/proto/authorize"
+	grpcapi "github.com/SKF/proto/v2/authorize"
 
-	"github.com/SKF/proto/common"
+	"github.com/SKF/proto/v2/common"
 
 	"github.com/stretchr/testify/mock"
 	"google.golang.org/grpc"

@@ -7,7 +7,7 @@ import (
 	"github.com/stretchr/testify/mock"
 	"google.golang.org/grpc"
 
-	pas_api "github.com/SKF/proto/pas"
+	pas_api "github.com/SKF/proto/v2/pas"
 
 	"github.com/SKF/go-enlight-sdk/v2/services/pas"
 )

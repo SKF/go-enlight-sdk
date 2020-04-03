@@ -8,8 +8,8 @@ import (
 
 	"github.com/SKF/go-enlight-sdk/v2/interceptors/reconnect"
 	"github.com/SKF/go-utility/v2/log"
-	authorizeApi "github.com/SKF/proto/authorize"
-	"github.com/SKF/proto/common"
+	authorizeApi "github.com/SKF/proto/v2/authorize"
+	"github.com/SKF/proto/v2/common"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"google.golang.org/grpc"
 )

@@ -7,8 +7,8 @@ import (
 
 	"github.com/SKF/go-enlight-sdk/v2/services/authorize"
 	authMock "github.com/SKF/go-enlight-sdk/v2/services/authorize/mock"
-	grpcapi "github.com/SKF/proto/authorize"
-	"github.com/SKF/proto/common"
+	grpcapi "github.com/SKF/proto/v2/authorize"
+	"github.com/SKF/proto/v2/common"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"

@@ -3,7 +3,7 @@ package hierarchy_test
 import (
 	"log"
 
-	hierarchy_grpcapi "github.com/SKF/proto/hierarchy"
+	hierarchy_grpcapi "github.com/SKF/proto/v2/hierarchy"
 
 	"github.com/SKF/go-enlight-sdk/v2/grpc"
 	"github.com/SKF/go-enlight-sdk/v2/services/hierarchy"

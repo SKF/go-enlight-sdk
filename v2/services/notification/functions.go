@@ -5,8 +5,8 @@ import (
 
 	"github.com/SKF/go-utility/v2/log"
 
-	"github.com/SKF/proto/common"
-	proto "github.com/SKF/proto/notification"
+	"github.com/SKF/proto/v2/common"
+	proto "github.com/SKF/proto/v2/notification"
 )
 
 func (c *client) SetNotificationType(notificationType proto.NotificationType) error {

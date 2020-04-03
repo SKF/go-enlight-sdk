@@ -6,7 +6,7 @@ import (
 	"github.com/stretchr/testify/mock"
 	"google.golang.org/grpc"
 
-	reports_grpcapi "github.com/SKF/proto/reports"
+	reports_grpcapi "github.com/SKF/proto/v2/reports"
 
 	"github.com/SKF/go-enlight-sdk/v2/services/reports"
 )

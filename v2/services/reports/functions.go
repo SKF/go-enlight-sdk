@@ -4,7 +4,7 @@ import (
 	"context"
 	"time"
 
-	reports_grpcapi "github.com/SKF/proto/reports"
+	reports_grpcapi "github.com/SKF/proto/v2/reports"
 )
 
 func (c *client) GetAssetHealth(input reports_grpcapi.GetAssetHealthInput) (output *reports_grpcapi.GetAssetHealthOutput, err error) {

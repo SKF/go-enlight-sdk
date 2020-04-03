@@ -6,8 +6,8 @@ import (
 	"fmt"
 	"time"
 
-	authorizeApi "github.com/SKF/proto/authorize"
-	"github.com/SKF/proto/common"
+	authorizeApi "github.com/SKF/proto/v2/authorize"
+	"github.com/SKF/proto/v2/common"
 )
 
 const REQUEST_LENGTH_LIMIT = 1000

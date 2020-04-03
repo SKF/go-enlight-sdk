@@ -9,7 +9,7 @@ import (
 
 	"github.com/SKF/go-enlight-sdk/v2/grpc"
 	"github.com/SKF/go-enlight-sdk/v2/services/iot"
-	api "github.com/SKF/proto/iot"
+	api "github.com/SKF/proto/v2/iot"
 )
 
 func main() {

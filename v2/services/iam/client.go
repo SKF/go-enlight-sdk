@@ -4,12 +4,12 @@ import (
 	"context"
 	"time"
 
-	"github.com/SKF/proto/common"
+	"github.com/SKF/proto/v2/common"
 
 	"google.golang.org/grpc"
 
 	"github.com/SKF/go-eventsource/eventsource"
-	iam_grpcapi "github.com/SKF/proto/iam"
+	iam_grpcapi "github.com/SKF/proto/v2/iam"
 )
 
 type IAMClient interface { // nolint: golint

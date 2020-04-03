@@ -4,8 +4,8 @@ import (
 	"errors"
 
 	"github.com/SKF/go-utility/v2/uuid"
-	common_proto "github.com/SKF/proto/common"
-	hierarchy_proto "github.com/SKF/proto/hierarchy"
+	common_proto "github.com/SKF/proto/v2/common"
+	hierarchy_proto "github.com/SKF/proto/v2/hierarchy"
 )
 
 type Node struct {
