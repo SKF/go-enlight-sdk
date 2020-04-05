@@ -97,7 +97,7 @@ func (c *client) IsAuthorizedBulkWithResources(ctx context.Context, userID, acti
 		// If running against an old server which doesn't set the resource
 		if resource == nil {
 			resource = &common.Origin{
-				Id:       responses[i].GetResourceId(),
+				Id:       responses[i].GetResourceId(), //nolint: staticcheck
 				Type:     "",
 				Provider: "",
 			}
