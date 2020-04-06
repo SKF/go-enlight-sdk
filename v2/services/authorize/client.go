@@ -20,7 +20,7 @@ type client struct {
 	requestTimeout time.Duration
 }
 
-type AuthorizeClient interface { // nolint: golint
+type AuthorizeClient interface {
 	Dial(host, port string, opts ...grpc.DialOption) error
 	DialWithContext(ctx context.Context, host, port string, opts ...grpc.DialOption) error
 	DialUsingCredentials(sess *session.Session, host, port, secretKey string, opts ...grpc.DialOption) error
