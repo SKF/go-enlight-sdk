@@ -5,7 +5,7 @@ import (
 	"strings"
 
 	"github.com/SKF/go-utility/v2/uuid"
-	grpcapi "github.com/SKF/proto/hierarchy"
+	grpcapi "github.com/SKF/proto/v2/hierarchy"
 )
 
 // MeasurementPoint describes an assets measurement points

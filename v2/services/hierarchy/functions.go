@@ -6,8 +6,8 @@ import (
 	"time"
 
 	"github.com/SKF/go-eventsource/eventsource"
-	"github.com/SKF/proto/common"
-	hierarchy_grpcapi "github.com/SKF/proto/hierarchy"
+	"github.com/SKF/proto/v2/common"
+	hierarchy_grpcapi "github.com/SKF/proto/v2/hierarchy"
 )
 
 // SaveNode will add the node if it this not exist and otherwise

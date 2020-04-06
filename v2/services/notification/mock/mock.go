@@ -5,8 +5,8 @@ import (
 	"time"
 
 	"github.com/SKF/go-enlight-sdk/v2/services/notification"
-	"github.com/SKF/proto/common"
-	proto "github.com/SKF/proto/notification"
+	"github.com/SKF/proto/v2/common"
+	proto "github.com/SKF/proto/v2/notification"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/stretchr/testify/mock"
 	"google.golang.org/grpc"

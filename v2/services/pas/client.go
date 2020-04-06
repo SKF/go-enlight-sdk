@@ -4,8 +4,8 @@ import (
 	"context"
 	"time"
 
-	"github.com/SKF/proto/common"
-	pas_api "github.com/SKF/proto/pas"
+	"github.com/SKF/proto/v2/common"
+	pas_api "github.com/SKF/proto/v2/pas"
 
 	"google.golang.org/grpc"
 )

@@ -7,8 +7,8 @@ import (
 
 	"github.com/SKF/go-enlight-sdk/v2/interceptors/reconnect"
 	"github.com/SKF/go-utility/v2/log"
-	"github.com/SKF/proto/common"
-	proto "github.com/SKF/proto/notification"
+	"github.com/SKF/proto/v2/common"
+	proto "github.com/SKF/proto/v2/notification"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"google.golang.org/grpc"
 )

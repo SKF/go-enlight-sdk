@@ -81,7 +81,7 @@ func Test_ReconnectInterceptor_ConnectionClosed(t *testing.T) {
 
 	client := pb.NewGreeterClient(conn)
 	_, err = client.SayHello(ctx, &pb.HelloRequest{Name: "Kalle Anka"})
-	assert.EqualError(t, err, `rpc error: code = Unavailable desc = all SubConns are in TransientFailure, latest connection error: connection error: desc = "transport: Error while dialing closed"`)
+	assert.EqualError(t, err, `rpc error: code = Unavailable desc = connection error: desc = "transport: Error while dialing closed"`)
 }
 
 func Test_ReconnectInterceptor_RepeatedReconnects(t *testing.T) {

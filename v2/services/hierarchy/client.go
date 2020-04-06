@@ -4,12 +4,12 @@ import (
 	"context"
 	"time"
 
-	"github.com/SKF/proto/common"
+	"github.com/SKF/proto/v2/common"
 
 	"google.golang.org/grpc"
 
 	"github.com/SKF/go-eventsource/eventsource"
-	hierarchy_grpcapi "github.com/SKF/proto/hierarchy"
+	hierarchy_grpcapi "github.com/SKF/proto/v2/hierarchy"
 )
 
 // HierarchyClient provides the API operation methods for making

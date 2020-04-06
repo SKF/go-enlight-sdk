@@ -6,8 +6,8 @@ import (
 	"fmt"
 	"time"
 
-	authorizeApi "github.com/SKF/proto/authorize"
-	"github.com/SKF/proto/common"
+	authorizeApi "github.com/SKF/proto/v2/authorize"
+	"github.com/SKF/proto/v2/common"
 )
 
 const REQUEST_LENGTH_LIMIT = 1000
@@ -97,7 +97,7 @@ func (c *client) IsAuthorizedBulkWithResources(ctx context.Context, userID, acti
 		// If running against an old server which doesn't set the resource
 		if resource == nil {
 			resource = &common.Origin{
-				Id:       responses[i].GetResourceId(),
+				Id:       responses[i].GetResourceId(), //nolint: staticcheck
 				Type:     "",
 				Provider: "",
 			}

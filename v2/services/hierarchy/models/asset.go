@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/SKF/go-utility/v2/uuid"
-	grpcapi "github.com/SKF/proto/hierarchy"
+	grpcapi "github.com/SKF/proto/v2/hierarchy"
 )
 
 type Component struct {
@@ -127,8 +127,8 @@ func (asset *AssetNode) FromGRPC(assetNode grpcapi.AssetNode) {
 	}
 }
 
-func (cmp *Component) ToGRPC() *grpcapi.Component {
-	ret := &grpcapi.Component{
+func (cmp *Component) ToGRPC() *grpcapi.Component { // nolint: staticcheck
+	ret := &grpcapi.Component{ // nolint: staticcheck
 		Id:   cmp.Id.String(),
 		Type: cmp.Type,
 	}
@@ -146,7 +146,7 @@ func (cmp *Component) ToGRPC() *grpcapi.Component {
 	return ret
 }
 
-func (cmp *Component) FromGRPC(c *grpcapi.Component) {
+func (cmp *Component) FromGRPC(c *grpcapi.Component) { // nolint: staticcheck
 	cmp.Id = uuid.UUID(c.Id)
 	cmp.Type = c.Type
 	cmp.Props.UnmarshalJSON([]byte(c.Props)) // nolint: errcheck

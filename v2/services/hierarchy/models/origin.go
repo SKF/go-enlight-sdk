@@ -3,7 +3,7 @@ package models
 import (
 	"fmt"
 
-	"github.com/SKF/proto/common"
+	"github.com/SKF/proto/v2/common"
 )
 
 type Origin struct {
