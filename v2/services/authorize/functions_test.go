@@ -25,7 +25,7 @@ func clientFor(t *testing.T, server *authMock.AuthorizeServer) authorize.Authori
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Millisecond)
 	defer cancel()
 
-	require.NoError(t, client.DialWithContext(ctx, host, port, grpc.WithInsecure()))
+	require.NoError(t, client.Dial(ctx, host, port, grpc.WithInsecure()))
 
 	return client
 }
@@ -41,7 +41,7 @@ func Test_DeepPing(t *testing.T) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Millisecond)
 	defer cancel()
 
-	err = client.DeepPingWithContext(ctx)
+	err = client.DeepPing(ctx)
 	assert.NoError(t, err)
 
 	server.AssertExpectations(t)
