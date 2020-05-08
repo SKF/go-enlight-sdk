@@ -2,7 +2,6 @@ package authorize
 
 import (
 	"context"
-	"google.golang.org/grpc/codes"
 	"net"
 	"os"
 	"time"
@@ -14,6 +13,7 @@ import (
 
 	"github.com/SKF/proto/common"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/codes"
 
 	authorize_grpcapi "github.com/SKF/proto/authorize"
 )

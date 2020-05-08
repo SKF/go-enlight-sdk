@@ -2,8 +2,6 @@ package authorize
 
 import (
 	"context"
-	grpc_retry "github.com/grpc-ecosystem/go-grpc-middleware/retry"
-	"google.golang.org/grpc/codes"
 	"net"
 	"os"
 	"time"
@@ -14,6 +12,8 @@ import (
 	"github.com/SKF/proto/v2/common"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/codes"
+	grpc_retry "github.com/grpc-ecosystem/go-grpc-middleware/retry"
 )
 
 type client struct {
