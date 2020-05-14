@@ -11,9 +11,10 @@ import (
 	authorizeApi "github.com/SKF/proto/v2/authorize"
 	"github.com/SKF/proto/v2/common"
 	"github.com/aws/aws-sdk-go/aws/session"
-	"google.golang.org/grpc"
-	"google.golang.org/grpc/codes"
 	grpc_retry "github.com/grpc-ecosystem/go-grpc-middleware/retry"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/balancer/roundrobin"
+	"google.golang.org/grpc/codes"
 )
 
 type client struct {
@@ -144,7 +145,9 @@ func (c *client) Dial(host, port string, opts ...grpc.DialOption) error {
 
 // DialWithContext creates a client connection to the given host with context (for timeout and transaction id)
 func (c *client) DialWithContext(ctx context.Context, host, port string, opts ...grpc.DialOption) (err error) {
-	conn, err := grpc.DialContext(ctx, host+":"+port, opts...)
+	opts = append(opts, grpc.WithBalancerName(roundrobin.Name))
+
+	conn, err := grpc.DialContext(ctx, net.JoinHostPort(host, port), opts...)
 	if err != nil {
 		return
 	}
@@ -164,6 +167,8 @@ func (c *client) DialUsingCredentials(sess *session.Session, host, port, secretK
 
 // DialUsingCredentialsWithContext creates a client connection to the given host with context (for timeout and transaction id)
 func (c *client) DialUsingCredentialsWithContext(ctx context.Context, sess *session.Session, host, port, secretKey string, opts ...grpc.DialOption) error {
+	opts = append(opts, grpc.WithBalancerName(roundrobin.Name))
+
 	var newClientConn reconnect.NewConnectionFunc
 	newClientConn = func(invokerCtx context.Context, invokerConn *grpc.ClientConn, invokerOptions ...grpc.CallOption) (context.Context, *grpc.ClientConn, []grpc.CallOption, error) {
 		credOpt, err := getCredentialOption(invokerCtx, sess, host, secretKey)
@@ -195,7 +200,7 @@ func (c *client) DialUsingCredentialsWithContext(ctx context.Context, sess *sess
 	dialOptsReconnectRetry := reconnectRetryInterceptor(newClientConn)
 	newOpts := append(opts, opt, dialOptsReconnectRetry)
 
-	conn, err := grpc.DialContext(ctx, host+":"+port, newOpts...)
+	conn, err := grpc.DialContext(ctx, net.JoinHostPort(host, port), newOpts...)
 	if err != nil {
 		return err
 	}
