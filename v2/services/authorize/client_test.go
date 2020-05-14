@@ -29,7 +29,7 @@ func clientForFakeHostName(t *testing.T, authority, host, port string, servers .
 
 	client := authorize.CreateClient()
 
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Millisecond)
+	ctx, cancel := context.WithTimeout(context.Background(), 50*time.Millisecond)
 	defer cancel()
 
 	require.NoError(t, client.DialWithContext(ctx, hostnameWithAuthority, port, grpc.WithInsecure()))

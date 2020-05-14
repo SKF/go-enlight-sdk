@@ -13,6 +13,7 @@ import (
 	grpc_retry "github.com/grpc-ecosystem/go-grpc-middleware/retry"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/resolver"
 )
 
 const defaultServiceConfig = `{
@@ -150,6 +151,7 @@ func (c *client) Dial(host, port string, opts ...grpc.DialOption) error {
 
 // DialWithContext creates a client connection to the given host with context (for timeout and transaction id)
 func (c *client) DialWithContext(ctx context.Context, host, port string, opts ...grpc.DialOption) (err error) {
+	resolver.SetDefaultScheme("dns")
 	opts = append(opts, grpc.WithDefaultServiceConfig(defaultServiceConfig))
 
 	conn, err := grpc.DialContext(ctx, host+":"+port, opts...)
@@ -172,6 +174,7 @@ func (c *client) DialUsingCredentials(sess *session.Session, host, port, secretK
 
 // DialUsingCredentialsWithContext creates a client connection to the given host with context (for timeout and transaction id)
 func (c *client) DialUsingCredentialsWithContext(ctx context.Context, sess *session.Session, host, port, secretKey string, opts ...grpc.DialOption) error {
+	resolver.SetDefaultScheme("dns")
 	opts = append(opts, grpc.WithDefaultServiceConfig(defaultServiceConfig))
 
 	var newClientConn reconnect.NewConnectionFunc
