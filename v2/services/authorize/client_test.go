@@ -127,7 +127,7 @@ func getPort(t *testing.T) string {
 func Test_Loadbalancing(t *testing.T) {
 	backends := 5
 
-	domain := "foobar.com"
+	domain := "skf.com"
 	dnsServer := NewDNS(t, domain)
 	dnsServer.Start(t)
 	defer dnsServer.Stop(t)
