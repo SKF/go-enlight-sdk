@@ -2,7 +2,6 @@ package authorize
 
 import (
 	"context"
-	"net"
 	"os"
 	"time"
 
@@ -11,10 +10,18 @@ import (
 	authorizeApi "github.com/SKF/proto/v2/authorize"
 	"github.com/SKF/proto/v2/common"
 	"github.com/aws/aws-sdk-go/aws/session"
+	grpc_retry "github.com/grpc-ecosystem/go-grpc-middleware/retry"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
-	grpc_retry "github.com/grpc-ecosystem/go-grpc-middleware/retry"
+	"google.golang.org/grpc/resolver"
 )
+
+const defaultServiceConfig = `{
+	"loadBalancingConfig": [
+		{ "round_robin": {} }
+	]
+}
+`
 
 type client struct {
 	conn           *grpc.ClientConn
@@ -144,6 +151,9 @@ func (c *client) Dial(host, port string, opts ...grpc.DialOption) error {
 
 // DialWithContext creates a client connection to the given host with context (for timeout and transaction id)
 func (c *client) DialWithContext(ctx context.Context, host, port string, opts ...grpc.DialOption) (err error) {
+	resolver.SetDefaultScheme("dns")
+	opts = append(opts, grpc.WithDefaultServiceConfig(defaultServiceConfig))
+
 	conn, err := grpc.DialContext(ctx, host+":"+port, opts...)
 	if err != nil {
 		return
@@ -164,6 +174,9 @@ func (c *client) DialUsingCredentials(sess *session.Session, host, port, secretK
 
 // DialUsingCredentialsWithContext creates a client connection to the given host with context (for timeout and transaction id)
 func (c *client) DialUsingCredentialsWithContext(ctx context.Context, sess *session.Session, host, port, secretKey string, opts ...grpc.DialOption) error {
+	resolver.SetDefaultScheme("dns")
+	opts = append(opts, grpc.WithDefaultServiceConfig(defaultServiceConfig))
+
 	var newClientConn reconnect.NewConnectionFunc
 	newClientConn = func(invokerCtx context.Context, invokerConn *grpc.ClientConn, invokerOptions ...grpc.CallOption) (context.Context, *grpc.ClientConn, []grpc.CallOption, error) {
 		credOpt, err := getCredentialOption(invokerCtx, sess, host, secretKey)
@@ -175,7 +188,7 @@ func (c *client) DialUsingCredentialsWithContext(ctx context.Context, sess *sess
 		dialOptsReconnectRetry := reconnectRetryInterceptor(newClientConn)
 
 		dialOpts := append(opts, credOpt, dialOptsReconnectRetry, grpc.WithBlock())
-		newConn, err := grpc.DialContext(invokerCtx, net.JoinHostPort(host, port), dialOpts...)
+		newConn, err := grpc.DialContext(invokerCtx, host+":"+port, dialOpts...)
 		if err != nil {
 			log.WithTracing(invokerCtx).WithError(err).Error("Failed to dial context")
 			return invokerCtx, invokerConn, invokerOptions, err

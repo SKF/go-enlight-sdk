@@ -10,9 +10,11 @@ require (
 	github.com/aws/aws-sdk-go v1.25.49
 	github.com/golang/protobuf v1.3.5
 	github.com/grpc-ecosystem/go-grpc-middleware v1.2.0
+	github.com/miekg/dns v1.1.29
 	github.com/oklog/ulid v1.3.1 // indirect
 	github.com/pkg/errors v0.8.1
 	github.com/stretchr/testify v1.4.0
+	go.uber.org/zap v1.12.0
 	golang.org/x/text v0.3.2
-	google.golang.org/grpc v1.28.0
+	google.golang.org/grpc v1.29.1
 )
