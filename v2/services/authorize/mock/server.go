@@ -2,39 +2,32 @@ package mock
 
 import (
 	"context"
-	"fmt"
-	"io/ioutil"
 	"net"
-	"os"
 	"testing"
 
+	"github.com/SKF/go-utility/v2/log"
 	authorize "github.com/SKF/proto/v2/authorize"
 	"github.com/SKF/proto/v2/common"
 
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
+	"go.uber.org/zap"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 )
 
 type AuthorizeServer struct {
 	mock.Mock
-	grpc *grpc.Server
-	done chan error
-	sock *os.File
-}
-
-func createSockFile() (file *os.File, err error) {
-	if file, err = ioutil.TempFile("", "authorize-grpc-server-*.sock"); err != nil {
-		return
-	}
-
-	err = os.RemoveAll(file.Name())
-
-	return
+	grpc     *grpc.Server
+	done     chan error
+	listener net.Listener
 }
 
 func NewServer() (server *AuthorizeServer, err error) {
+	return NewServerOnHostPort("localhost", "0")
+}
+
+func NewServerOnHostPort(host, port string) (server *AuthorizeServer, err error) {
 	server = &AuthorizeServer{
 		grpc: grpc.NewServer(),
 	}
@@ -42,25 +35,25 @@ func NewServer() (server *AuthorizeServer, err error) {
 	authorize.RegisterAuthorizeServer(server.grpc, server)
 	reflection.Register(server.grpc)
 
-	if server.sock, err = createSockFile(); err != nil {
-		return
-	}
-
-	lis, err := net.Listen("unix", server.sock.Name())
+	server.listener, err = net.Listen("tcp", net.JoinHostPort(host, port))
 	if err != nil {
 		return
 	}
 
 	server.done = make(chan error)
 	go func() {
-		server.done <- server.grpc.Serve(lis)
+		server.done <- server.grpc.Serve(server.listener)
 	}()
 
 	return
 }
 
 func (s *AuthorizeServer) HostPort() (string, string) {
-	return "unix", fmt.Sprintf("//%s", s.sock.Name())
+	host, port, err := net.SplitHostPort(s.listener.Addr().String())
+	if err != nil {
+		panic(err)
+	}
+	return host, port
 }
 
 func (s *AuthorizeServer) AssertExpectations(t *testing.T) {
@@ -75,6 +68,11 @@ func (s *AuthorizeServer) DeepPing(ctx context.Context, void *common.Void) (*com
 }
 
 func (s *AuthorizeServer) LogClientState(ctx context.Context, clientInfo *authorize.LogClientStateInput) (*common.Void, error) {
+	log.WithFields(log.Fields{
+		zap.String("addr", s.listener.Addr().String()),
+		zap.String("hostname", clientInfo.GetHostname()),
+		zap.String("state", clientInfo.GetState()),
+	}).Info("client logging state")
 	args := s.Called(ctx, clientInfo)
 	return args.Get(0).(*common.Void), args.Error(1)
 }
