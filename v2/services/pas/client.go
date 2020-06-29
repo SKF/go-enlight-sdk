@@ -4,10 +4,14 @@ import (
 	"context"
 	"time"
 
+	"github.com/SKF/go-enlight-sdk/v2/interceptors/reconnect"
+	"github.com/SKF/go-utility/v2/log"
 	"github.com/SKF/proto/v2/common"
 	pas_api "github.com/SKF/proto/v2/pas"
+	grpc_retry "github.com/grpc-ecosystem/go-grpc-middleware/retry"
 
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/codes"
 )
 
 // PointAlarmStatusClient provides the API operation methods for making
@@ -58,14 +62,49 @@ func (c *Client) Dial(host, port string, opts ...grpc.DialOption) error {
 
 // DialWithContext creates a client connection to the given host with context (for timeout and transaction id)
 func (c *Client) DialWithContext(ctx context.Context, host, port string, opts ...grpc.DialOption) (err error) {
-	conn, err := grpc.DialContext(ctx, host+":"+port, opts...)
+	var newClientConn reconnect.NewConnectionFunc
+	newClientConn = func(invokerCtx context.Context, invokerConn *grpc.ClientConn, invokerOptions ...grpc.CallOption) (context.Context, *grpc.ClientConn, []grpc.CallOption, error) {
+		dialOptsReconnectRetry := reconnectRetryInterceptor(newClientConn)
+
+		dialOpts := append(opts, dialOptsReconnectRetry, grpc.WithBlock())
+		newConn, dialErr := grpc.DialContext(invokerCtx, host+":"+port, dialOpts...)
+		if dialErr != nil {
+			log.WithTracing(invokerCtx).WithError(dialErr).Error("Failed to dial context")
+			return invokerCtx, invokerConn, invokerOptions, dialErr
+		}
+		_ = invokerConn.Close()
+
+		c.conn = newConn
+		c.api = pas_api.NewPointAlarmStatusClient(c.conn)
+		return invokerCtx, c.conn, invokerOptions, err
+	}
+
+	dialOptsReconnectRetry := reconnectRetryInterceptor(newClientConn)
+	dialOpts := append(opts, dialOptsReconnectRetry)
+
+	conn, err := grpc.DialContext(ctx, host+":"+port, dialOpts...)
 	if err != nil {
-		return
+		log.WithTracing(ctx).WithError(err).Error("Failed to dial context")
+		return err
 	}
 
 	c.conn = conn
-	c.api = pas_api.NewPointAlarmStatusClient(conn)
+	c.api = pas_api.NewPointAlarmStatusClient(c.conn)
 	return
+}
+
+func reconnectRetryInterceptor(newClientConn reconnect.NewConnectionFunc) grpc.DialOption {
+	retryIC := grpc_retry.UnaryClientInterceptor(
+		grpc_retry.WithBackoff(grpc_retry.BackoffLinear(100*time.Millisecond)),
+		grpc_retry.WithCodes(codes.Unavailable, codes.ResourceExhausted, codes.Aborted),
+	)
+
+	reconnectIC := reconnect.UnaryInterceptor(
+		reconnect.WithNewConnection(newClientConn),
+	)
+
+	dialOptsReconnectRetry := grpc.WithChainUnaryInterceptor(reconnectIC, retryIC) // first one is outer, being called last
+	return dialOptsReconnectRetry
 }
 
 // Close tears down the ClientConn and all underlying connections.
