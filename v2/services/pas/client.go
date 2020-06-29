@@ -69,7 +69,10 @@ func (c *Client) DialWithContext(ctx context.Context, host, port string, opts ..
 		dialOpts := append(opts, dialOptsReconnectRetry, grpc.WithBlock())
 		newConn, dialErr := grpc.DialContext(invokerCtx, host+":"+port, dialOpts...)
 		if dialErr != nil {
-			log.WithTracing(invokerCtx).WithError(dialErr).Error("Failed to dial context")
+			log.
+				WithTracing(invokerCtx).
+				WithError(dialErr).
+				Error("Failed to connect to PAS gRPC server")
 			return invokerCtx, invokerConn, invokerOptions, dialErr
 		}
 		_ = invokerConn.Close()
@@ -84,7 +87,10 @@ func (c *Client) DialWithContext(ctx context.Context, host, port string, opts ..
 
 	conn, err := grpc.DialContext(ctx, host+":"+port, dialOpts...)
 	if err != nil {
-		log.WithTracing(ctx).WithError(err).Error("Failed to dial context")
+		log.
+			WithTracing(ctx).
+			WithError(err).
+			Error("Failed to connect to PAS gRPC server")
 		return err
 	}
 
