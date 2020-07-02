@@ -7,7 +7,6 @@ import (
 	"github.com/SKF/go-utility/v2/uuid"
 )
 
-// CreateNodeEvent ...
 type CreateNodeEvent struct {
 	*eventsource.BaseEvent
 	models.BaseNode
@@ -30,7 +29,6 @@ type DeleteOriginEvent struct {
 	*eventsource.BaseEvent
 }
 
-// CopyNodeEvent ...
 type CopyNodeEvent struct {
 	*eventsource.BaseEvent
 	models.BaseNode
