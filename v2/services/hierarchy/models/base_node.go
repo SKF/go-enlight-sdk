@@ -29,7 +29,7 @@ type BaseNode struct {
 	// Relative position of node in the Enlight Centre UI
 	Position *int64 `json:"position"`
 	// Comma separated list of free form tags on this node
-	Tags *string `json:"tags"`
+	Tags *string `json:"tags" example:"tag1,tag2=value2"`
 	// Which country the node is in
 	Country *string `json:"country,omitempty" example:"SWE"`
 	// Metadata with keys and optional values
