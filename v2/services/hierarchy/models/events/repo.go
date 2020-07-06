@@ -14,6 +14,10 @@ func CreateHierarchyEventSerializer() eventsource.Serializer {
 		CreateRelationEvent{},
 		DeleteRelationEvent{},
 		CopyNodeEvent{},
+		CreateComponentEvent{},
+		UpdateComponentEvent{},
+		DeleteComponentEvent{},
+		DeleteOriginEvent{},
 	)
 }
 

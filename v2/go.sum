@@ -3,6 +3,7 @@ github.com/BurntSushi/toml v0.3.1 h1:WXkYYl6Yr3qBf1K79EBnL4mak0OimBfB0XUf9Vl28OQ
 github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03qcyfWMU=
 github.com/DataDog/datadog-go v2.2.0+incompatible/go.mod h1:LButxg5PwREeZtORoXG3tL4fMGNddJ+vMq1mwgfaqoQ=
 github.com/DataDog/opencensus-go-exporter-datadog v0.0.0-20190726131236-c7b72e836616/go.mod h1:gMGUEe16aZh0QN941HgDjwrdjU4iTthPoz2/AtDRADE=
+github.com/SKF/go-enlight-sdk v1.32.0 h1:CdUx/EwDaDO4GYhWkH0Kw7InQK7ybKJSNuo35tieDAM=
 github.com/SKF/go-eventsource v1.3.5 h1:devBOcXgajEkl6QWF6T2zZ116PeO7iNA7jH4wxDdfPs=
 github.com/SKF/go-eventsource v1.3.5/go.mod h1:abJr3JUWqqtYUNhvEdcbYyUYLVUcZlJ0S/3XYnVWLoE=
 github.com/SKF/go-utility v1.8.0 h1:XIZFDRVd6CA6BJOPizR1I4i6CCTtrQOMAFJxaYX2nmY=
