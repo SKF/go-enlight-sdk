@@ -99,6 +99,9 @@ type AuthorizeClient interface {
 	ApplyUserAction(userID, action string, resource *common.Origin) error
 	ApplyUserActionWithContext(ctx context.Context, userID, action string, resource *common.Origin) error
 
+	ApplyRolesForUserOnResources(userID string, roles []string, resources []common.Origin) error
+	ApplyRolesForUserOnResourcesWithContext(ctx context.Context, userID string, roles []string, resources []common.Origin) error
+
 	RemoveUserAction(userID, action string, resource *common.Origin) error
 	RemoveUserActionWithContext(ctx context.Context, userID, action string, resource *common.Origin) error
 
