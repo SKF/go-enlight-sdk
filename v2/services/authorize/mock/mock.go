@@ -195,6 +195,16 @@ func (mock *client) ApplyUserActionWithContext(ctx context.Context, userID, acti
 	return args.Error(0)
 }
 
+func (mock *client) ApplyRolesForUserOnResources(userID string, roles []string, resources []common.Origin) error {
+	args := mock.Called(userID, roles, resources)
+	return args.Error(0)
+}
+
+func (mock *client) ApplyRolesForUserOnResourcesWithContext(ctx context.Context, userID string, roles []string, resources []common.Origin) error {
+	args := mock.Called(ctx, userID, roles, resources)
+	return args.Error(0)
+}
+
 func (mock *client) RemoveUserAction(userID, action string, resource *common.Origin) error {
 	args := mock.Called(userID, action, resource)
 	return args.Error(0)

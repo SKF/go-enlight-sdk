@@ -12,6 +12,15 @@ import (
 
 const REQUEST_LENGTH_LIMIT = 1000
 
+func toArrayOfPointers(resources []common.Origin) []*common.Origin {
+	var result []*common.Origin
+	for i := 0; i < len(resources); i++ {
+		result = append(result, &resources[i])
+	}
+
+	return result
+}
+
 func requestLengthLimit(requestLength int) error {
 	if requestLength > REQUEST_LENGTH_LIMIT {
 		return fmt.Errorf("request length limit exceeded. max: %d actual: %d", REQUEST_LENGTH_LIMIT, requestLength)
@@ -74,10 +83,7 @@ func (c *client) IsAuthorizedBulkWithResources(ctx context.Context, userID, acti
 		return nil, nil, err
 	}
 
-	resourcesInput := make([]*common.Origin, len(reqResources))
-	for i := range reqResources {
-		resourcesInput[i] = &reqResources[i]
-	}
+	resourcesInput := toArrayOfPointers(reqResources)
 
 	results, err := c.api.IsAuthorizedBulk(ctx, &authorizeApi.IsAuthorizedBulkInput{
 		UserId:    userID,
@@ -175,10 +181,7 @@ func (c *client) AddResourcesWithContext(ctx context.Context, resources []common
 		return err
 	}
 
-	var resourcesInput []*common.Origin
-	for i := 0; i < len(resources); i++ {
-		resourcesInput = append(resourcesInput, &resources[i])
-	}
+	resourcesInput := toArrayOfPointers(resources)
 
 	_, err := c.api.AddResources(ctx, &authorizeApi.AddResourcesInput{
 		Resource: resourcesInput,
@@ -213,10 +216,7 @@ func (c *client) RemoveResourcesWithContext(ctx context.Context, resources []com
 		return err
 	}
 
-	var resourcesInput []*common.Origin
-	for i := 0; i < len(resources); i++ {
-		resourcesInput = append(resourcesInput, &resources[i])
-	}
+	resourcesInput := toArrayOfPointers(resources)
 
 	_, err := c.api.RemoveResources(ctx, &authorizeApi.RemoveResourcesInput{
 		Resource: resourcesInput,
@@ -369,6 +369,23 @@ func (c *client) ApplyUserActionWithContext(ctx context.Context, userID, action 
 		UserId:   userID,
 		Action:   action,
 		Resource: resource,
+	})
+	return err
+}
+
+func (c *client) ApplyRolesForUserOnResources(userID string, roles []string, resources []common.Origin) error {
+	ctx, cancel := context.WithTimeout(context.Background(), c.requestTimeout)
+	defer cancel()
+	return c.ApplyRolesForUserOnResourcesWithContext(ctx, userID, roles, resources)
+}
+
+func (c *client) ApplyRolesForUserOnResourcesWithContext(ctx context.Context, userID string, roles []string, resources []common.Origin) error {
+	resourcesInput := toArrayOfPointers(resources)
+
+	_, err := c.api.ApplyRolesForUserOnResources(ctx, &authorizeApi.ApplyRolesForUserOnResourcesInput{
+		UserId:    userID,
+		Roles:     roles,
+		Resources: resourcesInput,
 	})
 	return err
 }

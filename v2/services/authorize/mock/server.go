@@ -192,6 +192,11 @@ func (s *AuthorizeServer) ApplyUserAction(ctx context.Context, in *authorize.App
 	return args.Get(0).(*common.Void), args.Error(1)
 }
 
+func (s *AuthorizeServer) ApplyRolesForUserOnResources(ctx context.Context, in *authorize.ApplyRolesForUserOnResourcesInput) (*common.Void, error) {
+	args := s.Called(ctx, in)
+	return args.Get(0).(*common.Void), args.Error(1)
+}
+
 func (s *AuthorizeServer) GetUserActions(ctx context.Context, in *authorize.GetUserActionsInput) (*authorize.GetUserActionsOutput, error) {
 	args := s.Called(ctx, in)
 	return args.Get(0).(*authorize.GetUserActionsOutput), args.Error(1)
