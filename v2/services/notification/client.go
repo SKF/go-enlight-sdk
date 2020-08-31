@@ -62,6 +62,9 @@ type NotificationClient interface {
 
 	RemoveUserNotifications(userID string, initatedNotificationExtId string) error
 	RemoveUserNotificationsWithContext(ctx context.Context, userID string, initatedNotificationExtId string) error
+
+	UpdateUserNotificationStatus (notificationId string, state proto.SendState) error
+	UpdateUserNotificationStatusWithContext (ctx context.Context, notificationId string, state proto.SendState) error
 }
 
 func CreateClient() NotificationClient {

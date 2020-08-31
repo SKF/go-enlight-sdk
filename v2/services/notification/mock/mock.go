@@ -158,3 +158,12 @@ func (mock *client) RemoveUserNotificationsWithContext(ctx context.Context, user
 	args := mock.Called(ctx, userID, initiatedNotificationExtId)
 	return args.Error(0)
 }
+
+func (mock *client) UpdateUserNotificationStatus(notificationId string, state proto.SendState) error {
+	args := mock.Called(notificationId, state)
+	return args.Error(0)
+}
+func (mock *client) UpdateUserNotificationStatusWithContext(ctx context.Context, notificationId string, state proto.SendState) error {
+	args := mock.Called(ctx, notificationId, state)
+	return args.Error(0)
+}
