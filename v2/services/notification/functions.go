@@ -202,3 +202,19 @@ func (c *client) RemoveUserNotificationsWithContext(ctx context.Context, userID,
 
 	return err
 }
+
+func (c *client) UpdateUserNotificationStatus(notificationId string, state proto.SendState) error {
+	ctx, cancel := context.WithTimeout(context.Background(), c.requestTimeout)
+	defer cancel()
+	return c.UpdateUserNotificationStatusWithContext(ctx, notificationId, state)
+}
+
+func (c *client) UpdateUserNotificationStatusWithContext(ctx context.Context, notificationId string, state proto.SendState) error {
+	input := proto.UpdateUserNotificationStatusInput{
+		NotificationId: notificationId,
+		SendState:      state,
+	}
+	_, err := c.api.UpdateUserNotificationStatus(ctx, &input)
+
+	return err
+}
