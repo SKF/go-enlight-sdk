@@ -11,7 +11,6 @@ require (
 	github.com/golang/protobuf v1.4.3
 	github.com/grpc-ecosystem/go-grpc-middleware v1.2.2
 	github.com/miekg/dns v1.1.35
-	github.com/oklog/ulid v1.3.1 // indirect
 	github.com/pkg/errors v0.9.1
 	github.com/stretchr/testify v1.6.1
 	go.opencensus.io v0.22.5
