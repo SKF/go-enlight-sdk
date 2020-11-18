@@ -14,7 +14,9 @@ require (
 	github.com/oklog/ulid v1.3.1 // indirect
 	github.com/pkg/errors v0.8.1
 	github.com/stretchr/testify v1.4.0
+	go.opencensus.io v0.22.0
 	go.uber.org/zap v1.12.0
 	golang.org/x/text v0.3.2
-	google.golang.org/grpc v1.31.0
+	google.golang.org/grpc v1.31.1
+	gopkg.in/DataDog/dd-trace-go.v1 v1.16.1
 )
