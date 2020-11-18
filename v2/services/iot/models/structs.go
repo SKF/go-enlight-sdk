@@ -1,7 +1,7 @@
 package models
 
 import (
-	iotgrpcapi "github.com/SKF/proto/iot"
+	iotgrpcapi "github.com/SKF/proto/v2/iot"
 )
 
 type Device struct {

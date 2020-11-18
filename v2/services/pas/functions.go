@@ -4,7 +4,7 @@ import (
 	"context"
 	"time"
 
-	pas_api "github.com/SKF/proto/pas"
+	pas_api "github.com/SKF/proto/v2/pas"
 )
 
 // SetPointAlarmThreshold sets the alarm threshold for a specific point

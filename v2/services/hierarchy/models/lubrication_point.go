@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"strings"
 
-	hierarchy_proto "github.com/SKF/proto/hierarchy"
+	hierarchy_proto "github.com/SKF/proto/v2/hierarchy"
 )
 
 type LubricationPoint struct {
@@ -17,6 +17,10 @@ type LubricationPoint struct {
 	Unit LubricantUnit `json:"lubricantUnit" swaggertype:"string" example:"cm3" enums:"gram,ounce,cm3,unknown"`
 	// Interval between lubrication in days
 	Interval int32 `json:"lubricateInterval" example:"5"`
+	// ActivityAssetState the asset should be in during the lubrication activity
+	ActivityAssetState LubricationActivityAssetState `json:"lubricationActivityAssetState" swaggertype:"string" example:"must_be_on" enums:"must_be_on,must_be_off"`
+	// Instruction for lubrication activity
+	Instructions string `json:"lubricateInstructions"`
 }
 
 type LubricantUnit string
@@ -58,6 +62,31 @@ func (lu LubricantUnit) Validate() error {
 	return fmt.Errorf("'%s' is not a valid Lubricant Unit", lu)
 }
 
+type LubricationActivityAssetState string
+
+const (
+	AssetMustBeOn     LubricationActivityAssetState = "must_be_on"
+	AssetMustBeOff    LubricationActivityAssetState = "must_be_off"
+	AssetStateUnknown LubricationActivityAssetState = ""
+)
+
+var activityAssetStates = []LubricationActivityAssetState{
+	AssetMustBeOn, AssetMustBeOff, AssetStateUnknown,
+}
+
+func (laas LubricationActivityAssetState) Validate() error {
+	for _, state := range activityAssetStates {
+		if laas == state {
+			return nil
+		}
+	}
+	return fmt.Errorf("'%s' is not a valid lubrication activity asset state", laas)
+}
+
+func (laas LubricationActivityAssetState) String() string {
+	return string(laas)
+}
+
 func (lp LubricationPoint) Validate() error {
 	if lp.Lubricant == "" {
 		return errors.New("Lubricant cannot be empty string")
@@ -75,6 +104,10 @@ func (lp LubricationPoint) Validate() error {
 
 	if lp.Interval < 0 {
 		return errors.New("Lubricate interval cannot be negative")
+	}
+
+	if err := lp.ActivityAssetState.Validate(); err != nil {
+		return err
 	}
 
 	return nil

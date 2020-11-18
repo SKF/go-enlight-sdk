@@ -5,10 +5,9 @@ import (
 	"net"
 	"time"
 
+	pb "github.com/SKF/go-enlight-sdk/tests/server/helloworld"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/test/bufconn"
-
-	pb "github.com/SKF/go-enlight-sdk/v2/tests/server/helloworld"
 )
 
 type server struct {

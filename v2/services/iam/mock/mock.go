@@ -7,7 +7,7 @@ import (
 	"google.golang.org/grpc"
 
 	"github.com/SKF/go-eventsource/eventsource"
-	iam_grpcapi "github.com/SKF/proto/iam"
+	iam_grpcapi "github.com/SKF/proto/v2/iam"
 
 	"github.com/SKF/go-enlight-sdk/v2/services/iam"
 )

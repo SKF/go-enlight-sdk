@@ -5,12 +5,12 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/SKF/proto/common"
+	"github.com/SKF/proto/v2/common"
 
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
-	iot_grpcapi "github.com/SKF/proto/iot"
+	iot_grpcapi "github.com/SKF/proto/v2/iot"
 )
 
 func (c *Client) CreateTask(task iot_grpcapi.InitialTaskDescription) (taskID string, err error) {

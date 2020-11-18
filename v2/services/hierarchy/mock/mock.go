@@ -9,8 +9,8 @@ import (
 	"github.com/SKF/go-eventsource/eventsource"
 
 	"github.com/SKF/go-enlight-sdk/v2/services/hierarchy"
-	"github.com/SKF/proto/common"
-	hierarchy_grpcapi "github.com/SKF/proto/hierarchy"
+	"github.com/SKF/proto/v2/common"
+	hierarchy_grpcapi "github.com/SKF/proto/v2/hierarchy"
 )
 
 type client struct {

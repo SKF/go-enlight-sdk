@@ -2,20 +2,26 @@ package authorize
 
 import (
 	"context"
-	"net"
 	"os"
 	"time"
 
 	"github.com/SKF/go-enlight-sdk/v2/interceptors/reconnect"
-	"github.com/SKF/go-utility/log"
+	"github.com/SKF/go-utility/v2/log"
+	authorizeApi "github.com/SKF/proto/v2/authorize"
+	"github.com/SKF/proto/v2/common"
 	"github.com/aws/aws-sdk-go/aws/session"
-	"google.golang.org/grpc/codes"
-
-	"github.com/SKF/proto/common"
+	grpc_retry "github.com/grpc-ecosystem/go-grpc-middleware/retry"
 	"google.golang.org/grpc"
-
-	authorizeApi "github.com/SKF/proto/authorize"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/resolver"
 )
+
+const defaultServiceConfig = `{
+	"loadBalancingConfig": [
+		{ "round_robin": {} }
+	]
+}
+`
 
 type client struct {
 	conn           *grpc.ClientConn
@@ -23,7 +29,7 @@ type client struct {
 	requestTimeout time.Duration
 }
 
-type AuthorizeClient interface { // nolint: golint
+type AuthorizeClient interface {
 	Dial(host, port string, opts ...grpc.DialOption) error
 	DialWithContext(ctx context.Context, host, port string, opts ...grpc.DialOption) error
 	DialUsingCredentials(sess *session.Session, host, port, secretKey string, opts ...grpc.DialOption) error
@@ -36,8 +42,9 @@ type AuthorizeClient interface { // nolint: golint
 
 	IsAuthorized(userID, action string, resource *common.Origin) (bool, error)
 	IsAuthorizedWithContext(ctx context.Context, userID, action string, resource *common.Origin) (bool, error)
-	IsAuthorizedBulk(userID, action string, resource []common.Origin) ([]string, []bool, error)
-	IsAuthorizedBulkWithContext(ctx context.Context, userID, action string, resource []common.Origin) ([]string, []bool, error)
+	IsAuthorizedBulk(userID, action string, resResources []common.Origin) ([]string, []bool, error)
+	IsAuthorizedBulkWithContext(ctx context.Context, userID, action string, reqResources []common.Origin) ([]string, []bool, error)
+	IsAuthorizedBulkWithResources(ctx context.Context, userID, action string, reqResources []common.Origin) ([]common.Origin, []bool, error)
 	IsAuthorizedByEndpoint(api, method, endpoint, userID string) (bool, error)
 	IsAuthorizedByEndpointWithContext(ctx context.Context, api, method, endpoint, userID string) (bool, error)
 
@@ -92,6 +99,9 @@ type AuthorizeClient interface { // nolint: golint
 	ApplyUserAction(userID, action string, resource *common.Origin) error
 	ApplyUserActionWithContext(ctx context.Context, userID, action string, resource *common.Origin) error
 
+	ApplyRolesForUserOnResources(userID string, roles []string, resources []common.Origin) error
+	ApplyRolesForUserOnResourcesWithContext(ctx context.Context, userID string, roles []string, resources []common.Origin) error
+
 	RemoveUserAction(userID, action string, resource *common.Origin) error
 	RemoveUserActionWithContext(ctx context.Context, userID, action string, resource *common.Origin) error
 
@@ -144,6 +154,9 @@ func (c *client) Dial(host, port string, opts ...grpc.DialOption) error {
 
 // DialWithContext creates a client connection to the given host with context (for timeout and transaction id)
 func (c *client) DialWithContext(ctx context.Context, host, port string, opts ...grpc.DialOption) (err error) {
+	resolver.SetDefaultScheme("dns")
+	opts = append(opts, grpc.WithDefaultServiceConfig(defaultServiceConfig))
+
 	conn, err := grpc.DialContext(ctx, host+":"+port, opts...)
 	if err != nil {
 		return
@@ -164,35 +177,39 @@ func (c *client) DialUsingCredentials(sess *session.Session, host, port, secretK
 
 // DialUsingCredentialsWithContext creates a client connection to the given host with context (for timeout and transaction id)
 func (c *client) DialUsingCredentialsWithContext(ctx context.Context, sess *session.Session, host, port, secretKey string, opts ...grpc.DialOption) error {
-	reconnectOpts := grpc.WithUnaryInterceptor(reconnect.UnaryInterceptor(
-		reconnect.WithCodes(codes.DeadlineExceeded, codes.Unavailable),
-		reconnect.WithNewConnection(
-			func(invokerCtx context.Context, invokerConn *grpc.ClientConn, invokerOptions ...grpc.CallOption) (context.Context, *grpc.ClientConn, []grpc.CallOption, error) {
-				if invokerCtx.Err() != nil {
-					return invokerCtx, invokerConn, invokerOptions, nil
-				}
-				opt, err := getCredentialOption(invokerCtx, sess, host, secretKey)
-				if err != nil {
-					log.WithTracing(invokerCtx).WithError(err).Error("Failed to get credential options")
-					return invokerCtx, invokerConn, invokerOptions, err
-				}
-				_ = c.conn.Close()
-				c.conn, err = grpc.DialContext(invokerCtx, net.JoinHostPort(host, port), append(opts, opt, grpc.WithBlock())...)
-				if err != nil {
-					log.WithTracing(invokerCtx).WithError(err).Error("Failed to dial context")
-					return invokerCtx, invokerConn, invokerOptions, err
-				}
-				c.api = authorizeApi.NewAuthorizeClient(c.conn)
-				return invokerCtx, c.conn, invokerOptions, err
-			}),
-	),
-	)
+	resolver.SetDefaultScheme("dns")
+	opts = append(opts, grpc.WithDefaultServiceConfig(defaultServiceConfig))
+
+	var newClientConn reconnect.NewConnectionFunc
+	newClientConn = func(invokerCtx context.Context, invokerConn *grpc.ClientConn, invokerOptions ...grpc.CallOption) (context.Context, *grpc.ClientConn, []grpc.CallOption, error) {
+		credOpt, err := getCredentialOption(invokerCtx, sess, host, secretKey)
+		if err != nil {
+			log.WithTracing(invokerCtx).WithError(err).Error("Failed to get credential options")
+			return invokerCtx, invokerConn, invokerOptions, err
+		}
+
+		dialOptsReconnectRetry := reconnectRetryInterceptor(newClientConn)
+
+		dialOpts := append(opts, credOpt, dialOptsReconnectRetry, grpc.WithBlock())
+		newConn, err := grpc.DialContext(invokerCtx, host+":"+port, dialOpts...)
+		if err != nil {
+			log.WithTracing(invokerCtx).WithError(err).Error("Failed to dial context")
+			return invokerCtx, invokerConn, invokerOptions, err
+		}
+		_ = invokerConn.Close()
+
+		c.conn = newConn
+		c.api = authorizeApi.NewAuthorizeClient(c.conn)
+		return invokerCtx, c.conn, invokerOptions, err
+	}
 
 	opt, err := getCredentialOption(ctx, sess, host, secretKey)
 	if err != nil {
 		return err
 	}
-	newOpts := append(opts, opt, reconnectOpts)
+
+	dialOptsReconnectRetry := reconnectRetryInterceptor(newClientConn)
+	newOpts := append(opts, opt, dialOptsReconnectRetry)
 
 	conn, err := grpc.DialContext(ctx, host+":"+port, newOpts...)
 	if err != nil {
@@ -204,6 +221,20 @@ func (c *client) DialUsingCredentialsWithContext(ctx context.Context, sess *sess
 
 	err = c.logClientState(ctx, "opening connection")
 	return err
+}
+
+func reconnectRetryInterceptor(newClientConn reconnect.NewConnectionFunc) grpc.DialOption {
+	retryIC := grpc_retry.UnaryClientInterceptor(
+		grpc_retry.WithBackoff(grpc_retry.BackoffLinear(100*time.Millisecond)),
+		grpc_retry.WithCodes(codes.Unavailable, codes.ResourceExhausted, codes.Aborted),
+	)
+
+	reconnectIC := reconnect.UnaryInterceptor(
+		reconnect.WithNewConnection(newClientConn),
+	)
+
+	dialOptsReconnectRetry := grpc.WithChainUnaryInterceptor(reconnectIC, retryIC) // first one is outer, being called last
+	return dialOptsReconnectRetry
 }
 
 func (c *client) Close() (err error) {

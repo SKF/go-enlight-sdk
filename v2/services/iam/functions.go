@@ -6,10 +6,10 @@ import (
 	"errors"
 	"time"
 
-	"github.com/SKF/proto/common"
+	"github.com/SKF/proto/v2/common"
 
 	"github.com/SKF/go-eventsource/eventsource"
-	iam_grpcapi "github.com/SKF/proto/iam"
+	iam_grpcapi "github.com/SKF/proto/v2/iam"
 )
 
 func (c *client) CheckAuthentication(token, arn string) (claims iam_grpcapi.UserClaims, err error) {

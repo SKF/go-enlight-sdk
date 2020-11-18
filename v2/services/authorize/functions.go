@@ -6,11 +6,20 @@ import (
 	"fmt"
 	"time"
 
-	authorizeApi "github.com/SKF/proto/authorize"
-	"github.com/SKF/proto/common"
+	authorizeApi "github.com/SKF/proto/v2/authorize"
+	"github.com/SKF/proto/v2/common"
 )
 
 const REQUEST_LENGTH_LIMIT = 1000
+
+func toArrayOfPointers(resources []common.Origin) []*common.Origin {
+	var result []*common.Origin
+	for i := 0; i < len(resources); i++ {
+		result = append(result, &resources[i])
+	}
+
+	return result
+}
 
 func requestLengthLimit(requestLength int) error {
 	if requestLength > REQUEST_LENGTH_LIMIT {
@@ -41,21 +50,40 @@ func (c *client) IsAuthorizedWithContext(ctx context.Context, userID, action str
 	return result.Ok, err
 }
 
-func (c *client) IsAuthorizedBulk(userID, action string, resources []common.Origin) ([]string, []bool, error) {
+// Deprecated: This functions is deprecated in favor of
+// IsAuthorizedBulkWithResources as this variant returns a list of resource IDs
+// which aren't unique.
+func (c *client) IsAuthorizedBulk(userID, action string, reqResources []common.Origin) ([]string, []bool, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), c.requestTimeout)
 	defer cancel()
-	return c.IsAuthorizedBulkWithContext(ctx, userID, action, resources)
+	return c.IsAuthorizedBulkWithContext(ctx, userID, action, reqResources)
 }
 
-func (c *client) IsAuthorizedBulkWithContext(ctx context.Context, userID, action string, resources []common.Origin) ([]string, []bool, error) {
-	if err := requestLengthLimit(len(resources)); err != nil {
+// Deprecated: This functions is deprecated in favor of
+// IsAuthorizedBulkWithResources as this variant returns a list of resource IDs
+// which aren't unique.
+func (c *client) IsAuthorizedBulkWithContext(ctx context.Context, userID, action string, reqResources []common.Origin) ([]string, []bool, error) {
+	resources, oks, err := c.IsAuthorizedBulkWithResources(ctx, userID, action, reqResources)
+
+	if err != nil {
 		return nil, nil, err
 	}
 
-	var resourcesInput []*common.Origin
-	for i := 0; i < len(resources); i++ {
-		resourcesInput = append(resourcesInput, &resources[i])
+	ids := make([]string, len(resources))
+
+	for i := range resources {
+		ids[i] = resources[i].GetId()
 	}
+
+	return ids, oks, nil
+}
+
+func (c *client) IsAuthorizedBulkWithResources(ctx context.Context, userID, action string, reqResources []common.Origin) ([]common.Origin, []bool, error) {
+	if err := requestLengthLimit(len(reqResources)); err != nil {
+		return nil, nil, err
+	}
+
+	resourcesInput := toArrayOfPointers(reqResources)
 
 	results, err := c.api.IsAuthorizedBulk(ctx, &authorizeApi.IsAuthorizedBulkInput{
 		UserId:    userID,
@@ -66,15 +94,25 @@ func (c *client) IsAuthorizedBulkWithContext(ctx context.Context, userID, action
 		return nil, nil, err
 	}
 
-	items := results.Responses
-	var ids []string
-	var oks []bool
-	for _, item := range items {
-		ids = append(ids, item.ResourceId)
-		oks = append(oks, item.Ok)
+	responses := results.GetResponses()
+	resources := make([]common.Origin, len(responses))
+	oks := make([]bool, len(responses))
+
+	for i := range responses {
+		resource := responses[i].GetResource()
+		// If running against an old server which doesn't set the resource
+		if resource == nil {
+			resource = &common.Origin{
+				Id:       responses[i].GetResourceId(), //nolint: staticcheck
+				Type:     "",
+				Provider: "",
+			}
+		}
+		resources[i] = *resource
+		oks[i] = responses[i].GetOk()
 	}
 
-	return ids, oks, err
+	return resources, oks, err
 }
 
 func (c *client) IsAuthorizedByEndpoint(api, method, endpoint, userID string) (bool, error) {
@@ -143,10 +181,7 @@ func (c *client) AddResourcesWithContext(ctx context.Context, resources []common
 		return err
 	}
 
-	var resourcesInput []*common.Origin
-	for i := 0; i < len(resources); i++ {
-		resourcesInput = append(resourcesInput, &resources[i])
-	}
+	resourcesInput := toArrayOfPointers(resources)
 
 	_, err := c.api.AddResources(ctx, &authorizeApi.AddResourcesInput{
 		Resource: resourcesInput,
@@ -181,10 +216,7 @@ func (c *client) RemoveResourcesWithContext(ctx context.Context, resources []com
 		return err
 	}
 
-	var resourcesInput []*common.Origin
-	for i := 0; i < len(resources); i++ {
-		resourcesInput = append(resourcesInput, &resources[i])
-	}
+	resourcesInput := toArrayOfPointers(resources)
 
 	_, err := c.api.RemoveResources(ctx, &authorizeApi.RemoveResourcesInput{
 		Resource: resourcesInput,
@@ -337,6 +369,23 @@ func (c *client) ApplyUserActionWithContext(ctx context.Context, userID, action 
 		UserId:   userID,
 		Action:   action,
 		Resource: resource,
+	})
+	return err
+}
+
+func (c *client) ApplyRolesForUserOnResources(userID string, roles []string, resources []common.Origin) error {
+	ctx, cancel := context.WithTimeout(context.Background(), c.requestTimeout)
+	defer cancel()
+	return c.ApplyRolesForUserOnResourcesWithContext(ctx, userID, roles, resources)
+}
+
+func (c *client) ApplyRolesForUserOnResourcesWithContext(ctx context.Context, userID string, roles []string, resources []common.Origin) error {
+	resourcesInput := toArrayOfPointers(resources)
+
+	_, err := c.api.ApplyRolesForUserOnResources(ctx, &authorizeApi.ApplyRolesForUserOnResourcesInput{
+		UserId:    userID,
+		Roles:     roles,
+		Resources: resourcesInput,
 	})
 	return err
 }

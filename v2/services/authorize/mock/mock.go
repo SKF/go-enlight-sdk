@@ -2,12 +2,13 @@ package mock
 
 import (
 	"context"
-	"github.com/aws/aws-sdk-go/aws/session"
 	"time"
 
-	grpcapi "github.com/SKF/proto/authorize"
+	"github.com/aws/aws-sdk-go/aws/session"
 
-	"github.com/SKF/proto/common"
+	grpcapi "github.com/SKF/proto/v2/authorize"
+
+	"github.com/SKF/proto/v2/common"
 
 	"github.com/stretchr/testify/mock"
 	"google.golang.org/grpc"
@@ -79,6 +80,10 @@ func (mock *client) IsAuthorizedBulk(userID, action string, resources []common.O
 func (mock *client) IsAuthorizedBulkWithContext(ctx context.Context, userID, action string, resources []common.Origin) ([]string, []bool, error) {
 	args := mock.Called(userID, action, resources)
 	return args.Get(0).([]string), args.Get(1).([]bool), args.Error(2)
+}
+func (mock *client) IsAuthorizedBulkWithResources(ctx context.Context, userID, action string, resources []common.Origin) ([]common.Origin, []bool, error) {
+	args := mock.Called(userID, action, resources)
+	return args.Get(0).([]common.Origin), args.Get(1).([]bool), args.Error(2)
 }
 
 func (mock *client) IsAuthorizedByEndpoint(api, method, endpoint, userID string) (bool, error) {
@@ -190,6 +195,16 @@ func (mock *client) ApplyUserActionWithContext(ctx context.Context, userID, acti
 	return args.Error(0)
 }
 
+func (mock *client) ApplyRolesForUserOnResources(userID string, roles []string, resources []common.Origin) error {
+	args := mock.Called(userID, roles, resources)
+	return args.Error(0)
+}
+
+func (mock *client) ApplyRolesForUserOnResourcesWithContext(ctx context.Context, userID string, roles []string, resources []common.Origin) error {
+	args := mock.Called(ctx, userID, roles, resources)
+	return args.Error(0)
+}
+
 func (mock *client) RemoveUserAction(userID, action string, resource *common.Origin) error {
 	args := mock.Called(userID, action, resource)
 	return args.Error(0)
@@ -276,12 +291,12 @@ func (mock *client) GetResourcesAndActionsByUserWithContext(ctx context.Context,
 	return args.Get(0).([]grpcapi.ActionResource), args.Error(1)
 }
 
-func (mock *client) GetResourcesAndActionsByUserAndResource(userID string, resource common.Origin) ([]grpcapi.ActionResource, error) {
+func (mock *client) GetResourcesAndActionsByUserAndResource(userID string, resource *common.Origin) ([]grpcapi.ActionResource, error) {
 	args := mock.Called(userID, resource)
 	return args.Get(0).([]grpcapi.ActionResource), args.Error(1)
 }
 
-func (mock *client) GetResourcesAndActionsByUserAndResourceWithContext(ctx context.Context, userID string, resource common.Origin) ([]grpcapi.ActionResource, error) {
+func (mock *client) GetResourcesAndActionsByUserAndResourceWithContext(ctx context.Context, userID string, resource *common.Origin) ([]grpcapi.ActionResource, error) {
 	args := mock.Called(ctx, userID, resource)
 	return args.Get(0).([]grpcapi.ActionResource), args.Error(1)
 }

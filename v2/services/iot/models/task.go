@@ -7,7 +7,7 @@ import (
 
 	"github.com/SKF/go-utility/log"
 	"github.com/SKF/go-utility/uuid"
-	iotgrpcapi "github.com/SKF/proto/iot"
+	iotgrpcapi "github.com/SKF/proto/v2/iot"
 )
 
 var (

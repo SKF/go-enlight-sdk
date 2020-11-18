@@ -2,12 +2,12 @@ package notification
 
 import (
 	"context"
-	"github.com/SKF/go-utility/log"
 
-	"github.com/SKF/proto/common"
-	proto "github.com/SKF/proto/notification"
+	"github.com/SKF/go-utility/v2/log"
+
+	"github.com/SKF/proto/v2/common"
+	proto "github.com/SKF/proto/v2/notification"
 )
-
 
 func (c *client) SetNotificationType(notificationType proto.NotificationType) error {
 	ctx, cancel := context.WithTimeout(context.Background(), c.requestTimeout)
@@ -59,7 +59,6 @@ func (c *client) RemoveNotificationTypeWithContext(ctx context.Context, name str
 
 	return err
 }
-
 
 func (c *client) InitiateNotification(notificationType proto.NotificationType, resource common.Origin, header, body, createdBy string) (string, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), c.requestTimeout)
@@ -113,7 +112,6 @@ func (c *client) RemoveInitiatedNotificationWithContext(ctx context.Context, ext
 	return err
 }
 
-
 func (c *client) SetUserPreferences(prefs []proto.UserPreference) error {
 	ctx, cancel := context.WithTimeout(context.Background(), c.requestTimeout)
 	defer cancel()
@@ -158,14 +156,13 @@ func (c *client) RemoveUserPreferences(userID, notificationTypeExtId string) err
 }
 func (c *client) RemoveUserPreferencesWithContext(ctx context.Context, userID, notificationTypeExtId string) error {
 	input := proto.RemoveUserPreferencesInput{
-		UserId: userID,
-		NotificationTypeExtId:notificationTypeExtId,
+		UserId:                userID,
+		NotificationTypeExtId: notificationTypeExtId,
 	}
 	_, err := c.api.RemoveUserPreferences(ctx, &input)
 
 	return err
 }
-
 
 func (c *client) GetUserNotifications(userID string, limit int32) ([]proto.UserNotification, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), c.requestTimeout)
@@ -202,6 +199,22 @@ func (c *client) RemoveUserNotificationsWithContext(ctx context.Context, userID,
 		InitiatedNotificationExternalId: initiatedNotificationExternalId,
 	}
 	_, err := c.api.RemoveUserNotifications(ctx, &input)
+
+	return err
+}
+
+func (c *client) UpdateUserNotificationStatus(notificationId string, state proto.SendState) error {
+	ctx, cancel := context.WithTimeout(context.Background(), c.requestTimeout)
+	defer cancel()
+	return c.UpdateUserNotificationStatusWithContext(ctx, notificationId, state)
+}
+
+func (c *client) UpdateUserNotificationStatusWithContext(ctx context.Context, notificationId string, state proto.SendState) error {
+	input := proto.UpdateUserNotificationStatusInput{
+		NotificationId: notificationId,
+		SendState:      state,
+	}
+	_, err := c.api.UpdateUserNotificationStatus(ctx, &input)
 
 	return err
 }

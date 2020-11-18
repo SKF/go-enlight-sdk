@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	grpcapi "github.com/SKF/proto/hierarchy"
+	grpcapi "github.com/SKF/proto/v2/hierarchy"
 )
 
 // InspectionPoint - holds parameters for inspection point
