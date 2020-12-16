@@ -371,12 +371,7 @@ func (mock *client) RemoveUserRoleWithContext(ctx context.Context, roleName stri
 	return args.Error(0)
 }
 
-func (mock *client) IsAuthorizedWithReason(userID, action string, resource *common.Origin) (bool, string, error) {
-	args := mock.Called(userID, action, resource)
-	return args.Bool(0), args.String(1), args.Error(2)
-}
-
-func (mock *client) IsAuthorizedWithReasonWithContext(ctx context.Context, userID, action string, resource *common.Origin) (bool, string, error) {
+func (mock *client) IsAuthorizedWithReason(ctx context.Context, userID, action string, resource *common.Origin) (bool, string, error) {
 	args := mock.Called(ctx, userID, action, resource)
 	return args.Bool(0), args.String(1), args.Error(2)
 }

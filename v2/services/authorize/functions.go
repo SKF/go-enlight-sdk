@@ -686,20 +686,15 @@ func (c *client) RemoveUserRoleWithContext(ctx context.Context, roleName string)
 	return err
 }
 
-func (c *client) IsAuthorizedWithReason(userID, action string, resource *common.Origin) (bool, string, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), c.requestTimeout)
-	defer cancel()
-	return c.IsAuthorizedWithReasonWithContext(ctx, userID, action, resource)
-}
-func (c *client) IsAuthorizedWithReasonWithContext(ctx context.Context, userID, action string, resource *common.Origin) (bool, string, error) {
-	result, reason, err := c.api.IsAuthorizedWithReason(ctx, &authorizeApi.IsAuthorizedInput{
+func (c *client) IsAuthorizedWithReason(ctx context.Context, userID, action string, resource *common.Origin) (bool, string, error) {
+	result, err := c.api.IsAuthorizedWithReason(ctx, &authorizeApi.IsAuthorizedInput{
 		UserId:   userID,
 		Action:   action,
 		Resource: resource,
 	})
 	if err != nil {
-		return false, reason, err
+		return false, result.Reason, err
 	}
 
-	return result.Ok, reason, err
+	return result.Ok, result.Reason, err
 }

@@ -47,8 +47,7 @@ type AuthorizeClient interface {
 	IsAuthorizedBulkWithResources(ctx context.Context, userID, action string, reqResources []common.Origin) ([]common.Origin, []bool, error)
 	IsAuthorizedByEndpoint(api, method, endpoint, userID string) (bool, error)
 	IsAuthorizedByEndpointWithContext(ctx context.Context, api, method, endpoint, userID string) (bool, error)
-	IsAuthorizedWithReason(userID, action string, resource *common.Origin) (bool, string, error)
-	IsAuthorizedWithReasonWithContext(ctx context.Context, userID, action string, resource *common.Origin) (bool, string, error)
+	IsAuthorizedWithReason(ctx context.Context, userID, action string, resource *common.Origin) (bool, string, error)
 
 	AddResource(resource common.Origin) error
 	AddResourceWithContext(ctx context.Context, resource common.Origin) error
