@@ -158,7 +158,7 @@ func Test_IsAuthorizedWithReason(t *testing.T) {
 
 	client := clientFor(t, server)
 
-	server.On("IsAuthorizedwithreason", mock.Anything, &grpcapi.IsAuthorizedInput{
+	server.On("IsAuthorizedWithReason", mock.Anything, &grpcapi.IsAuthorizedInput{
 		UserId: "testUser",
 		Action: "testAction",
 		Resource: &common.Origin{
@@ -167,7 +167,7 @@ func Test_IsAuthorizedWithReason(t *testing.T) {
 			Provider: "1",
 		},
 	}).
-		Return(grpcapi.IsAuthorizedWithReasonOutput{
+		Return(&grpcapi.IsAuthorizedWithReasonOutput{
 			Ok:     true,
 			Reason: "reason",
 		}, nil)
@@ -175,14 +175,15 @@ func Test_IsAuthorizedWithReason(t *testing.T) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Millisecond)
 	defer cancel()
 
-	ok, reason, err := client.IsAuthorizedWithReason(ctx, "testUser", "testAction", &common.Origin{
+	ok, reason, err := client.IsAuthorizedWithReasonWithContext(ctx, "testUser", "testAction", &common.Origin{
 		Id:       "0",
 		Type:     "node",
 		Provider: "1",
 	})
 
 	require.NoError(t, err)
-
+	print(ok)
+	print("reason")
 	assert.Equal(t, "reason", reason)
 	assert.True(t, ok)
 
