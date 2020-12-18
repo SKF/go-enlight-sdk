@@ -699,7 +699,7 @@ func (c *client) IsAuthorizedWithReasonWithContext(ctx context.Context, userID, 
 		Resource: resource,
 	})
 	if err != nil || result == nil {
-		return false, "error occured", err
+		return false, "error occured ", err
 	}
 
 	return result.Ok, result.Reason, err
