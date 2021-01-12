@@ -151,3 +151,41 @@ func Test_IsAuthorizedBulkWithResourcesNoResourceInResonse(t *testing.T) {
 
 	server.AssertExpectations(t)
 }
+
+func Test_IsAuthorizedWithReason(t *testing.T) {
+	server, err := authMock.NewServer()
+	require.NoError(t, err)
+
+	client := clientFor(t, server)
+
+	server.On("IsAuthorizedWithReason", mock.Anything, &grpcapi.IsAuthorizedInput{
+		UserId: "testUser",
+		Action: "testAction",
+		Resource: &common.Origin{
+			Id:       "0",
+			Type:     "node",
+			Provider: "1",
+		},
+	}).
+		Return(&grpcapi.IsAuthorizedWithReasonOutput{
+			Ok:     true,
+			Reason: "reason",
+		}, nil)
+
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Millisecond)
+	defer cancel()
+
+	ok, reason, err := client.IsAuthorizedWithReasonWithContext(ctx, "testUser", "testAction", &common.Origin{
+		Id:       "0",
+		Type:     "node",
+		Provider: "1",
+	})
+
+	require.NoError(t, err)
+	print(ok)
+	print("reason")
+	assert.Equal(t, "reason", reason)
+	assert.True(t, ok)
+
+	server.AssertExpectations(t)
+}

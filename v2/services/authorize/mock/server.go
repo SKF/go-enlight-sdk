@@ -241,3 +241,8 @@ func (s *AuthorizeServer) GetAllActions(ctx context.Context, in *common.Void) (*
 	args := s.Called(ctx, in)
 	return args.Get(0).(*authorize.GetAllActionsOutput), args.Error(1)
 }
+
+func (s *AuthorizeServer) IsAuthorizedWithReason(ctx context.Context, in *authorize.IsAuthorizedInput) (*authorize.IsAuthorizedWithReasonOutput, error) {
+	args := s.Called(ctx, in)
+	return args.Get(0).(*authorize.IsAuthorizedWithReasonOutput), args.Error(1)
+}
