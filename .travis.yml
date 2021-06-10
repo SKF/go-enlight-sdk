@@ -11,12 +11,10 @@ script:
   - $(go env GOPATH)/bin/golangci-lint run --disable wsl ./...
   - go clean
   - go build ./...
-  - go clean -testcache
-  - go test ./... --short
+  - go test ./... --short -count=1
 
   - cd v2
   - $(go env GOPATH)/bin/golangci-lint run --disable wsl ./...
   - go clean
   - go build ./...
-  - go clean -testcache
-  - go test ./... --short
+  - go test ./... --short -count=1
