@@ -140,7 +140,7 @@ func Test_Loadbalancing(t *testing.T) {
 		server, err := authMock.NewServerOnHostPort(ip, serverPort)
 		require.NoError(t, err)
 		dnsServer.AddEndpoint(domain, ip)
-		server.On("DeepPing", mock.Anything, mock.Anything).Return(&common.PrimitiveString{Value: ""}, nil)
+		server.On("DeepPing", mock.Anything, mock.Anything).Return(&common.PrimitiveString{Value: ""}, nil).Once()
 		servers[i] = server
 	}
 
