@@ -9,10 +9,12 @@ install:
   - $(go env GOPATH)/bin/golangci-lint --version
 script:
   - $(go env GOPATH)/bin/golangci-lint run --disable wsl ./...
+  - go clean
   - go build ./...
-  - go test ./... --short
+  - go test ./... --short -count=1
 
   - cd v2
   - $(go env GOPATH)/bin/golangci-lint run --disable wsl ./...
+  - go clean
   - go build ./...
-  - go test ./... --short
+  - go test ./... --short -count=1
