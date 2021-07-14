@@ -80,6 +80,16 @@ func (mock *client) GetPointAlarmStatusWithContext(ctx context.Context, input pa
 	return args.Get(0).(pas_api.AlarmStatus), args.Error(1)
 }
 
+func (mock *client) GetPointAlarmStatusV2(input pas_api.GetPointAlarmStatusInput) (*pas_api.GetPointAlarmStatusOutput, error) {
+	args := mock.Called(input)
+	return args.Get(0).(*pas_api.GetPointAlarmStatusOutput), args.Error(1)
+}
+
+func (mock *client) GetPointAlarmStatusV2WithContext(ctx context.Context, input pas_api.GetPointAlarmStatusInput) (*pas_api.GetPointAlarmStatusOutput, error) {
+	args := mock.Called(ctx, input)
+	return args.Get(0).(*pas_api.GetPointAlarmStatusOutput), args.Error(1)
+}
+
 func (mock *client) GetPointAlarmStatusEventLog(seqID string) (events pas_api.GetPointAlarmStatusEventLogOutput, err error) {
 	args := mock.Called(seqID)
 	return args.Get(0).(pas_api.GetPointAlarmStatusEventLogOutput), args.Error(1)

@@ -4,11 +4,12 @@ import (
 	"context"
 	"time"
 
-	"github.com/SKF/go-enlight-sdk/v2/interceptors/reconnect"
 	"github.com/SKF/go-utility/v2/log"
 	"github.com/SKF/proto/v2/common"
 	pas_api "github.com/SKF/proto/v2/pas"
 	grpc_retry "github.com/grpc-ecosystem/go-grpc-middleware/retry"
+
+	"github.com/SKF/go-enlight-sdk/v2/interceptors/reconnect"
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
@@ -34,8 +35,15 @@ type PointAlarmStatusClient interface {
 	SetPointAlarmStatus(input pas_api.SetPointAlarmStatusInput) error
 	SetPointAlarmStatusWithContext(ctx context.Context, input pas_api.SetPointAlarmStatusInput) error
 
+	// Deprecated: GetPointAlarmStatus only returns worst status
+	// use GetPointAlarmStatusV2 instead
 	GetPointAlarmStatus(input pas_api.GetPointAlarmStatusInput) (pas_api.AlarmStatus, error)
+	// Deprecated: GetPointAlarmStatusWithContext only returns worst status
+	// use GetPointAlarmStatusV2WithContext instead
 	GetPointAlarmStatusWithContext(ctx context.Context, input pas_api.GetPointAlarmStatusInput) (pas_api.AlarmStatus, error)
+
+	GetPointAlarmStatusV2(input pas_api.GetPointAlarmStatusInput) (*pas_api.GetPointAlarmStatusOutput, error)
+	GetPointAlarmStatusV2WithContext(ctx context.Context, input pas_api.GetPointAlarmStatusInput) (*pas_api.GetPointAlarmStatusOutput, error)
 
 	GetPointAlarmStatusEventLog(seqID string) (events pas_api.GetPointAlarmStatusEventLogOutput, err error)
 	GetPointAlarmStatusEventLogWithContext(ctx context.Context, seqID string) (events pas_api.GetPointAlarmStatusEventLogOutput, err error)
