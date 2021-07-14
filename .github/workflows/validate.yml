@@ -26,17 +26,20 @@ jobs:
           go get github.com/golangci/golangci-lint/cmd/golangci-lint@v1.20.0
           go install github.com/golangci/golangci-lint/cmd/golangci-lint
           $GOPATH/bin/golangci-lint --version
+
       - name: lint
         run: |
           $GOPATH/bin/golangci-lint run --disable wsl ./...
           cd v2
           $GOPATH/bin/golangci-lint run --disable wsl ./...
+
       - name: test
         run: |
           go clean
           go get ./...
           go test ./... --short -count=1
 
+          cd v2
           go clean
           go get ./...
           go test ./... --short -count=1
