@@ -9,7 +9,6 @@ jobs:
     name: validate
     runs-on: ubuntu-latest
     env:
-      GOPATH: ${{ github.workspace }}/go
       GO111MODULE: on
     steps:
       - name: Set up Go 1.13
