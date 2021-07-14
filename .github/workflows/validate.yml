@@ -23,11 +23,8 @@ jobs:
 
       - name: install
         run: |
-          echo "Go getting"
           go get github.com/golangci/golangci-lint/cmd/golangci-lint@v1.20.0
-          echo "Go installing"
           go install github.com/golangci/golangci-lint/cmd/golangci-lint
-          echo "Printing version of lint"
           $GOPATH/bin/golangci-lint --version
       - name: lint
         run: |
@@ -37,9 +34,9 @@ jobs:
       - name: test
         run: |
           go clean
-          go build ./...
+          go get ./...
           go test ./... --short -count=1
 
           go clean
-          go build ./...
+          go get ./...
           go test ./... --short -count=1
