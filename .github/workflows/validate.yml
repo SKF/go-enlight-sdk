@@ -37,7 +37,9 @@ jobs:
       - name: test
         run: |
           go clean
+          go build ./...
           go test ./... --short -count=1
 
           go clean
+          go build ./...
           go test ./... --short -count=1
