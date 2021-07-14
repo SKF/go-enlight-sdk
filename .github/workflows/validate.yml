@@ -35,8 +35,10 @@ jobs:
       - name: test
         run: |
           go clean
+          echo "Running v1 tests"
           go test ./... --short -count=1
 
           cd v2
           go clean
+          echo "Running v2 tests"
           go test ./... --short -count=1
