@@ -1,0 +1,31 @@
+name: Validate
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+jobs:
+  validate:
+    name: validate
+    runs-on: ubuntu-latest
+    env:
+      GOPATH: ${{ github.workspace }}
+      GO111MODULE: on
+    steps:
+      - name: install
+        run: |
+          - go get github.com/golangci/golangci-lint/cmd/golangci-lint@v1.20.0
+          - go install github.com/golangci/golangci-lint/cmd/golangci-lint
+          - $(go env GOPATH)/bin/golangci-lint --version
+      - name: lint
+        run: |
+          - $(go env GOPATH)/bin/golangci-lint run --disable wsl ./...
+          - cd v2
+          - $(go env GOPATH)/bin/golangci-lint run --disable wsl ./...
+      - name: test
+        run: |
+          - go clean
+          - go test ./... --short -count=1
+
+          - go clean
+          - go test ./... --short -count=1
