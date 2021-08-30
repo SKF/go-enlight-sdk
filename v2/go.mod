@@ -6,7 +6,7 @@ require (
 	github.com/SKF/go-eventsource v1.4.2
 	github.com/SKF/go-utility v1.10.4
 	github.com/SKF/go-utility/v2 v2.12.0
-	github.com/SKF/proto/v2 v2.4.3-go
+	github.com/SKF/proto/v2 v2.12.0-go
 	github.com/aws/aws-sdk-go v1.35.30
 	github.com/golang/protobuf v1.4.3
 	github.com/grpc-ecosystem/go-grpc-middleware v1.2.2
