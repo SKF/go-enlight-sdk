@@ -2,7 +2,6 @@ package pas
 
 import (
 	"context"
-	"fmt"
 	"time"
 
 	pas_api "github.com/SKF/proto/v2/pas"
@@ -80,18 +79,6 @@ func (c *Client) GetPointAlarmStatusV2WithContext(ctx context.Context, input pas
 	}
 
 	return output, err
-}
-
-// GetPointAlarmStatusEventLog get all alarm events after a given sequence ID
-func (c *Client) GetPointAlarmStatusEventLog(seqID string) (events pas_api.GetPointAlarmStatusEventLogOutput, err error) {
-	ctx, cancel := context.WithCancel(context.Background())
-	defer cancel()
-	return c.GetPointAlarmStatusEventLogWithContext(ctx, seqID)
-}
-
-// GetPointAlarmStatusEventLogWithContext get all alarm events after a given sequence ID
-func (c *Client) GetPointAlarmStatusEventLogWithContext(ctx context.Context, seqID string) (events pas_api.GetPointAlarmStatusEventLogOutput, err error) {
-	return pas_api.GetPointAlarmStatusEventLogOutput{}, fmt.Errorf("this api is deprecated")
 }
 
 // CalculateAndSetPointAlarmStatus calculates and sets new PAS based on input data
