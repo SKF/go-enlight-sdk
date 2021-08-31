@@ -45,11 +45,6 @@ type PointAlarmStatusClient interface {
 	GetPointAlarmStatusV2(input pas_api.GetPointAlarmStatusInput) (*pas_api.GetPointAlarmStatusOutput, error)
 	GetPointAlarmStatusV2WithContext(ctx context.Context, input pas_api.GetPointAlarmStatusInput) (*pas_api.GetPointAlarmStatusOutput, error)
 
-	// Deprecated: GetPointAlarmStatusEventLog Don't use
-	GetPointAlarmStatusEventLog(seqID string) (events pas_api.GetPointAlarmStatusEventLogOutput, err error)
-	// Deprecated: GetPointAlarmStatusEventLogWithContext Don't use
-	GetPointAlarmStatusEventLogWithContext(ctx context.Context, seqID string) (events pas_api.GetPointAlarmStatusEventLogOutput, err error)
-
 	CalculateAndSetPointAlarmStatus(input pas_api.CalculateAndSetPointAlarmStatusInput) error
 	CalculateAndSetPointAlarmStatusWithContext(ctx context.Context, input pas_api.CalculateAndSetPointAlarmStatusInput) error
 }
