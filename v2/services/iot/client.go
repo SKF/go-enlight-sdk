@@ -34,6 +34,9 @@ type IoTClient interface { // nolint: golint
 	GetUncompletedTasksByHierarchy(nodeID string) (out []iot_grpcapi.TaskDescription, err error)
 	GetUncompletedTasksByHierarchyWithContext(ctx context.Context, nodeID string) (out []iot_grpcapi.TaskDescription, err error)
 
+	GetActiveTasks(userID string) ([]iot_grpcapi.TaskDescription, error)
+	GetActiveTasksWithContext(ctx context.Context, userID string) ([]iot_grpcapi.TaskDescription, error)
+
 	SetTaskStatus(input iot_grpcapi.SetTaskStatusInput) (err error)
 	SetTaskStatusWithContext(ctx context.Context, input iot_grpcapi.SetTaskStatusInput) (err error)
 

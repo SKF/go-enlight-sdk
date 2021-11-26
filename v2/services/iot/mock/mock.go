@@ -96,6 +96,15 @@ func (mock *client) GetUncompletedTasksByHierarchyWithContext(ctx context.Contex
 	return args.Get(0).([]iot_grpcapi.TaskDescription), args.Error(1)
 }
 
+func (mock *client) GetActiveTasks(userID string) ([]iot_grpcapi.TaskDescription, error) {
+	args := mock.Called(userID)
+	return args.Get(0).([]iot_grpcapi.TaskDescription), args.Error(1)
+}
+func (mock *client) GetActiveTasksWithContext(ctx context.Context, userID string) ([]iot_grpcapi.TaskDescription, error) {
+	args := mock.Called(ctx, userID)
+	return args.Get(0).([]iot_grpcapi.TaskDescription), args.Error(1)
+}
+
 func (mock *client) SetTaskStatus(input iot_grpcapi.SetTaskStatusInput) error {
 	args := mock.Called(input)
 	return args.Error(0)
