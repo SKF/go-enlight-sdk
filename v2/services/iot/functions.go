@@ -104,6 +104,7 @@ func (c *Client) GetActiveTasksWithContext(ctx context.Context, userID string) (
 	}
 	return
 }
+
 // SetTaskStatus will set the status of the task.
 //   SetTaskStatusInput:
 //     task_id uuid (required)
