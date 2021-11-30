@@ -6,6 +6,8 @@ on:
     branches: [ master ]
 jobs:
   validate:
+    env:
+      GOLANG_CI_LINT: go run github.com/golangci/golangci-lint/cmd/golangci-lint@v1.43.0
     name: validate
     runs-on: ubuntu-latest
     steps:
@@ -18,19 +20,12 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: install
-        run: |
-          # TODO: check install
-          go get github.com/golangci/golangci-lint/cmd/golangci-lint@v1.20.0
-          go install github.com/golangci/golangci-lint/cmd/golangci-lint
-          golangci-lint --version
-
       - name: lint
         run: |
-          golangci-lint run --disable wsl ./...
+          ${GOLANG_CI_LINT} run --disable wsl ./...
           cd v2
           # It isn't allowed to shallow-copy protobuf, therefore govet is disabled until this is fixed in the entire repo
-          golangci-lint run --disable wsl,govet ./...
+          ${GOLANG_CI_LINT} run --disable wsl,govet ./...
 
       - name: test
         run: |
