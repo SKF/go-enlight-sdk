@@ -8,13 +8,11 @@ jobs:
   validate:
     name: validate
     runs-on: ubuntu-latest
-    env:
-      GO111MODULE: on
     steps:
-      - name: Set up Go 1.13
+      - name: Set up Go 1.17
         uses: actions/setup-go@v2
         with:
-          go-version: 1.13
+          go-version: 1.17
         id: go
 
       - name: Checkout code
@@ -22,6 +20,7 @@ jobs:
 
       - name: install
         run: |
+          # TODO: check install
           go get github.com/golangci/golangci-lint/cmd/golangci-lint@v1.20.0
           go install github.com/golangci/golangci-lint/cmd/golangci-lint
           golangci-lint --version
