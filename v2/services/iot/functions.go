@@ -88,6 +88,23 @@ func (c *Client) GetUncompletedTasksByHierarchyWithContext(ctx context.Context, 
 	return
 }
 
+func (c *Client) GetActiveTasks(userID string) (out []iot_grpcapi.TaskDescription, err error) {
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
+	defer cancel()
+	return c.GetActiveTasksWithContext(ctx, userID)
+}
+func (c *Client) GetActiveTasksWithContext(ctx context.Context, userID string) (out []iot_grpcapi.TaskDescription, err error) {
+	input := common.PrimitiveString{Value: userID}
+	output, err := c.api.GetActiveTasks(ctx, &input)
+
+	if output != nil {
+		for _, desc := range output.TaskDescriptionArr {
+			out = append(out, *desc)
+		}
+	}
+	return
+}
+
 // SetTaskStatus will set the status of the task.
 //   SetTaskStatusInput:
 //     task_id uuid (required)
