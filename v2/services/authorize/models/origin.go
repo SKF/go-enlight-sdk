@@ -8,4 +8,5 @@ const (
 	UserGroupType      string = "usergroup"
 	UserAdminGroupType string = "useradmingroup"
 	FileType           string = "fileid"
+	AssetComponentType string = "assetcomponent"
 )
