@@ -5,19 +5,26 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/SKF/go-enlight-sdk/grpc"
-	"github.com/SKF/go-utility/v2/log"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/secretsmanager"
 	"github.com/pkg/errors"
 	googleGrpc "google.golang.org/grpc"
+
+	"github.com/SKF/go-enlight-sdk/grpc"
+	"github.com/SKF/go-enlight-sdk/services/authorize/credentialsmanager"
+	"github.com/SKF/go-utility/v2/log"
 )
 
 type dataStore struct {
 	CA  []byte `json:"ca"`
 	Key []byte `json:"key"`
 	Crt []byte `json:"crt"`
+}
+
+func getCredentialsManagerV1(sess *session.Session) credentialsmanager.CredentialsManager {
+	svc := secretsmanager.New(sess)
+	return credentialsmanager.CreateCredentialsManagerV1(svc)
 }
 
 func getSecret(ctx context.Context, sess *session.Session, secretsName string, out interface{}) (err error) {
@@ -50,6 +57,18 @@ func getSecret(ctx context.Context, sess *session.Session, secretsName string, o
 func getCredentialOption(ctx context.Context, sess *session.Session, host, secretKeyName string) (googleGrpc.DialOption, error) {
 	var clientCert dataStore
 	if err := getSecret(ctx, sess, secretKeyName, &clientCert); err != nil {
+		panic(err)
+	}
+
+	return grpc.WithTransportCredentialsPEM(
+		host,
+		clientCert.Crt, clientCert.Key, clientCert.CA,
+	)
+}
+
+func getWrapCredentials(ctx context.Context, host, secretKeyName string, cm credentialsmanager.CredentialsManager) (googleGrpc.DialOption, error) {
+	clientCert, err := cm.GetDataStore(ctx, secretKeyName)
+	if err != nil {
 		panic(err)
 	}
 

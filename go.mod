@@ -8,6 +8,7 @@ require (
 	github.com/SKF/go-utility/v2 v2.2.1
 	github.com/SKF/proto v1.27.1-go
 	github.com/aws/aws-sdk-go v1.25.49
+	github.com/aws/aws-sdk-go-v2/service/secretsmanager v1.15.22
 	github.com/golang/protobuf v1.3.2
 	github.com/grpc-ecosystem/go-grpc-middleware v1.2.0
 	github.com/pkg/errors v0.8.1
@@ -18,10 +19,14 @@ require (
 
 require (
 	github.com/BurntSushi/toml v0.3.1 // indirect
+	github.com/aws/aws-sdk-go-v2 v1.16.14 // indirect
+	github.com/aws/aws-sdk-go-v2/internal/configsources v1.1.21 // indirect
+	github.com/aws/aws-sdk-go-v2/internal/endpoints/v2 v2.4.15 // indirect
+	github.com/aws/smithy-go v1.13.2 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/google/uuid v1.0.0 // indirect
 	github.com/hashicorp/golang-lru v0.5.3 // indirect
-	github.com/jmespath/go-jmespath v0.0.0-20180206201540-c2b33e8439af // indirect
+	github.com/jmespath/go-jmespath v0.4.0 // indirect
 	github.com/kr/text v0.2.0 // indirect
 	github.com/niemeyer/pretty v0.0.0-20200227124842-a10e7caefd8e // indirect
 	github.com/oklog/ulid v1.3.1 // indirect
