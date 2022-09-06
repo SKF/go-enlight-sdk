@@ -34,7 +34,7 @@ type AuthorizeClient interface { // nolint: golint
 	DialUsingCredentials(sess *session.Session, host, port, secretKey string, opts ...grpc.DialOption) error
 	DialUsingCredentialsWithContext(ctx context.Context, sess *session.Session, host, port, secretKey string, opts ...grpc.DialOption) error
 
-	DialUsingCredentialsManager(ctx context.Context, host, port, secretKey string, opts ...grpc.DialOption) error
+	DialUsingCredentialsManager(ctx context.Context, cm credentialsmanager.CredentialsManager, host, port, secretKey string, opts ...grpc.DialOption) error
 
 	Close() error
 	SetRequestTimeout(d time.Duration)
@@ -140,13 +140,6 @@ func CreateClient() AuthorizeClient {
 	}
 }
 
-func CreateClientWithCredentials(credentialsManager credentialsmanager.CredentialsManager) AuthorizeClient {
-	return &client{
-		requestTimeout:     60 * time.Second,
-		credentialsManager: credentialsManager,
-	}
-}
-
 func (c *client) WithCredentialsManager(credentialsManager credentialsmanager.CredentialsManager) *client {
 	c.credentialsManager = credentialsManager
 
@@ -184,13 +177,12 @@ func (c *client) DialUsingCredentials(sess *session.Session, host, port, secretK
 func (c *client) DialUsingCredentialsWithContext(ctx context.Context, sess *session.Session, host, port, secretKey string, opts ...grpc.DialOption) error {
 
 	cm := getCredentialsManagerV1(sess)
-
-	return c.WithCredentialsManager(cm).
-		dialUsingCredentials(ctx, host, port, secretKey, opts)
+	return c.DialUsingCredentialsManager(ctx, cm, host, port, secretKey, opts...)
 }
 
-func (c *client) DialUsingCredentialsManager(ctx context.Context, host, port, secretKey string, opts ...grpc.DialOption) error {
-	return c.dialUsingCredentials(ctx, host, port, secretKey, opts)
+func (c *client) DialUsingCredentialsManager(ctx context.Context, cm credentialsmanager.CredentialsManager, host, port, secretKey string, opts ...grpc.DialOption) error {
+	return c.WithCredentialsManager(cm).
+		dialUsingCredentials(ctx, host, port, secretKey, opts...)
 }
 
 // Temporary solution to support old way of using sessions
