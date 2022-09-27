@@ -8,7 +8,7 @@ import (
 	"github.com/stretchr/testify/mock"
 	"google.golang.org/grpc"
 
-	"github.com/SKF/go-enlight-sdk/v2/services/notification"
+	"github.com/SKF/go-enlight-sdk/v2/services/notification" //nolint:staticcheck
 	"github.com/SKF/proto/v2/common"
 	proto "github.com/SKF/proto/v2/notification"
 )
