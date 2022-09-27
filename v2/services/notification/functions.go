@@ -14,6 +14,7 @@ func (c *client) SetNotificationType(notificationType proto.NotificationType) er
 	defer cancel()
 	return c.SetNotificationTypeWithContext(ctx, notificationType)
 }
+
 func (c *client) SetNotificationTypeWithContext(ctx context.Context, notificationType proto.NotificationType) error {
 	input := proto.SetNotificationTypeInput{
 		NotificationType: &notificationType,
@@ -28,6 +29,7 @@ func (c *client) GetNotificationType(name string) (proto.NotificationType, error
 	defer cancel()
 	return c.GetNotificationTypeWithContext(ctx, name)
 }
+
 func (c *client) GetNotificationTypeWithContext(ctx context.Context, name string) (proto.NotificationType, error) {
 	input := proto.GetNotificationTypeInput{
 		Name: name,
@@ -46,6 +48,7 @@ func (c *client) RemoveNotificationType(name string) error {
 	defer cancel()
 	return c.RemoveNotificationTypeWithContext(ctx, name)
 }
+
 func (c *client) RemoveNotificationTypeWithContext(ctx context.Context, name string) error {
 	input := proto.RemoveNotificationTypeInput{
 		Name: name,
@@ -65,6 +68,7 @@ func (c *client) InitiateNotification(notificationType proto.NotificationType, r
 	defer cancel()
 	return c.InitiateNotificationWithContext(ctx, notificationType, resource, header, body, createdBy)
 }
+
 func (c *client) InitiateNotificationWithContext(ctx context.Context, notificationType proto.NotificationType, resource common.Origin, header, body, createdBy string) (string, error) {
 	input := proto.InitiateNotificationInput{
 		Type:      &notificationType,
@@ -86,6 +90,7 @@ func (c *client) GetInitiatedNotification(externalId string) (proto.InitiatedNot
 	defer cancel()
 	return c.GetInitiatedNotificationWithContext(ctx, externalId)
 }
+
 func (c *client) GetInitiatedNotificationWithContext(ctx context.Context, externalId string) (proto.InitiatedNotification, error) {
 	input := proto.GetInitiatedNotificationInput{
 		ExternalId: externalId,
@@ -103,6 +108,7 @@ func (c *client) RemoveInitiatedNotification(externalId string) error {
 	defer cancel()
 	return c.RemoveInitiatedNotificationWithContext(ctx, externalId)
 }
+
 func (c *client) RemoveInitiatedNotificationWithContext(ctx context.Context, externalId string) error {
 	input := proto.RemoveInitiatedNotificationInput{
 		ExternalId: externalId,
@@ -117,6 +123,7 @@ func (c *client) SetUserPreferences(prefs []proto.UserPreference) error {
 	defer cancel()
 	return c.SetUserPreferencesWithContext(ctx, prefs)
 }
+
 func (c *client) SetUserPreferencesWithContext(ctx context.Context, prefs []proto.UserPreference) error {
 	input := proto.SetUserPreferencesInput{
 		Preferences: []*proto.UserPreference{},
@@ -135,6 +142,7 @@ func (c *client) GetUserPreferences(userID string) ([]proto.UserPreference, erro
 	defer cancel()
 	return c.GetUserPreferencesWithContext(ctx, userID)
 }
+
 func (c *client) GetUserPreferencesWithContext(ctx context.Context, userID string) ([]proto.UserPreference, error) {
 	result := []proto.UserPreference{}
 	input := proto.GetUserPreferencesInput{UserId: userID}
@@ -154,6 +162,7 @@ func (c *client) RemoveUserPreferences(userID, notificationTypeExtId string) err
 	defer cancel()
 	return c.RemoveUserPreferencesWithContext(ctx, userID, notificationTypeExtId)
 }
+
 func (c *client) RemoveUserPreferencesWithContext(ctx context.Context, userID, notificationTypeExtId string) error {
 	input := proto.RemoveUserPreferencesInput{
 		UserId:                userID,
@@ -169,6 +178,7 @@ func (c *client) GetUserNotifications(userID string, limit int32) ([]proto.UserN
 	defer cancel()
 	return c.GetUserNotificationsWithContext(ctx, userID, limit)
 }
+
 func (c *client) GetUserNotificationsWithContext(ctx context.Context, userID string, limit int32) ([]proto.UserNotification, error) {
 	input := proto.GetUserNotificationsInput{
 		UserId: userID,
@@ -193,6 +203,7 @@ func (c *client) RemoveUserNotifications(userID, initiatedNotificationExternalId
 	defer cancel()
 	return c.RemoveUserNotificationsWithContext(ctx, userID, initiatedNotificationExternalId)
 }
+
 func (c *client) RemoveUserNotificationsWithContext(ctx context.Context, userID, initiatedNotificationExternalId string) error {
 	input := proto.RemoveUserNotificationsInput{
 		UserId:                          userID,
