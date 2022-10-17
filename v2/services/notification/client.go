@@ -1,3 +1,8 @@
+/*
+Deprecated: This client is build to connect to the decommissioned grpc API for the notification service.
+
+The rest API client should be used instead: https://github.com/SKF/go-notification-client
+*/
 package notification
 
 import (
@@ -5,12 +10,13 @@ import (
 	"net"
 	"time"
 
+	"github.com/aws/aws-sdk-go/aws/session"
+	"google.golang.org/grpc"
+
 	"github.com/SKF/go-enlight-sdk/v2/interceptors/reconnect"
 	"github.com/SKF/go-utility/v2/log"
 	"github.com/SKF/proto/v2/common"
 	proto "github.com/SKF/proto/v2/notification"
-	"github.com/aws/aws-sdk-go/aws/session"
-	"google.golang.org/grpc"
 )
 
 type client struct {
@@ -63,8 +69,8 @@ type NotificationClient interface {
 	RemoveUserNotifications(userID string, initatedNotificationExtId string) error
 	RemoveUserNotificationsWithContext(ctx context.Context, userID string, initatedNotificationExtId string) error
 
-	UpdateUserNotificationStatus (notificationId string, state proto.SendState) error
-	UpdateUserNotificationStatusWithContext (ctx context.Context, notificationId string, state proto.SendState) error
+	UpdateUserNotificationStatus(notificationId string, state proto.SendState) error
+	UpdateUserNotificationStatusWithContext(ctx context.Context, notificationId string, state proto.SendState) error
 }
 
 func CreateClient() NotificationClient {
