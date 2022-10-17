@@ -10,7 +10,7 @@ import (
 	"github.com/SKF/go-enlight-sdk/services/authorize/credentialsmanager"
 )
 
-func getWrapCredentials(ctx context.Context, host, secretKeyName string, cm credentialsmanager.CredentialsManager) (googleGrpc.DialOption, error) {
+func getCredentialOption(ctx context.Context, host, secretKeyName string, cm credentialsmanager.CredentialsManager) (googleGrpc.DialOption, error) {
 	clientCert, err := cm.GetDataStore(ctx, secretKeyName)
 	if err != nil {
 		panic(err)

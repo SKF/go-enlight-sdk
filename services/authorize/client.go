@@ -190,7 +190,7 @@ func (c *client) DialUsingCredentialsManager(ctx context.Context, cm credentials
 func (c *client) dialUsingCredentials(ctx context.Context, host, port, secretKey string, opts ...grpc.DialOption) error {
 	var newClientConn reconnect.NewConnectionFunc
 	newClientConn = func(invokerCtx context.Context, invokerConn *grpc.ClientConn, invokerOptions ...grpc.CallOption) (context.Context, *grpc.ClientConn, []grpc.CallOption, error) {
-		credOpt, err := getWrapCredentials(invokerCtx, host, secretKey, c.credentialsManager)
+		credOpt, err := getCredentialOption(invokerCtx, host, secretKey, c.credentialsManager)
 		if err != nil {
 			log.WithTracing(invokerCtx).WithError(err).Error("Failed to get credential options")
 			return invokerCtx, invokerConn, invokerOptions, err
@@ -211,7 +211,7 @@ func (c *client) dialUsingCredentials(ctx context.Context, host, port, secretKey
 		return invokerCtx, c.conn, invokerOptions, err
 	}
 
-	opt, err := getWrapCredentials(ctx, host, secretKey, c.credentialsManager)
+	opt, err := getCredentialOption(ctx, host, secretKey, c.credentialsManager)
 	if err != nil {
 		return err
 	}
