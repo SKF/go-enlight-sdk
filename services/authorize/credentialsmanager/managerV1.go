@@ -31,10 +31,13 @@ func (cm *CredentialsMangerV1) GetDataStore(ctx context.Context, secretsName str
 		VersionStage: aws.String("AWSCURRENT"),
 	}
 
+	logger := log.
+		WithField("secretsName", secretsName).
+		WithField("credentialsManager", "V1")
+
 	result, err := cm.sm.GetSecretValue(input)
 	if err != nil {
-		log.WithTracing(ctx).WithError(err).
-			WithField("secretsName", secretsName).
+		logger.WithTracing(ctx).WithError(err).
 			Error("failed to get secrets")
 		err = errors.Wrapf(err, "failed to get secret value from '%s'", secretsName)
 		return nil, err
@@ -43,8 +46,7 @@ func (cm *CredentialsMangerV1) GetDataStore(ctx context.Context, secretsName str
 	var out DataStore
 
 	if err = json.Unmarshal([]byte(*result.SecretString), &out); err != nil {
-		log.WithTracing(ctx).WithError(err).
-			WithField("secretsName", secretsName).
+		logger.WithTracing(ctx).WithError(err).
 			Error("failed to unmarshal secret")
 		err = errors.Wrapf(err, "failed to unmarshal secret from '%s'", secretsName)
 

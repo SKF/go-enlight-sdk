@@ -19,7 +19,7 @@ type CredentialsManagerV2 struct {
 	sm SMAPIV2
 }
 
-func CreateCredentialManagerV2(sm SMAPIV2) CredentialsManager {
+func CreateCredentialsManagerV2(sm SMAPIV2) CredentialsManager {
 	return &CredentialsManagerV2{
 		sm: sm,
 	}
@@ -31,10 +31,13 @@ func (cm *CredentialsManagerV2) GetDataStore(ctx context.Context, secretsName st
 		VersionStage: aws.String("AWSCURRENT"),
 	}
 
+	logger := log.
+		WithField("secretsName", secretsName).
+		WithField("credentialsManager", "V2")
+
 	result, err := cm.sm.GetSecretValue(ctx, input)
 	if err != nil {
-		log.WithTracing(ctx).WithError(err).
-			WithField("secretsName", secretsName).
+		logger.WithTracing(ctx).WithError(err).
 			Error("failed to get secrets")
 		err = errors.Wrapf(err, "failed to get secret value from '%s'", secretsName)
 		return nil, err
@@ -43,11 +46,9 @@ func (cm *CredentialsManagerV2) GetDataStore(ctx context.Context, secretsName st
 	var out DataStore
 
 	if err = json.Unmarshal([]byte(*result.SecretString), &out); err != nil {
-		log.WithTracing(ctx).WithError(err).
-			WithField("secretsName", secretsName).
+		logger.WithTracing(ctx).WithError(err).
 			Error("failed to unmarshal secret")
 		err = errors.Wrapf(err, "failed to unmarshal secret from '%s'", secretsName)
-
 		return nil, err
 	}
 

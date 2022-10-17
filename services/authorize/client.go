@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/aws/aws-sdk-go/aws/session"
+	"github.com/aws/aws-sdk-go/service/secretsmanager"
 	grpc_retry "github.com/grpc-ecosystem/go-grpc-middleware/retry"
 
 	"github.com/SKF/go-enlight-sdk/interceptors/reconnect"
@@ -33,7 +34,6 @@ type AuthorizeClient interface { // nolint: golint
 	DialWithContext(ctx context.Context, host, port string, opts ...grpc.DialOption) error
 	DialUsingCredentials(sess *session.Session, host, port, secretKey string, opts ...grpc.DialOption) error
 	DialUsingCredentialsWithContext(ctx context.Context, sess *session.Session, host, port, secretKey string, opts ...grpc.DialOption) error
-
 	DialUsingCredentialsManager(ctx context.Context, cm credentialsmanager.CredentialsManager, host, port, secretKey string, opts ...grpc.DialOption) error
 
 	Close() error
@@ -140,7 +140,7 @@ func CreateClient() AuthorizeClient {
 	}
 }
 
-func (c *client) WithCredentialsManager(credentialsManager credentialsmanager.CredentialsManager) *client {
+func (c *client) withCredentialsManager(credentialsManager credentialsmanager.CredentialsManager) *client {
 	c.credentialsManager = credentialsManager
 
 	return c
@@ -176,12 +176,13 @@ func (c *client) DialUsingCredentials(sess *session.Session, host, port, secretK
 // DialUsingCredentialsWithContext creates a client connection to the given host with context (for timeout and transaction id)
 func (c *client) DialUsingCredentialsWithContext(ctx context.Context, sess *session.Session, host, port, secretKey string, opts ...grpc.DialOption) error {
 
-	cm := getCredentialsManagerV1(sess)
+	sm := secretsmanager.New(sess)
+	cm := credentialsmanager.CreateCredentialsManagerV1(sm)
 	return c.DialUsingCredentialsManager(ctx, cm, host, port, secretKey, opts...)
 }
 
 func (c *client) DialUsingCredentialsManager(ctx context.Context, cm credentialsmanager.CredentialsManager, host, port, secretKey string, opts ...grpc.DialOption) error {
-	return c.WithCredentialsManager(cm).
+	return c.withCredentialsManager(cm).
 		dialUsingCredentials(ctx, host, port, secretKey, opts...)
 }
 
