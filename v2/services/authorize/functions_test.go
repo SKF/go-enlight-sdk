@@ -22,7 +22,7 @@ func clientFor(t *testing.T, server *authMock.AuthorizeServer) authorize.Authori
 	client := authorize.CreateClient()
 	server.On("LogClientState", mock.Anything, mock.Anything).Return(&common.Void{}, nil)
 
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Millisecond)
+	ctx, cancel := context.WithTimeout(context.Background(), 50*time.Millisecond)
 	defer cancel()
 
 	require.NoError(t, client.DialWithContext(ctx, host, port, grpc.WithInsecure()))
