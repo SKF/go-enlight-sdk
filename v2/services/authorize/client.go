@@ -5,15 +5,18 @@ import (
 	"os"
 	"time"
 
-	"github.com/SKF/go-enlight-sdk/v2/interceptors/reconnect"
-	"github.com/SKF/go-utility/v2/log"
-	authorizeApi "github.com/SKF/proto/v2/authorize"
-	"github.com/SKF/proto/v2/common"
 	"github.com/aws/aws-sdk-go/aws/session"
+	"github.com/aws/aws-sdk-go/service/secretsmanager"
 	grpc_retry "github.com/grpc-ecosystem/go-grpc-middleware/retry"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/resolver"
+
+	"github.com/SKF/go-enlight-sdk/v2/interceptors/reconnect"
+	"github.com/SKF/go-enlight-sdk/v2/services/authorize/credentialsmanager"
+	"github.com/SKF/go-utility/v2/log"
+	authorizeApi "github.com/SKF/proto/v2/authorize"
+	"github.com/SKF/proto/v2/common"
 )
 
 const defaultServiceConfig = `{
@@ -24,9 +27,10 @@ const defaultServiceConfig = `{
 `
 
 type client struct {
-	conn           *grpc.ClientConn
-	api            authorizeApi.AuthorizeClient
-	requestTimeout time.Duration
+	conn               *grpc.ClientConn
+	api                authorizeApi.AuthorizeClient
+	requestTimeout     time.Duration
+	credentialsManager credentialsmanager.CredentialsManager
 }
 
 type AuthorizeClient interface {
@@ -34,6 +38,8 @@ type AuthorizeClient interface {
 	DialWithContext(ctx context.Context, host, port string, opts ...grpc.DialOption) error
 	DialUsingCredentials(sess *session.Session, host, port, secretKey string, opts ...grpc.DialOption) error
 	DialUsingCredentialsWithContext(ctx context.Context, sess *session.Session, host, port, secretKey string, opts ...grpc.DialOption) error
+	DialUsingCredentialsManager(ctx context.Context, cm credentialsmanager.CredentialsManager, host, port, secretKey string, opts ...grpc.DialOption) error
+
 	Close() error
 	SetRequestTimeout(d time.Duration)
 
@@ -147,6 +153,12 @@ func CreateClient() AuthorizeClient {
 	}
 }
 
+func (c *client) withCredentialsManager(credentialsManager credentialsmanager.CredentialsManager) *client {
+	c.credentialsManager = credentialsManager
+
+	return c
+}
+
 // Dial creates a client connection to the given host with background context and no timeout
 func (c *client) Dial(host, port string, opts ...grpc.DialOption) error {
 	ctx, cancel := context.WithTimeout(context.Background(), c.requestTimeout)
@@ -179,12 +191,23 @@ func (c *client) DialUsingCredentials(sess *session.Session, host, port, secretK
 
 // DialUsingCredentialsWithContext creates a client connection to the given host with context (for timeout and transaction id)
 func (c *client) DialUsingCredentialsWithContext(ctx context.Context, sess *session.Session, host, port, secretKey string, opts ...grpc.DialOption) error {
+	sm := secretsmanager.New(sess)
+	cm := credentialsmanager.CreateCredentialsManagerV1(sm)
+	return c.DialUsingCredentialsManager(ctx, cm, host, port, secretKey, opts...)
+}
+
+func (c *client) DialUsingCredentialsManager(ctx context.Context, cm credentialsmanager.CredentialsManager, host, port, secretKey string, opts ...grpc.DialOption) error {
+	return c.withCredentialsManager(cm).
+		dialUsingCredentials(ctx, host, port, secretKey, opts...)
+}
+
+func (c *client) dialUsingCredentials(ctx context.Context, host, port, secretKey string, opts ...grpc.DialOption) error {
 	resolver.SetDefaultScheme("dns")
 	opts = append(opts, grpc.WithDefaultServiceConfig(defaultServiceConfig))
 
 	var newClientConn reconnect.NewConnectionFunc
 	newClientConn = func(invokerCtx context.Context, invokerConn *grpc.ClientConn, invokerOptions ...grpc.CallOption) (context.Context, *grpc.ClientConn, []grpc.CallOption, error) {
-		credOpt, err := getCredentialOption(invokerCtx, sess, host, secretKey)
+		credOpt, err := getCredentialOption(invokerCtx, host, secretKey, c.credentialsManager)
 		if err != nil {
 			log.WithTracing(invokerCtx).WithError(err).Error("Failed to get credential options")
 			return invokerCtx, invokerConn, invokerOptions, err
@@ -205,7 +228,7 @@ func (c *client) DialUsingCredentialsWithContext(ctx context.Context, sess *sess
 		return invokerCtx, c.conn, invokerOptions, err
 	}
 
-	opt, err := getCredentialOption(ctx, sess, host, secretKey)
+	opt, err := getCredentialOption(ctx, host, secretKey, c.credentialsManager)
 	if err != nil {
 		return err
 	}
