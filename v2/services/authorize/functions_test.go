@@ -129,7 +129,7 @@ func Test_IsAuthorizedBulkWithResourcesNoResourceInResonse(t *testing.T) {
 			},
 		}, nil)
 
-	ctx, cancel := context.WithTimeout(context.Background(), 100*time.Millisecond)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Millisecond)
 	defer cancel()
 
 	res, oks, err := client.IsAuthorizedBulkWithResources(ctx, "testUser", "testAction", []common.Origin{
@@ -172,7 +172,7 @@ func Test_IsAuthorizedWithReason(t *testing.T) {
 			Reason: "reason",
 		}, nil)
 
-	ctx, cancel := context.WithTimeout(context.Background(), 100*time.Millisecond)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Millisecond)
 	defer cancel()
 
 	ok, reason, err := client.IsAuthorizedWithReasonWithContext(ctx, "testUser", "testAction", &common.Origin{
