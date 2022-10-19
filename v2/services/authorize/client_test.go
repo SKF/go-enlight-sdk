@@ -147,7 +147,7 @@ func Test_Loadbalancing(t *testing.T) {
 
 	client := clientForFakeHostName(t, dnsServer.Authority(), domain, serverPort, servers...)
 
-	ctx, cancel := context.WithTimeout(context.Background(), 1000*time.Millisecond)
+	ctx, cancel := context.WithTimeout(context.Background(), 500*time.Millisecond)
 	defer cancel()
 
 	for i := 0; i < backends; i++ {
