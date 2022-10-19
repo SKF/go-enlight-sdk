@@ -36,7 +36,7 @@ func Test_DeepPing(t *testing.T) {
 
 	client := clientFor(t, server)
 
-	server.On("DeepPing", mock.Anything, mock.Anything).Return(&common.PrimitiveString{Value: ""}, nil).Once()
+	server.On("DeepPing", mock.Anything, mock.Anything).Return(&common.PrimitiveString{Value: ""}, nil)
 
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Millisecond)
 	defer cancel()
