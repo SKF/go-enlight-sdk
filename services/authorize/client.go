@@ -7,7 +7,6 @@ import (
 	"time"
 
 	"github.com/aws/aws-sdk-go/aws/session"
-	"github.com/aws/aws-sdk-go/service/secretsmanager"
 	grpc_retry "github.com/grpc-ecosystem/go-grpc-middleware/retry"
 
 	"github.com/SKF/go-enlight-sdk/interceptors/reconnect"
@@ -175,9 +174,7 @@ func (c *client) DialUsingCredentials(sess *session.Session, host, port, secretK
 
 // DialUsingCredentialsWithContext creates a client connection to the given host with context (for timeout and transaction id)
 func (c *client) DialUsingCredentialsWithContext(ctx context.Context, sess *session.Session, host, port, secretKey string, opts ...grpc.DialOption) error {
-
-	sm := secretsmanager.New(sess)
-	cm := credentialsmanager.CreateCredentialsManagerV1(sm)
+	cm := credentialsmanager.New().UsingSDKV1Session(sess)
 	return c.DialUsingCredentialsManager(ctx, cm, host, port, secretKey, opts...)
 }
 

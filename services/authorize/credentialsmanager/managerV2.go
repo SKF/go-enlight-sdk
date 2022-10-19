@@ -19,7 +19,12 @@ type CredentialsManagerV2 struct {
 	sm SMAPIV2
 }
 
-func CreateCredentialsManagerV2(sm SMAPIV2) CredentialsManager {
+func (b *CredentialsManagerBuilder) UsingSDKV2Config(cfg aws.Config) CredentialsManager {
+	sm := secretsmanager.NewFromConfig(cfg)
+	return b.UsingSDKV2(sm)
+}
+
+func (b *CredentialsManagerBuilder) UsingSDKV2(sm SMAPIV2) CredentialsManager {
 	return &CredentialsManagerV2{
 		sm: sm,
 	}

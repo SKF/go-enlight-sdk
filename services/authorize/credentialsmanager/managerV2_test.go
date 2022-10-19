@@ -23,7 +23,7 @@ func Test_V2_GetDataStore_Success(t *testing.T) {
 	}
 
 	api := api_mock.CreateAPIV2()
-	manager := CreateCredentialsManagerV2(api)
+	manager := New().UsingSDKV2(api)
 
 	api.On("GetSecretValue", mock.Anything, mock.Anything, mock.Anything).Return(&secretsmanager.GetSecretValueOutput{
 		SecretString: &secret,
@@ -42,7 +42,7 @@ func Test_V2_GetDataStore_JsonError(t *testing.T) {
 	secret := `{"ca":"YWFhYQ==","key":"ZWVl","crt":"ZmZmZg=="`
 
 	api := api_mock.CreateAPIV2()
-	manager := CreateCredentialsManagerV2(api)
+	manager := New().UsingSDKV2(api)
 
 	api.On("GetSecretValue", mock.Anything, mock.Anything, mock.Anything).Return(&secretsmanager.GetSecretValueOutput{
 		SecretString: &secret,
@@ -62,7 +62,7 @@ func Test_V2_GetDataStore_GetSecretError(t *testing.T) {
 	expectedErr := errors.New("failed to fetch secret")
 
 	api := api_mock.CreateAPIV2()
-	manager := CreateCredentialsManagerV2(api)
+	manager := New().UsingSDKV2(api)
 
 	api.On("GetSecretValue", mock.Anything, mock.Anything, mock.Anything).Return(secret, expectedErr).Once()
 

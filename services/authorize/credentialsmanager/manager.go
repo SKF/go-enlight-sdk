@@ -11,3 +11,9 @@ type DataStore struct {
 type CredentialsManager interface {
 	GetDataStore(ctx context.Context, secretsName string) (*DataStore, error)
 }
+
+type CredentialsManagerBuilder struct{}
+
+func New() *CredentialsManagerBuilder {
+	return &CredentialsManagerBuilder{}
+}

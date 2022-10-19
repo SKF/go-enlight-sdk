@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 
 	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/secretsmanager"
 	"github.com/pkg/errors"
 
@@ -19,7 +20,12 @@ type CredentialsMangerV1 struct {
 	sm SMAPIV1
 }
 
-func CreateCredentialsManagerV1(sm SMAPIV1) CredentialsManager {
+func (b *CredentialsManagerBuilder) UsingSDKV1Session(sess *session.Session) CredentialsManager {
+	sm := secretsmanager.New(sess)
+	return b.UsingSDKV1(sm)
+}
+
+func (b *CredentialsManagerBuilder) UsingSDKV1(sm SMAPIV1) CredentialsManager {
 	return &CredentialsMangerV1{
 		sm: sm,
 	}
