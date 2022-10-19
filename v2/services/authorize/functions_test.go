@@ -22,7 +22,7 @@ func clientFor(t *testing.T, server *authMock.AuthorizeServer) authorize.Authori
 	client := authorize.CreateClient()
 	server.On("LogClientState", mock.Anything, mock.Anything).Return(&common.Void{}, nil)
 
-	ctx, cancel := context.WithTimeout(context.Background(), 100*time.Millisecond)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Millisecond)
 	defer cancel()
 
 	require.NoError(t, client.DialWithContext(ctx, host, port, grpc.WithInsecure()))
@@ -36,9 +36,9 @@ func Test_DeepPing(t *testing.T) {
 
 	client := clientFor(t, server)
 
-	server.On("DeepPing", mock.Anything, mock.Anything).Return(&common.PrimitiveString{Value: ""}, nil)
+	server.On("DeepPing", mock.Anything, mock.Anything).Return(&common.PrimitiveString{Value: ""}, nil).Once()
 
-	ctx, cancel := context.WithTimeout(context.Background(), 100*time.Millisecond)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Millisecond)
 	defer cancel()
 
 	err = client.DeepPingWithContext(ctx)
@@ -57,7 +57,7 @@ func Test_IsAuthorizedBulkWithResources(t *testing.T) {
 		UserId: "testUser",
 		Action: "testAction",
 		Resources: []*common.Origin{
-			&common.Origin{
+			{
 				Id:       "0",
 				Type:     "node",
 				Provider: "1",
@@ -66,7 +66,7 @@ func Test_IsAuthorizedBulkWithResources(t *testing.T) {
 	}).
 		Return(&grpcapi.IsAuthorizedBulkOutput{
 			Responses: []*grpcapi.IsAuthorizedOutItem{
-				&grpcapi.IsAuthorizedOutItem{
+				{
 					ResourceId: "0",
 					Ok:         true,
 					Resource: &common.Origin{
@@ -78,7 +78,7 @@ func Test_IsAuthorizedBulkWithResources(t *testing.T) {
 			},
 		}, nil)
 
-	ctx, cancel := context.WithTimeout(context.Background(), 100*time.Millisecond)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Millisecond)
 	defer cancel()
 
 	res, oks, err := client.IsAuthorizedBulkWithResources(ctx, "testUser", "testAction", []common.Origin{
@@ -113,7 +113,7 @@ func Test_IsAuthorizedBulkWithResourcesNoResourceInResonse(t *testing.T) {
 		UserId: "testUser",
 		Action: "testAction",
 		Resources: []*common.Origin{
-			&common.Origin{
+			{
 				Id:       "0",
 				Type:     "node",
 				Provider: "1",
@@ -122,7 +122,7 @@ func Test_IsAuthorizedBulkWithResourcesNoResourceInResonse(t *testing.T) {
 	}).
 		Return(&grpcapi.IsAuthorizedBulkOutput{
 			Responses: []*grpcapi.IsAuthorizedOutItem{
-				&grpcapi.IsAuthorizedOutItem{
+				{
 					ResourceId: "0",
 					Ok:         true,
 				},
