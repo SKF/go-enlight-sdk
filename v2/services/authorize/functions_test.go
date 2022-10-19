@@ -22,7 +22,7 @@ func clientFor(t *testing.T, server *authMock.AuthorizeServer) authorize.Authori
 	client := authorize.CreateClient()
 	server.On("LogClientState", mock.Anything, mock.Anything).Return(&common.Void{}, nil)
 
-	ctx, cancel := context.WithTimeout(context.Background(), 50*time.Millisecond)
+	ctx, cancel := context.WithTimeout(context.Background(), 100*time.Millisecond)
 	defer cancel()
 
 	require.NoError(t, client.DialWithContext(ctx, host, port, grpc.WithInsecure()))
@@ -38,7 +38,7 @@ func Test_DeepPing(t *testing.T) {
 
 	server.On("DeepPing", mock.Anything, mock.Anything).Return(&common.PrimitiveString{Value: ""}, nil)
 
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Millisecond)
+	ctx, cancel := context.WithTimeout(context.Background(), 100*time.Millisecond)
 	defer cancel()
 
 	err = client.DeepPingWithContext(ctx)
@@ -78,7 +78,7 @@ func Test_IsAuthorizedBulkWithResources(t *testing.T) {
 			},
 		}, nil)
 
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Millisecond)
+	ctx, cancel := context.WithTimeout(context.Background(), 100*time.Millisecond)
 	defer cancel()
 
 	res, oks, err := client.IsAuthorizedBulkWithResources(ctx, "testUser", "testAction", []common.Origin{
@@ -129,7 +129,7 @@ func Test_IsAuthorizedBulkWithResourcesNoResourceInResonse(t *testing.T) {
 			},
 		}, nil)
 
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Millisecond)
+	ctx, cancel := context.WithTimeout(context.Background(), 100*time.Millisecond)
 	defer cancel()
 
 	res, oks, err := client.IsAuthorizedBulkWithResources(ctx, "testUser", "testAction", []common.Origin{
@@ -172,7 +172,7 @@ func Test_IsAuthorizedWithReason(t *testing.T) {
 			Reason: "reason",
 		}, nil)
 
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Millisecond)
+	ctx, cancel := context.WithTimeout(context.Background(), 100*time.Millisecond)
 	defer cancel()
 
 	ok, reason, err := client.IsAuthorizedWithReasonWithContext(ctx, "testUser", "testAction", &common.Origin{
