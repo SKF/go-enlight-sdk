@@ -10,7 +10,6 @@ import (
 	grpc_retry "github.com/grpc-ecosystem/go-grpc-middleware/retry"
 
 	"github.com/SKF/go-enlight-sdk/interceptors/reconnect"
-	"github.com/SKF/go-enlight-sdk/services/authorize/credentialsmanager"
 	"github.com/SKF/go-utility/v2/log"
 
 	"google.golang.org/grpc"
@@ -22,10 +21,9 @@ import (
 )
 
 type client struct {
-	conn               *grpc.ClientConn
-	api                authorize_grpcapi.AuthorizeClient
-	requestTimeout     time.Duration
-	credentialsManager *credentialsmanager.CredentialsManager
+	conn           *grpc.ClientConn
+	api            authorize_grpcapi.AuthorizeClient
+	requestTimeout time.Duration
 }
 
 type AuthorizeClient interface { // nolint: golint
@@ -33,7 +31,6 @@ type AuthorizeClient interface { // nolint: golint
 	DialWithContext(ctx context.Context, host, port string, opts ...grpc.DialOption) error
 	DialUsingCredentials(sess *session.Session, host, port, secretKey string, opts ...grpc.DialOption) error
 	DialUsingCredentialsWithContext(ctx context.Context, sess *session.Session, host, port, secretKey string, opts ...grpc.DialOption) error
-	DialUsingCredentialsManager(ctx context.Context, cm *credentialsmanager.CredentialsManager, host, port, secretKey string, opts ...grpc.DialOption) error
 
 	Close() error
 	SetRequestTimeout(d time.Duration)
@@ -139,12 +136,6 @@ func CreateClient() AuthorizeClient {
 	}
 }
 
-func (c *client) withCredentialsManager(credentialsManager *credentialsmanager.CredentialsManager) *client {
-	c.credentialsManager = credentialsManager
-
-	return c
-}
-
 // Dial creates a client connection to the given host with background context and no timeout
 func (c *client) Dial(host, port string, opts ...grpc.DialOption) error {
 	ctx, cancel := context.WithTimeout(context.Background(), c.requestTimeout)
@@ -174,20 +165,9 @@ func (c *client) DialUsingCredentials(sess *session.Session, host, port, secretK
 
 // DialUsingCredentialsWithContext creates a client connection to the given host with context (for timeout and transaction id)
 func (c *client) DialUsingCredentialsWithContext(ctx context.Context, sess *session.Session, host, port, secretKey string, opts ...grpc.DialOption) error {
-	cm := credentialsmanager.New().UsingSDKV1Session(sess)
-	return c.DialUsingCredentialsManager(ctx, cm, host, port, secretKey, opts...)
-}
-
-func (c *client) DialUsingCredentialsManager(ctx context.Context, cm *credentialsmanager.CredentialsManager, host, port, secretKey string, opts ...grpc.DialOption) error {
-	return c.withCredentialsManager(cm).
-		dialUsingCredentials(ctx, host, port, secretKey, opts...)
-}
-
-// Temporary solution to support old way of using sessions
-func (c *client) dialUsingCredentials(ctx context.Context, host, port, secretKey string, opts ...grpc.DialOption) error {
 	var newClientConn reconnect.NewConnectionFunc
 	newClientConn = func(invokerCtx context.Context, invokerConn *grpc.ClientConn, invokerOptions ...grpc.CallOption) (context.Context, *grpc.ClientConn, []grpc.CallOption, error) {
-		credOpt, err := getCredentialOption(invokerCtx, host, secretKey, c.credentialsManager)
+		credOpt, err := getCredentialOption(invokerCtx, sess, host, secretKey)
 		if err != nil {
 			log.WithTracing(invokerCtx).WithError(err).Error("Failed to get credential options")
 			return invokerCtx, invokerConn, invokerOptions, err
@@ -208,7 +188,7 @@ func (c *client) dialUsingCredentials(ctx context.Context, host, port, secretKey
 		return invokerCtx, c.conn, invokerOptions, err
 	}
 
-	opt, err := getCredentialOption(ctx, host, secretKey, c.credentialsManager)
+	opt, err := getCredentialOption(ctx, sess, host, secretKey)
 	if err != nil {
 		return err
 	}

@@ -14,7 +14,6 @@ import (
 	"google.golang.org/grpc"
 
 	"github.com/SKF/go-enlight-sdk/services/authorize"
-	"github.com/SKF/go-enlight-sdk/services/authorize/credentialsmanager"
 )
 
 type Client struct {
@@ -48,11 +47,6 @@ func (mock *Client) DialUsingCredentials(sess *session.Session, host, port, secr
 
 func (mock *Client) DialUsingCredentialsWithContext(ctx context.Context, sess *session.Session, host, port, secretKey string, opts ...grpc.DialOption) error {
 	args := mock.Called(ctx, sess, host, port, secretKey, opts)
-	return args.Error(0)
-}
-
-func (mock *Client) DialUsingCredentialsManager(ctx context.Context, cm *credentialsmanager.CredentialsManager, host, port, secretKey string, opts ...grpc.DialOption) error {
-	args := mock.Called(ctx, cm, host, port, secretKey, opts)
 	return args.Error(0)
 }
 

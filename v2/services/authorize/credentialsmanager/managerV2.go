@@ -15,21 +15,11 @@ type SMAPIV2 interface {
 	GetSecretValue(ctx context.Context, params *secretsmanager.GetSecretValueInput, optFns ...func(*secretsmanager.Options)) (*secretsmanager.GetSecretValueOutput, error)
 }
 
-type CredentialsManagerV2 struct {
+type credentialsManagerV2 struct {
 	sm SMAPIV2
 }
 
-func (cm *CredentialsManager) UsingSDKV2Config(cfg aws.Config) *CredentialsManager {
-	sm := secretsmanager.NewFromConfig(cfg)
-	return cm.UsingSDKV2(sm)
-}
-
-func (cm *CredentialsManager) UsingSDKV2(sm SMAPIV2) *CredentialsManager {
-	cm.fetcher = &CredentialsManagerV2{sm: sm}
-	return cm
-}
-
-func (cm *CredentialsManagerV2) GetDataStore(ctx context.Context, secretsName string) (*DataStore, error) {
+func (cm *credentialsManagerV2) GetDataStore(ctx context.Context, secretsName string) (*DataStore, error) {
 	input := &secretsmanager.GetSecretValueInput{
 		SecretId:     aws.String(secretsName),
 		VersionStage: aws.String("AWSCURRENT"),

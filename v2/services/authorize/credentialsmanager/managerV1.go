@@ -5,32 +5,17 @@ import (
 	"encoding/json"
 
 	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/secretsmanager"
 	"github.com/pkg/errors"
 
 	"github.com/SKF/go-utility/v2/log"
 )
 
-type SMAPIV1 interface {
-	GetSecretValue(input *secretsmanager.GetSecretValueInput) (*secretsmanager.GetSecretValueOutput, error)
-}
-
-type CredentialsManagerV1 struct {
+type credentialsManagerV1 struct {
 	sm SMAPIV1
 }
 
-func (cm *CredentialsManager) UsingSDKV1Session(sess *session.Session) *CredentialsManager {
-	sm := secretsmanager.New(sess)
-	return cm.UsingSDKV1(sm)
-}
-
-func (cm *CredentialsManager) UsingSDKV1(sm SMAPIV1) *CredentialsManager {
-	cm.fetcher = &CredentialsManagerV1{sm: sm}
-	return cm
-}
-
-func (cm *CredentialsManagerV1) GetDataStore(ctx context.Context, secretsName string) (*DataStore, error) {
+func (cm *credentialsManagerV1) GetDataStore(ctx context.Context, secretsName string) (*DataStore, error) {
 	input := &secretsmanager.GetSecretValueInput{
 		SecretId:     aws.String(secretsName),
 		VersionStage: aws.String("AWSCURRENT"),
