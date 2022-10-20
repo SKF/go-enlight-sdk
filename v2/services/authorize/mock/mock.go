@@ -51,7 +51,7 @@ func (mock *Client) DialUsingCredentialsWithContext(ctx context.Context, sess *s
 	return args.Error(0)
 }
 
-func (mock *Client) DialUsingCredentialsManager(ctx context.Context, cm credentialsmanager.CredentialsManager, host, port, secretKey string, opts ...grpc.DialOption) error {
+func (mock *Client) DialUsingCredentialsManager(ctx context.Context, cm *credentialsmanager.CredentialsManager, host, port, secretKey string, opts ...grpc.DialOption) error {
 	args := mock.Called(ctx, cm, host, port, secretKey, opts)
 	return args.Error(0)
 }

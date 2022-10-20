@@ -25,7 +25,7 @@ type client struct {
 	conn               *grpc.ClientConn
 	api                authorize_grpcapi.AuthorizeClient
 	requestTimeout     time.Duration
-	credentialsManager credentialsmanager.CredentialsManager
+	credentialsManager *credentialsmanager.CredentialsManager
 }
 
 type AuthorizeClient interface { // nolint: golint
@@ -33,7 +33,7 @@ type AuthorizeClient interface { // nolint: golint
 	DialWithContext(ctx context.Context, host, port string, opts ...grpc.DialOption) error
 	DialUsingCredentials(sess *session.Session, host, port, secretKey string, opts ...grpc.DialOption) error
 	DialUsingCredentialsWithContext(ctx context.Context, sess *session.Session, host, port, secretKey string, opts ...grpc.DialOption) error
-	DialUsingCredentialsManager(ctx context.Context, cm credentialsmanager.CredentialsManager, host, port, secretKey string, opts ...grpc.DialOption) error
+	DialUsingCredentialsManager(ctx context.Context, cm *credentialsmanager.CredentialsManager, host, port, secretKey string, opts ...grpc.DialOption) error
 
 	Close() error
 	SetRequestTimeout(d time.Duration)
@@ -139,7 +139,7 @@ func CreateClient() AuthorizeClient {
 	}
 }
 
-func (c *client) withCredentialsManager(credentialsManager credentialsmanager.CredentialsManager) *client {
+func (c *client) withCredentialsManager(credentialsManager *credentialsmanager.CredentialsManager) *client {
 	c.credentialsManager = credentialsManager
 
 	return c
@@ -178,7 +178,7 @@ func (c *client) DialUsingCredentialsWithContext(ctx context.Context, sess *sess
 	return c.DialUsingCredentialsManager(ctx, cm, host, port, secretKey, opts...)
 }
 
-func (c *client) DialUsingCredentialsManager(ctx context.Context, cm credentialsmanager.CredentialsManager, host, port, secretKey string, opts ...grpc.DialOption) error {
+func (c *client) DialUsingCredentialsManager(ctx context.Context, cm *credentialsmanager.CredentialsManager, host, port, secretKey string, opts ...grpc.DialOption) error {
 	return c.withCredentialsManager(cm).
 		dialUsingCredentials(ctx, host, port, secretKey, opts...)
 }

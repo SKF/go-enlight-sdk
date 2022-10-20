@@ -19,15 +19,14 @@ type CredentialsManagerV2 struct {
 	sm SMAPIV2
 }
 
-func (b *CredentialsManagerBuilder) UsingSDKV2Config(cfg aws.Config) CredentialsManager {
+func (cm *CredentialsManager) UsingSDKV2Config(cfg aws.Config) *CredentialsManager {
 	sm := secretsmanager.NewFromConfig(cfg)
-	return b.UsingSDKV2(sm)
+	return cm.UsingSDKV2(sm)
 }
 
-func (b *CredentialsManagerBuilder) UsingSDKV2(sm SMAPIV2) CredentialsManager {
-	return &CredentialsManagerV2{
-		sm: sm,
-	}
+func (cm *CredentialsManager) UsingSDKV2(sm SMAPIV2) *CredentialsManager {
+	cm.fetcher = &CredentialsManagerV2{sm: sm}
+	return cm
 }
 
 func (cm *CredentialsManagerV2) GetDataStore(ctx context.Context, secretsName string) (*DataStore, error) {

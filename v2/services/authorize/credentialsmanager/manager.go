@@ -8,12 +8,18 @@ type DataStore struct {
 	Crt []byte `json:"crt"`
 }
 
-type CredentialsManager interface {
+type CredentialsManager struct {
+	fetcher credentialsFetcher
+}
+
+type credentialsFetcher interface {
 	GetDataStore(ctx context.Context, secretsName string) (*DataStore, error)
 }
 
-type CredentialsManagerBuilder struct{}
+func New() *CredentialsManager {
+	return &CredentialsManager{}
+}
 
-func New() *CredentialsManagerBuilder {
-	return &CredentialsManagerBuilder{}
+func (cm *CredentialsManager) GetDataStore(ctx context.Context, secretsName string) (*DataStore, error) {
+	return cm.fetcher.GetDataStore(ctx, secretsName)
 }

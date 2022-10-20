@@ -16,22 +16,21 @@ type SMAPIV1 interface {
 	GetSecretValue(input *secretsmanager.GetSecretValueInput) (*secretsmanager.GetSecretValueOutput, error)
 }
 
-type CredentialsMangerV1 struct {
+type CredentialsManagerV1 struct {
 	sm SMAPIV1
 }
 
-func (b *CredentialsManagerBuilder) UsingSDKV1Session(sess *session.Session) CredentialsManager {
+func (cm *CredentialsManager) UsingSDKV1Session(sess *session.Session) *CredentialsManager {
 	sm := secretsmanager.New(sess)
-	return b.UsingSDKV1(sm)
+	return cm.UsingSDKV1(sm)
 }
 
-func (b *CredentialsManagerBuilder) UsingSDKV1(sm SMAPIV1) CredentialsManager {
-	return &CredentialsMangerV1{
-		sm: sm,
-	}
+func (cm *CredentialsManager) UsingSDKV1(sm SMAPIV1) *CredentialsManager {
+	cm.fetcher = &CredentialsManagerV1{sm: sm}
+	return cm
 }
 
-func (cm *CredentialsMangerV1) GetDataStore(ctx context.Context, secretsName string) (*DataStore, error) {
+func (cm *CredentialsManagerV1) GetDataStore(ctx context.Context, secretsName string) (*DataStore, error) {
 	input := &secretsmanager.GetSecretValueInput{
 		SecretId:     aws.String(secretsName),
 		VersionStage: aws.String("AWSCURRENT"),
