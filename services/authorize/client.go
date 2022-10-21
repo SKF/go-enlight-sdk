@@ -6,14 +6,16 @@ import (
 	"os"
 	"time"
 
-	"github.com/SKF/go-enlight-sdk/interceptors/reconnect"
-	"github.com/SKF/go-utility/v2/log"
 	"github.com/aws/aws-sdk-go/aws/session"
 	grpc_retry "github.com/grpc-ecosystem/go-grpc-middleware/retry"
 
-	"github.com/SKF/proto/common"
+	"github.com/SKF/go-enlight-sdk/interceptors/reconnect"
+	"github.com/SKF/go-utility/v2/log"
+
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
+
+	"github.com/SKF/proto/common"
 
 	authorize_grpcapi "github.com/SKF/proto/authorize"
 )
@@ -29,6 +31,7 @@ type AuthorizeClient interface { // nolint: golint
 	DialWithContext(ctx context.Context, host, port string, opts ...grpc.DialOption) error
 	DialUsingCredentials(sess *session.Session, host, port, secretKey string, opts ...grpc.DialOption) error
 	DialUsingCredentialsWithContext(ctx context.Context, sess *session.Session, host, port, secretKey string, opts ...grpc.DialOption) error
+
 	Close() error
 	SetRequestTimeout(d time.Duration)
 

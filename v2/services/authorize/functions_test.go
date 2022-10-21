@@ -57,7 +57,7 @@ func Test_IsAuthorizedBulkWithResources(t *testing.T) {
 		UserId: "testUser",
 		Action: "testAction",
 		Resources: []*common.Origin{
-			&common.Origin{
+			{
 				Id:       "0",
 				Type:     "node",
 				Provider: "1",
@@ -66,7 +66,7 @@ func Test_IsAuthorizedBulkWithResources(t *testing.T) {
 	}).
 		Return(&grpcapi.IsAuthorizedBulkOutput{
 			Responses: []*grpcapi.IsAuthorizedOutItem{
-				&grpcapi.IsAuthorizedOutItem{
+				{
 					ResourceId: "0",
 					Ok:         true,
 					Resource: &common.Origin{
@@ -113,7 +113,7 @@ func Test_IsAuthorizedBulkWithResourcesNoResourceInResonse(t *testing.T) {
 		UserId: "testUser",
 		Action: "testAction",
 		Resources: []*common.Origin{
-			&common.Origin{
+			{
 				Id:       "0",
 				Type:     "node",
 				Provider: "1",
@@ -122,7 +122,7 @@ func Test_IsAuthorizedBulkWithResourcesNoResourceInResonse(t *testing.T) {
 	}).
 		Return(&grpcapi.IsAuthorizedBulkOutput{
 			Responses: []*grpcapi.IsAuthorizedOutItem{
-				&grpcapi.IsAuthorizedOutItem{
+				{
 					ResourceId: "0",
 					Ok:         true,
 				},
