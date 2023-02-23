@@ -8,21 +8,16 @@ require (
 	github.com/SKF/go-utility/v2 v2.2.1
 	github.com/SKF/proto v1.27.1-go
 	github.com/aws/aws-sdk-go v1.25.49
-	github.com/aws/aws-sdk-go-v2 v1.16.14
-	github.com/aws/aws-sdk-go-v2/service/secretsmanager v1.15.22
 	github.com/golang/protobuf v1.3.2
 	github.com/grpc-ecosystem/go-grpc-middleware v1.2.0
 	github.com/pkg/errors v0.8.1
 	github.com/stretchr/testify v1.5.1
-	golang.org/x/text v0.3.2
+	golang.org/x/text v0.3.8
 	google.golang.org/grpc v1.22.1
 )
 
 require (
 	github.com/BurntSushi/toml v0.3.1 // indirect
-	github.com/aws/aws-sdk-go-v2/internal/configsources v1.1.21 // indirect
-	github.com/aws/aws-sdk-go-v2/internal/endpoints/v2 v2.4.15 // indirect
-	github.com/aws/smithy-go v1.13.2 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/google/uuid v1.0.0 // indirect
 	github.com/hashicorp/golang-lru v0.5.3 // indirect
@@ -38,9 +33,10 @@ require (
 	go.uber.org/tools v0.0.0-20190618225709-2cfd321de3ee // indirect
 	go.uber.org/zap v1.12.0 // indirect
 	golang.org/x/lint v0.0.0-20190930215403-16217165b5de // indirect
-	golang.org/x/net v0.0.0-20190923162816-aa69164e4478 // indirect
-	golang.org/x/sys v0.0.0-20190804053845-51ab0e2deafa // indirect
-	golang.org/x/tools v0.0.0-20191113232020-e2727e816f5a // indirect
+	golang.org/x/mod v0.6.0-dev.0.20220419223038-86c51ed26bb4 // indirect
+	golang.org/x/net v0.0.0-20220722155237-a158d28d115b // indirect
+	golang.org/x/sys v0.0.0-20220722155257-8c9f86f7a55f // indirect
+	golang.org/x/tools v0.1.12 // indirect
 	google.golang.org/genproto v0.0.0-20190819201941-24fa4b261c55 // indirect
 	gopkg.in/check.v1 v1.0.0-20200227125254-8fa46927fb4f // indirect
 	gopkg.in/yaml.v2 v2.2.8 // indirect
