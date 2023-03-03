@@ -168,7 +168,7 @@ func (c *client) Dial(host, port string, opts ...grpc.DialOption) error {
 // DialWithContext creates a client connection to the given host with context (for timeout and transaction id)
 func (c *client) DialWithContext(ctx context.Context, host, port string, opts ...grpc.DialOption) (err error) {
 	resolver.SetDefaultScheme("dns")
-	opts = append(opts, grpc.WithDefaultServiceConfig(defaultServiceConfig))
+	opts = append([]grpc.DialOption{grpc.WithDefaultServiceConfig(defaultServiceConfig)}, opts...)
 
 	conn, err := grpc.DialContext(ctx, host+":"+port, opts...)
 	if err != nil {
@@ -201,7 +201,7 @@ func (c *client) DialUsingCredentialsManager(ctx context.Context, cm *credential
 
 func (c *client) dialUsingCredentials(ctx context.Context, host, port, secretKey string, opts ...grpc.DialOption) error {
 	resolver.SetDefaultScheme("dns")
-	opts = append(opts, grpc.WithDefaultServiceConfig(defaultServiceConfig))
+	opts = append([]grpc.DialOption{grpc.WithDefaultServiceConfig(defaultServiceConfig)}, opts...)
 
 	var newClientConn reconnect.NewConnectionFunc
 	newClientConn = func(invokerCtx context.Context, invokerConn *grpc.ClientConn, invokerOptions ...grpc.CallOption) (context.Context, *grpc.ClientConn, []grpc.CallOption, error) {
