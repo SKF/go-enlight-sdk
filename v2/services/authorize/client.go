@@ -29,7 +29,7 @@ type client struct {
 	conn               *grpc.ClientConn
 	api                authorizeApi.AuthorizeClient
 	requestTimeout     time.Duration
-	credentialsManager *credentialsmanager.CredentialsManager
+	credentialsFetcher credentialsmanager.CredentialsFetcher
 }
 
 type AuthorizeClient interface {
@@ -37,7 +37,7 @@ type AuthorizeClient interface {
 	DialWithContext(ctx context.Context, host, port string, opts ...grpc.DialOption) error
 	DialUsingCredentials(sess *session.Session, host, port, secretKey string, opts ...grpc.DialOption) error
 	DialUsingCredentialsWithContext(ctx context.Context, sess *session.Session, host, port, secretKey string, opts ...grpc.DialOption) error
-	DialUsingCredentialsManager(ctx context.Context, cm *credentialsmanager.CredentialsManager, host, port, secretKey string, opts ...grpc.DialOption) error
+	DialUsingCredentialsManager(ctx context.Context, cm credentialsmanager.CredentialsFetcher, host, port, secretKey string, opts ...grpc.DialOption) error
 
 	Close() error
 	SetRequestTimeout(d time.Duration)
@@ -152,8 +152,8 @@ func CreateClient() AuthorizeClient {
 	}
 }
 
-func (c *client) withCredentialsManager(credentialsManager *credentialsmanager.CredentialsManager) *client {
-	c.credentialsManager = credentialsManager
+func (c *client) withCredentialsFetcher(credentialsFetcher credentialsmanager.CredentialsFetcher) *client {
+	c.credentialsFetcher = credentialsFetcher
 
 	return c
 }
@@ -194,8 +194,8 @@ func (c *client) DialUsingCredentialsWithContext(ctx context.Context, sess *sess
 	return c.DialUsingCredentialsManager(ctx, cm, host, port, secretKey, opts...)
 }
 
-func (c *client) DialUsingCredentialsManager(ctx context.Context, cm *credentialsmanager.CredentialsManager, host, port, secretKey string, opts ...grpc.DialOption) error {
-	return c.withCredentialsManager(cm).
+func (c *client) DialUsingCredentialsManager(ctx context.Context, cf credentialsmanager.CredentialsFetcher, host, port, secretKey string, opts ...grpc.DialOption) error {
+	return c.withCredentialsFetcher(cf).
 		dialUsingCredentials(ctx, host, port, secretKey, opts...)
 }
 
@@ -205,7 +205,7 @@ func (c *client) dialUsingCredentials(ctx context.Context, host, port, secretKey
 
 	var newClientConn reconnect.NewConnectionFunc
 	newClientConn = func(invokerCtx context.Context, invokerConn *grpc.ClientConn, invokerOptions ...grpc.CallOption) (context.Context, *grpc.ClientConn, []grpc.CallOption, error) {
-		credOpt, err := getCredentialOption(invokerCtx, host, secretKey, c.credentialsManager)
+		credOpt, err := getCredentialOption(invokerCtx, host, secretKey, c.credentialsFetcher)
 		if err != nil {
 			log.WithTracing(invokerCtx).WithError(err).Error("Failed to get credential options")
 			return invokerCtx, invokerConn, invokerOptions, err
@@ -226,7 +226,7 @@ func (c *client) dialUsingCredentials(ctx context.Context, host, port, secretKey
 		return invokerCtx, c.conn, invokerOptions, err
 	}
 
-	opt, err := getCredentialOption(ctx, host, secretKey, c.credentialsManager)
+	opt, err := getCredentialOption(ctx, host, secretKey, c.credentialsFetcher)
 	if err != nil {
 		return err
 	}

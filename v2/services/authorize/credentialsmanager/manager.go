@@ -16,14 +16,14 @@ type DataStore struct {
 }
 
 type CredentialsManager struct {
-	fetcher credentialsFetcher
+	fetcher CredentialsFetcher
 }
 
 type SMAPIV1 interface {
 	GetSecretValue(input *smV1.GetSecretValueInput) (*smV1.GetSecretValueOutput, error)
 }
 
-type credentialsFetcher interface {
+type CredentialsFetcher interface {
 	GetDataStore(ctx context.Context, secretsName string) (*DataStore, error)
 }
 
