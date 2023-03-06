@@ -37,7 +37,7 @@ type AuthorizeClient interface {
 	DialWithContext(ctx context.Context, host, port string, opts ...grpc.DialOption) error
 	DialUsingCredentials(sess *session.Session, host, port, secretKey string, opts ...grpc.DialOption) error
 	DialUsingCredentialsWithContext(ctx context.Context, sess *session.Session, host, port, secretKey string, opts ...grpc.DialOption) error
-	DialUsingCredentialsManager(ctx context.Context, cm credentialsmanager.CredentialsFetcher, host, port, secretKey string, opts ...grpc.DialOption) error
+	DialUsingCredentialsManager(ctx context.Context, cf credentialsmanager.CredentialsFetcher, host, port, secretKey string, opts ...grpc.DialOption) error
 
 	Close() error
 	SetRequestTimeout(d time.Duration)
