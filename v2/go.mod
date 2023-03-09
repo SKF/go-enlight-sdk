@@ -17,7 +17,7 @@ require (
 	go.uber.org/zap v1.16.0
 	golang.org/x/crypto v0.0.0-20201117144127-c1f2f97bffc9 // indirect
 	golang.org/x/text v0.3.7
-	google.golang.org/grpc v1.40.0
+	google.golang.org/grpc v1.49.0
 	gopkg.in/DataDog/dd-trace-go.v1 v1.27.1
 )
 
