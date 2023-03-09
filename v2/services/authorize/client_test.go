@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"go.uber.org/zap"
+	"google.golang.org/grpc/grpclog"
 
 	"github.com/SKF/go-enlight-sdk/v2/services/authorize"
 	authMock "github.com/SKF/go-enlight-sdk/v2/services/authorize/mock"
@@ -18,7 +19,6 @@ import (
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
 	"google.golang.org/grpc"
-	"google.golang.org/grpc/grpclog"
 )
 
 func clientForFakeHostName(t *testing.T, authority, host, port string, servers ...*authMock.AuthorizeServer) authorize.AuthorizeClient {

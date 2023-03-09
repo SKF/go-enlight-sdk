@@ -2,6 +2,7 @@ package authorize
 
 import (
 	"context"
+	_ "embed"
 	"os"
 	"time"
 
@@ -18,12 +19,8 @@ import (
 	"github.com/SKF/proto/v2/common"
 )
 
-const defaultServiceConfig = `{
-	"loadBalancingConfig": [
-		{ "round_robin": {} }
-	]
-}
-`
+//go:embed service_config.json
+var defaultServiceConfig string
 
 type client struct {
 	conn               *grpc.ClientConn
