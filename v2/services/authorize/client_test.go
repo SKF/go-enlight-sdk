@@ -7,13 +7,12 @@ import (
 	"testing"
 	"time"
 
-	"go.uber.org/zap"
-	"google.golang.org/grpc/grpclog"
-
 	"github.com/SKF/go-enlight-sdk/v2/services/authorize"
 	authMock "github.com/SKF/go-enlight-sdk/v2/services/authorize/mock"
 	"github.com/SKF/go-utility/v2/log"
 	"github.com/SKF/proto/v2/common"
+	"go.uber.org/zap"
+	"google.golang.org/grpc/grpclog"
 
 	"github.com/miekg/dns"
 	"github.com/stretchr/testify/mock"

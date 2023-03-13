@@ -14,6 +14,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 )
 
 const (
@@ -43,7 +44,7 @@ func Test_ReconnectInterceptor_HappyCase(t *testing.T) {
 			}),
 		)),
 		grpc.WithContextDialer(s.Dialer()),
-		grpc.WithInsecure(),
+		grpc.WithTransportCredentials(insecure.NewCredentials()),
 	)
 	require.NoError(t, err, "failed to dial bufnet")
 	defer conn.Close()
@@ -72,7 +73,7 @@ func Test_ReconnectInterceptor_ConnectionClosed(t *testing.T) {
 	conn, err := grpc.DialContext(ctx, "bufnet",
 		grpc.WithUnaryInterceptor(reconnect.UnaryInterceptor()),
 		grpc.WithContextDialer(s.Dialer()),
-		grpc.WithInsecure(),
+		grpc.WithTransportCredentials(insecure.NewCredentials()),
 	)
 	require.NoError(t, err, "failed to dial bufnet")
 	defer conn.Close()
@@ -101,7 +102,7 @@ func Test_ReconnectInterceptor_RepeatedReconnects(t *testing.T) {
 				reconnect.WithNewConnection(newClientConn),
 			)),
 			grpc.WithContextDialer(s.Dialer()),
-			grpc.WithInsecure(),
+			grpc.WithTransportCredentials(insecure.NewCredentials()),
 			grpc.WithBlock(),
 		)
 
@@ -119,7 +120,7 @@ func Test_ReconnectInterceptor_RepeatedReconnects(t *testing.T) {
 			reconnect.WithNewConnection(newClientConn),
 		)),
 		grpc.WithContextDialer(s.Dialer()),
-		grpc.WithInsecure(),
+		grpc.WithTransportCredentials(insecure.NewCredentials()),
 		grpc.WithBlock(),
 	)
 	require.NoError(t, err, "failed to dial bufnet")
