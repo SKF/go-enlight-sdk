@@ -48,12 +48,12 @@ func generateCA(privateKey *rsa.PrivateKey) ([]byte, error) {
 	}
 
 	caPEM := new(bytes.Buffer)
-	pem.Encode(caPEM, &pem.Block{
+	err = pem.Encode(caPEM, &pem.Block{
 		Type:  "CERTIFICATE",
 		Bytes: caBytes,
 	})
 
-	return caPEM.Bytes(), nil
+	return caPEM.Bytes(), err
 }
 
 func generateDatastore(ca *x509.Certificate, privateKey *rsa.PrivateKey, caCertPEM []byte, validTime time.Duration) (credentialsmanager.DataStore, error) {
@@ -83,10 +83,14 @@ func generateDatastore(ca *x509.Certificate, privateKey *rsa.PrivateKey, caCertP
 	}
 
 	certPrivKeyPEM := new(bytes.Buffer)
-	pem.Encode(certPrivKeyPEM, &pem.Block{
+
+	err = pem.Encode(certPrivKeyPEM, &pem.Block{
 		Type:  "RSA PRIVATE KEY",
 		Bytes: x509.MarshalPKCS1PrivateKey(privateKey),
 	})
+	if err != nil {
+		return ds, err
+	}
 
 	ds.Crt = certPEM.Bytes()
 	ds.Key = certPrivKeyPEM.Bytes()
@@ -183,6 +187,8 @@ func launchServer(tlsCredentials credentials.TransportCredentials) (chan<- struc
 
 	go func() {
 		defer lis.Close()
+
+		//nolint:errcheck
 		go grpcServer.Serve(lis)
 
 		<-signal

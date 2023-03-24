@@ -16,6 +16,7 @@ import (
 	"github.com/stretchr/testify/require"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/grpc/grpclog"
 )
 
@@ -31,7 +32,7 @@ func clientForFakeHostName(t *testing.T, authority, host, port string, servers .
 	ctx, cancel := context.WithTimeout(context.Background(), 50*time.Millisecond)
 	defer cancel()
 
-	require.NoError(t, client.DialWithContext(ctx, hostnameWithAuthority, port, grpc.WithInsecure()))
+	require.NoError(t, client.DialWithContext(ctx, hostnameWithAuthority, port, grpc.WithTransportCredentials(insecure.NewCredentials())))
 
 	return client
 }

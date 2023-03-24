@@ -65,6 +65,9 @@ func (c *autoRefreshingTransportCredentials) shouldLoadNewCertificate() bool {
 
 func (c *autoRefreshingTransportCredentials) loadCertificates(ctx context.Context) error {
 	config, err := c.loadCertificateIntoConfig(ctx)
+	if err != nil {
+		return err
+	}
 
 	var expiryTime time.Time
 	for _, chain := range config.Certificates {
@@ -150,5 +153,6 @@ func (c *autoRefreshingTransportCredentials) OverrideServerName(s string) error 
 		return nil
 	}
 
+	//nolint:staticcheck
 	return c.credentials.OverrideServerName(s)
 }
