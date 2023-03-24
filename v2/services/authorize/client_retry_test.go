@@ -332,7 +332,7 @@ func TestClientHandshake_CertificateAboutToExpire(t *testing.T) {
 	server, client := net.Pipe()
 	server.Close()
 
-	// Swap out certificates for a fresh ones
+	// Swap out certificates for fresh ones
 	cf.ds, err = generateDatastore(ca, privateKey, caCertPEM, 3*24*time.Hour)
 	require.NoError(t, err)
 
