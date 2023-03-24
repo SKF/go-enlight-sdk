@@ -48,7 +48,7 @@ func NewAutoRefreshingTransportCredentials(ctx context.Context, cf credentialsma
 }
 
 func (c *autoRefreshingTransportCredentials) ensureValidCredentials(ctx context.Context) error {
-	if c.shouldLoadNewCertificate() {
+	if c.shouldLoadNewCertificates() {
 		if err := c.loadCertificates(ctx); err != nil {
 			return err
 		}
@@ -57,7 +57,7 @@ func (c *autoRefreshingTransportCredentials) ensureValidCredentials(ctx context.
 	return nil
 }
 
-func (c *autoRefreshingTransportCredentials) shouldLoadNewCertificate() bool {
+func (c *autoRefreshingTransportCredentials) shouldLoadNewCertificates() bool {
 	earliestReload := c.certificateExpiryTime.Add(-24 * time.Hour)
 
 	return time.Now().After(earliestReload)
