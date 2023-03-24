@@ -171,8 +171,8 @@ func parseRSAKey() (*rsa.PrivateKey, error) {
 	return k.(*rsa.PrivateKey), nil
 }
 
-func launchServer(tlsCredentials credentials.TransportCredentials) (chan<- struct{}, error) {
-	signal := make(chan struct{})
+func launchServer(tlsCredentials credentials.TransportCredentials) (chan int, error) {
+	signal := make(chan int)
 
 	var serverOpts []grpc.ServerOption
 	serverOpts = append(serverOpts, grpc.Creds(tlsCredentials))
@@ -186,21 +186,26 @@ func launchServer(tlsCredentials credentials.TransportCredentials) (chan<- struc
 	}
 
 	go func() {
-		defer lis.Close()
-
 		//nolint:errcheck
 		go grpcServer.Serve(lis)
 
 		<-signal
+
 		grpcServer.Stop()
+		_ = lis.Close()
+		signal <- 1
 	}()
 
 	return signal, nil
 }
 
-func TestDefaultDeadline(t *testing.T) {
-	t.SkipNow()
+func shutdownServer(signal chan int) {
+	signal <- 1
+	<-signal
+	close(signal)
+}
 
+func TestDefaultDeadline(t *testing.T) {
 	privateKey, err := parseRSAKey()
 	require.NoError(t, err)
 
@@ -225,7 +230,7 @@ func TestDefaultDeadline(t *testing.T) {
 	err = c.DialUsingCredentialsManager(context.Background(), &mockCredentialsFetcher{ds: clientDataStore}, "localhost", "10000", "")
 	require.NoError(t, err)
 
-	close(signal)
+	shutdownServer(signal)
 
 	_, err = c.GetResourceWithContext(context.Background(), "", "")
 
@@ -256,11 +261,11 @@ func TestReconnect(t *testing.T) {
 	err = c.DialUsingCredentialsManager(context.Background(), &mockCredentialsFetcher{ds: clientDataStore}, "localhost", "10000", "")
 	require.NoError(t, err)
 
-	close(signal)
+	shutdownServer(signal)
 
 	signal, err = launchServer(tlsCredentials)
 	require.NoError(t, err)
-	defer close(signal)
+	defer shutdownServer(signal)
 
 	_, err = c.GetResourceWithContext(context.Background(), "", "")
 
@@ -285,7 +290,7 @@ func TestRetryPolicy(t *testing.T) {
 
 	signal, err := launchServer(tlsCredentials)
 	require.NoError(t, err)
-	defer close(signal)
+	defer shutdownServer(signal)
 
 	c := authorize.CreateClient()
 
