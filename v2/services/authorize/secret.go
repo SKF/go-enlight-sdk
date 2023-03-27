@@ -15,6 +15,8 @@ import (
 	"github.com/SKF/go-enlight-sdk/v2/services/authorize/credentialsmanager"
 )
 
+const CertificateGracePeriod = 24 * time.Hour
+
 func getCredentialOption(ctx context.Context, host, secretKeyName string, cf credentialsmanager.CredentialsFetcher) (grpc.DialOption, error) {
 	c, err := NewAutoRefreshingTransportCredentials(ctx, cf, secretKeyName, host)
 	if err != nil {
@@ -58,7 +60,7 @@ func (c *autoRefreshingTransportCredentials) ensureValidCredentials(ctx context.
 }
 
 func (c *autoRefreshingTransportCredentials) shouldLoadNewCertificates() bool {
-	earliestReload := c.certificateExpiryTime.Add(-24 * time.Hour)
+	earliestReload := c.certificateExpiryTime.Add(-CertificateGracePeriod)
 
 	return time.Now().After(earliestReload)
 }

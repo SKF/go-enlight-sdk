@@ -213,7 +213,7 @@ func TestDefaultDeadline(t *testing.T) {
 	serverDataStore, err := generateDatastore(ca, privateKey, caCertPEM, 10*365*24*time.Hour)
 	require.NoError(t, err)
 
-	clientDataStore, err := generateDatastore(ca, privateKey, caCertPEM, 3*24*time.Hour)
+	clientDataStore, err := generateDatastore(ca, privateKey, caCertPEM, 10*365*24*time.Hour)
 	require.NoError(t, err)
 
 	tlsCredentials, err := loadTLSCredentials(serverDataStore)
@@ -245,7 +245,7 @@ func TestReconnect(t *testing.T) {
 	serverDataStore, err := generateDatastore(ca, privateKey, caCertPEM, 10*365*24*time.Hour)
 	require.NoError(t, err)
 
-	clientDataStore, err := generateDatastore(ca, privateKey, caCertPEM, 24*time.Hour)
+	clientDataStore, err := generateDatastore(ca, privateKey, caCertPEM, 10*365*24*time.Hour)
 	require.NoError(t, err)
 
 	tlsCredentials, err := loadTLSCredentials(serverDataStore)
@@ -280,7 +280,7 @@ func TestRetryPolicy(t *testing.T) {
 	serverDataStore, err := generateDatastore(ca, privateKey, caCertPEM, 10*365*24*time.Hour)
 	require.NoError(t, err)
 
-	clientDataStore, err := generateDatastore(ca, privateKey, caCertPEM, 3*24*time.Hour)
+	clientDataStore, err := generateDatastore(ca, privateKey, caCertPEM, 10*365*24*time.Hour)
 	require.NoError(t, err)
 
 	tlsCredentials, err := loadTLSCredentials(serverDataStore)
@@ -308,7 +308,7 @@ func TestClientHandshake_CertificateAboutToExpire(t *testing.T) {
 	caCertPEM, err := generateCA(privateKey)
 	require.NoError(t, err)
 
-	ds, err := generateDatastore(ca, privateKey, caCertPEM, 24*time.Hour-time.Second)
+	ds, err := generateDatastore(ca, privateKey, caCertPEM, authorize.CertificateGracePeriod-time.Second)
 	require.NoError(t, err)
 
 	cf := &mockCredentialsFetcher{ds: ds}
