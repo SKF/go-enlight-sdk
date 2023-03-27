@@ -50,10 +50,12 @@ func NewAutoRefreshingTransportCredentials(ctx context.Context, cf credentialsma
 }
 
 func (c *autoRefreshingTransportCredentials) ensureValidCredentials(ctx context.Context) error {
-	if c.shouldLoadNewCertificates() {
-		if err := c.loadCertificates(ctx); err != nil {
-			return err
-		}
+	if !c.shouldLoadNewCertificates() {
+		return nil
+	}
+
+	if err := c.loadCertificates(ctx); err != nil {
+		return err
 	}
 
 	return nil
