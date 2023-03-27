@@ -201,7 +201,7 @@ func (c *client) dialUsingCredentials(ctx context.Context, host, port, secretKey
 		return err
 	}
 
-	newOpts := append(opts, opt)
+	newOpts := append(opts, opt, withDefaultRequestTimeout(c.requestTimeout))
 
 	conn, err := grpc.DialContext(ctx, host+":"+port, newOpts...)
 	if err != nil {
@@ -246,4 +246,17 @@ func (c *client) logClientState(ctx context.Context, state string) error {
 		Hostname: hostname,
 	})
 	return err
+}
+
+func withDefaultRequestTimeout(requestTimeout time.Duration) grpc.DialOption {
+	return grpc.WithUnaryInterceptor(func(ctx context.Context, method string, req, reply interface{}, cc *grpc.ClientConn, invoker grpc.UnaryInvoker, opts ...grpc.CallOption) error {
+		var cancel context.CancelFunc
+
+		if _, ok := ctx.Deadline(); !ok {
+			ctx, cancel = context.WithTimeout(ctx, requestTimeout)
+			defer cancel()
+		}
+
+		return invoker(ctx, method, req, reply, cc, opts...)
+	})
 }

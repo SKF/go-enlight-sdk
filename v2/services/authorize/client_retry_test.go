@@ -205,7 +205,7 @@ func (s *server) Shutdown() {
 	close(s.signal)
 }
 
-func TestDefaultDeadline(t *testing.T) {
+func TestDeadline(t *testing.T) {
 	privateKey, err := parseRSAKey()
 	require.NoError(t, err)
 
@@ -225,16 +225,23 @@ func TestDefaultDeadline(t *testing.T) {
 	require.NoError(t, err)
 
 	c := authorize.CreateClient()
-	c.SetRequestTimeout(time.Millisecond)
+	c.SetRequestTimeout(0)
 
-	err = c.DialUsingCredentialsManager(context.Background(), &mockCredentialsFetcher{ds: clientDataStore}, "localhost", "10000", "")
+	childCtx, cancel := context.WithTimeout(context.Background(), 100*time.Millisecond)
+	defer cancel()
+	err = c.DialUsingCredentialsManager(childCtx, &mockCredentialsFetcher{ds: clientDataStore}, "localhost", "10000", "")
 	require.NoError(t, err)
 
 	server.Shutdown()
 
+	// Perform a call without specifying any deadline. As the server has been shut down this
+	// would normally result in the call blocking forever waiting for the client to reconnect.
+	// Assert: The call is intercepted and the request timeout is injected as a deadline.
+
 	_, err = c.GetResourceWithContext(context.Background(), "", "")
 
-	require.EqualError(t, err, "rpc error: code = DeadlineExceeded desc = context deadline exceeded")
+	require.EqualError(t, err, "rpc error: code = DeadlineExceeded desc = context deadline exceeded",
+		"Caller omits deadline and the default request timeout is used")
 }
 
 func TestReconnect(t *testing.T) {
