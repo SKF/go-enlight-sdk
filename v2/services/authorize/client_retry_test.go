@@ -32,11 +32,13 @@ var (
 	rsaKey []byte
 )
 
+const DistantFuture = 10 * 365 * 24 * time.Hour
+
 var ca = &x509.Certificate{
 	SerialNumber:          big.NewInt(2019),
 	Subject:               pkix.Name{},
 	NotBefore:             time.Now(),
-	NotAfter:              time.Now().AddDate(10, 0, 0),
+	NotAfter:              time.Now().Add(DistantFuture),
 	IsCA:                  true,
 	BasicConstraintsValid: true,
 }
@@ -210,10 +212,10 @@ func TestDefaultDeadline(t *testing.T) {
 	caCertPEM, err := generateCA(privateKey)
 	require.NoError(t, err)
 
-	serverDataStore, err := generateDatastore(ca, privateKey, caCertPEM, 10*365*24*time.Hour)
+	serverDataStore, err := generateDatastore(ca, privateKey, caCertPEM, DistantFuture)
 	require.NoError(t, err)
 
-	clientDataStore, err := generateDatastore(ca, privateKey, caCertPEM, 10*365*24*time.Hour)
+	clientDataStore, err := generateDatastore(ca, privateKey, caCertPEM, DistantFuture)
 	require.NoError(t, err)
 
 	tlsCredentials, err := loadTLSCredentials(serverDataStore)
@@ -242,10 +244,10 @@ func TestReconnect(t *testing.T) {
 	caCertPEM, err := generateCA(privateKey)
 	require.NoError(t, err)
 
-	serverDataStore, err := generateDatastore(ca, privateKey, caCertPEM, 10*365*24*time.Hour)
+	serverDataStore, err := generateDatastore(ca, privateKey, caCertPEM, DistantFuture)
 	require.NoError(t, err)
 
-	clientDataStore, err := generateDatastore(ca, privateKey, caCertPEM, 10*365*24*time.Hour)
+	clientDataStore, err := generateDatastore(ca, privateKey, caCertPEM, DistantFuture)
 	require.NoError(t, err)
 
 	tlsCredentials, err := loadTLSCredentials(serverDataStore)
@@ -277,10 +279,10 @@ func TestRetryPolicy(t *testing.T) {
 	caCertPEM, err := generateCA(privateKey)
 	require.NoError(t, err)
 
-	serverDataStore, err := generateDatastore(ca, privateKey, caCertPEM, 10*365*24*time.Hour)
+	serverDataStore, err := generateDatastore(ca, privateKey, caCertPEM, DistantFuture)
 	require.NoError(t, err)
 
-	clientDataStore, err := generateDatastore(ca, privateKey, caCertPEM, 10*365*24*time.Hour)
+	clientDataStore, err := generateDatastore(ca, privateKey, caCertPEM, DistantFuture)
 	require.NoError(t, err)
 
 	tlsCredentials, err := loadTLSCredentials(serverDataStore)
@@ -320,16 +322,21 @@ func TestClientHandshake_CertificateAboutToExpire(t *testing.T) {
 	require.Equal(t, 1, cf.callCount, "Certificates are loaded once during initialization")
 
 	server, client := net.Pipe()
-	server.Close()
-
-	// Swap out certificates for fresh ones
-	cf.ds, err = generateDatastore(ca, privateKey, caCertPEM, 3*24*time.Hour)
+	// Close pipe to avoid client getting stuck in an infinite reconnect loop
+	err = server.Close()
 	require.NoError(t, err)
 
-	for k := 0; k < 2; k++ {
-		_, _, err = tls.ClientHandshake(ctx, "", client)
-		require.Error(t, err, "io: read/write on closed pipe")
-	}
+	// Swap out certificates for fresh ones
+	cf.ds, err = generateDatastore(ca, privateKey, caCertPEM, DistantFuture)
+	require.NoError(t, err)
 
-	require.Equal(t, 2, cf.callCount, "Certificates are reloaded at first re-connect attempt only")
+	_, _, err = tls.ClientHandshake(ctx, "", client)
+	require.Error(t, err, "io: read/write on closed pipe")
+
+	require.Equal(t, 2, cf.callCount, "Certificates are about to expiry and should be reloaded")
+
+	_, _, err = tls.ClientHandshake(ctx, "", client)
+	require.Error(t, err, "io: read/write on closed pipe")
+
+	require.Equal(t, 2, cf.callCount, "Cached certificates are still valid and should not be reloaded")
 }
