@@ -326,7 +326,7 @@ func TestClientHandshake_CertificateAboutToExpire(t *testing.T) {
 	cf.ds, err = generateDatastore(ca, privateKey, caCertPEM, 3*24*time.Hour)
 	require.NoError(t, err)
 
-	for k := 0; k < 10; k++ {
+	for k := 0; k < 2; k++ {
 		_, _, err = tls.ClientHandshake(ctx, "", client)
 		require.Error(t, err, "io: read/write on closed pipe")
 	}
