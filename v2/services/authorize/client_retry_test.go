@@ -132,22 +132,19 @@ func loadTLSCredentials(ds credentialsmanager.DataStore) (credentials.TransportC
 
 type dummyAuthorizeServer struct {
 	authorizeproto.UnimplementedAuthorizeServer
-	timesFailed int
+	failuresRemaining int
 }
 
 func (*dummyAuthorizeServer) LogClientState(context.Context, *authorizeproto.LogClientStateInput) (*common.Void, error) {
 	return &common.Void{}, nil
 }
 
-func (srv *dummyAuthorizeServer) AddResource(context.Context, *authorizeproto.AddResourceInput) (*common.Void, error) {
-	if srv.timesFailed++; srv.timesFailed <= 4 {
+func (srv *dummyAuthorizeServer) GetResource(context.Context, *authorizeproto.GetResourceInput) (*authorizeproto.GetResourceOutput, error) {
+	if srv.failuresRemaining > 0 {
+		srv.failuresRemaining--
 		return nil, status.Errorf(codes.Canceled, "too slow")
 	}
 
-	return &common.Void{}, nil
-}
-
-func (srv *dummyAuthorizeServer) GetResource(context.Context, *authorizeproto.GetResourceInput) (*authorizeproto.GetResourceOutput, error) {
 	return &authorizeproto.GetResourceOutput{
 		Resource: &common.Origin{
 			Id:       "",
@@ -155,11 +152,6 @@ func (srv *dummyAuthorizeServer) GetResource(context.Context, *authorizeproto.Ge
 			Provider: "",
 		},
 	}, nil
-}
-
-func newServer() *dummyAuthorizeServer {
-	s := &dummyAuthorizeServer{}
-	return s
 }
 
 func parseRSAKey() (*rsa.PrivateKey, error) {
@@ -175,7 +167,7 @@ type server struct {
 	signal chan int
 }
 
-func launchServer(tlsCredentials credentials.TransportCredentials) (server, error) {
+func launchServer(tlsCredentials credentials.TransportCredentials, authorizeServer dummyAuthorizeServer) (server, error) {
 	server := server{
 		signal: make(chan int),
 	}
@@ -184,7 +176,7 @@ func launchServer(tlsCredentials credentials.TransportCredentials) (server, erro
 	serverOpts = append(serverOpts, grpc.Creds(tlsCredentials))
 
 	grpcServer := grpc.NewServer(serverOpts...)
-	authorizeproto.RegisterAuthorizeServer(grpcServer, newServer())
+	authorizeproto.RegisterAuthorizeServer(grpcServer, &authorizeServer)
 
 	lis, err := net.Listen("tcp", "localhost:10000")
 	if err != nil {
@@ -227,7 +219,7 @@ func TestDefaultDeadline(t *testing.T) {
 	tlsCredentials, err := loadTLSCredentials(serverDataStore)
 	require.NoError(t, err)
 
-	server, err := launchServer(tlsCredentials)
+	server, err := launchServer(tlsCredentials, dummyAuthorizeServer{})
 	require.NoError(t, err)
 
 	c := authorize.CreateClient()
@@ -259,7 +251,7 @@ func TestReconnect(t *testing.T) {
 	tlsCredentials, err := loadTLSCredentials(serverDataStore)
 	require.NoError(t, err)
 
-	server, err := launchServer(tlsCredentials)
+	server, err := launchServer(tlsCredentials, dummyAuthorizeServer{})
 	require.NoError(t, err)
 
 	c := authorize.CreateClient()
@@ -269,7 +261,7 @@ func TestReconnect(t *testing.T) {
 
 	server.Shutdown()
 
-	server, err = launchServer(tlsCredentials)
+	server, err = launchServer(tlsCredentials, dummyAuthorizeServer{})
 	require.NoError(t, err)
 	defer server.Shutdown()
 
@@ -294,7 +286,9 @@ func TestRetryPolicy(t *testing.T) {
 	tlsCredentials, err := loadTLSCredentials(serverDataStore)
 	require.NoError(t, err)
 
-	server, err := launchServer(tlsCredentials)
+	server, err := launchServer(tlsCredentials, dummyAuthorizeServer{
+		failuresRemaining: 4,
+	})
 	require.NoError(t, err)
 	defer server.Shutdown()
 
@@ -303,11 +297,7 @@ func TestRetryPolicy(t *testing.T) {
 	err = c.DialUsingCredentialsManager(context.Background(), &mockCredentialsFetcher{ds: clientDataStore}, "localhost", "10000", "")
 	require.NoError(t, err)
 
-	err = c.AddResourceWithContext(context.Background(), common.Origin{
-		Id:       "",
-		Type:     "",
-		Provider: "",
-	})
+	_, err = c.GetResourceWithContext(context.Background(), "", "")
 	require.NoError(t, err)
 }
 
