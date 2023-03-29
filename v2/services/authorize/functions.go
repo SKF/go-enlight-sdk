@@ -152,6 +152,7 @@ func (c *client) GetResource(id string, originType string) (common.Origin, error
 	defer cancel()
 	return c.GetResourceWithContext(ctx, id, originType)
 }
+
 func (c *client) GetResourceWithContext(ctx context.Context, id string, originType string) (common.Origin, error) {
 	input := authorizeApi.GetResourceInput{
 		Id:         id,

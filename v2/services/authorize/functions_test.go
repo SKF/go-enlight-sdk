@@ -9,11 +9,12 @@ import (
 	authMock "github.com/SKF/go-enlight-sdk/v2/services/authorize/mock"
 	grpcapi "github.com/SKF/proto/v2/authorize"
 	"github.com/SKF/proto/v2/common"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
-	"google.golang.org/grpc"
 )
 
 func clientFor(t *testing.T, server *authMock.AuthorizeServer) authorize.AuthorizeClient {
@@ -25,7 +26,7 @@ func clientFor(t *testing.T, server *authMock.AuthorizeServer) authorize.Authori
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Millisecond)
 	defer cancel()
 
-	require.NoError(t, client.DialWithContext(ctx, host, port, grpc.WithInsecure()))
+	require.NoError(t, client.DialWithContext(ctx, host, port, grpc.WithTransportCredentials(insecure.NewCredentials())))
 
 	return client
 }

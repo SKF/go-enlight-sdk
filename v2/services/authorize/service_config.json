@@ -1,0 +1,34 @@
+{
+    "loadBalancingConfig": [
+        { "round_robin": {} }
+    ],
+    "methodConfig": [{
+        "name": [{"service": "grpcapi.Authorize"}],
+        "waitForReady": true,
+
+        "retryPolicy": {
+            "MaxAttempts": 5,
+            "InitialBackoff": ".1s",
+            "MaxBackoff": "1.0s",
+            "BackoffMultiplier": 1.6,
+            "RetryableStatusCodes": [
+                "CANCELLED",
+                "UNKNOWN",
+                "INVALID_ARGUMENT",
+                "DEADLINE_EXCEEDED",
+                "NOT_FOUND",
+                "ALREADY_EXISTS",
+                "PERMISSION_DENIED",
+                "RESOURCE_EXHAUSTED",
+                "FAILED_PRECONDITION",
+                "ABORTED",
+                "OUT_OF_RANGE",
+                "UNIMPLEMENTED",
+                "INTERNAL",
+                "UNAVAILABLE",
+                "DATA_LOSS",
+                "UNAUTHENTICATED"
+            ]
+        }
+    }]
+}

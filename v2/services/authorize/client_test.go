@@ -7,17 +7,16 @@ import (
 	"testing"
 	"time"
 
-	"go.uber.org/zap"
-
 	"github.com/SKF/go-enlight-sdk/v2/services/authorize"
 	authMock "github.com/SKF/go-enlight-sdk/v2/services/authorize/mock"
 	"github.com/SKF/go-utility/v2/log"
 	"github.com/SKF/proto/v2/common"
-
 	"github.com/miekg/dns"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
+	"go.uber.org/zap"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/grpc/grpclog"
 )
 
@@ -33,7 +32,7 @@ func clientForFakeHostName(t *testing.T, authority, host, port string, servers .
 	ctx, cancel := context.WithTimeout(context.Background(), 50*time.Millisecond)
 	defer cancel()
 
-	require.NoError(t, client.DialWithContext(ctx, hostnameWithAuthority, port, grpc.WithInsecure()))
+	require.NoError(t, client.DialWithContext(ctx, hostnameWithAuthority, port, grpc.WithTransportCredentials(insecure.NewCredentials())))
 
 	return client
 }
