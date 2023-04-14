@@ -7,10 +7,10 @@ require (
 	github.com/SKF/go-utility v1.8.0
 	github.com/SKF/go-utility/v2 v2.2.1
 	github.com/SKF/proto v1.27.1-go
-	github.com/aws/aws-sdk-go v1.25.49
+	github.com/aws/aws-sdk-go v1.34.0
 	github.com/golang/protobuf v1.3.2
 	github.com/grpc-ecosystem/go-grpc-middleware v1.2.0
-	github.com/pkg/errors v0.8.1
+	github.com/pkg/errors v0.9.1
 	github.com/stretchr/testify v1.5.1
 	golang.org/x/text v0.7.0
 	google.golang.org/grpc v1.22.1
