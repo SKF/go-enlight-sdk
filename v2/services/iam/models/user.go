@@ -1,10 +1,10 @@
 package models
 
 import (
-	"github.com/SKF/go-utility/uuid"
+	"github.com/SKF/go-utility/v2/uuid"
 )
 
-//User struct
+// User struct
 type User struct {
 	ID             uuid.UUID `json:"id"`
 	Email          string    `json:"email"`
@@ -15,14 +15,14 @@ type User struct {
 	ValidEula      bool      `json:"validEula"`
 }
 
-//UserCredentials struct
+// UserCredentials struct
 type UserCredentials struct {
 	Username string
 	Email    string
 	Password string
 }
 
-//UserAgreement struct
+// UserAgreement struct
 type UserAgreement struct {
 	Email      string
 	EULAAgreed string
@@ -51,10 +51,10 @@ type userRoles struct {
 }
 
 var (
-	//UserStatus variables
+	// UserStatus variables
 	UserStatus = userStatus{Active: "active", Inactive: "inactive"}
 
-	//UserRoles variables
+	// UserRoles variables
 	UserRoles = userRoles{
 		UserAdmin:        "user_admin",
 		HierarchyManager: "hierarchy_manager",

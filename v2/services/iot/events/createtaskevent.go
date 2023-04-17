@@ -2,7 +2,7 @@ package events
 
 import (
 	"github.com/SKF/go-enlight-sdk/v2/services/iot/models"
-	"github.com/SKF/go-eventsource/eventsource"
+	"github.com/SKF/go-eventsource/v2/eventsource"
 )
 
 type CreateTaskEvent struct {

@@ -1,6 +1,6 @@
 package models
 
-import "github.com/SKF/go-utility/uuid"
+import "github.com/SKF/go-utility/v2/uuid"
 
 func stringToUUIDArray(stringArr []string) (uuidArr []uuid.UUID) {
 	for _, elem := range stringArr {

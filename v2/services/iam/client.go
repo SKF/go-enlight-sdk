@@ -8,7 +8,7 @@ import (
 
 	"google.golang.org/grpc"
 
-	"github.com/SKF/go-eventsource/eventsource"
+	"github.com/SKF/go-eventsource/v2/eventsource"
 	iam_grpcapi "github.com/SKF/proto/v2/iam"
 )
 

@@ -1,7 +1,7 @@
 package events
 
 import (
-	"github.com/SKF/go-eventsource/eventsource"
+	"github.com/SKF/go-eventsource/v2/eventsource"
 )
 
 type SetTaskStatusEvent struct {
