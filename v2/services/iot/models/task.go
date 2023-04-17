@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/SKF/go-utility/log"
-	"github.com/SKF/go-utility/uuid"
+	"github.com/SKF/go-utility/v2/log"
+	"github.com/SKF/go-utility/v2/uuid"
 	iotgrpcapi "github.com/SKF/proto/v2/iot"
 )
 
@@ -77,7 +77,6 @@ func (task Task) Validate() (err error) {
 				return ErrTaskNodeTypeEmpty
 			}
 		}
-
 	}
 	if len(task.FunctionalLocationIDs) > 0 && len(task.Nodes) > 0 {
 		return ErrTaskFLIDsAndNodeIdsFilledIn
@@ -201,14 +200,14 @@ func (task *Task) FromGRPCInitial(request iotgrpcapi.InitialTaskDescription) (er
 	task.IsCompleted = false
 	task.UserID = uuid.UUID(request.UserId)
 	if (request.Nodes != nil) && (len(request.Nodes) > 0) {
-		//Check that all nodes have a nodetype
+		// Check that all nodes have a nodetype
 		for _, node := range request.Nodes {
 			if len(node.NodeType) == 0 {
 				err = fmt.Errorf("Nodetype is missing")
 			}
 		}
 
-		//Add nodes
+		// Add nodes
 		for _, node := range request.Nodes {
 			var tempNode Node
 			tempNode.NodeID = uuid.UUID(node.NodeId)

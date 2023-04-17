@@ -8,7 +8,7 @@ import (
 
 	"github.com/SKF/proto/v2/common"
 
-	"github.com/SKF/go-eventsource/eventsource"
+	"github.com/SKF/go-eventsource/v2/eventsource"
 	iam_grpcapi "github.com/SKF/proto/v2/iam"
 )
 
@@ -17,6 +17,7 @@ func (c *client) CheckAuthentication(token, arn string) (claims iam_grpcapi.User
 	defer cancel()
 	return c.CheckAuthenticationWithContext(ctx, token, arn)
 }
+
 func (c *client) CheckAuthenticationWithContext(ctx context.Context, token, arn string) (claims iam_grpcapi.UserClaims, err error) {
 	input := &iam_grpcapi.CheckAuthenticationInput{Token: token, MethodArn: arn}
 	output, err := c.api.CheckAuthentication(ctx, input)
@@ -33,6 +34,7 @@ func (c *client) CheckAuthenticationByEndpoint(token, api, method, endpoint stri
 	defer cancel()
 	return c.CheckAuthenticationByEndpointWithContext(ctx, token, api, method, endpoint)
 }
+
 func (c *client) CheckAuthenticationByEndpointWithContext(ctx context.Context, token, api, method, endpoint string) (claims iam_grpcapi.UserClaims, err error) {
 	input := &iam_grpcapi.CheckAuthenticationByEndpointInput{
 		Api:      api,
@@ -54,6 +56,7 @@ func (c *client) GetNodesByUser(userID string) (nodeIDs []string, err error) {
 	defer cancel()
 	return c.GetNodesByUserWithContext(ctx, userID)
 }
+
 func (c *client) GetNodesByUserWithContext(ctx context.Context, userID string) (nodeIDs []string, err error) {
 	input := &iam_grpcapi.GetHierarchyRelationsInput{UserId: userID}
 	output, err := c.api.GetHierarchyRelations(ctx, input)
@@ -69,6 +72,7 @@ func (c *client) GetEventRecords(since int, limit *int32) (records []eventsource
 	defer cancel()
 	return c.GetEventRecordsWithContext(ctx, since, limit)
 }
+
 func (c *client) GetEventRecordsWithContext(ctx context.Context, since int, limit *int32) (records []eventsource.Record, err error) {
 	input := iam_grpcapi.GetEventRecordsInput{Since: int64(since)}
 	if limit != nil {
