@@ -1,6 +1,6 @@
 module github.com/SKF/go-enlight-sdk/v2
 
-go 1.17
+go 1.19
 
 require (
 	github.com/SKF/go-utility/v2 v2.33.4
