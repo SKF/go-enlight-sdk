@@ -5,7 +5,7 @@ go 1.19
 require (
 	github.com/SKF/go-utility/v2 v2.33.4
 	github.com/SKF/proto/v2 v2.19.0-go
-	github.com/aws/aws-sdk-go v1.44.241
+	github.com/aws/aws-sdk-go v1.44.249
 	github.com/golang/protobuf v1.5.2
 	github.com/miekg/dns v1.1.35
 	github.com/pkg/errors v0.9.1
@@ -18,7 +18,7 @@ require (
 )
 
 require (
-	github.com/SKF/go-eventsource/v2 v2.13.0
+	github.com/SKF/go-eventsource/v2 v2.13.2
 	github.com/aws/aws-sdk-go-v2 v1.18.0
 	github.com/aws/aws-sdk-go-v2/service/secretsmanager v1.16.2
 )
