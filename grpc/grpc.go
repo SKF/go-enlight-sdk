@@ -6,7 +6,7 @@ import (
 	"crypto/x509"
 	"errors"
 	"fmt"
-	"io/ioutil"
+	"os"
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
@@ -27,7 +27,7 @@ func WithBlock() grpc.DialOption {
 // reconnect. The default value of FailOnNonTempDialError is
 // false.
 //
-//This is an EXPERIMENTAL API.
+// This is an EXPERIMENTAL API.
 func FailOnNonTempDialError(f bool) grpc.DialOption {
 	return grpc.FailOnNonTempDialError(f)
 }
@@ -61,15 +61,15 @@ func WithTransportCredentialsPEM(serverName string, certPEMBlock, keyPEMBlock, c
 // WithTransportCredentials returns a DialOption which configures
 // a connection level security credentials (e.g., TLS/SSL).
 func WithTransportCredentials(serverName, certFile, keyFile, caFile string) (opt grpc.DialOption, err error) {
-	certPEMBlock, err := ioutil.ReadFile(certFile)
+	certPEMBlock, err := os.ReadFile(certFile)
 	if err != nil {
 		return nil, err
 	}
-	keyPEMBlock, err := ioutil.ReadFile(keyFile)
+	keyPEMBlock, err := os.ReadFile(keyFile)
 	if err != nil {
 		return nil, err
 	}
-	caPEMBlock, err := ioutil.ReadFile(caFile)
+	caPEMBlock, err := os.ReadFile(caFile)
 	if err != nil {
 		return nil, err
 	}

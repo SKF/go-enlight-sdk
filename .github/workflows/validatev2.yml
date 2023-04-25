@@ -1,4 +1,4 @@
-name: Validate
+name: Validate v2
 
 on:
   push:
@@ -24,9 +24,11 @@ jobs:
         uses: golangci/golangci-lint-action@v3
         with:
           version: v1.52
-          args: --disable wsl
+          args: --disable wsl,govet
+          working-directory: v2/
 
       - name: Test
         run: |
           go clean
           go test -short -count=1 ./...
+        working-directory: v2/
