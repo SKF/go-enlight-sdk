@@ -1,6 +1,6 @@
 module github.com/SKF/go-enlight-sdk
 
-go 1.17
+go 1.19
 
 require (
 	github.com/SKF/go-eventsource v1.3.5
