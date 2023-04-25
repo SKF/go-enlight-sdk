@@ -12,7 +12,7 @@ require (
 	github.com/grpc-ecosystem/go-grpc-middleware v1.2.0
 	github.com/pkg/errors v0.9.1
 	github.com/stretchr/testify v1.5.1
-	golang.org/x/text v0.7.0
+	golang.org/x/text v0.9.0
 	google.golang.org/grpc v1.22.1
 )
 
