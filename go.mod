@@ -3,8 +3,8 @@ module github.com/SKF/go-enlight-sdk
 go 1.19
 
 require (
-	github.com/SKF/go-eventsource v1.3.5
-	github.com/SKF/go-utility v1.8.0
+	github.com/SKF/go-eventsource v1.4.2
+	github.com/SKF/go-utility v1.10.2
 	github.com/SKF/go-utility/v2 v2.2.1
 	github.com/SKF/proto v1.27.1-go
 	github.com/aws/aws-sdk-go v1.34.0
