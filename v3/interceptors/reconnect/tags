@@ -1,0 +1,40 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_OUTPUT_FILESEP	slash	/slash or backslash/
+!_TAG_OUTPUT_MODE	u-ctags	/u-ctags or e-ctags/
+!_TAG_PROGRAM_AUTHOR	Universal Ctags Team	//
+!_TAG_PROGRAM_NAME	Universal Ctags	/Derived from Exuberant Ctags/
+!_TAG_PROGRAM_URL	https://ctags.io/	/official site/
+!_TAG_PROGRAM_VERSION	0.0.0	/a3c87ab5/
+CallOption	options.go	/^type CallOption func(opt *options)$/;"	t	package:reconnect	typeref:typename:func(opt *options)
+NewConnectionFunc	options.go	/^type NewConnectionFunc func(context.Context, *grpc.ClientConn, ...grpc.CallOption) (context.Cont/;"	t	package:reconnect	typeref:typename:func(context.Context, *grpc.ClientConn, ...grpc.CallOption) (context.Context, *grpc.ClientConn, []grpc.CallOption, error)
+Test_ReconnectInterceptor_ConnectionClosed	reconnect_test.go	/^func Test_ReconnectInterceptor_ConnectionClosed(t *testing.T) {$/;"	f	package:reconnect_test	signature:(t *testing.T)
+Test_ReconnectInterceptor_HappyCase	reconnect_test.go	/^func Test_ReconnectInterceptor_HappyCase(t *testing.T) {$/;"	f	package:reconnect_test	signature:(t *testing.T)
+Test_ReconnectInterceptor_RepeatedReconnects	reconnect_test.go	/^func Test_ReconnectInterceptor_RepeatedReconnects(t *testing.T) {$/;"	f	package:reconnect_test	signature:(t *testing.T)
+UnaryInterceptor	reconnect.go	/^func UnaryInterceptor(opts ...CallOption) func(ctx context.Context, method string, req, reply in/;"	f	package:reconnect	typeref:typename:func(ctx context.Context, method string, req, reply interface{}, cc *grpc.ClientConn, invoker grpc.UnaryInvoker, opts ...grpc.CallOption) error	signature:(opts ...CallOption)
+WithNewConnection	options.go	/^func WithNewConnection(f NewConnectionFunc) CallOption {$/;"	f	package:reconnect	typeref:typename:CallOption	signature:(f NewConnectionFunc)
+bufSize	reconnect_test.go	/^	bufSize     = 1024 * 1024$/;"	c	package:reconnect_test
+defaultOptions	options.go	/^	defaultOptions = &options{$/;"	v	package:reconnect
+evaluateCallOptions	options.go	/^func evaluateCallOptions(opts []CallOption) *options {$/;"	f	package:reconnect	typeref:typename:*options	signature:(opts []CallOption)
+newClientConn	options.go	/^	newClientConn NewConnectionFunc$/;"	m	struct:reconnect.options	typeref:typename:NewConnectionFunc
+options	options.go	/^type options struct {$/;"	s	package:reconnect
+pb	reconnect_test.go	/^	pb "github.com\/SKF\/go-enlight-sdk\/v2\/tests\/server\/helloworld"$/;"	P	package:github.com/SKF/go-enlight-sdk/v2/tests/server/helloworld
+reconnect	options.go	/^package reconnect$/;"	p
+reconnect	reconnect.go	/^package reconnect$/;"	p
+reconnect.CallOption	options.go	/^type CallOption func(opt *options)$/;"	t	package:reconnect	typeref:typename:func(opt *options)
+reconnect.NewConnectionFunc	options.go	/^type NewConnectionFunc func(context.Context, *grpc.ClientConn, ...grpc.CallOption) (context.Cont/;"	t	package:reconnect	typeref:typename:func(context.Context, *grpc.ClientConn, ...grpc.CallOption) (context.Context, *grpc.ClientConn, []grpc.CallOption, error)
+reconnect.UnaryInterceptor	reconnect.go	/^func UnaryInterceptor(opts ...CallOption) func(ctx context.Context, method string, req, reply in/;"	f	package:reconnect	typeref:typename:func(ctx context.Context, method string, req, reply interface{}, cc *grpc.ClientConn, invoker grpc.UnaryInvoker, opts ...grpc.CallOption) error	signature:(opts ...CallOption)
+reconnect.WithNewConnection	options.go	/^func WithNewConnection(f NewConnectionFunc) CallOption {$/;"	f	package:reconnect	typeref:typename:CallOption	signature:(f NewConnectionFunc)
+reconnect.defaultOptions	options.go	/^	defaultOptions = &options{$/;"	v	package:reconnect
+reconnect.evaluateCallOptions	options.go	/^func evaluateCallOptions(opts []CallOption) *options {$/;"	f	package:reconnect	typeref:typename:*options	signature:(opts []CallOption)
+reconnect.options	options.go	/^type options struct {$/;"	s	package:reconnect
+reconnect.options.newClientConn	options.go	/^	newClientConn NewConnectionFunc$/;"	m	struct:reconnect.options	typeref:typename:NewConnectionFunc
+reconnect_test	reconnect_test.go	/^package reconnect_test$/;"	p
+reconnect_test.Test_ReconnectInterceptor_ConnectionClosed	reconnect_test.go	/^func Test_ReconnectInterceptor_ConnectionClosed(t *testing.T) {$/;"	f	package:reconnect_test	signature:(t *testing.T)
+reconnect_test.Test_ReconnectInterceptor_HappyCase	reconnect_test.go	/^func Test_ReconnectInterceptor_HappyCase(t *testing.T) {$/;"	f	package:reconnect_test	signature:(t *testing.T)
+reconnect_test.Test_ReconnectInterceptor_RepeatedReconnects	reconnect_test.go	/^func Test_ReconnectInterceptor_RepeatedReconnects(t *testing.T) {$/;"	f	package:reconnect_test	signature:(t *testing.T)
+reconnect_test.bufSize	reconnect_test.go	/^	bufSize     = 1024 * 1024$/;"	c	package:reconnect_test
+reconnect_test.timeout	reconnect_test.go	/^	timeout     = time.Millisecond * 100$/;"	c	package:reconnect_test
+reconnect_test.timeoutWait	reconnect_test.go	/^	timeoutWait = time.Millisecond * 150$/;"	c	package:reconnect_test
+timeout	reconnect_test.go	/^	timeout     = time.Millisecond * 100$/;"	c	package:reconnect_test
+timeoutWait	reconnect_test.go	/^	timeoutWait = time.Millisecond * 150$/;"	c	package:reconnect_test
