@@ -20,7 +20,7 @@ require (
 require (
 	github.com/SKF/go-eventsource/v2 v2.13.2
 	github.com/aws/aws-sdk-go-v2 v1.18.0
-	github.com/aws/aws-sdk-go-v2/service/secretsmanager v1.16.2
+	github.com/aws/aws-sdk-go-v2/service/secretsmanager v1.19.6
 )
 
 require (
@@ -33,8 +33,8 @@ require (
 	github.com/DataDog/sketches-go v1.2.1 // indirect
 	github.com/Microsoft/go-winio v0.5.1 // indirect
 	github.com/SKF/go-enlight-middleware v0.8.0 // indirect
-	github.com/aws/aws-sdk-go-v2/internal/configsources v1.1.32 // indirect
-	github.com/aws/aws-sdk-go-v2/internal/endpoints/v2 v2.4.26 // indirect
+	github.com/aws/aws-sdk-go-v2/internal/configsources v1.1.33 // indirect
+	github.com/aws/aws-sdk-go-v2/internal/endpoints/v2 v2.4.27 // indirect
 	github.com/aws/smithy-go v1.13.5 // indirect
 	github.com/cespare/xxhash/v2 v2.2.0 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
