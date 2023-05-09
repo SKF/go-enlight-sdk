@@ -1,3 +1,4 @@
+// Deprecated: Please use github.com/SKF/go-enlight-sdk/v2 instead.
 module github.com/SKF/go-enlight-sdk
 
 go 1.19
