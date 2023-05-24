@@ -9,7 +9,7 @@ require (
 	github.com/golang/protobuf v1.5.3
 	github.com/miekg/dns v1.1.54
 	github.com/pkg/errors v0.9.1
-	github.com/stretchr/testify v1.8.2
+	github.com/stretchr/testify v1.8.3
 	go.opencensus.io v0.24.0
 	go.uber.org/zap v1.24.0
 	golang.org/x/text v0.8.0 // indirect
@@ -18,7 +18,7 @@ require (
 )
 
 require (
-	github.com/SKF/go-eventsource/v2 v2.13.2
+	github.com/SKF/go-eventsource/v2 v2.13.3
 	github.com/aws/aws-sdk-go-v2 v1.18.0
 	github.com/aws/aws-sdk-go-v2/service/secretsmanager v1.19.8
 )
