@@ -3,13 +3,13 @@ module github.com/SKF/go-enlight-sdk/v2
 go 1.19
 
 require (
-	github.com/SKF/go-utility/v2 v2.33.6
+	github.com/SKF/go-utility/v2 v2.33.8
 	github.com/SKF/proto/v2 v2.19.0-go
 	github.com/aws/aws-sdk-go v1.44.295
 	github.com/golang/protobuf v1.5.3
 	github.com/miekg/dns v1.1.54
 	github.com/pkg/errors v0.9.1
-	github.com/stretchr/testify v1.8.3
+	github.com/stretchr/testify v1.8.4
 	go.opencensus.io v0.24.0
 	go.uber.org/zap v1.24.0
 	golang.org/x/text v0.9.0 // indirect
@@ -19,7 +19,7 @@ require (
 
 require (
 	github.com/SKF/go-eventsource/v2 v2.13.2
-	github.com/aws/aws-sdk-go-v2 v1.18.0
+	github.com/aws/aws-sdk-go-v2 v1.18.1
 	github.com/aws/aws-sdk-go-v2/service/secretsmanager v1.19.8
 )
 
@@ -33,8 +33,8 @@ require (
 	github.com/DataDog/sketches-go v1.4.1 // indirect
 	github.com/Microsoft/go-winio v0.5.2 // indirect
 	github.com/SKF/go-enlight-middleware v0.8.2 // indirect
-	github.com/aws/aws-sdk-go-v2/internal/configsources v1.1.33 // indirect
-	github.com/aws/aws-sdk-go-v2/internal/endpoints/v2 v2.4.27 // indirect
+	github.com/aws/aws-sdk-go-v2/internal/configsources v1.1.34 // indirect
+	github.com/aws/aws-sdk-go-v2/internal/endpoints/v2 v2.4.28 // indirect
 	github.com/aws/smithy-go v1.13.5 // indirect
 	github.com/cespare/xxhash/v2 v2.2.0 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
