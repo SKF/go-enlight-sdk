@@ -23,8 +23,8 @@ github.com/Microsoft/go-winio v0.5.2/go.mod h1:WpS1mjBmmwHBEWmogvA2mj8546UReBk4v
 github.com/OneOfOne/xxhash v1.2.2/go.mod h1:HSdplMjZKSmBqAxg5vPj2TmRDmfkzw+cTzAElWljhcU=
 github.com/SKF/go-enlight-middleware v0.8.4 h1:zMQW8B/1aDzCKjIndjjKF3Aj7RZqteygIkISQZkw6xA=
 github.com/SKF/go-enlight-middleware v0.8.4/go.mod h1:WOYrp5saxf0Q2MXLDMNHr9NKqVBD45BKNdaGbB2NM7c=
-github.com/SKF/go-eventsource/v2 v2.13.3 h1:JiVt0IljSlzR1F+MbH6oZKtj5/gWzzf6e+deIS7fXzQ=
-github.com/SKF/go-eventsource/v2 v2.13.3/go.mod h1:yaCupb2aDfTT0kBQD5WYO6S5/u5KOgHSkdwigb+j8wU=
+github.com/SKF/go-eventsource/v2 v2.13.4 h1:7RnDiqprGoMmt5crejvJPB7Ka+2P1TlqA2sMQvFFvgo=
+github.com/SKF/go-eventsource/v2 v2.13.4/go.mod h1:2VThsf1GD83Y6sptWx9llPDumlBXoogu8c3FXxddQOE=
 github.com/SKF/go-utility/v2 v2.33.11 h1:3LJHV+76Imcmfn/xNs5liSeoZEUUow33QOD2B56O2bw=
 github.com/SKF/go-utility/v2 v2.33.11/go.mod h1:Rn50YoDG+5Gqba5Y06eEXINb3BEEtLf5uPHY7Hbm8sM=
 github.com/SKF/proto/v2 v2.19.0-go h1:suOQyDn684WyijRPoyiJurEQUy1A0iGJja71uHqSJPM=
