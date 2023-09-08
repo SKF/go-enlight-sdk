@@ -14,7 +14,7 @@ require (
 	go.uber.org/zap v1.25.0
 	golang.org/x/text v0.12.0 // indirect
 	google.golang.org/grpc v1.57.0
-	gopkg.in/DataDog/dd-trace-go.v1 v1.54.0
+	gopkg.in/DataDog/dd-trace-go.v1 v1.54.1
 )
 
 require (
