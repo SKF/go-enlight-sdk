@@ -214,14 +214,11 @@ func (c *client) dialUsingCredentials(ctx context.Context, host, port, secretKey
 }
 
 func (c *client) Close() error {
-	ctx, cancel := context.WithTimeout(context.Background(), c.requestTimeout)
-	defer cancel()
-
-	if c.conn != nil {
-		return c.conn.Close()
+	if c.conn == nil {
+		return nil
 	}
 
-	return nil
+	return c.conn.Close()
 }
 
 func (c *client) DeepPing() error {
