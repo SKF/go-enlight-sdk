@@ -3,7 +3,6 @@ package authorize
 import (
 	"context"
 	_ "embed"
-	"os"
 	"time"
 
 	"github.com/aws/aws-sdk-go/aws/session"
@@ -159,19 +158,19 @@ func (c *client) Dial(host, port string, opts ...grpc.DialOption) error {
 }
 
 // DialWithContext creates a client connection to the given host with context (for timeout and transaction id)
-func (c *client) DialWithContext(ctx context.Context, host, port string, opts ...grpc.DialOption) (err error) {
+func (c *client) DialWithContext(ctx context.Context, host, port string, opts ...grpc.DialOption) error {
 	resolver.SetDefaultScheme("dns")
 	opts = append([]grpc.DialOption{grpc.WithDefaultServiceConfig(defaultServiceConfig)}, opts...)
 
 	conn, err := grpc.DialContext(ctx, host+":"+port, opts...)
 	if err != nil {
-		return
+		return err
 	}
 
 	c.conn = conn
 	c.api = authorizeApi.NewAuthorizeClient(conn)
-	err = c.logClientState(ctx, "opening connection")
-	return
+
+	return nil
 }
 
 // DialUsingCredentials creates a client connection to the given host with background context and no timeout
@@ -211,17 +210,17 @@ func (c *client) dialUsingCredentials(ctx context.Context, host, port, secretKey
 	c.conn = conn
 	c.api = authorizeApi.NewAuthorizeClient(c.conn)
 
-	err = c.logClientState(ctx, "opening connection")
-	return err
+	return nil
 }
 
-func (c *client) Close() (err error) {
+func (c *client) Close() error {
 	ctx, cancel := context.WithTimeout(context.Background(), c.requestTimeout)
 	defer cancel()
-	err = c.logClientState(ctx, "closing connection")
+
 	if c.conn != nil {
 		return c.conn.Close()
 	}
+
 	return nil
 }
 
@@ -233,18 +232,6 @@ func (c *client) DeepPing() error {
 
 func (c *client) DeepPingWithContext(ctx context.Context) error {
 	_, err := c.api.DeepPing(ctx, &common.Void{})
-	return err
-}
-
-func (c *client) logClientState(ctx context.Context, state string) error {
-	hostname, err := os.Hostname()
-	if err != nil {
-		hostname = ""
-	}
-	_, err = c.api.LogClientState(ctx, &authorizeApi.LogClientStateInput{
-		State:    state,
-		Hostname: hostname,
-	})
 	return err
 }
 
