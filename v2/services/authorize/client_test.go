@@ -23,10 +23,6 @@ import (
 func clientForFakeHostName(t *testing.T, authority, host, port string, servers ...*authMock.AuthorizeServer) authorize.AuthorizeClient {
 	hostnameWithAuthority := fmt.Sprintf("dns://%s/%s", authority, host)
 
-	for i := range servers {
-		servers[i].On("LogClientState", mock.Anything, mock.Anything).Return(&common.Void{}, nil).Maybe()
-	}
-
 	client := authorize.CreateClient()
 
 	ctx, cancel := context.WithTimeout(context.Background(), 50*time.Millisecond)

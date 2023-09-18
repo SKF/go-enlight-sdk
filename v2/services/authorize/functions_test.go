@@ -21,7 +21,6 @@ func clientFor(t *testing.T, server *authMock.AuthorizeServer) authorize.Authori
 	host, port := server.HostPort()
 
 	client := authorize.CreateClient()
-	server.On("LogClientState", mock.Anything, mock.Anything).Return(&common.Void{}, nil)
 
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Millisecond)
 	defer cancel()
