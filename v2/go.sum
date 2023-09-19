@@ -26,8 +26,8 @@ github.com/SKF/go-enlight-middleware v0.8.5 h1:+23yE50gKVNrodQVoWbNcvV5zYWgfHAIF
 github.com/SKF/go-enlight-middleware v0.8.5/go.mod h1:OygaLyG8KsPuDMq3Tfu10S5Yd0chZGshdcpWwB5pBZU=
 github.com/SKF/go-eventsource/v2 v2.13.4 h1:7RnDiqprGoMmt5crejvJPB7Ka+2P1TlqA2sMQvFFvgo=
 github.com/SKF/go-eventsource/v2 v2.13.4/go.mod h1:2VThsf1GD83Y6sptWx9llPDumlBXoogu8c3FXxddQOE=
-github.com/SKF/go-utility/v2 v2.33.11 h1:3LJHV+76Imcmfn/xNs5liSeoZEUUow33QOD2B56O2bw=
-github.com/SKF/go-utility/v2 v2.33.11/go.mod h1:Rn50YoDG+5Gqba5Y06eEXINb3BEEtLf5uPHY7Hbm8sM=
+github.com/SKF/go-utility/v2 v2.33.12 h1:uuTj+p5VaRHxP+Q0ZO6a2XpLnBisoOCZixwNtpJRxcw=
+github.com/SKF/go-utility/v2 v2.33.12/go.mod h1:07lnd+OTNYPd0wGj0J1NQaJkjeSX6xBu4JLkR1SCF+g=
 github.com/SKF/proto/v2 v2.19.0-go h1:suOQyDn684WyijRPoyiJurEQUy1A0iGJja71uHqSJPM=
 github.com/SKF/proto/v2 v2.19.0-go/go.mod h1:PX9BUHguKyZlicj9B0ur3PVs4mskS53GPO2VzG+ACA8=
 github.com/antihax/optional v1.0.0/go.mod h1:uupD/76wgC+ih3iEmQUL+0Ugr19nfwCT1kdvxnR2qWY=
