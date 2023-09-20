@@ -12,15 +12,6 @@ import (
 
 const REQUEST_LENGTH_LIMIT = 1000
 
-func toArrayOfPointers(resources []common.Origin) []*common.Origin {
-	var result []*common.Origin
-	for i := 0; i < len(resources); i++ {
-		result = append(result, &resources[i])
-	}
-
-	return result
-}
-
 func requestLengthLimit(requestLength int) error {
 	if requestLength > REQUEST_LENGTH_LIMIT {
 		return fmt.Errorf("request length limit exceeded. max: %d actual: %d", REQUEST_LENGTH_LIMIT, requestLength)
