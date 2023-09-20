@@ -18,7 +18,7 @@ require (
 )
 
 require (
-	github.com/SKF/go-eventsource/v2 v2.13.4
+	github.com/SKF/go-eventsource/v2 v2.13.5
 	github.com/aws/aws-sdk-go-v2 v1.21.0
 	github.com/aws/aws-sdk-go-v2/service/secretsmanager v1.21.3
 )
