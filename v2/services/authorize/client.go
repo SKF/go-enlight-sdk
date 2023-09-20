@@ -39,100 +39,100 @@ type AuthorizeClient interface {
 
 	IsAuthorized(userID, action string, resource *common.Origin) (bool, error)
 	IsAuthorizedWithContext(ctx context.Context, userID, action string, resource *common.Origin) (bool, error)
-	IsAuthorizedBulk(userID, action string, resResources []common.Origin) ([]string, []bool, error)
-	IsAuthorizedBulkWithContext(ctx context.Context, userID, action string, reqResources []common.Origin) ([]string, []bool, error)
-	IsAuthorizedBulkWithResources(ctx context.Context, userID, action string, reqResources []common.Origin) ([]common.Origin, []bool, error)
+	IsAuthorizedBulk(userID, action string, resResources []*common.Origin) ([]string, []bool, error)
+	IsAuthorizedBulkWithContext(ctx context.Context, userID, action string, reqResources []*common.Origin) ([]string, []bool, error)
+	IsAuthorizedBulkWithResources(ctx context.Context, userID, action string, reqResources []*common.Origin) ([]*common.Origin, []bool, error)
 	IsAuthorizedByEndpoint(api, method, endpoint, userID string) (bool, error)
 	IsAuthorizedByEndpointWithContext(ctx context.Context, api, method, endpoint, userID string) (bool, error)
 	IsAuthorizedWithReason(userID, action string, resource *common.Origin) (bool, string, error)
 	IsAuthorizedWithReasonWithContext(ctx context.Context, userID, action string, resource *common.Origin) (bool, string, error)
 
-	AddResource(resource common.Origin) error
-	AddResourceWithContext(ctx context.Context, resource common.Origin) error
+	AddResource(resource *common.Origin) error
+	AddResourceWithContext(ctx context.Context, resource *common.Origin) error
 
-	GetResource(id, originType string) (common.Origin, error)
-	GetResourceWithContext(ctx context.Context, id, originType string) (common.Origin, error)
+	GetResource(id, originType string) (*common.Origin, error)
+	GetResourceWithContext(ctx context.Context, id, originType string) (*common.Origin, error)
 
-	AddResources(resources []common.Origin) error
-	AddResourcesWithContext(ctx context.Context, resources []common.Origin) error
+	AddResources(resources []*common.Origin) error
+	AddResourcesWithContext(ctx context.Context, resources []*common.Origin) error
 
-	RemoveResource(resource common.Origin) error
-	RemoveResourceWithContext(ctx context.Context, resource common.Origin) error
+	RemoveResource(resource *common.Origin) error
+	RemoveResourceWithContext(ctx context.Context, resource *common.Origin) error
 
-	RemoveResources(resources []common.Origin) error
-	RemoveResourcesWithContext(ctx context.Context, resources []common.Origin) error
+	RemoveResources(resources []*common.Origin) error
+	RemoveResourcesWithContext(ctx context.Context, resources []*common.Origin) error
 
-	GetResourcesWithActionsAccess(actions []string, resourceType string, resource *common.Origin) ([]common.Origin, error)
-	GetResourcesWithActionsAccessWithContext(ctx context.Context, actions []string, resourceType string, resource *common.Origin) ([]common.Origin, error)
+	GetResourcesWithActionsAccess(actions []string, resourceType string, resource *common.Origin) ([]*common.Origin, error)
+	GetResourcesWithActionsAccessWithContext(ctx context.Context, actions []string, resourceType string, resource *common.Origin) ([]*common.Origin, error)
 
-	GetResourcesByUserAction(userID, actionName, resourceType string) ([]common.Origin, error)
-	GetResourcesByUserActionWithContext(ctx context.Context, userID, actionName, resourceType string) ([]common.Origin, error)
+	GetResourcesByUserAction(userID, actionName, resourceType string) ([]*common.Origin, error)
+	GetResourcesByUserActionWithContext(ctx context.Context, userID, actionName, resourceType string) ([]*common.Origin, error)
 
-	GetResourcesByType(resourceType string) (resources []common.Origin, err error)
-	GetResourcesByTypeWithContext(ctx context.Context, resourceType string) (resources []common.Origin, err error)
+	GetResourcesByType(resourceType string) (resources []*common.Origin, err error)
+	GetResourcesByTypeWithContext(ctx context.Context, resourceType string) (resources []*common.Origin, err error)
 
-	GetResourcesByOriginAndType(resource common.Origin, resourceType string, depth int32) (resources []common.Origin, err error)
-	GetResourcesByOriginAndTypeWithContext(ctx context.Context, resource common.Origin, resourceType string, depth int32) (resources []common.Origin, err error)
+	GetResourcesByOriginAndType(resource *common.Origin, resourceType string, depth int32) (resources []*common.Origin, err error)
+	GetResourcesByOriginAndTypeWithContext(ctx context.Context, resource *common.Origin, resourceType string, depth int32) (resources []*common.Origin, err error)
 
-	GetResourceParents(resource common.Origin, parentOriginType string) (resources []common.Origin, err error)
-	GetResourceParentsWithContext(ctx context.Context, resource common.Origin, parentOriginType string) (resources []common.Origin, err error)
+	GetResourceParents(resource *common.Origin, parentOriginType string) (resources []*common.Origin, err error)
+	GetResourceParentsWithContext(ctx context.Context, resource *common.Origin, parentOriginType string) (resources []*common.Origin, err error)
 
-	GetResourceChildren(resource common.Origin, childOriginType string) (resources []common.Origin, err error)
-	GetResourceChildrenWithContext(ctx context.Context, resource common.Origin, childOriginType string) (resources []common.Origin, err error)
+	GetResourceChildren(resource *common.Origin, childOriginType string) (resources []*common.Origin, err error)
+	GetResourceChildrenWithContext(ctx context.Context, resource *common.Origin, childOriginType string) (resources []*common.Origin, err error)
 
-	GetUserIDsWithAccessToResource(resource common.Origin) (resources []string, err error)
-	GetUserIDsWithAccessToResourceWithContext(ctx context.Context, resource common.Origin) (resources []string, err error)
+	GetUserIDsWithAccessToResource(resource *common.Origin) (resources []string, err error)
+	GetUserIDsWithAccessToResourceWithContext(ctx context.Context, resource *common.Origin) (resources []string, err error)
 
-	AddResourceRelation(resource common.Origin, parent common.Origin) error
-	AddResourceRelationWithContext(ctx context.Context, resource common.Origin, parent common.Origin) error
+	AddResourceRelation(resource *common.Origin, parent *common.Origin) error
+	AddResourceRelationWithContext(ctx context.Context, resource *common.Origin, parent *common.Origin) error
 
-	AddResourceRelations(resources authorizeApi.AddResourceRelationsInput) error
-	AddResourceRelationsWithContext(ctx context.Context, resources authorizeApi.AddResourceRelationsInput) error
+	AddResourceRelations(resources *authorizeApi.AddResourceRelationsInput) error
+	AddResourceRelationsWithContext(ctx context.Context, resources *authorizeApi.AddResourceRelationsInput) error
 
-	RemoveResourceRelation(resource common.Origin, parent common.Origin) error
-	RemoveResourceRelationWithContext(ctx context.Context, resource common.Origin, parent common.Origin) error
+	RemoveResourceRelation(resource *common.Origin, parent *common.Origin) error
+	RemoveResourceRelationWithContext(ctx context.Context, resource *common.Origin, parent *common.Origin) error
 
-	RemoveResourceRelations(resources authorizeApi.RemoveResourceRelationsInput) error
-	RemoveResourceRelationsWithContext(ctx context.Context, resources authorizeApi.RemoveResourceRelationsInput) error
+	RemoveResourceRelations(resources *authorizeApi.RemoveResourceRelationsInput) error
+	RemoveResourceRelationsWithContext(ctx context.Context, resources *authorizeApi.RemoveResourceRelationsInput) error
 
 	ApplyUserAction(userID, action string, resource *common.Origin) error
 	ApplyUserActionWithContext(ctx context.Context, userID, action string, resource *common.Origin) error
 
-	ApplyRolesForUserOnResources(userID string, roles []string, resources []common.Origin) error
-	ApplyRolesForUserOnResourcesWithContext(ctx context.Context, userID string, roles []string, resources []common.Origin) error
+	ApplyRolesForUserOnResources(userID string, roles []string, resources []*common.Origin) error
+	ApplyRolesForUserOnResourcesWithContext(ctx context.Context, userID string, roles []string, resources []*common.Origin) error
 
 	RemoveUserAction(userID, action string, resource *common.Origin) error
 	RemoveUserActionWithContext(ctx context.Context, userID, action string, resource *common.Origin) error
 
-	GetActionsByUserRole(userRole string) ([]authorizeApi.Action, error)
-	GetActionsByUserRoleWithContext(ctx context.Context, userRole string) ([]authorizeApi.Action, error)
+	GetActionsByUserRole(userRole string) ([]*authorizeApi.Action, error)
+	GetActionsByUserRoleWithContext(ctx context.Context, userRole string) ([]*authorizeApi.Action, error)
 
-	GetResourcesAndActionsByUser(userID string) ([]authorizeApi.ActionResource, error)
-	GetResourcesAndActionsByUserWithContext(ctx context.Context, userID string) ([]authorizeApi.ActionResource, error)
+	GetResourcesAndActionsByUser(userID string) ([]*authorizeApi.ActionResource, error)
+	GetResourcesAndActionsByUserWithContext(ctx context.Context, userID string) ([]*authorizeApi.ActionResource, error)
 
-	GetResourcesAndActionsByUserAndResource(userID string, resource *common.Origin) ([]authorizeApi.ActionResource, error)
-	GetResourcesAndActionsByUserAndResourceWithContext(ctx context.Context, userID string, resource *common.Origin) ([]authorizeApi.ActionResource, error)
+	GetResourcesAndActionsByUserAndResource(userID string, resource *common.Origin) ([]*authorizeApi.ActionResource, error)
+	GetResourcesAndActionsByUserAndResourceWithContext(ctx context.Context, userID string, resource *common.Origin) ([]*authorizeApi.ActionResource, error)
 
-	AddAction(action authorizeApi.Action) error
-	AddActionWithContext(ctx context.Context, action authorizeApi.Action) error
+	AddAction(action *authorizeApi.Action) error
+	AddActionWithContext(ctx context.Context, action *authorizeApi.Action) error
 
 	RemoveAction(name string) error
 	RemoveActionWithContext(ctx context.Context, name string) error
 
-	GetAction(name string) (authorizeApi.Action, error)
-	GetActionWithContext(ctx context.Context, name string) (authorizeApi.Action, error)
+	GetAction(name string) (*authorizeApi.Action, error)
+	GetActionWithContext(ctx context.Context, name string) (*authorizeApi.Action, error)
 
-	GetAllActions() ([]authorizeApi.Action, error)
-	GetAllActionsWithContext(ctx context.Context) ([]authorizeApi.Action, error)
+	GetAllActions() ([]*authorizeApi.Action, error)
+	GetAllActionsWithContext(ctx context.Context) ([]*authorizeApi.Action, error)
 
-	GetUserActions(userID string) ([]authorizeApi.Action, error)
-	GetUserActionsWithContext(ctx context.Context, userID string) ([]authorizeApi.Action, error)
+	GetUserActions(userID string) ([]*authorizeApi.Action, error)
+	GetUserActionsWithContext(ctx context.Context, userID string) ([]*authorizeApi.Action, error)
 
-	AddUserRole(role authorizeApi.UserRole) error
-	AddUserRoleWithContext(ctx context.Context, role authorizeApi.UserRole) error
+	AddUserRole(role *authorizeApi.UserRole) error
+	AddUserRoleWithContext(ctx context.Context, role *authorizeApi.UserRole) error
 
-	GetUserRole(roleName string) (authorizeApi.UserRole, error)
-	GetUserRoleWithContext(ctx context.Context, roleName string) (authorizeApi.UserRole, error)
+	GetUserRole(roleName string) (*authorizeApi.UserRole, error)
+	GetUserRoleWithContext(ctx context.Context, roleName string) (*authorizeApi.UserRole, error)
 
 	RemoveUserRole(roleName string) error
 	RemoveUserRoleWithContext(ctx context.Context, roleName string) error

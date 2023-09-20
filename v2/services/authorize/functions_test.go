@@ -81,7 +81,7 @@ func Test_IsAuthorizedBulkWithResources(t *testing.T) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Millisecond)
 	defer cancel()
 
-	res, oks, err := client.IsAuthorizedBulkWithResources(ctx, "testUser", "testAction", []common.Origin{
+	res, oks, err := client.IsAuthorizedBulkWithResources(ctx, "testUser", "testAction", []*common.Origin{
 		{
 			Id:       "0",
 			Type:     "node",
@@ -132,7 +132,7 @@ func Test_IsAuthorizedBulkWithResourcesNoResourceInResonse(t *testing.T) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Millisecond)
 	defer cancel()
 
-	res, oks, err := client.IsAuthorizedBulkWithResources(ctx, "testUser", "testAction", []common.Origin{
+	res, oks, err := client.IsAuthorizedBulkWithResources(ctx, "testUser", "testAction", []*common.Origin{
 		{
 			Id:       "0",
 			Type:     "node",
