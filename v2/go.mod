@@ -3,7 +3,7 @@ module github.com/SKF/go-enlight-sdk/v2
 go 1.19
 
 require (
-	github.com/SKF/go-utility/v2 v2.33.12
+	github.com/SKF/go-utility/v2 v2.33.14
 	github.com/SKF/proto/v2 v2.19.0-go
 	github.com/aws/aws-sdk-go v1.45.12
 	github.com/golang/protobuf v1.5.3
@@ -32,7 +32,7 @@ require (
 	github.com/DataDog/go-tuf v1.0.2-0.5.2 // indirect
 	github.com/DataDog/sketches-go v1.4.2 // indirect
 	github.com/Microsoft/go-winio v0.6.1 // indirect
-	github.com/SKF/go-enlight-middleware v0.8.5 // indirect
+	github.com/SKF/go-enlight-middleware v0.8.6 // indirect
 	github.com/aws/aws-sdk-go-v2/internal/configsources v1.1.41 // indirect
 	github.com/aws/aws-sdk-go-v2/internal/endpoints/v2 v2.4.35 // indirect
 	github.com/aws/smithy-go v1.14.2 // indirect
