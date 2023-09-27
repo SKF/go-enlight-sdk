@@ -5,7 +5,7 @@ go 1.19
 require (
 	github.com/SKF/go-utility/v2 v2.33.12
 	github.com/SKF/proto/v2 v2.19.0-go
-	github.com/aws/aws-sdk-go v1.45.12
+	github.com/aws/aws-sdk-go v1.45.17
 	github.com/golang/protobuf v1.5.3
 	github.com/miekg/dns v1.1.56
 	github.com/pkg/errors v0.9.1
