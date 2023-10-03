@@ -31,8 +31,8 @@ github.com/SKF/go-utility/v2 v2.33.12/go.mod h1:07lnd+OTNYPd0wGj0J1NQaJkjeSX6xBu
 github.com/SKF/proto/v2 v2.19.0-go h1:suOQyDn684WyijRPoyiJurEQUy1A0iGJja71uHqSJPM=
 github.com/SKF/proto/v2 v2.19.0-go/go.mod h1:PX9BUHguKyZlicj9B0ur3PVs4mskS53GPO2VzG+ACA8=
 github.com/antihax/optional v1.0.0/go.mod h1:uupD/76wgC+ih3iEmQUL+0Ugr19nfwCT1kdvxnR2qWY=
-github.com/aws/aws-sdk-go v1.45.12 h1:+bKbbesGNPp+TeGrcqfrWuZoqcIEhjwKyBMHQPp80Jo=
-github.com/aws/aws-sdk-go v1.45.12/go.mod h1:aVsgQcEevwlmQ7qHE9I3h+dtQgpqhFB+i8Phjh7fkwI=
+github.com/aws/aws-sdk-go v1.45.20 h1:U/wLZEwqVB6o2XlcJ7um8kczx+A1X2MgO2y4wdKDQTs=
+github.com/aws/aws-sdk-go v1.45.20/go.mod h1:aVsgQcEevwlmQ7qHE9I3h+dtQgpqhFB+i8Phjh7fkwI=
 github.com/aws/aws-sdk-go-v2 v1.21.0 h1:gMT0IW+03wtYJhRqTVYn0wLzwdnK9sRMcxmtfGzRdJc=
 github.com/aws/aws-sdk-go-v2 v1.21.0/go.mod h1:/RfNgGmRxI+iFOB1OeJUyxiU+9s88k3pfHvDagGEp0M=
 github.com/aws/aws-sdk-go-v2/internal/configsources v1.1.41 h1:22dGT7PneFMx4+b3pz7lMTRyN8ZKH7M2cW4GP9yUS2g=
