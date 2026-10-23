@@ -8,7 +8,7 @@ import (
 	grpcapi "github.com/SKF/proto/hierarchy"
 )
 
-// MeasurementPoint describes an assets measurement points
+// MeasurementPoint describes an asset's measurement points
 type MeasurementPoint struct {
 	// Bearing number on this asset
 	Bearing int32 `json:"bearing" example:"1"`
@@ -28,7 +28,7 @@ type MeasurementPoint struct {
 	DADType string `json:"dadType,omitempty"`
 }
 
-// Orientation describes a measurement points orientation
+// Orientation describes a measurement point's orientation
 type Orientation string
 
 // Valid values of measurement points orientations
@@ -139,7 +139,7 @@ func ParseMeasurementType(measurementType string) MeasurementType {
 	}
 }
 
-// ParseMeasurementType takes a string and makes it a valid measurement type value
+// ToShort returns the abbreviated form of the measurement type, or an empty string if it has none
 func (m MeasurementType) ToShort() string {
 	switch m {
 	case Displacement, Acceleration, Velocity, Temperature, Speed, BOV:

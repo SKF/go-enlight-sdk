@@ -20,7 +20,7 @@ var (
 	ErrTaskInvalidHierarchy            = errors.New("Required field 'hierarchyId' is invalid")
 	ErrTaskInvalidID                   = errors.New("Required field 'id' is invalid")
 	ErrTaskInvalidkTaskStatus          = fmt.Errorf("Field 'taskstatus' is invalid, valid statuses: %v", validTaskStatuses)
-	ErrTaskInvalidkTaskStatusUpdatedAt = errors.New("Invalid taskStatusUpdateAt, not unix timestamp in ms")
+	ErrTaskInvalidkTaskStatusUpdatedAt = errors.New("Invalid taskStatusUpdatedAt, not unix timestamp in ms")
 	ErrTaskNodeTypeEmpty               = errors.New("Nodetype cannot be empty when 'NodeIds' is used")
 	year                               = time.Hour * 24 * 365
 )
