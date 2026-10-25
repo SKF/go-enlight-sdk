@@ -60,8 +60,8 @@ type NotificationClient interface {
 	GetUserNotifications(userID string, limit int32) ([]proto.UserNotification, error)
 	GetUserNotificationsWithContext(ctx context.Context, userID string, limit int32) ([]proto.UserNotification, error)
 
-	RemoveUserNotifications(userID string, initatedNotificationExtId string) error
-	RemoveUserNotificationsWithContext(ctx context.Context, userID string, initatedNotificationExtId string) error
+	RemoveUserNotifications(userID string, initiatedNotificationExtId string) error
+	RemoveUserNotificationsWithContext(ctx context.Context, userID string, initiatedNotificationExtId string) error
 }
 
 func CreateClient() NotificationClient {
